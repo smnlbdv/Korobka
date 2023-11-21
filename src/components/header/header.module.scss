@@ -1,0 +1,55 @@
+.header {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    justify-content: space-between;
+}
+
+.header__logo {
+    display: flex;
+    align-items: center;
+    column-gap: 9px;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal; 
+}
+
+.list__navigation {
+    display: flex;
+    column-gap: 24px;
+    font-weight: 500;
+}
+
+.list__item {
+    position: relative;
+    cursor: pointer;
+
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0px;
+        height: 2px;
+        background-color: #F14D29;
+        transition: all 300ms;
+    }
+    &:hover {   
+        &::before {
+            width: 100%;
+            transition: all 300ms;
+        }
+    }
+}
+
+// Вынести к отдельный компонент
+
+.button_login {
+    background: linear-gradient(90.71deg, #F14D29 50.01%, rgba(241, 65, 41, 0.93) 108.84%);
+    border-radius: 4px;
+    color: white;
+    font-weight: 600; 
+    border: 0;
+    padding: 3px 17px;
+}
