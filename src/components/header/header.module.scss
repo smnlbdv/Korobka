@@ -1,7 +1,7 @@
 .header {
     display: flex;
     align-items: center;
-    height: 80px;
+    height: 70px;
     justify-content: space-between;
 }
 
@@ -9,10 +9,14 @@
     display: flex;
     align-items: center;
     column-gap: 9px;
-    font-size: 30px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 600;
     line-height: normal; 
+    
+    img {
+        width: 40px;
+    }
 }
 
 .list__navigation {
@@ -24,6 +28,7 @@
 .list__item {
     position: relative;
     cursor: pointer;
+    font-size: 15px;
 
     &::before {
         content: "";
@@ -44,28 +49,8 @@
     }
 }
 
-.button_login {
-    background-color: #F14D29;
-    border-radius: 4px;
-    color: white;
-    font-weight: 400; 
-    border: 0;
-    padding: 8px 17px;
-    transition: all 300ms;
-
-    &:hover {   
-        background-color: #fb5833;
-        transition: all 300ms;
-    }
-
-    &:active {   
-        background-color: #fe3f14;
-        transition: all 300ms;
-    }
-}
-
-
 .buttons_block {
     display: flex;
     column-gap: 10px;
 }
+
