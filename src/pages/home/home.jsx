@@ -98,6 +98,20 @@ const newBoxList = [
     text: "В каждом боксе находится денежная купюра номиналом 100, 200, 500, 2000 или 5000 рублей",
     price: "50",
   },
+  {
+    id: 5,
+    img: "./assets/new-box-1.png",
+    title: "Денежный бокс",
+    text: "В каждом боксе находится денежная купюра номиналом 100, 200, 500, 2000 или 5000 рублей",
+    price: "50",
+  },
+  {
+    id: 6,
+    img: "./assets/new-box-1.png",
+    title: "Денежный бокс",
+    text: "В каждом боксе находится денежная купюра номиналом 100, 200, 500, 2000 или 5000 рублей",
+    price: "50",
+  },
 ];
 
 const reviewsList = [
@@ -127,10 +141,8 @@ const reviewsList = [
   },
 ];
 
-// const listAnswers = document.querySelector('.list_answer')
-// const itemAnswer = listAnswers.querySelectorAll('.answer_item')
-
 const Home = () => {
+
   const [open, setOpen] = useState(1);
 
   const openAnswer = (id) => {
@@ -234,16 +246,17 @@ const Home = () => {
             <img className={style.image} src="./assets/partner-1.png" alt="" />
           </div>
         </section>
-        <section className={style.partner_block}>
+    </div>
+    <div className={style.good_people}>
           <h2 className="section__title">Тысячи довольных пользователей</h2>
-        </section>
     </div>
     <div className={style.swiper}>
         <Swiper
         effect={'coverflow'}
         grabCursor={true}
         centeredSlides={true}
-        slidesPerView={'auto'}
+        slidesPerView={"auto"}
+        initialSlide={1}
         coverflowEffect={{
           rotate: 50,
           stretch: 0,

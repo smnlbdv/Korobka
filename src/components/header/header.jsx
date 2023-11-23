@@ -9,8 +9,8 @@ const Header = () => {
   return (
     <header className={`${style.header} wrapper`}>
         {/* <Link to="/"> */}
-            <div className={style.header__logo}>
-                <img className={style.header__image} src="./assets/logo.svg" alt="logo" />
+            <div className="header__logo">
+                <img className="header__image" src="./assets/logo.svg" alt="logo" />
                 <span>Коробка</span>
             </div>
         {/* </Link>  */}

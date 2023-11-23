@@ -115,7 +115,6 @@
     justify-content: center;
     align-items: center;
     column-gap: 80px;
-    margin-bottom: 142px;
 
     .left_block {
         max-width: 700px;
@@ -137,9 +136,10 @@
         line-height: normal;
     }
     .text {
-        font-size: 16px;
+        font-size: 15px;
         font-style: normal;
         font-weight: 400;
+        max-width: 500px;
         line-height: normal;
         margin-bottom: 20px;
         margin-top: 10px;
@@ -149,9 +149,9 @@
 .new_box_flex {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    justify-content: space-between;
-    column-gap: 40px;
-    margin-top: 124px;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 83px;
 }
 
 .partner_block {
@@ -172,11 +172,11 @@
     }
 }
 .partner_block {
-    margin-top: 200px;
-    margin-bottom: 80px;
+    margin-top: 150px;
+    margin-bottom: 150px;
 }
 .swiper {
-    margin-top: 60px;
+    margin-top: 20px;
     color: black;
 }
 
@@ -190,7 +190,7 @@
     display: flex;
     justify-content: center;
     margin-top: 80px;
-    background-image: url('./assets/bg-main-img.png');
+    background-image: url('./assets/bg-question-img.png');
     background-repeat: no-repeat;
     background-size:contain;
     background-position: center;
@@ -202,21 +202,25 @@
     flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
-    margin-top: 50px;
-    column-gap: 100px;
-    margin-bottom: 156px;
+    margin-top: 100px;
+    column-gap: 177px;
+    margin-bottom: 100px;
 
     .left_block {
         width: 500px;
     }
 }
 
+.new__list_box {
+    margin-top: 142px;
+}
+
 .input_question {
-    padding: 8px 23px;
+    padding: 8px 15px;
     color: #a9a9a9;
-    font-size: 14px;
+    font-size: 13px;
     font-style: normal;
-    font-weight: 600; 
+    font-weight: 500; 
     border:0;
     width: 300px;
     height: 39px;

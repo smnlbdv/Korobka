@@ -2,27 +2,16 @@
     display: flex;
     align-items: center;
     height: 70px;
-    justify-content: space-between;
+    justify-content: left;
 }
 
-.header__logo {
-    display: flex;
-    align-items: center;
-    column-gap: 9px;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal; 
-    
-    img {
-        width: 40px;
-    }
-}
+
 
 .list__navigation {
     display: flex;
     column-gap: 24px;
     font-weight: 500;
+    margin-left: 100px;
 }
 
 .list__item {
@@ -52,5 +41,6 @@
 .buttons_block {
     display: flex;
     column-gap: 10px;
+    margin-left: auto;
 }
 

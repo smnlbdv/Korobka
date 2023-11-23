@@ -18,9 +18,13 @@
     transition: all 200ms;
 
     .block_text {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        justify-content: center;
         opacity: 0;
         height: 0;
-        // transition-delay: 0.5s;
+        transition: all 300ms;
     }
     .answer_title {
         font-size: 20px;
@@ -31,7 +35,6 @@
         transition: all 200ms;
     }
     .answer_text {
-        max-width: 300px;
         font-size: 14px;
         font-style: normal;
         font-weight: 500; 
@@ -44,20 +47,21 @@
         width: 93px;
         height: 93px;
         transition: all 200ms;
+        z-index: 3;
+        cursor: pointer;    
     }
     .answer_image {
         width: 100%;
         height: 100%;
         transition: all 200ms;
-        cursor: pointer;
     }
 }
 
 .open {
-
     width: 350px;
     transition: all 200ms;
     color: rgb(59, 59, 59);
+    transition: all 300ms;
 
     .image_block {
         width: 110px;
@@ -67,7 +71,7 @@
 
     .block_text {
         opacity: 1;
-        height: 100%;
+        height: 110px;
         transition: all 300ms;
         transition-delay: 0.3s;
     }

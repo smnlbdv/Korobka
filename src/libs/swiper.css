@@ -2,20 +2,28 @@
     display: flex;
     align-items: center;
     height: 350px;
+    width: 600px;
+    border-radius: 18px;
 }
 
 .swiper-slide {
-    width: 773px;
-    height: 295px;
-    border-radius: 18px;
+    height: auto;
     box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.368);
+    width: 600px;
+    border-radius: 18px;
 }
 
 .swiper.swiper-coverflow.swiper-3d.swiper-initialized.swiper-horizontal.swiper-watch-progress.mySwipere {
     height: 800px;
+    width: 600px;
+    border-radius: 18px;
 }
 
 .swiper-slide-shadow-right.swiper-slide-shadow-coverflow,
 .swiper-slide-shadow-left.swiper-slide-shadow-coverflow{
     border-radius: 18px;
+}
+
+.swiper-slide-shadow-right, .swiper-slide-shadow-left {
+    backdrop-filter: blur(1px);
 }

@@ -6,7 +6,8 @@
     background-color: white;
     border-radius: 18px;
     box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.10);
-    padding: 15px 40px;
+    padding: 30px;
+    row-gap: 15px;
 
 }
 
@@ -20,13 +21,13 @@
     display: flex;
     align-items: center;
     column-gap: 14px;
-    font-size: 18px;
+    font-size: 14px;
     font-style: normal;
-    font-weight: 400; 
+    font-weight: 500; 
 
     .image {
-        width: 55px;
-        height: 55px;
+        width: 40px;
+        height: 40px;
     }
 }
 
@@ -37,13 +38,13 @@
 }
 
 .text {
-    font-size: 17px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400; 
 }
 
 .date {
-    font-size: 13x;
+    font-size: 12px;
     font-style: normal;
     font-weight: 400; 
     color: rgba(0, 0, 0, 0.40); 
@@ -51,6 +52,6 @@
 }
 
 .static img {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
 }
