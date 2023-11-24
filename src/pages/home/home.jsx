@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import { EffectCoverflow, Pagination } from 'swiper/modules';
+import { EffectCoverflow, Navigation} from 'swiper/modules';
 
 import ButtonCreate from "../../components/buttonCreate/buttonCreate";
 import StepsCard from "../../components/stepsCard/stepsCard";
@@ -11,6 +10,7 @@ import Review from "../../components/review/review";
 
 import style from "./home.module.scss";
 import "swiper/css";
+import 'swiper/css/navigation';
 import './../../libs/swiper.css'
 
 const stepsItem = [
@@ -52,7 +52,7 @@ const answersWhy = [
   {
     id: 3,
     img: "./assets/answers-3.svg",
-    title: "Отличное обслуживание клиентов",
+    title: "Отличное обслуживание",
     text: "Наша команда всегда готова помочь вам с любыми вопросами или проблемами",
   },
   {
@@ -117,6 +117,14 @@ const newBoxList = [
 const reviewsList = [
   {
     id: 1,
+    avatar: "./assets/avatar-3.png",
+    name: "Сергей",
+    lastName: "Матус",
+    text: "Никогда не думал, что можно найти подарок, который так точно отражает мою личность, пока не заметил вашего сайта. Было так весело проходить процесс выбора и создавать индивидуальный подарок. Острые косырьки вперед!!!!",
+    date: "18 декабря 2023 года",
+  },
+  {
+    id: 2,
     avatar: "./assets/avatar-1.png",
     name: "Семён",
     lastName: "Лебедев",
@@ -124,7 +132,15 @@ const reviewsList = [
     date: "18 декабря 2023 года",
   },
   {
-    id: 2,
+    id: 3,
+    avatar: "./assets/avatar-3.png",
+    name: "Сергей",
+    lastName: "Матус",
+    text: "Никогда не думал, что можно найти подарок, который так точно отражает мою личность, пока не заметил вашего сайта. Было так весело проходить процесс выбора и создавать индивидуальный подарок. Острые косырьки вперед!!!!",
+    date: "18 декабря 2023 года",
+  },
+  {
+    id: 4,
     avatar: "./assets/avatar-2.png",
     name: "Анасасия",
     lastName: "Самойленко",
@@ -132,7 +148,7 @@ const reviewsList = [
     date: "18 декабря 2023 года",
   },
   {
-    id: 3,
+    id: 5,
     avatar: "./assets/avatar-3.png",
     name: "Сергей",
     lastName: "Матус",
@@ -253,7 +269,6 @@ const Home = () => {
     <div className={style.swiper}>
         <Swiper
         effect={'coverflow'}
-        grabCursor={true}
         centeredSlides={true}
         slidesPerView={"auto"}
         initialSlide={1}
@@ -264,7 +279,7 @@ const Home = () => {
           modifier: 1,
           slideShadows: true,
         }}
-        pagination={true}
+        navigation={true}
         modules={[EffectCoverflow, Navigation]}
         className="mySwiper"
         >

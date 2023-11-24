@@ -3,6 +3,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    &:hover {
+        .block_image {
+            transform: translateY(-5px);
+            transition: all 300ms;
+        }
+    }
 }
 
 .span {
@@ -35,11 +41,6 @@
     width: 70px;
     height: 70px;
     transition: all 400ms;
-
-    &:hover {
-        transform: translateY(-5px);
-        transition: all 400ms;
-    }
 }
 
 .image {

@@ -1,0 +1,54 @@
+.section_ready_gifts {
+    height: calc(100% - 150px);
+}
+
+.section_title {
+    padding-top: 45px;
+}
+
+.search_block {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 50px;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    column-gap: 13px;
+    border: 1px solid #FFFFFF;
+    border-radius: 36px;
+    padding: 9px 18px;
+
+    input {
+        background-color: transparent;
+        border: 0;
+        color: white;
+        width: 175px;
+    }
+
+    img {
+        width: 16px;
+    }
+}
+
+.filter_item {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    column-gap: 13px;
+    border: 1px solid #FFFFFF;
+    border-radius: 36px;
+    padding: 5px 15px;
+    height: fit-content;
+    cursor: pointer;
+}
+
+.span {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.771);
+}

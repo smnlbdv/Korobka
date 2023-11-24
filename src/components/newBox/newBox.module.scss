@@ -1,5 +1,6 @@
 .new_box {
-    max-width: 275px;
+    max-width: 265px;
+    height: 370px;
     position: relative;
     background-color: white;
     border-radius: 15px;
@@ -48,6 +49,7 @@
     display: flex;
     align-items: end;
     column-gap: 10px;
+    margin-top: 5px;
     // flex-direction: column;
     span {
         color: #A1A1A1;
@@ -58,7 +60,7 @@
     }
     p {
         color: #1D1D1D; 
-        font-size: 17px;
+        font-size: 19px;
         font-style: normal;
         font-weight: 600; 
     }
@@ -66,7 +68,9 @@
 
 .btn_add {
     width: 100%;
-    font-size: 14px;
+    position: absolute;
+    bottom: 0;
+    font-size: 15px;
     font-style: normal;
     font-weight: 600; 
     border: 0;
@@ -92,9 +96,10 @@
 
 .favorite {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 10px;
+    right: 15px;
     border: 0;
+    width: 24px;
     cursor: pointer;
 }
 

@@ -27,3 +27,38 @@
 .swiper-slide-shadow-right, .swiper-slide-shadow-left {
     backdrop-filter: blur(1px);
 }
+
+.swiper-button-prev, .swiper-button-next {
+    position: absolute;
+    bottom: 0 !important;
+    top: 93%;
+    height:50px;
+    width: auto;
+}
+
+.swiper-button-prev::after, .swiper-button-next::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    background-image: url('./assets/swiper-line.svg');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-button-next {
+    display: flex;
+    transform: translateX(120%);
+    align-items: center;
+    right: 50%;
+}
+
+.swiper-button-prev {
+    display: flex;
+    transform: translateX(-120%) scale(-1, 1);
+    align-items: center;
+    left: 50%;
+}
