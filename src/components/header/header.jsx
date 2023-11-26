@@ -41,7 +41,7 @@ const Header = () => {
         </nav>
         <div className={style.buttons_block}>
             <Button title={"Вход"}/>
-            <Button title={"Регистрация"}/>
+            <Button title={"Регистрация"} path={'/register'}/>
         </div>
     </header>
   );
