@@ -3,7 +3,7 @@ import { useState } from "react";
 import ButtonLogin from '../../components/buttonLogin/buttonLogin';
 import InputReg from '../../components/inputReg/inputReg';
 import style from './register.module.scss'
-import axios from 'axios'
+import api from './../../api/api.js'
 
 const Register = () => {
 
@@ -19,15 +19,11 @@ const Register = () => {
 
     const submitInfo = async () => {
         try {
-            await axios.post('/api/auth/registration', {...form}, {
-                headers: { 
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then(res => console.log(res))
+            await api.post('/api/auth/registration', {...form})
+            .then(res => alert(res.data.message))
 
         } catch (error) {
-            console.log(error.message)
+            alert(error)
         }
     }
     return (
