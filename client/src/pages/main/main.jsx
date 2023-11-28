@@ -8,7 +8,7 @@ import AnswerCard from "../../components/answerCard/answerCard";
 import NewBox from "../../components/newBox/newBox";
 import Review from "../../components/review/review";
 
-import style from "./home.module.scss";
+import style from "./main.module.scss";
 import "swiper/css";
 import 'swiper/css/navigation';
 import './../../libs/swiper.css'
@@ -157,7 +157,7 @@ const reviewsList = [
   },
 ];
 
-const Home = () => {
+const Main = () => {
 
   const [open, setOpen] = useState(1);
 
@@ -315,4 +315,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Main;

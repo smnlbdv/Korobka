@@ -1,31 +1,25 @@
-import Footer from './components/footer/footer.jsx'
-import Header from './components/header/header.jsx'
-import Home from './pages/home/home.jsx'
-import ReadyGifts from './pages/readyGifts/readyGifts';
-import { Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import HomePage from "./pages/home/homePage.jsx";
+import Auth from './pages/auth/auth.jsx';
+import {AuthContext} from './context/authContext.js'
+import { useAuth } from './hooks/auth.hook.js';
+// import {useRoutes} from '../routes.js'
 
 function App() {
 
+  const {login, logout, token, userId, isReady} = useAuth()
+    // const isLogin = !!token
+    // // const router = useRoutes(isLogin)
+
   return (
-    <>
-      <Header/>
-      <Routes>
-          <Route
-            path="/"
-            element={
-              <Home/>
-            }
-          ></Route>
-          <Route
-            path="/ready-gifts"
-            element={
-              <ReadyGifts/>
-            }
-          ></Route>
-          
-        </Routes>
-      <Footer/>
-     </> 
+    <AuthContext.Provider value={{login, logout, token, userId, isReady}}>
+        <Router>
+          <Routes>
+            <Route path="/*" element= {<HomePage/>}/>
+            <Route path="/api/auth/*" element= {<Auth/>}/>
+          </Routes>
+        </Router>
+    </AuthContext.Provider>
   )
 }
 

@@ -22,7 +22,7 @@ const Header = () => {
                         <p className={style.list__text}>Собрать</p>
                     </li>
                 {/* </Link> */}
-                <Link to="/ready-gifts">
+                <Link to="ready-gifts">
                     <li className={style.list__item}>
                         <p className={style.list__text}>Готовые подарки</p>
                     </li>
@@ -40,8 +40,8 @@ const Header = () => {
             </ul>
         </nav>
         <div className={style.buttons_block}>
-            <Button title={"Вход"}/>
-            <Button title={"Регистрация"} path={'/register'}/>
+            <Button title={"Вход"} path={'/api/auth/login'}/>
+            <Button title={"Регистрация"} path={'/api/auth/registration'}/>
         </div>
     </header>
   );
