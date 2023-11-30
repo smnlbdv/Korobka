@@ -41,3 +41,25 @@
     margin-left: auto;
 }
 
+.user_nav{
+    margin-left: auto;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.user_list {
+    display: flex;
+    column-gap: 18px;
+}
+
+.list_item {
+    display: flex;
+    align-items: center;
+    column-gap: 9px;
+    cursor: pointer;
+
+    img {
+        width: 20px;
+    }
+}
+

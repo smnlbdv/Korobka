@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import {AuthContext} from './context/authContext.js'
 import { useAuth } from './hooks/auth.hook.js';
 
@@ -13,21 +13,22 @@ import Login from './components/login/login.jsx';
 function App() {
 
   const {login, logout, token, userId, isReady} = useAuth()
-    // const isLogin = !!token
-    // // const router = useRoutes(isLogin)
+  const isLogin = !!token
 
   return (
-    <AuthContext.Provider value={{login, logout, token, userId, isReady}}>
+    <AuthContext.Provider value={{login, logout, token, userId, isReady, isLogin}}>
         <Router>
           <Routes>
             <Route path="/*" element= {<HomePage/>}>
                 <Route index element={<Main/>} />
                 <Route path="ready-gifts" element={<ReadyGifts/>} />
             </Route>
-            <Route path="/api/auth/*" element= {<Auth/>}>
+            {
+              <Route path="/api/auth/*" element= {<Auth/>}>
                 <Route path="registration" element={<Registration/>} />
-                <Route path="login" element={<Login/>} />
-            </Route>
+                <Route path="login" element={<Login/>} />  
+              </Route>
+            }
           </Routes>
         </Router>
     </AuthContext.Provider>

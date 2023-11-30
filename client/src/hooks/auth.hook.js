@@ -20,13 +20,11 @@ export const useAuth = () => {
 
     useEffect(() => {
 
-        // const data = JSON.parse(localStorage.getItem('userData'));
-
-        // if(data & data.token) {
-        //     login(data.token, data.userId)
-        // }
-
-        // setIsReady(true)
+        if(localStorage.getItem('userData')) {
+            const data = JSON.parse(localStorage.getItem('userData'));
+            login(data.token, data.userId)
+            setIsReady(true)
+        }
 
     }, [login])
 

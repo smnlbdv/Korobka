@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import { useNavigate } from 'react-router-dom'
 
 import ButtonLogin from '../buttonLogin/buttonLogin.jsx';
 import InputReg from '../inputReg/inputReg.jsx';
@@ -7,6 +8,8 @@ import api from '../../api/api.js'
 import { AuthContext } from "../../context/authContext.js";
 
 const Login = () => {
+
+    const nav = useNavigate()
 
     const [form, setForm] = useState({
         email: '',
@@ -24,7 +27,9 @@ const Login = () => {
             await api.post('/api/auth/login', {...form})
             .then(res => {
                 login(res.data.token, res.data.userId)
-                console.log(res)
+                if(res.status === 200) {
+                    nav("/")
+                }
             })
 
         } catch (error) {

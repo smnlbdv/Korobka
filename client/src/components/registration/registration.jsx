@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom'
 
 import ButtonLogin from '../buttonLogin/buttonLogin.jsx';
 import InputReg from '..//inputReg/inputReg.jsx';
@@ -6,6 +7,8 @@ import style from './registration.module.scss'
 import api from '../../api/api.js'
 
 const Registration = () => {
+
+    const nav = useNavigate()
 
     const [form, setForm] = useState({
         name: '',
@@ -20,7 +23,11 @@ const Registration = () => {
     const submitInfo = async () => {
         try {
             await api.post('/api/auth/registration', {...form})
-            .then(res => console.log(res))
+            .then(res => {
+                if(res.status === 200) {
+                    nav("/api/auth/login")
+                }
+            })
 
         } catch (error) {
             alert(error)

@@ -1,14 +1,17 @@
-
+import { useContext } from 'react';
 import style from './header.module.scss'
 import Button from '../button/button';
-import { Link } from 'react-router-dom' 
+import { Link   } from 'react-router-dom';
 
+import { AuthContext } from "../../context/authContext.js";
 
 const Header = () => {
+    
+  const { isLogin } = useContext(AuthContext)
 
   return (
     <header className={`${style.header} wrapper`}>
-        <Link to="/">
+        <Link to="/" replace={true} >
             <div className="header__logo">
                 <img className="header__image" src="./assets/logo.svg" alt="logo" />
                 <span>Коробка</span>
@@ -22,7 +25,7 @@ const Header = () => {
                         <p className={style.list__text}>Собрать</p>
                     </li>
                 {/* </Link> */}
-                <Link to="ready-gifts">
+                <Link to="ready-gifts" replace={true} >
                     <li className={style.list__item}>
                         <p className={style.list__text}>Готовые подарки</p>
                     </li>
@@ -33,16 +36,36 @@ const Header = () => {
                     </li>
                 {/* </Link> */}
                 {/* <Link to="#"> */}
-                <li className={style.list__item}>
+                    <li className={style.list__item}>
                         <p className={style.list__text}>О нас</p>
                     </li>
                 {/* </Link> */}
             </ul>
         </nav>
-        <div className={style.buttons_block}>
-            <Button title={"Вход"} path={'/api/auth/login'}/>
-            <Button title={"Регистрация"} path={'/api/auth/registration'}/>
-        </div>
+        {
+            isLogin ? 
+            <div className={style.user_nav}>
+                <ul className={style.user_list}>
+                    <li className={style.list_item}>
+                        <img src="./assets/bag.svg" alt="bag logo" />
+                        <p>0 руб.</p>
+                    </li>
+                    <li className={style.list_item}>
+                        <img src="./assets/heart.svg" alt="favorite logo" />
+                        <p>Закладки</p>
+                    </li>
+                    <li className={style.list_item}>
+                        <img src="./assets/user.svg" alt="user logo" />
+                        <p>Профиль</p>
+                    </li>
+                </ul>
+            </div>
+            :
+            <div className={style.buttons_block}>
+                <Button title={"Вход"} path={'/api/auth/login'}/>
+                <Button title={"Регистрация"} path={'/api/auth/registration'}/>
+            </div>
+        }
     </header>
   );
 };
