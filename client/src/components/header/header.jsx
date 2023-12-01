@@ -1,5 +1,9 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+
+import { Dropdown, Space } from 'antd';
+
 import style from './header.module.scss'
+import './header.css'
 import Button from '../button/button';
 import { Link   } from 'react-router-dom';
 
@@ -7,6 +11,26 @@ import { AuthContext } from "../../context/authContext.js";
 
 const Header = () => {
     
+    const items = [
+        {
+          label: <Link to="ready-gifts" replace={true} >
+                    <li>Для мужчин</li>
+                 </Link>,
+          key: '0',
+        },
+        {
+          label: <Link to="ready-gifts" replace={true} >
+                    <li>На 14 февраля</li>
+                 </Link>,
+          key: '1',
+        },
+        {
+          label: <Link to="ready-gifts" replace={true} >
+                    <li>Для девушек</li>
+                 </Link>,
+          key: '2',
+        },
+      ];
   const { isLogin } = useContext(AuthContext)
 
   return (
@@ -17,6 +41,7 @@ const Header = () => {
                 <span>Коробка</span>
             </div>
         </Link> 
+
         <nav className={style.navigation}>
             <ul className={style.list__navigation}>
                 
@@ -25,11 +50,20 @@ const Header = () => {
                         <p className={style.list__text}>Собрать</p>
                     </li>
                 {/* </Link> */}
-                <Link to="ready-gifts" replace={true} >
-                    <li className={style.list__item}>
-                        <p className={style.list__text}>Готовые подарки</p>
-                    </li>
-                </Link>
+                <li className={style.list__item}>
+                    <Dropdown
+                        menu={{
+                        items,
+                        }}
+                        trigger={['click']}
+                    >
+                        <a onClick={(e) => e.preventDefault()}>
+                        <Space>
+                            <p className={style.list__text}>Готовые подарки</p>
+                        </Space>
+                        </a>
+                    </Dropdown>
+                </li>
                 {/* <Link to="#"> */}
                     <li className={style.list__item}>
                         <p className={style.list__text}>Контакты</p>
