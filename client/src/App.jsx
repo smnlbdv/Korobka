@@ -8,6 +8,7 @@ import Main from './pages/main/main.jsx'
 import ReadyGifts from './pages/readyGifts/readyGifts.jsx';
 import Registration from './components/registration/registration.jsx';
 import Login from './components/login/login.jsx';
+import Contacts from './pages/contacts/contacts.jsx';
 // import {useRoutes} from '../routes.js'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/*" element= {<HomePage/>}>
                 <Route index element={<Main/>} />
                 <Route path="ready-gifts" element={<ReadyGifts/>} />
+                <Route path="contacts" element={<Contacts/>} />
             </Route>
             {
               <Route path="/api/auth/*" element= {<Auth/>}>

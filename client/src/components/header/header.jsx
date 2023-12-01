@@ -1,11 +1,11 @@
-import { useContext, useState } from 'react';
+import { useContext} from 'react';
 
 import { Dropdown, Space } from 'antd';
 
 import style from './header.module.scss'
-import './header.css'
+import './header.scss'
 import Button from '../button/button';
-import { Link   } from 'react-router-dom';
+import { Link  } from 'react-router-dom';
 
 import { AuthContext } from "../../context/authContext.js";
 
@@ -58,17 +58,17 @@ const Header = () => {
                         trigger={['click']}
                     >
                         <a onClick={(e) => e.preventDefault()}>
-                        <Space>
-                            <p className={style.list__text}>Готовые подарки</p>
-                        </Space>
+                            <Space>
+                                <p>Готовые подарки</p>
+                            </Space>    
                         </a>
                     </Dropdown>
                 </li>
-                {/* <Link to="#"> */}
+                <Link to="contacts">
                     <li className={style.list__item}>
                         <p className={style.list__text}>Контакты</p>
                     </li>
-                {/* </Link> */}
+                </Link>
                 {/* <Link to="#"> */}
                     <li className={style.list__item}>
                         <p className={style.list__text}>О нас</p>
