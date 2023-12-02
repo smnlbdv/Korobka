@@ -1,15 +1,18 @@
+import {Suspense, lazy} from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import {AuthContext} from './context/authContext.js'
 import { useAuth } from './hooks/auth.hook.js';
 
-import HomePage from "./pages/home/homePage.jsx";
-import Auth from './pages/auth/auth.jsx';
-import Main from './pages/main/main.jsx'
-import ReadyGifts from './pages/readyGifts/readyGifts.jsx';
-import Registration from './components/registration/registration.jsx';
-import Login from './components/login/login.jsx';
-import Contacts from './pages/contacts/contacts.jsx';
-// import {useRoutes} from '../routes.js'
+import Loading from './components/loading/loading.jsx';
+
+const HomePage = lazy(() => import('./pages/home/homePage.jsx'));
+const Auth = lazy(() => import('./pages/auth/auth.jsx'));
+const Main = lazy(() => import('./pages/main/main.jsx'));
+const ReadyGifts = lazy(() => import('./pages/readyGifts/readyGifts.jsx'));
+const Registration = lazy(() => import('./components/registration/registration.jsx'));
+const Login = lazy(() => import('./components/login/login.jsx'));
+const Contacts = lazy(() => import('./pages/contacts/contacts.jsx'));
+const AboutUs = lazy(() => import('./pages/aboutUs/aboutUs.jsx'));
 
 function App() {
 
@@ -20,17 +23,20 @@ function App() {
     <AuthContext.Provider value={{login, logout, token, userId, isReady, isLogin}}>
         <Router>
           <Routes>
-            <Route path="/*" element= {<HomePage/>}>
+            <Route path="/" element= {
+              <Suspense fallback={<Loading/>}>
+                <HomePage/>
+              </Suspense>
+            }>
                 <Route index element={<Main/>} />
                 <Route path="ready-gifts" element={<ReadyGifts/>} />
                 <Route path="contacts" element={<Contacts/>} />
+                <Route path="about-us" element={<AboutUs/>} />
             </Route>
-            {
-              <Route path="/api/auth/*" element= {<Auth/>}>
-                <Route path="registration" element={<Registration/>} />
-                <Route path="login" element={<Login/>} />  
-              </Route>
-            }
+            <Route path="/api/auth/*" element= {<Auth/>}>
+              <Route path="registration" element={<Registration/>} />
+              <Route path="login" element={<Login/>} />  
+            </Route>
           </Routes>
         </Router>
     </AuthContext.Provider>

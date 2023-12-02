@@ -22,24 +22,27 @@ const Contacts = () => {
           </p>
         </div>
         <div className={style.item_block_contacts}>
-          <h3 className={style.title_contact}>Адрес производства</h3>
+          <h3 className={style.title_contact}>Фактический адрес</h3>
           <p className={style.text_contact}>
-            623100, Свердловская обл., г.Первоуральск, Северо-восточная часть
-            8-го квартала городских лесов МО «г.Первоуральск».
+          660041, Россия, г. Красноярск, ул. Академика Киренского, д.89.
           </p>
         </div>
         <div className={style.item_block_contacts}>
-          <h3 className={style.title_contact}>Адрес производства</h3>
+          <h3 className={style.title_contact}>Почтовый адрес</h3>
           <p className={style.text_contact}>
-            623100, Свердловская обл., г.Первоуральск, Северо-восточная часть
-            8-го квартала городских лесов МО «г.Первоуральск».
+          660130, Красноярский край, г. Красноярск а/я 20493
           </p>
         </div>
         <div className={style.item_block_contacts}>
-          <h3 className={style.title_contact}>Адрес производства</h3>
+          <h3 className={style.title_contact}>Реквизиты организации</h3>
           <p className={style.text_contact}>
-            623100, Свердловская обл., г.Первоуральск, Северо-восточная часть
-            8-го квартала городских лесов МО «г.Первоуральск».
+            Общество с ограниченной ответственностью «Наш Двор Сибирь»
+          </p>
+          <p className={style.text_contact}>
+            ИНН/КПП: 2463108622/246301001
+          </p>
+          <p className={style.text_contact}>
+            ОГРН: 1172468031097
           </p>
         </div>
         <div className={style.item_block_contacts}>

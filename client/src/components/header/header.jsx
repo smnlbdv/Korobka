@@ -69,11 +69,11 @@ const Header = () => {
                         <p className={style.list__text}>Контакты</p>
                     </li>
                 </Link>
-                {/* <Link to="#"> */}
+                <Link to="about-us">
                     <li className={style.list__item}>
                         <p className={style.list__text}>О нас</p>
                     </li>
-                {/* </Link> */}
+                </Link>
             </ul>
         </nav>
         {

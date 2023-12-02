@@ -1,0 +1,42 @@
+.section_about{
+    min-height: calc(100% - 150px);
+    background-image: url('./assets/bg-about-us.png');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+}
+
+.section__title_about {
+    padding-top: 45px;
+    text-align: left !important;
+}
+
+.block_about {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    margin-bottom: 100px;
+    column-gap: 50px;
+
+
+    .block__about_text {
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        margin-bottom: 30px;
+    }
+    // .block_flex {
+    //     display: flex;
+    // }
+    .block__about_img {
+        min-width: 600px;
+        height: 400px;
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+    }
+}
+
