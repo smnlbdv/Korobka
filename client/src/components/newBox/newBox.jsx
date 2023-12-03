@@ -1,7 +1,18 @@
 /* eslint-disable react/prop-types */
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext.js";
+
 import style from './newBox.module.scss'
 
-const NewBox = ({img, title, text, price}) => {
+
+const NewBox = ({id, img, title, text, price}) => {
+
+    const { addCart } = useContext(AuthContext)
+
+    const clickBtnAdd = () => {
+        addCart({id, img, title, text, price})
+    }
+
     return ( 
         <div className={style.new_box}>
             <img className={style.favorite} src="./assets/love.svg" alt="" />
@@ -21,7 +32,7 @@ const NewBox = ({img, title, text, price}) => {
                     </div>
                 </div>
             </div>
-            <button className={style.btn_add}>В корзину</button>
+            <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
         </div>
     );
 }

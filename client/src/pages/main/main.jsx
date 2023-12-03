@@ -8,6 +8,7 @@ import AnswerCard from "../../components/answerCard/answerCard";
 import NewBox from "../../components/newBox/newBox";
 import Review from "../../components/review/review";
 
+
 import style from "./main.module.scss";
 import "swiper/css";
 import 'swiper/css/navigation';
@@ -244,6 +245,7 @@ const Main = () => {
             {newBoxList.map((item, index) => (
               <NewBox
                 key={index}
+                id={item.id}
                 img={item.img}
                 title={item.title}
                 text={item.text}

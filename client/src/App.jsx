@@ -1,4 +1,4 @@
-import {Suspense, lazy} from 'react';
+import {Suspense, lazy, useState} from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import {AuthContext} from './context/authContext.js'
 import { useAuth } from './hooks/auth.hook.js';
@@ -17,11 +17,18 @@ const AboutUs = lazy(() => import('./pages/aboutUs/aboutUs.jsx'));
 
 function App() {
 
+  const [cart, setCart] = useState([])
+
   const {login, logout, token, userId, isReady} = useAuth()
   const isLogin = !!token
 
+  const addCart = (obj) => {
+    setCart([...cart, obj])
+    console.log(cart)
+  }
+
   return (
-    <AuthContext.Provider value={{login, logout, token, userId, isReady, isLogin}}>
+    <AuthContext.Provider value={{login, logout, token, userId, isReady, isLogin, addCart, cart}}>
         <Router>
           <Routes>
             <Route path="/" element= {

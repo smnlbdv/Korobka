@@ -1,12 +1,17 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useContext  } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/authContext.js";
+
+import CartItem from '../../components/cartItem/cartItem.jsx'
 
 import style from './cart.module.scss'
 
 const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
+
+    const { cart } = useContext(AuthContext)
 
     const clickButtonAll = () => {
         setCheckAll(!checkAll)
@@ -32,7 +37,14 @@ const Cart = () => {
                     </div>
                     <span className={style.cart__span}></span>
                     <div className={style.cart__list}>
-
+                    {
+                        cart.map((obj, index) => (
+                            <CartItem
+                                key={index}
+                                {...obj}
+                            />
+                        ))
+                    }
                     </div>
                 </div>
                 <div className={style.cart__right_block}>
