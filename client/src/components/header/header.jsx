@@ -80,10 +80,12 @@ const Header = () => {
             isLogin ? 
             <div className={style.user_nav}>
                 <ul className={style.user_list}>
-                    <li className={style.list_item}>
-                        <img src="./assets/bag.svg" alt="bag logo" />
-                        <p>0 руб.</p>
-                    </li>
+                    <Link to="cart">
+                        <li className={style.list_item}>
+                            <img src="./assets/bag.svg" alt="bag logo" />
+                            <p>0 руб.</p>
+                        </li>
+                    </Link>
                     <li className={style.list_item}>
                         <img src="./assets/heart.svg" alt="favorite logo" />
                         <p>Закладки</p>

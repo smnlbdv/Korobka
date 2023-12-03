@@ -10,8 +10,9 @@ const Loading = () => {
             indicator={
             <LoadingOutlined
                 style={{
-                fontSize: 60,
-                color: 'white'
+                fontSize: 70,
+                color: 'white',
+                fontWeight: 'bold',
                 }}
                 spin
             />

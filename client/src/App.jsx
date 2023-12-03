@@ -4,6 +4,7 @@ import {AuthContext} from './context/authContext.js'
 import { useAuth } from './hooks/auth.hook.js';
 
 import Loading from './components/loading/loading.jsx';
+import Cart from './pages/cart/cart.jsx';
 
 const HomePage = lazy(() => import('./pages/home/homePage.jsx'));
 const Auth = lazy(() => import('./pages/auth/auth.jsx'));
@@ -32,6 +33,7 @@ function App() {
                 <Route path="ready-gifts" element={<ReadyGifts/>} />
                 <Route path="contacts" element={<Contacts/>} />
                 <Route path="about-us" element={<AboutUs/>} />
+                <Route path="cart" element={<Cart/>}/>
             </Route>
             <Route path="/api/auth/*" element= {<Auth/>}>
               <Route path="registration" element={<Registration/>} />
