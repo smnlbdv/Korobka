@@ -47,6 +47,7 @@ const Cart = () => {
                             cart.map((obj, index) => (
                                 <CartItem
                                     key={index}
+                                    id={obj.id}
                                     checkAll={checkAll}
                                     {...obj}
                                 />

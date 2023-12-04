@@ -2,11 +2,10 @@
     display: flex;
     flex-direction: column;
     min-height: calc(100% - 150px);
-    background-image: url('./assets/bg-main-img.png');
-    background-repeat: no-repeat;
-    background-size:contain;
-    background-position: center;
-    background-position: top;
+    // background-image: url('./assets/bg-main-img.png');
+    // background-repeat: no-repeat;
+    // background-size:contain;
+    // background-position: top;
 }
 
 .section_title {
@@ -18,7 +17,7 @@
     display: flex;
     column-gap: 172px;
     margin-top: 50px;
-    margin-bottom: 50px;
+    margin-bottom: 100px;
 }
 
 .cart__block__buttons {
@@ -159,6 +158,7 @@
         display: flex;
         flex-direction: column;
         row-gap: 20px;
+        margin-top: -50px;
     }
     .title {
         font-size: 23px;
