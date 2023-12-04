@@ -28,7 +28,7 @@ function App() {
   }
 
   return (
-    <AuthContext.Provider value={{login, logout, token, userId, isReady, isLogin, addCart, cart}}>
+    <AuthContext.Provider value={{login, logout, token, userId, isReady, isLogin, addCart, cart, setCart}}>
         <Router>
           <Routes>
             <Route path="/" element= {

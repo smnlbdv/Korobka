@@ -11,10 +11,13 @@ const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
 
-    const { cart } = useContext(AuthContext)
+    const { cart, setCart } = useContext(AuthContext)
 
     const clickButtonAll = () => {
         setCheckAll(!checkAll)
+    }
+    const clearCart = () => {
+        setCart([])
     }
 
     return ( 
@@ -33,7 +36,7 @@ const Cart = () => {
                             <img className={style.cart__img_check} src={checkAll ? "./assets/yes-check.svg" : "./assets/no-check.svg"} alt="check" />
                             <button className={style.cart__button_all} onClick={clickButtonAll}>Выбрать все</button>
                         </div>
-                        <button className={style.cart__button_delete}>Удалить все</button>
+                        <button className={style.cart__button_delete} onClick={clearCart}>Удалить все</button>
                     </div>
                     <span className={style.cart__span}></span>
                     <div className={style.cart__list}>
@@ -41,6 +44,7 @@ const Cart = () => {
                         cart.map((obj, index) => (
                             <CartItem
                                 key={index}
+                                checkAll={checkAll}
                                 {...obj}
                             />
                         ))
