@@ -9,10 +9,18 @@ const Footer = () => {
             </div>
             <p className={style.footer_text}>2023 © Все права защищены</p>
             <div className={style.contact}>
-                <img src="./assets/twitter.svg" alt="" />
-                <img src="./assets/telegram.svg" alt="" />
-                <img src="./assets/facebook.svg" alt="" />
-                <img src="./assets/youtube.svg" alt="" />
+                <a href="https://twitter.com/?lang=en" target="blank">
+                    <img src="./assets/twitter.svg" alt="" />
+                </a>
+                <a href="https://web.telegram.org/" target="blank">
+                    <img src="./assets/telegram.svg" alt="" />
+                </a>
+                <a href="https://ru-ru.facebook.com/" target="blank">
+                    <img src="./assets/facebook.svg" alt="" />
+                </a>
+                <a href="https://www.youtube.com/" target="blank">
+                    <img src="./assets/youtube.svg" alt="" />
+                </a>
             </div>
         </footer>
      );
