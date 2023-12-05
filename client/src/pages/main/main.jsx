@@ -251,11 +251,7 @@ const Main = () => {
             {newBoxList.map((item, index) => (
               <NewBox
                 key={index}
-                id={item.id}
-                img={item.img}
-                title={item.title}
-                text={item.text}
-                price={item.price}
+                {...item}
               />
             ))}
           </div>

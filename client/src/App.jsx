@@ -23,17 +23,29 @@ function App() {
 
   const addCart = (obj) => {
 
-    // const updatedCartItems = cart.forEach(item => {
-    //   if (Number(item.id) == Number(obj.id)) {
-    //     return { ...item, count: item.count + 1 };
-    //   } else {
-    //     return item;
-    //   }
-    // });
-    
-    setCart([...cart, obj]);
-    console.log(cart);
+    if(cart.some(item => Number(item.id) === Number(obj.id))) {
+      console.log('yes')
+      const cartItem = cart.filter(item => Number(item.id) == Number(obj.id))
+      const updatedCartItems = cart.filter(item => Number(item.id) !== Number(obj.id))
+      cartItem[0]['count'] += 1
+      updatedCartItems.push(cartItem[0])
+      setCart(updatedCartItems);
+    } else {
+      setCart([...cart, obj]);
+      console.log('no')
+    }
+
   };
+
+  const calcCountItem = (id, value) => {
+    console.log(id)
+    cart.forEach(element => {
+      if(element.id === id) {
+        element.count += value
+      }
+    });
+  }
+
   const deleteItemCart = (id) => {
     console.log(id)
     setCart((cart) =>
@@ -53,7 +65,8 @@ function App() {
         addCart,
         cart,
         setCart,
-        deleteItemCart
+        deleteItemCart,
+        calcCountItem
       }}
     >
       <Router>

@@ -4,39 +4,41 @@ import { AuthContext } from "../../context/authContext.js";
 
 import style from './cartItem.module.scss'
 
-const CartItem = ({id, img, title, text, price, checkAll}) => {
+const CartItem = ({id, img, title, text, price, count = 1, checkAll}) => {
 
     const [choose, setСhoose] = useState(checkAll)
-    const [count, setCount] = useState(1)
+    const [counts, setCounts] = useState(count)
     const [input, setInput] = useState(false)
 
-    const { deleteItemCart } = useContext(AuthContext)
+    const { deleteItemCart, calcCountItem } = useContext(AuthContext)
 
     useEffect(() => {
         setСhoose(checkAll)
     }, [checkAll])
 
     const addProduct = () => {
-        if(count >= 200) {
-            setCount(count)
+        if(counts >= 200) {
+            setCounts(counts)
         } else {
-            setCount(count + 1)
+            setCounts(counts + 1)
+            calcCountItem(id, 1)
         }
     }
 
     const subtractProduct = () => {
-        if(count <= 0) {
-            setCount(0)
+        if(counts <= 0) {
+            setCounts(0)
         } else {
-            setCount(count - 1)
+            setCounts(counts - 1)
+            calcCountItem(id, -1)
         }
     }
 
     const handleChange = (e) => {
         if(e.target.value > 200) {
-            setCount(200)
+            setCounts(200)
         } else {
-            setCount(Number(e.target.value))
+            setCounts(Number(e.target.value))
         }
     }
 
@@ -72,9 +74,9 @@ const CartItem = ({id, img, title, text, price, checkAll}) => {
                 </button>
                 {
                     input ?
-                    <input className={style.count_input} type="text" value={count} onChange={handleChange} onBlur={onBlurInput}/>
+                    <input className={style.count_input} type="text" value={counts} onChange={handleChange} onBlur={onBlurInput}/>
                     :
-                    <p className={style.count} onClick={changeOnInput}>{count}</p>
+                    <p className={style.count} onClick={changeOnInput}>{counts}</p>
                 }
                 <button className={style.btn_counter} onClick={addProduct}>
                     <img className={style.counter_icon} src="./assets/btn-cart-plus.svg" alt="" />

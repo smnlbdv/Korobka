@@ -5,12 +5,12 @@ import { AuthContext } from "../../context/authContext.js";
 import style from './newBox.module.scss'
 
 
-const NewBox = ({id, img, title, text, price}) => {
+const NewBox = ({id, img, title, text, price, count}) => {
 
     const { addCart } = useContext(AuthContext)
 
     const clickBtnAdd = () => {
-        addCart({id, img, title, text, price})
+        addCart({id, img, title, text, price, count})
     }
 
     return ( 
