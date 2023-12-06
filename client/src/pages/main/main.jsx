@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Navigation} from 'swiper/modules';
 
@@ -13,6 +13,7 @@ import style from "./main.module.scss";
 import "swiper/css";
 import 'swiper/css/navigation';
 import './../../libs/swiper.css'
+import { AuthContext } from "../../context/authContext";
 
 const stepsItem = [
   {
@@ -167,6 +168,7 @@ const reviewsList = [
 const Main = () => {
 
   const [open, setOpen] = useState(1);
+  const {contextHolder} = useContext(AuthContext);
 
   const openAnswer = (id) => {
     setOpen(id);
@@ -175,6 +177,7 @@ const Main = () => {
   return (
     <>
     <div className="wrapper">
+    {contextHolder}
       <section className={style.main_section}>
           <div className={style.flex_box}>
             <div className={style.left_block}>

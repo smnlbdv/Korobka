@@ -2,6 +2,8 @@ import { Suspense, lazy, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
 import { useAuth } from "./hooks/auth.hook.js";
+import {  notification } from 'antd';
+import './libs/ant.css'
 
 import Loading from "./components/loading/loading.jsx";
 import Cart from "./pages/cart/cart.jsx";
@@ -17,9 +19,19 @@ const AboutUs = lazy(() => import("./pages/aboutUs/aboutUs.jsx"));
 
 function App() {
   const [cart, setCart] = useState([]);
-
   const { login, logout, token, userId, isReady } = useAuth();
+  const [api, contextHolder] = notification.useNotification();
+
   const isLogin = !!token;
+
+  const openNotification = (placement) => {
+    api.success({
+      message: 'Товар успешно добавлен в корзину',
+      placement,
+      closeIcon: false,
+      duration: 1.5
+    });
+  };
 
   const addCart = (obj) => {
 
@@ -30,9 +42,11 @@ function App() {
       cartItem[0]['count'] += 1
       updatedCartItems.push(cartItem[0])
       setCart(updatedCartItems);
+      openNotification('bottomRight')
     } else {
       setCart([...cart, obj]);
       console.log('no')
+      openNotification('bottomRight')
     }
 
   };
@@ -66,7 +80,8 @@ function App() {
         cart,
         setCart,
         deleteItemCart,
-        calcCountItem
+        calcCountItem,
+        contextHolder
       }}
     >
       <Router>

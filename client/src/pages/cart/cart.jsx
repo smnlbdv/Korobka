@@ -1,16 +1,19 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext  } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
+import { CSSTransition } from 'react-transition-group'
 
 import CartItem from '../../components/cartItem/cartItem.jsx'
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 
 import style from './cart.module.scss'
+import '../../libs/ant.css'
 
 const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
+    const [open, setOpen] = useState(false)
 
     const { cart, setCart } = useContext(AuthContext)
 
@@ -45,12 +48,18 @@ const Cart = () => {
                         <div className={style.cart__list}>
                         {
                             cart.map((obj, index) => (
-                                <CartItem
+                                <CSSTransition
                                     key={index}
-                                    id={obj.id}
-                                    checkAll={checkAll}
-                                    {...obj}
-                                />
+                                    in={open}
+                                    timeout={200}
+                                    classNames='my-node'>
+                                    <CartItem
+                                        id={obj.id}
+                                        checkAll={checkAll}
+                                        setOpen={setOpen}
+                                        {...obj}
+                                    />
+                                </CSSTransition>
                             ))
                         }
                         </div>
