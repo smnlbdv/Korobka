@@ -26,10 +26,10 @@ function App() {
 
   const openNotification = (placement) => {
     api.success({
-      message: 'Товар успешно добавлен в корзину',
+      message: <p>Товар успешно добавлен в корзину</p>,
       placement,
       closeIcon: false,
-      duration: 1.5
+      duration: 1.5,
     });
   };
 

@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 
 import style from './cartItem.module.scss'
 
-const CartItem = ({id, img, title, text, price, count = 1, checkAll, setOpen}) => {
+const CartItem = ({id, img, title, text, price, count = 1, checkAll}) => {
 
     const [choose, setСhoose] = useState(checkAll)
     const [counts, setCounts] = useState(count)
@@ -56,7 +56,6 @@ const CartItem = ({id, img, title, text, price, count = 1, checkAll, setOpen}) =
     
     const clickDeleteButton = () => {
         deleteItemCart(id)
-        setOpen(true)
     }
 
     return ( 

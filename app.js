@@ -8,10 +8,10 @@ import route from './routes/auth.route.js'
 const app = express()
 const PORT = process.env.PORT || 5000
 
-
 app.use(morgan(process.env.LOG_LEVEL))
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
+app.use(express.static('public'));
 app.use(cors())
 app.use('/api/auth', route)
 
