@@ -16,13 +16,11 @@ const InputReg = ({img, name, placeholder, type, chek = false, changeHandler}) =
         <div className={style.input_block}>
             <div className={style.main_input_block}>
                 <img className={style.img} src={img} alt="" />
-                <input className={style.input} name={name} type={show ? "text" : type} placeholder={placeholder} onChange={changeHandler}/>
+                <input className={style.input} name={name} type={show ? "text" : type} placeholder={placeholder} onChange={changeHandler} required/>
             </div>
-    
             {
                 chek && <img  className={style.img_secret} src="../../assets/secret.svg" alt="secret" onClick={showPass} />
             }
-
         </div>
     );
 }

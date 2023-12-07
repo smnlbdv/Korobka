@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
 import { useAuth } from "./hooks/auth.hook.js";
@@ -7,6 +7,7 @@ import './libs/ant.css'
 
 import Loading from "./components/loading/loading.jsx";
 import Cart from "./pages/cart/cart.jsx";
+import axios from "axios";
 
 const HomePage = lazy(() => import("./pages/home/homePage.jsx"));
 const Auth = lazy(() => import("./pages/auth/auth.jsx"));
@@ -19,8 +20,28 @@ const AboutUs = lazy(() => import("./pages/aboutUs/aboutUs.jsx"));
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [newBoxList, setNewBoxList] = useState([]);
   const { login, logout, token, userId, isReady } = useAuth();
   const [api, contextHolder] = notification.useNotification();
+
+  useEffect(() => {
+
+    async function fetchData() {
+      try {
+        await axios.get("/products/new", {
+          headers: { 'Content-Type': 'application/json' },
+          params: {
+            message: "Опааааа"
+          }
+        })
+                 .then(response => console.log(response))
+      } catch (error) {
+        alert("Ошибка");
+      }
+    }
+    fetchData();
+
+  }, []);
 
   const isLogin = !!token;
 
@@ -81,7 +102,8 @@ function App() {
         setCart,
         deleteItemCart,
         calcCountItem,
-        contextHolder
+        contextHolder,
+        newBoxList
       }}
     >
       <Router>

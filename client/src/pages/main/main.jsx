@@ -71,57 +71,6 @@ const answersWhy = [
   },
 ];
 
-const newBoxList = [
-  {
-    id: 1,
-    img: "./assets/new-box-1.png",
-    title: "Денежный бокс",
-    text: "В каждом боксе находится денежная купюра номиналом 100, 200, 500, 2000 или 5000 рублей",
-    price: "50",
-    count: 0
-  },
-  {
-    id: 2,
-    img: "./assets/new-box-1.png",
-    title: "Денежный бокс",
-    text: "В каждом боксе находится денежная купюра номиналом 100, 200, 500, 2000 или 5000 рублей",
-    price: "50",
-    count: 0
-  },
-  {
-    id: 3,
-    img: "./assets/new-box-1.png",
-    title: "Денежный бокс",
-    text: "В каждом боксе находится денежная купюра номиналом 100, 200, 500, 2000 или 5000 рублей",
-    price: "50",
-    count: 0
-  },
-  {
-    id: 4,
-    img: "./assets/new-box-1.png",
-    title: "Денежный бокс",
-    text: "В каждом боксе находится денежная купюра номиналом 100, 200, 500, 2000 или 5000 рублей",
-    price: "50",
-    count: 0
-  },
-  {
-    id: 5,
-    img: "./assets/new-box-1.png",
-    title: "Денежный бокс",
-    text: "В каждом боксе находится денежная купюра номиналом 100, 200, 500, 2000 или 5000 рублей",
-    price: "50",
-    count: 0
-  },
-  {
-    id: 6,
-    img: "./assets/new-box-1.png",
-    title: "Денежный бокс",
-    text: "В каждом боксе находится денежная купюра номиналом 100, 200, 500, 2000 или 5000 рублей",
-    price: "50",
-    count: 0
-  },
-];
-
 const reviewsList = [
   {
     id: 1,
@@ -168,7 +117,7 @@ const reviewsList = [
 const Main = () => {
 
   const [open, setOpen] = useState(1);
-  const {contextHolder} = useContext(AuthContext);
+  const {contextHolder, newBoxList} = useContext(AuthContext);
 
   const openAnswer = (id) => {
     setOpen(id);
