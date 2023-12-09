@@ -5,6 +5,7 @@ import morgan  from 'morgan';
 import cors from 'cors'
 import route from './routes/auth.route.js'
 import productRoute from './routes/product.route.js'
+import cartRoute from './routes/cart.route.js'
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -15,7 +16,8 @@ app.use(express.urlencoded({extended: false}))
 app.use(express.static('public'))
 app.use(cors())
 app.use('/api/auth', route)
-app.use('/products', productRoute)
+app.use('/api/products', productRoute)
+app.use('/api/cart', cartRoute)
 
 async function start() {
     try {

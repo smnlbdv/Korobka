@@ -45,10 +45,9 @@ const Cart = () => {
                         <span className={style.cart__span}></span>
                         <div className={style.cart__list}>
                         {
-                            cart.map((obj, index) => 
+                            cart.map((obj) => 
                                 <CartItem
-                                    key={index}
-                                    id={obj.id}
+                                    key={obj._id}
                                     checkAll={checkAll}
                                     {...obj}
                                 />

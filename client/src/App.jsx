@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
 import { useAuth } from "./hooks/auth.hook.js";
@@ -7,7 +7,7 @@ import './libs/ant.css'
 
 import Loading from "./components/loading/loading.jsx";
 import Cart from "./pages/cart/cart.jsx";
-import axios from "axios";
+import api from './api/api.js'
 
 const HomePage = lazy(() => import("./pages/home/homePage.jsx"));
 const Auth = lazy(() => import("./pages/auth/auth.jsx"));
@@ -22,69 +22,66 @@ function App() {
   const [cart, setCart] = useState([]);
   const [newBoxList, setNewBoxList] = useState([]);
   const { login, logout, token, userId, isReady } = useAuth();
-  const [api, contextHolder] = notification.useNotification();
-
-  useEffect(() => {
-
-    async function fetchData() {
-      try {
-        await axios.get("/products/new", {
-          headers: { 'Content-Type': 'application/json' },
-          params: {
-            message: "Опааааа"
-          }
-        })
-                 .then(response => console.log(response))
-      } catch (error) {
-        alert("Ошибка");
-      }
-    }
-    fetchData();
-
-  }, []);
+  const [apis, contextHolder] = notification.useNotification();
 
   const isLogin = !!token;
 
-  const openNotification = (placement) => {
-    api.success({
-      message: <p>Товар успешно добавлен в корзину</p>,
-      placement,
-      closeIcon: false,
-      duration: 1.5,
-    });
-  };
+  useEffect(() => {
+    getNewProduct()
+  }, [])
 
-  const addCart = (obj) => {
+  const getNewProduct = async () => {
+    try {
+      await api.get('/api/products/new')
+                 .then(response => setNewBoxList(response.data))
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
 
-    if(cart.some(item => Number(item.id) === Number(obj.id))) {
-      console.log('yes')
-      const cartItem = cart.filter(item => Number(item.id) == Number(obj.id))
-      const updatedCartItems = cart.filter(item => Number(item.id) !== Number(obj.id))
-      cartItem[0]['count'] += 1
-      updatedCartItems.push(cartItem[0])
-      setCart(updatedCartItems);
-      openNotification('bottomRight')
-    } else {
-      setCart([...cart, obj]);
-      console.log('no')
-      openNotification('bottomRight')
+  // const openNotification = (placement) => {
+  //   apis.success({
+  //     message: <p>Товар успешно добавлен в корзину</p>,
+  //     placement,
+  //     closeIcon: false,
+  //     duration: 1.5,
+  //   });
+  // };
+
+  const addCart = async (obj) => {
+
+    try {
+      await api.post('/api/cart/add', {userId, itemId: obj._id})
+    } catch (error) {
+      console.log(error.message)
     }
 
+    // if(cart.some(item => item._id === obj._id)) {
+    //   const cartItem = cart.filter(item => item._id === obj._id)
+    //   const updatedCartItems = cart.filter(item => item._id !== obj._id)
+    //   cartItem[0]['count'] += 1
+    //   updatedCartItems.push(cartItem[0])
+    //   setCart(updatedCartItems);
+    //   openNotification('bottomRight')
+    // } else {
+    //   obj.count += 1
+    //   setCart([...cart, obj]);
+    //   openNotification('bottomRight')
+    // }
+
   };
 
-  const calcCountItem = (id, value) => {
-    console.log(id)
+  const calcCountItem = (_id, value) => {
     cart.forEach(element => {
-      if(element.id === id) {
+      if(element._id === _id) {
         element.count += value
       }
     });
   }
 
   const deleteItemCart = (id) => {
-    console.log(id)
     setCart((cart) =>
-      cart.filter(item => Number(item.id) !== Number(id))
+      cart.filter((item) => item._id != id)
     );
   };
 
@@ -103,7 +100,7 @@ function App() {
         deleteItemCart,
         calcCountItem,
         contextHolder,
-        newBoxList
+        newBoxList,
       }}
     >
       <Router>
@@ -122,7 +119,11 @@ function App() {
             <Route path="about-us" element={<AboutUs />} />
             <Route path="cart" element={<Cart />} />
           </Route>
-          <Route path="/api/auth/*" element={<Auth />}>
+          <Route path="/api/auth/*" element={
+              <Suspense fallback={<Loading />}>
+                <Auth />
+              </Suspense>
+            }>
             <Route path="registration" element={<Registration />} />
             <Route path="login" element={<Login />} />
           </Route>

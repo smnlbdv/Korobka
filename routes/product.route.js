@@ -10,14 +10,11 @@ const productRoute = Router()
 
 productRoute.get('/new', async (req, res) => {
     try {
-        console.log(req.params.message)
-        const newProduct = await Product.find({category: "new"})
-        console.log(newProduct)
+        const newProduct = await Product.find({category: 'new'})
         res.json(newProduct)
     } catch (error) {
         console.log(error.message)
     }
 })
-
 
 export default productRoute

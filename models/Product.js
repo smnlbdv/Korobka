@@ -17,7 +17,6 @@ const shema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    count: Number,
     category: {
         type: String,
         required: true
