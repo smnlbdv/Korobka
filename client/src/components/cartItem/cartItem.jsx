@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 
 import style from './cartItem.module.scss'
 
-const CartItem = ({_id, img, title, text, price, count = 1, checkAll}) => {
+const CartItem = ({_id, img, title, text, price, count, checkAll}) => {
 
     const [choose, setСhoose] = useState(checkAll)
     const [counts, setCounts] = useState(count)

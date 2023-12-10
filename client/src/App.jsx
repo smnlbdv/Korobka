@@ -34,40 +34,49 @@ function App() {
     try {
       await api.get('/api/products/new')
                  .then(response => setNewBoxList(response.data))
+                 .catch(error => alert(error.message))
     } catch (error) {
       console.log("Ошибка", error);
     }
   }
 
-  // const openNotification = (placement) => {
-  //   apis.success({
-  //     message: <p>Товар успешно добавлен в корзину</p>,
-  //     placement,
-  //     closeIcon: false,
-  //     duration: 1.5,
-  //   });
-  // };
+  const openNotification = (placement) => {
+    apis.success({
+      message: <p>Товар успешно добавлен в корзину</p>,
+      placement,
+      closeIcon: false,
+      duration: 1.5,
+    });
+  };
 
   const addCart = async (obj) => {
-
     try {
       await api.post('/api/cart/add', {userId, itemId: obj._id})
+               .then(response => {
+                  console.log(response.data)
+                  if(cart.some(item => item._id === response.data.product._id)) {
+                    const cartItem = cart.filter(item => item._id === response.data.product._id)
+                    const updatedCartItems = cart.filter(item => item._id !== response.data.product._id)
+                    cartItem[0]['count'] = response.data.count
+                    updatedCartItems.push(cartItem[0])
+                    setCart(updatedCartItems);
+                    openNotification('bottomRight')
+                  } else {
+                    const product = {
+                      ...response.data.product,
+                      ...response.data.count
+                    }
+                    setCart((prevCart) => [...prevCart, product]);
+                    openNotification('bottomRight')
+                  }
+               })
+               .catch(error => {
+                  console.log(error.message);
+              });
+      
     } catch (error) {
       console.log(error.message)
     }
-
-    // if(cart.some(item => item._id === obj._id)) {
-    //   const cartItem = cart.filter(item => item._id === obj._id)
-    //   const updatedCartItems = cart.filter(item => item._id !== obj._id)
-    //   cartItem[0]['count'] += 1
-    //   updatedCartItems.push(cartItem[0])
-    //   setCart(updatedCartItems);
-    //   openNotification('bottomRight')
-    // } else {
-    //   obj.count += 1
-    //   setCart([...cart, obj]);
-    //   openNotification('bottomRight')
-    // }
 
   };
 
