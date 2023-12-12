@@ -6,6 +6,7 @@ import jwtToken from 'jsonwebtoken'
 import { registerValidation, loginValidation } from './../validation/auth.js'
 
 import CartItem from '../models/Cart.js'
+import verifyToken from '../validation/verifyToken.js'
 
 const cartRoute = Router()
 
@@ -23,7 +24,7 @@ const checkItems = (arr, itemId) => {
     }
 }
 
-cartRoute.post('/add', async (req, res) => {
+cartRoute.post('/add', verifyToken, async (req, res) => {
     try {
         const { userId, itemId } = req.body
         const cartItem = await CartItem.findOne({owner: userId})

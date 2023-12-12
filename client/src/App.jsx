@@ -1,5 +1,6 @@
 import { Suspense, lazy, useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
 import { useAuth } from "./hooks/auth.hook.js";
 import {  notification } from 'antd';
@@ -23,7 +24,7 @@ function App() {
   const [newBoxList, setNewBoxList] = useState([]);
   const { login, logout, token, userId, isReady } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
-
+  const navigate = useNavigate();
   const isLogin = !!token;
 
   useEffect(() => {
@@ -51,28 +52,34 @@ function App() {
 
   const addCart = async (obj) => {
     try {
-      await api.post('/api/cart/add', {userId, itemId: obj._id})
-               .then(response => {
-                  console.log(response.data)
-                  if(cart.some(item => item._id === response.data.product._id)) {
-                    const cartItem = cart.filter(item => item._id === response.data.product._id)
-                    const updatedCartItems = cart.filter(item => item._id !== response.data.product._id)
-                    cartItem[0]['count'] = response.data.count
-                    updatedCartItems.push(cartItem[0])
-                    setCart(updatedCartItems);
-                    openNotification('bottomRight')
-                  } else {
-                    const product = {
-                      ...response.data.product,
-                      ...response.data.count
-                    }
-                    setCart((prevCart) => [...prevCart, product]);
-                    openNotification('bottomRight')
-                  }
-               })
-               .catch(error => {
-                  console.log(error.message);
-              });
+      await api.post('/api/cart/add', {userId, itemId: obj._id}, {
+        headers: {
+          'Authorization': `${token}`,
+        }})
+        .then(response => {
+          console.log(response.data)
+          if(cart.some(item => item._id === response.data.product._id)) {
+            const cartItem = cart.filter(item => item._id === response.data.product._id)
+            const updatedCartItems = cart.filter(item => item._id !== response.data.product._id)
+            cartItem[0]['count'] = response.data.count
+            updatedCartItems.push(cartItem[0])
+            setCart(updatedCartItems);
+            openNotification('bottomRight')
+          } else {
+            const product = {
+              ...response.data.product,
+              ...response.data.count
+            }
+            setCart((prevCart) => [...prevCart, product]);
+            openNotification('bottomRight')
+          }
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+      });
       
     } catch (error) {
       console.log(error.message)
@@ -112,13 +119,13 @@ function App() {
         newBoxList,
       }}
     >
-      <Router>
+      {/* <Router> */}
         <Routes>
           <Route
             path="/"
             element={
               <Suspense fallback={<Loading />}>
-                <HomePage />
+                <HomePage/>
               </Suspense>
             }
           >
@@ -137,7 +144,7 @@ function App() {
             <Route path="login" element={<Login />} />
           </Route>
         </Routes>
-      </Router>
+      {/* </Router> */}
     </AuthContext.Provider>
   );
 }

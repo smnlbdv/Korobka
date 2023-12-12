@@ -6,6 +6,7 @@ import { registerValidation, loginValidation } from './../validation/auth.js'
 
 import User from '../models/User.js'
 import { validationResult } from 'express-validator'
+import generationToken from '../utils/generationJwt.js'
 
 const router = Router()
 
@@ -72,13 +73,7 @@ router.post('/login', loginValidation, async (req, res) => {
             return res.status(400).json({message: "Пароли не совпадают"})
         }
 
-        const jwtSecret = 'ssdjksdlfksjdflkjdflkjdflkjdk' //лучше вынести ключ в .env
-
-        const token = jwtToken.sign(
-            {userId: user.id}, 
-            jwtSecret,
-            {expiresIn: '1h'}
-        )
+        const token = generationToken(user.id)
 
         res.json({
             token,
