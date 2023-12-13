@@ -9,8 +9,7 @@ const CartItem = ({_id, img, title, text, price, count, checkAll}) => {
     const [choose, setСhoose] = useState(checkAll)
     const [counts, setCounts] = useState(count)
     const [input, setInput] = useState(false)
-
-    const { deleteItemCart, calcCountItem } = useContext(AuthContext)
+    const { deleteItemCart, increaseCartItem } = useContext(AuthContext)
 
     useEffect(() => {
         setСhoose(checkAll)
@@ -20,8 +19,8 @@ const CartItem = ({_id, img, title, text, price, count, checkAll}) => {
         if(counts >= 200) {
             setCounts(counts)
         } else {
-            setCounts(counts + 1)
-            calcCountItem(_id, 1)
+            increaseCartItem(_id)
+            // setCounts(counts + 1)
         }
     }
 
@@ -30,7 +29,7 @@ const CartItem = ({_id, img, title, text, price, count, checkAll}) => {
             setCounts(0)
         } else {
             setCounts(counts - 1)
-            calcCountItem(_id, -1)
+            // calcCountItem(_id, -1)
         }
     }
 

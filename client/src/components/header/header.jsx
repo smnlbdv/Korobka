@@ -84,7 +84,7 @@ const Header = () => {
                     <Link to="cart">
                         <li className={style.list_item}>
                             <img src="./assets/bag.svg" alt="bag logo" />
-                            <p>0 руб.</p>
+                            <p>Корзина</p>
                         </li>
                     </Link>
                     <li className={style.list_item}>

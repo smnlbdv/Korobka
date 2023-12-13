@@ -12,7 +12,6 @@ import style from './cart.module.scss'
 const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
-
     const { cart, setCart } = useContext(AuthContext)
 
     const clickButtonAll = () => {

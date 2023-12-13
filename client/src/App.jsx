@@ -1,4 +1,5 @@
-import { Suspense, lazy, useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { Suspense, lazy, useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
@@ -29,7 +30,8 @@ function App() {
 
   useEffect(() => {
     getNewProduct()
-  }, [])
+    getCart()
+  }, [isLogin])
 
   const getNewProduct = async () => {
     try {
@@ -41,6 +43,35 @@ function App() {
     }
   }
 
+  const getCart = async () => {
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.get(`/api/cart/${data.userId}`, {
+        headers: {
+            'Authorization': `${data.token}`,
+        }})
+        .then(response => {
+          const product = response.data.map(item => 
+            {
+              return {
+                ...item.product,
+                count: item.quantity
+              }; 
+            } 
+          );
+          setCart(product);
+        })
+        .catch(response => {
+            if(response.response.status == 401) {
+                logout()
+                navigate("/api/auth/login");
+            }
+        })
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
+  
   const openNotification = (placement) => {
     apis.success({
       message: <p>Товар успешно добавлен в корзину</p>,
@@ -50,25 +81,23 @@ function App() {
     });
   };
 
+
   const addCart = async (obj) => {
+    const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post('/api/cart/add', {userId, itemId: obj._id}, {
         headers: {
-          'Authorization': `${token}`,
+          'Authorization': `${token.token}`,
         }})
         .then(response => {
-          console.log(response.data)
-          if(cart.some(item => item._id === response.data.product._id)) {
-            const cartItem = cart.filter(item => item._id === response.data.product._id)
-            const updatedCartItems = cart.filter(item => item._id !== response.data.product._id)
-            cartItem[0]['count'] = response.data.count
-            updatedCartItems.push(cartItem[0])
-            setCart(updatedCartItems);
-            openNotification('bottomRight')
+          const index = cart.findIndex(item => item._id === response.data.product._id);
+          if(index !== -1) {
+            cart[index]['count'] = response.data.count
+            openNotification('bottomRight') 
           } else {
             const product = {
               ...response.data.product,
-              ...response.data.count
+              count: response.data.count
             }
             setCart((prevCart) => [...prevCart, product]);
             openNotification('bottomRight')
@@ -80,26 +109,63 @@ function App() {
             navigate("/api/auth/login");
           }
       });
-      
     } catch (error) {
       console.log(error.message)
     }
-
   };
 
-  const calcCountItem = (_id, value) => {
-    cart.forEach(element => {
-      if(element._id === _id) {
-        element.count += value
-      }
-    });
+  const increaseCartItem = async (id) => {
+    console.log(id)
+    const token = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.put('/api/cart/increase/${id}', {
+        headers: {
+          'Authorization': `${token.token}`,
+          params: {
+            productId: id,
+          }
+        }})
+        .then(response => {
+          console.log(response.response)
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+      });
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
-  const deleteItemCart = (id) => {
-    setCart((cart) =>
-      cart.filter((item) => item._id != id)
-    );
-  };
+  const deleteItemCart = useCallback(async (productId) => {
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.delete(`/api/cart/delete/${productId}`, {
+        headers: {
+            'Authorization': `${data.token}`,
+        },
+      })
+        .then(response => {
+          console.log(response.data)
+          if(response.data.delete === true) {
+            setCart((cart) =>
+              cart.filter((item) => item._id != productId)
+            );
+            openNotificationDelete('bottomRight')
+          }
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+              logout()
+              navigate("/api/auth/login");
+          }
+        })
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -114,12 +180,11 @@ function App() {
         cart,
         setCart,
         deleteItemCart,
-        calcCountItem,
+        increaseCartItem,
         contextHolder,
         newBoxList,
       }}
     >
-      {/* <Router> */}
         <Routes>
           <Route
             path="/"
@@ -144,7 +209,6 @@ function App() {
             <Route path="login" element={<Login />} />
           </Route>
         </Routes>
-      {/* </Router> */}
     </AuthContext.Provider>
   );
 }
