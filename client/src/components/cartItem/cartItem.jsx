@@ -4,12 +4,12 @@ import { AuthContext } from "../../context/authContext.js";
 
 import style from './cartItem.module.scss'
 
-const CartItem = ({_id, img, title, text, price, count, checkAll}) => {
+const CartItem = ({_id, img, title, text, price, count, checkAll }) => {
 
     const [choose, setСhoose] = useState(checkAll)
     const [counts, setCounts] = useState(count)
     const [input, setInput] = useState(false)
-    const { deleteItemCart, increaseCartItem } = useContext(AuthContext)
+    const { deleteItemCart, increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext)
 
     useEffect(() => {
         setСhoose(checkAll)
@@ -19,17 +19,17 @@ const CartItem = ({_id, img, title, text, price, count, checkAll}) => {
         if(counts >= 200) {
             setCounts(counts)
         } else {
-            increaseCartItem(_id)
-            // setCounts(counts + 1)
+            const resultIncrease = increaseCartItem(_id)
+            resultIncrease && setCounts(counts + 1)
         }
     }
 
     const subtractProduct = () => {
-        if(counts <= 0) {
-            setCounts(0)
+        if(counts <= 1) {
+            unmountItem(_id)
         } else {
-            setCounts(counts - 1)
-            // calcCountItem(_id, -1)
+            const resultDeCrease = decreaseCartItem(_id)
+            resultDeCrease && setCounts(counts - 1)
         }
     }
 

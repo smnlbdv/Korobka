@@ -116,7 +116,7 @@ const reviewsList = [
 
 const Main = () => {
 
-  const [open, setOpen] = useState(1);
+  const [open, setOpen] = useState(3);
   const {contextHolder, newBoxList} = useContext(AuthContext);
 
   const openAnswer = (id) => {

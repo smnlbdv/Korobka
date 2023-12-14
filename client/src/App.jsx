@@ -59,7 +59,7 @@ function App() {
               }; 
             } 
           );
-          setCart(product);
+          setCart(product)
         })
         .catch(response => {
             if(response.response.status == 401) {
@@ -81,6 +81,12 @@ function App() {
     });
   };
 
+  const unmountItem = (id) => {
+    setCart((prev) =>
+      prev.filter((item) => item._id != id)
+    );
+    deleteItemCart(id)
+  }
 
   const addCart = async (obj) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
@@ -114,19 +120,15 @@ function App() {
     }
   };
 
-  const increaseCartItem = async (id) => {
-    console.log(id)
+  const increaseCartItem = useCallback( async (id) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.put('/api/cart/increase/${id}', {
+      await api.post(`/api/cart/increase/`, {id: id}, {
         headers: {
           'Authorization': `${token.token}`,
-          params: {
-            productId: id,
-          }
         }})
         .then(response => {
-          console.log(response.response)
+          return response.data.increase
         })
         .catch(response => {
           if(response.response.status == 401) {
@@ -137,7 +139,28 @@ function App() {
     } catch (error) {
       console.log(error.message)
     }
-  }
+  }, [])
+
+  const decreaseCartItem = useCallback(async (id) => {
+    const token = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.post(`/api/cart/decrease/`, {id: id}, {
+        headers: {
+          'Authorization': `${token.token}`,
+        }})
+        .then(response => {
+          return response.data.increase
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+      });
+    } catch (error) {
+      console.log(error.message)
+    }
+  }, [])
 
   const deleteItemCart = useCallback(async (productId) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
@@ -148,12 +171,10 @@ function App() {
         },
       })
         .then(response => {
-          console.log(response.data)
           if(response.data.delete === true) {
             setCart((cart) =>
               cart.filter((item) => item._id != productId)
             );
-            openNotificationDelete('bottomRight')
           }
         })
         .catch(response => {
@@ -181,8 +202,10 @@ function App() {
         setCart,
         deleteItemCart,
         increaseCartItem,
+        decreaseCartItem,
         contextHolder,
         newBoxList,
+        unmountItem
       }}
     >
         <Routes>

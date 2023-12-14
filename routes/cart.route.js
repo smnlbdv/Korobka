@@ -106,14 +106,35 @@ cartRoute.delete('/delete/:productId', verifyToken, async (req, res) => {
         .catch((error) => res.status(400).json({delete: error.acknowledged}))
 })
 
-// cartRoute.post('/increase/:priductId', verifyToken, async (req, res) => {
-//     try {
-//         const productId = req.params.productId;
-//         console.log(productId)
-//     } catch (error) {
-//         // res.status(400).json({error: error.message})
-//     }
-// })
+cartRoute.post('/increase/', verifyToken, async (req, res) => {
+    try {
+        const productId = req.body.id;
+        const userId = req.userId
+        await CartItem.updateOne(
+            { owner: userId, 'items.product': productId},
+            { $inc: { 'items.$.quantity': 1 } },
+            { new: true })
+            .then((response) => res.status(200).json({increase: response.acknowledged}))
+            .catch((error) => res.status(400).json({increase: error.acknowledged}))
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
+})
+
+cartRoute.post('/decrease/', verifyToken, async (req, res) => {
+    try {
+        const productId = req.body.id;
+        const userId = req.userId
+        await CartItem.updateOne(
+            { owner: userId, 'items.product': productId},
+            { $inc: { 'items.$.quantity': - 1 } },
+            { new: true })
+            .then((response) => res.status(200).json({increase: response.acknowledged}))
+            .catch((error) => res.status(400).json({increase: error.acknowledged}))
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
+})
 
 
 cartRoute.get('/:userId', verifyToken, async (req, res) => {
