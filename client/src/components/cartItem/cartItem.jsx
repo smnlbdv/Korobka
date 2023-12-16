@@ -1,15 +1,15 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext} from 'react';
 import { AuthContext } from "../../context/authContext.js";
 
 import style from './cartItem.module.scss'
 
-const CartItem = ({_id, img, title, text, price, count, checkAll }) => {
+const CartItem = ({_id, img, title, text, price, count, checkAll}) => {
 
     const [choose, setСhoose] = useState(checkAll)
     const [counts, setCounts] = useState(count)
     const [input, setInput] = useState(false)
-    const { deleteItemCart, increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext)
+    const {deleteItemCart, increaseCartItem, decreaseCartItem, unmountItem} = useContext(AuthContext)
 
     useEffect(() => {
         setСhoose(checkAll)
@@ -20,7 +20,9 @@ const CartItem = ({_id, img, title, text, price, count, checkAll }) => {
             setCounts(counts)
         } else {
             const resultIncrease = increaseCartItem(_id)
-            resultIncrease && setCounts(counts + 1)
+            if(resultIncrease) { 
+                setCounts(counts + 1)
+            }
         }
     }
 
@@ -29,7 +31,9 @@ const CartItem = ({_id, img, title, text, price, count, checkAll }) => {
             unmountItem(_id)
         } else {
             const resultDeCrease = decreaseCartItem(_id)
-            resultDeCrease && setCounts(counts - 1)
+            if(resultDeCrease) { 
+                setCounts(counts - 1)
+            }
         }
     }
 

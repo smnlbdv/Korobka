@@ -22,16 +22,28 @@ const AboutUs = lazy(() => import("./pages/aboutUs/aboutUs.jsx"));
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [cartPrice, setCartPrice] = useState();
   const [newBoxList, setNewBoxList] = useState([]);
-  const { login, logout, token, userId, isReady } = useAuth();
+  const { login, logout, token, userId } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const isLogin = !!token;
 
   useEffect(() => {
     getNewProduct()
-    getCart()
+  }, [])
+
+  useEffect(() => {
+    isLogin && getCart()
   }, [isLogin])
+
+  const calculatePrice = () => {
+    const total = cart.reduce((accumulator, product) => {
+        const subtotal = product.count * product.price;
+        return accumulator + subtotal;
+    }, 0);
+    setCartPrice(total)
+  }
 
   const getNewProduct = async () => {
     try {
@@ -62,10 +74,10 @@ function App() {
           setCart(product)
         })
         .catch(response => {
-            if(response.response.status == 401) {
-                logout()
-                navigate("/api/auth/login");
-            }
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
         })
     } catch (error) {
       console.log("Ошибка", error);
@@ -89,6 +101,7 @@ function App() {
   }
 
   const addCart = async (obj) => {
+    console.log(cart)
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post('/api/cart/add', {userId, itemId: obj._id}, {
@@ -120,7 +133,7 @@ function App() {
     }
   };
 
-  const increaseCartItem = useCallback( async (id) => {
+  const increaseCartItem = async (id) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post(`/api/cart/increase/`, {id: id}, {
@@ -128,6 +141,11 @@ function App() {
           'Authorization': `${token.token}`,
         }})
         .then(response => {
+          const index = cart.findIndex(item => item._id === id);
+          if(index !== -1) {
+            cart[index]['count'] += 1
+            calculatePrice()
+          }
           return response.data.increase
         })
         .catch(response => {
@@ -139,9 +157,9 @@ function App() {
     } catch (error) {
       console.log(error.message)
     }
-  }, [])
+  }
 
-  const decreaseCartItem = useCallback(async (id) => {
+  const decreaseCartItem = async (id) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post(`/api/cart/decrease/`, {id: id}, {
@@ -149,6 +167,11 @@ function App() {
           'Authorization': `${token.token}`,
         }})
         .then(response => {
+          const index = cart.findIndex(item => item._id === id);
+          if(index !== -1) {
+            cart[index]['count'] -= 1
+            calculatePrice()
+          }
           return response.data.increase
         })
         .catch(response => {
@@ -160,7 +183,8 @@ function App() {
     } catch (error) {
       console.log(error.message)
     }
-  }, [])
+  }
+
 
   const deleteItemCart = useCallback(async (productId) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
@@ -195,7 +219,6 @@ function App() {
         logout,
         token,
         userId,
-        isReady,
         isLogin,
         addCart,
         cart,
@@ -203,6 +226,8 @@ function App() {
         deleteItemCart,
         increaseCartItem,
         decreaseCartItem,
+        calculatePrice,
+        cartPrice,
         contextHolder,
         newBoxList,
         unmountItem

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 
@@ -12,9 +12,18 @@ import style from './cart.module.scss'
 const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
-    const { cart, setCart } = useContext(AuthContext)
+    const [totalPrice, setPriceTotal] = useState()
+    const { cart, setCart, cartPrice, calculatePrice } = useContext(AuthContext)
 
-    const clickButtonAll = () => {
+    useEffect(() => {
+        calculatePrice()
+    }, [cart])
+
+    useEffect(() => {
+        setPriceTotal(cartPrice * 1)
+    }, [cartPrice])
+
+    const clickButtonAll = () => {  
         setCheckAll(!checkAll)
     }
     const clearCart = () => {
@@ -59,22 +68,22 @@ const Cart = () => {
                             <div className={style.cart__info}>
                                 <div className={style.info__item}>
                                     <p>Кол-во:</p>
-                                    <p>4 шт.</p>
+                                    <p>{cart.length} шт.</p>
                                 </div>
                                 <div className={style.info__item}>
                                     <p>Сумма:</p>
-                                    <p>200 BYN</p>
+                                    <p>{cartPrice} BYN</p>
                                 </div>
                                 <div className={style.info__item}>
-                                    <p>Налог:</p>
-                                    <p>1.2 %</p>
+                                    <p>Скидка:</p>
+                                    <p>0 %</p>
                                 </div>
                             </div>
                             <input className={style.promo} type="text" placeholder="Промокод..." />
                             <div className={style.pay}>
                                 <div className={style.pay_item}>
                                     <p>Итог к оплате:</p>
-                                    <p>215 BYN</p>
+                                    <p className={style.totalPrice}> {totalPrice} BYN</p>
                                 </div>
                                 <button className={style.btn_checkout}>Оформить</button>
                             </div>
