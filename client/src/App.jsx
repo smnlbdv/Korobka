@@ -19,9 +19,11 @@ const Registration = lazy(() => import("./components/registration/registration.j
 const Login = lazy(() => import("./components/login/login.jsx"));
 const Contacts = lazy(() => import("./pages/contacts/contacts.jsx"));
 const AboutUs = lazy(() => import("./pages/aboutUs/aboutUs.jsx"));
+const Liked = lazy(() => import("./pages/liked/liked.jsx"));
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [favoriteItem, setFavoriteItem] = useState([]);
   const [cartPrice, setCartPrice] = useState();
   const [newBoxList, setNewBoxList] = useState([]);
   const { login, logout, token, userId } = useAuth();
@@ -32,10 +34,6 @@ function App() {
   useEffect(() => {
     getNewProduct()
   }, [])
-
-  useEffect(() => {
-    isLogin && getCart()
-  }, [isLogin])
 
   const calculatePrice = () => {
     const total = cart.reduce((accumulator, product) => {
@@ -55,35 +53,6 @@ function App() {
     }
   }
 
-  const getCart = async () => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
-    try {
-      await api.get(`/api/cart/${data.userId}`, {
-        headers: {
-            'Authorization': `${data.token}`,
-        }})
-        .then(response => {
-          const product = response.data.map(item => 
-            {
-              return {
-                ...item.product,
-                count: item.quantity
-              }; 
-            } 
-          );
-          setCart(product)
-        })
-        .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
-        })
-    } catch (error) {
-      console.log("Ошибка", error);
-    }
-  }
-  
   const openNotification = (placement) => {
     apis.success({
       message: <p>Товар успешно добавлен в корзину</p>,
@@ -230,7 +199,8 @@ function App() {
         cartPrice,
         contextHolder,
         newBoxList,
-        unmountItem
+        unmountItem,
+        favoriteItem
       }}
     >
         <Routes>
@@ -247,6 +217,7 @@ function App() {
             <Route path="contacts" element={<Contacts />} />
             <Route path="about-us" element={<AboutUs />} />
             <Route path="cart" element={<Cart />} />
+            <Route path="liked" element={<Liked />} />
           </Route>
           <Route path="/api/auth/*" element={
               <Suspense fallback={<Loading />}>

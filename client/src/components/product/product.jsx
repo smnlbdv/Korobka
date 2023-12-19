@@ -2,10 +2,10 @@
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext.js";
 
-import style from './newBox.module.scss'
+import style from './product.module.scss'
 
 
-const NewBox = ({_id, img, title, text, price, count}) => {
+const Product = ({_id, img, title, text, price, count}) => {
 
     const { addCart } = useContext(AuthContext)
 
@@ -37,4 +37,4 @@ const NewBox = ({_id, img, title, text, price, count}) => {
     );
 }
  
-export default NewBox;
+export default Product;

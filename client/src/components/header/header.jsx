@@ -87,10 +87,12 @@ const Header = () => {
                             <p>Корзина</p>
                         </li>
                     </Link>
-                    <li className={style.list_item}>
-                        <img src="./assets/heart.svg" alt="favorite logo" />
-                        <p>Закладки</p>
-                    </li>
+                    <Link to="liked">
+                        <li className={style.list_item}>
+                            <img src="./assets/heart.svg" alt="favorite logo" />
+                            <p>Закладки</p>
+                        </li>
+                    </Link>
                     <li className={style.list_item}>
                         <img src="./assets/user.svg" alt="user logo" />
                         <p>Профиль</p>

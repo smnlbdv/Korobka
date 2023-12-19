@@ -1,0 +1,36 @@
+.section_cart {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100% - 150px);
+}
+
+.section_title {
+    padding-top: 45px;
+    text-align: left !important;
+}
+
+
+.cart__block_null {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    .block__info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 20px;
+        margin-top: -50px;
+    }
+    .title {
+        font-size: 23px;
+        text-align: center;
+    }
+
+    .btn_block {
+        display: flex;
+        column-gap: 15px;
+    }
+}

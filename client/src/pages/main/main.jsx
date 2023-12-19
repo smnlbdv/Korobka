@@ -5,7 +5,7 @@ import { EffectCoverflow, Navigation} from 'swiper/modules';
 import ButtonCreate from "../../components/buttonCreate/buttonCreate";
 import StepsCard from "../../components/stepsCard/stepsCard";
 import AnswerCard from "../../components/answerCard/answerCard";
-import NewBox from "../../components/newBox/newBox";
+import Product from "../../components/product/product";
 import Review from "../../components/review/review";
 
 
@@ -201,7 +201,7 @@ const Main = () => {
           <h2 className="section__title">Новинки</h2>
           <div className={style.new_box_flex}>
             {newBoxList.map((item, index) => (
-              <NewBox
+              <Product
                 key={index}
                 {...item}
               />
