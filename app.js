@@ -6,6 +6,7 @@ import cors from 'cors'
 import route from './routes/auth.route.js'
 import productRoute from './routes/product.route.js'
 import cartRoute from './routes/cart.route.js'
+import favoriteRoute from './routes/favorite.route.js';
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -18,6 +19,7 @@ app.use(cors())
 app.use('/api/auth', route)
 app.use('/api/products', productRoute)
 app.use('/api/cart', cartRoute)
+app.use('/api/favorite', favoriteRoute)
 
 async function start() {
     try {

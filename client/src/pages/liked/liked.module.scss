@@ -34,3 +34,12 @@
         column-gap: 15px;
     }
 }
+
+.favorite_items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 275px));
+    justify-content: left;
+    gap: 30px;
+    margin-top: 40px;
+    margin-bottom: 50px;
+}

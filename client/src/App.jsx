@@ -53,9 +53,9 @@ function App() {
     }
   }
 
-  const openNotification = (placement) => {
+  const openNotification = (placement, text) => {
     apis.success({
-      message: <p>Товар успешно добавлен в корзину</p>,
+      message: <p>{text}</p>,
       placement,
       closeIcon: false,
       duration: 1.5,
@@ -70,7 +70,6 @@ function App() {
   }
 
   const addCart = async (obj) => {
-    console.log(cart)
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post('/api/cart/add', {userId, itemId: obj._id}, {
@@ -81,14 +80,14 @@ function App() {
           const index = cart.findIndex(item => item._id === response.data.product._id);
           if(index !== -1) {
             cart[index]['count'] = response.data.count
-            openNotification('bottomRight') 
+            openNotification('bottomRight', 'Товар успешно добавлен в корзину') 
           } else {
             const product = {
               ...response.data.product,
               count: response.data.count
             }
             setCart((prevCart) => [...prevCart, product]);
-            openNotification('bottomRight')
+            openNotification('bottomRight', 'Товар успешно добавлен в корзину')
           }
         })
         .catch(response => {
@@ -155,7 +154,7 @@ function App() {
   }
 
 
-  const deleteItemCart = useCallback(async (productId) => {
+  const deleteItemCart = async (productId) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.delete(`/api/cart/delete/${productId}`, {
@@ -179,7 +178,42 @@ function App() {
     } catch (error) {
       console.log("Ошибка", error);
     }
-  }, []);
+  }
+
+  const addProductFavorite = async (productId) => {
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.post('/api/favorite/add', {userId: data.userId, favoriteId: productId}, {
+        headers: {
+          'Authorization': `${data.token}`,
+        }})
+        .then(response => {
+          // console.log(response.data)
+          setFavoriteItem((prevFavorite) => [...prevFavorite, response.data]);
+          openNotification('bottomRight', response.data.message)
+          // const index = cart.findIndex(item => item._id === response.data.product._id);
+          // if(index !== -1) {
+          //   cart[index]['count'] = response.data.count
+          //   openNotification('bottomRight') 
+          // } else {
+          //   const product = {
+          //     ...response.data.product,
+          //     count: response.data.count
+          //   }
+          //   setCart((prevCart) => [...prevCart, product]);
+          //   openNotification('bottomRight')
+          // }
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+      });
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
 
   return (
     <AuthContext.Provider
@@ -200,7 +234,8 @@ function App() {
         contextHolder,
         newBoxList,
         unmountItem,
-        favoriteItem
+        favoriteItem,
+        addProductFavorite
       }}
     >
         <Routes>

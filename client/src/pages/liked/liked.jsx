@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext, useEffect} from "react";
+import { useContext} from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 
+import Product from "../../components/product/product.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 
 import style from './liked.module.scss'
@@ -22,8 +23,16 @@ const Liked = () => {
             <h2 className={`${style.section_title} section__title`}>Закладки</h2>
             {
                 favoriteItem.length != 0 ?
-                <div>
-                    <p>Гуд!</p>
+                <div className={style.favorite_items}>
+                    {
+                        favoriteItem.map((obj) => 
+                            <Product
+                                key={obj._id}
+                                favorite={true}
+                                {...obj}
+                            />
+                        )
+                    }
                 </div>
                 :
                 <div className={style.cart__block_null}>
@@ -31,7 +40,6 @@ const Liked = () => {
                         <p className={style.title}>У вас нет понравившихся товаров</p>
                         <div className={style.btn_block}>
                             <ButtonNull title={"В каталог"} path={'/ready-gifts'}/>
-                            <ButtonNull title={"Собрать"} path={'/'}/>
                         </div>
                     </div>
                 </div>

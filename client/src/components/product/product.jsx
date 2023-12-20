@@ -1,21 +1,27 @@
 /* eslint-disable react/prop-types */
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
 
 import style from './product.module.scss'
 
 
-const Product = ({_id, img, title, text, price, count}) => {
+const Product = ({_id, img, title, text, price, count, favorite = false}) => {
 
-    const { addCart } = useContext(AuthContext)
+    const [isFavorite, setIsFavorite] = useState(favorite);
+
+    const { addCart, addProductFavorite } = useContext(AuthContext)
 
     const clickBtnAdd = () => {
         addCart({_id, img, title, text, price, count})
     }
 
-    return ( 
+    const clickHeart = () => {
+        addProductFavorite(_id) ? setIsFavorite(true) : setIsFavorite(false)
+    }
+
+    return (
         <div className={style.new_box}>
-            <img className={style.favorite} src="./assets/love.svg" alt="" />
+            <img className={style.favorite} src={isFavorite ? "./assets/favorite-love.svg" : "./assets/love.svg"} alt="" onClick={clickHeart}/>
             <div className={style.info}>
                 <div className={style.image_box}>
                     <img className={style.image} src={img} alt="image new" />

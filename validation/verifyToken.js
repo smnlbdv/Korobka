@@ -15,8 +15,6 @@ const verifyToken = (req, res, next) => {
     if (decodedToken.exp < Date.now()) {
       req.token = generationToken(decodedToken.userId);
     }
-    req.token = token
-    req.userId = decodedToken.userId
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Неверный токен авторизации' });
