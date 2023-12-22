@@ -1,20 +1,19 @@
 .new_box {
-    max-width: 265px;
-    height: 370px;
+    max-width: 250px;
     position: relative;
     background-color: white;
-    border-radius: 15px;
+    border-radius: 10px;
     color: black;
     overflow: hidden;
 }
 
 .image {
-    max-width: 150px;
+    max-width: 140px;
     margin: 0 auto;
 }
 
 .title {
-    font-size: 20px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 600; 
     text-align: center;
@@ -42,7 +41,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 10px;
 }
 
 .price {
@@ -68,13 +66,11 @@
 
 .btn_add {
     width: 100%;
-    position: absolute;
-    bottom: 0;
     font-size: 15px;
     font-style: normal;
     font-weight: 600; 
     border: 0;
-    border-radius: 0px 0px 15px 15px;
+    border-radius: 0px 0px 10px 10px;
     background: #8338EC; 
     color: white;
     padding: 15px 0;
@@ -96,10 +92,9 @@
 
 .favorite {
     position: absolute;
-    top: 15px;
     right: 20px;
     border: 0;
-    width: 24px;
+    width: 21px;
     cursor: pointer;
 }
 

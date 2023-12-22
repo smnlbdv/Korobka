@@ -181,38 +181,81 @@ function App() {
   }
 
   const addProductFavorite = async (productId) => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
-    try {
-      await api.post('/api/favorite/add', {userId: data.userId, favoriteId: productId}, {
-        headers: {
-          'Authorization': `${data.token}`,
-        }})
-        .then(response => {
-          // console.log(response.data)
-          setFavoriteItem((prevFavorite) => [...prevFavorite, response.data]);
-          openNotification('bottomRight', response.data.message)
-          // const index = cart.findIndex(item => item._id === response.data.product._id);
-          // if(index !== -1) {
-          //   cart[index]['count'] = response.data.count
-          //   openNotification('bottomRight') 
-          // } else {
-          //   const product = {
-          //     ...response.data.product,
-          //     count: response.data.count
-          //   }
-          //   setCart((prevCart) => [...prevCart, product]);
-          //   openNotification('bottomRight')
-          // }
-        })
-        .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
-      });
-    } catch (error) {
-      console.log(error.message)
+    if(favoriteItem.some(item => item._id == productId)) {
+      // favoriteItem.filter((item) => item._id !== productId)
+    } else {
+      const data = JSON.parse(localStorage.getItem('userData')) || '';
+      try {
+        await api.post('/api/favorite/add', {userId: data.userId, favoriteId: productId}, {
+          headers: {
+            'Authorization': `${data.token}`,
+          }})
+          .then(response => {
+            setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
+            openNotification('bottomRight', response.data.message)
+            // const index = cart.findIndex(item => item._id === response.data.product._id);
+            // if(index !== -1) {
+            //   cart[index]['count'] = response.data.count
+            //   openNotification('bottomRight') 
+            // } else {
+            //   const product = {
+            //     ...response.data.product,
+            //     count: response.data.count
+            //   }
+            //   setCart((prevCart) => [...prevCart, product]);
+            //   openNotification('bottomRight')
+            // }
+          })
+          .catch(response => {
+            if(response.response.status == 401) {
+              logout()
+              navigate("/api/auth/login");
+            }
+        }); 
+      }
+      catch (error) {
+        console.log(error.message)
+      }
     }
+  }
+
+  const deleteProductFavorite = async (productId) => {
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+      try {
+        await api.delete(`/api/favorite/delete/${productId}`, {
+          headers: {
+            'Authorization': `${data.token}`,
+          }
+        })
+          .then(response => {
+            if(response.data.delete === true) {
+              setFavoriteItem((cart) =>
+                cart.filter((item) => item._id != productId)
+              );
+            }
+            // const index = cart.findIndex(item => item._id === response.data.product._id);
+            // if(index !== -1) {
+            //   cart[index]['count'] = response.data.count
+            //   openNotification('bottomRight') 
+            // } else {
+            //   const product = {
+            //     ...response.data.product,
+            //     count: response.data.count
+            //   }
+            //   setCart((prevCart) => [...prevCart, product]);
+            //   openNotification('bottomRight')
+            // }
+          })
+          .catch(response => {
+            if(response.response.status == 401) {
+              logout()
+              navigate("/api/auth/login");
+            }
+        }); 
+      }
+      catch (error) {
+        console.log(error.message)
+      }
   }
 
   return (
@@ -235,7 +278,9 @@ function App() {
         newBoxList,
         unmountItem,
         favoriteItem,
-        addProductFavorite
+        addProductFavorite,
+        setFavoriteItem,
+        deleteProductFavorite
       }}
     >
         <Routes>

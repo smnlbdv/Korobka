@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useContext, useEffect, useCallback, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
-// import ContentLoader from "react-content-loader";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 import api from '../../api/api.js'
@@ -68,7 +67,7 @@ const Cart = () => {
         } catch (error) {
           console.log("Ошибка", error);
         }
-      }
+    }
 
     return ( 
         <section className={`${style.section_cart} wrapper`}>

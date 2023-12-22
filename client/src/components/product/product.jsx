@@ -9,21 +9,27 @@ const Product = ({_id, img, title, text, price, count, favorite = false}) => {
 
     const [isFavorite, setIsFavorite] = useState(favorite);
 
-    const { addCart, addProductFavorite } = useContext(AuthContext)
+    const { addCart, addProductFavorite, deleteProductFavorite } = useContext(AuthContext)
 
     const clickBtnAdd = () => {
         addCart({_id, img, title, text, price, count})
     }
 
     const clickHeart = () => {
-        addProductFavorite(_id) ? setIsFavorite(true) : setIsFavorite(false)
+        if(isFavorite) {
+            deleteProductFavorite(_id)
+            setIsFavorite(false)
+        } else {
+            addProductFavorite(_id) 
+            setIsFavorite(true)
+        }
     }
 
     return (
         <div className={style.new_box}>
-            <img className={style.favorite} src={isFavorite ? "./assets/favorite-love.svg" : "./assets/love.svg"} alt="" onClick={clickHeart}/>
             <div className={style.info}>
                 <div className={style.image_box}>
+                <img className={style.favorite} src={isFavorite ? "./assets/favorite-love.svg" : "./assets/love.svg"} alt="" onClick={clickHeart}/>
                     <img className={style.image} src={img} alt="image new" />
                     {/* <img className={style.icon_new_box} src="./assets/icon-new.svg" alt="" /> */}
                 </div>

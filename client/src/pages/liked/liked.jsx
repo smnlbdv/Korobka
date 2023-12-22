@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useContext} from "react";
+import { useContext, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
+
+import api from '../../api/api.js'
 
 import Product from "../../components/product/product.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
@@ -10,7 +13,43 @@ import style from './liked.module.scss'
 
 
 const Liked = () => {
-    const { favoriteItem } = useContext(AuthContext)
+    const { favoriteItem, logout, setFavoriteItem } = useContext(AuthContext)
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(favoriteItem.length == 0) {
+            getFavorite()
+        }
+    }, [])
+
+    const getFavorite = async () => {
+        const data = JSON.parse(localStorage.getItem('userData')) || '';
+        try {
+          await api.get(`/api/favorite/${data.userId}`, {
+            headers: {
+                'Authorization': `${data.token}`,
+            }})
+            .then(response => {
+                const favorite = response.data.map(item => 
+                    {
+                      return {
+                        ...item.product,
+                      }; 
+                    } 
+                  );
+                setFavoriteItem(favorite)
+            })
+            .catch(response => {
+              if(response.status == 401) {
+                logout()
+                navigate("/api/auth/login");
+              }
+            })
+            
+        } catch (error) {
+          console.log("Ошибка", error);
+        }
+    }
     
     return ( 
         <section className={`${style.section_cart} wrapper`}>

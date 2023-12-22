@@ -8,5 +8,7 @@
 }
 
 .ant-notification-notice {
-    width: 340px !important;
+    width: max-content !important;
+    padding: 16px 20px !important;
 }
+

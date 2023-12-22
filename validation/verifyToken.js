@@ -11,11 +11,13 @@ const verifyToken = (req, res, next) => {
   }
   try {
     const decodedToken = jwt.verify(token, 'ssdjksdlfksjdflkjdflkjdflkjdk');
-    console.log(decodedToken)
-    if (decodedToken.exp < Date.now()) {
-      req.token = generationToken(decodedToken.userId);
+    const currentTime = Math.round(new Date().getTime() / 1000);
+    if (decodedToken.exp <= currentTime) {
+      return res.status(401).json({ message: 'Время токена истекло' });
+    } else {
+      req.userId = decodedToken.userId
+      next();
     }
-    next();
   } catch (error) {
     return res.status(401).json({ message: 'Неверный токен авторизации' });
   }
