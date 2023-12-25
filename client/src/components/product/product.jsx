@@ -8,12 +8,47 @@ import style from './product.module.scss'
 const Product = ({_id, img, title, text, price, count, favorite = false, newProduct = true}) => {
 
     const [isFavorite, setIsFavorite] = useState(favorite);
+    const [isAdded, setIsAdded] = useState(false)
+    const [countProduct, setCountProduct] = useState()
 
-    const { addCart, addProductFavorite, deleteProductFavorite } = useContext(AuthContext)
+    const { cart, addCart, addProductFavorite, deleteProductFavorite, increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext)
 
-    const clickBtnAdd = () => {
-        addCart({_id, img, title, text, price, count})
+    const clickBtnAdd = async () => {
+        await addCart({_id, img, title, text, price, count})
+        const product = cart.find(obj => obj._id === _id);
+        if(!product) {
+            setCountProduct(1)
+            setIsAdded(true)
+        }
+        setCountProduct(product.count)
+        setIsAdded(true)
     }
+
+    // ................
+    
+    const addProduct = () => {
+        if(countProduct >= 200) {
+            setCountProduct(countProduct)
+        } else {
+            const resultIncrease = increaseCartItem(_id)
+            if(resultIncrease) { 
+                setCountProduct(countProduct + 1)
+            }
+        }
+    }
+
+    const subtractProduct = () => {
+        if(countProduct <= 1) {
+            unmountItem(_id)
+            setIsAdded(false)
+        } else {
+            const resultDeCrease = decreaseCartItem(_id)
+            if(resultDeCrease) { 
+                setCountProduct(countProduct - 1)
+            }
+        }
+    }
+    //функцию добавления и удаления нужно вынести 
 
     const clickHeart = () => {
         if(isFavorite) {
@@ -46,7 +81,20 @@ const Product = ({_id, img, title, text, price, count, favorite = false, newProd
             </div>
             <div className={style.cart__button}>
                 <div className={style.button__add_cart}>
-                    <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
+                    {
+                        isAdded ? 
+                        <div className={style.counter__block}>
+                            <img className={style.counter__image} src="./assets/product-cart-decrease.svg" alt="Decrease" onClick={subtractProduct}/>
+                            <div className={style.counter__info}>
+                                <p className={style.counter__count}>
+                                    {countProduct} шт.
+                                </p>
+                            </div>
+                            <img className={style.counter__image} src="./assets/product-cart-increase.svg" alt="Increase" onClick={addProduct}/>
+                        </div>
+                        :
+                        <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
+                    }
                 </div>
                 <div className={!isFavorite ? style.button__add_favorite : style.button__add_favorite_love}>
                     <img className={style.favorite} src={isFavorite ? "./assets/favorite-love.svg" : "./assets/love.svg"} alt="" onClick={clickHeart}/>

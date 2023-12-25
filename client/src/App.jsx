@@ -114,6 +114,7 @@ function App() {
             cart[index]['count'] += 1
             calculatePrice()
           }
+          openNotification('bottomRight', 'Товар успешно добавлен в корзину')
           return response.data.increase
         })
         .catch(response => {

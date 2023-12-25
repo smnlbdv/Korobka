@@ -22,7 +22,7 @@
 .image_box {
     display: flex;
     justify-content: center;
-    transform: translateY(-24px);
+    transform: translateY(-26px);
 }
 
 .text_block {
@@ -91,14 +91,15 @@
 }
 
 .favorite {
-    width: 19px;
+    width: 18px;
     cursor: pointer;
+    transition: all 200ms;
 }
 
 .icon_new_box {
     position: absolute;
     bottom: -29px;
-    right: -36px;
+    right: -35px;
     width: 74px;
     height: 30px;
 }
@@ -124,8 +125,38 @@
     flex: 1;
     border-radius: 0px 0px 10px 0px;
     background-color: rgb(252, 62, 62);
+    transition: all 200ms;
     &_love {
         @extend .button__add_favorite;
         background-color:white;
+        transition: all 200ms;
     }
+}
+.counter__block {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    border-radius: 0px 0px 0px 10px;
+    justify-content: space-between;
+    padding: 0px 25px;
+    background-color: #8338EC; 
+
+}
+
+.counter__image {
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+}
+
+.counter__count {
+    color: #FFF;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    text-align: center;
+}
+.counter__info {
+    display: flex;
+    flex-direction: column;
 }
