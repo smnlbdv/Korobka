@@ -12,19 +12,19 @@ const Header = () => {
     
     const items = [
         {
-          label: <Link to="ready-gifts" replace={true} >
+          label: <Link to="ready-gifts">
                     <li>Для мужчин</li>
                  </Link>,
           key: '0',
         },
         {
-          label: <Link to="ready-gifts" replace={true} >
+          label: <Link to="ready-gifts">
                     <li>На 14 февраля</li>
                  </Link>,
           key: '1',
         },
         {
-          label: <Link to="ready-gifts" replace={true} >
+          label: <Link to="ready-gifts">
                     <li>Для девушек</li>
                  </Link>,
           key: '2',

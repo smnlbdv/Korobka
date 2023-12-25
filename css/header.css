@@ -1,0 +1,11 @@
+.ant-dropdown {
+  width: 180px;
+}
+.ant-dropdown .ant-dropdown-menu {
+  border-radius: 2px !important;
+  font-family: "Montserrat", sans-serif;
+  padding: 0 !important;
+}
+.ant-dropdown .ant-dropdown-menu-item {
+  padding: 8px 16px !important;
+}

@@ -1,0 +1,129 @@
+.new_box {
+  max-width: 260px;
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  color: black;
+}
+
+.image {
+  max-width: 140px;
+  margin: 0 auto;
+  transform: scale(1.4);
+}
+
+.title {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+}
+
+.image_box {
+  display: flex;
+  justify-content: center;
+  transform: translateY(-24px);
+}
+
+.text_block {
+  display: flex;
+  flex-direction: column;
+}
+
+.text {
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.block_price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.price {
+  display: flex;
+  align-items: end;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  margin-top: 5px;
+}
+.price span {
+  color: #A1A1A1;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.price p {
+  color: #1D1D1D;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.btn_add {
+  width: 100%;
+  font-size: 15px;
+  height: 100%;
+  font-style: normal;
+  font-weight: 600;
+  border: 0;
+  border-radius: 0px 0px 0px 10px;
+  background: #8338EC;
+  color: white;
+  transition: all 300ms;
+}
+.btn_add:hover {
+  background: #7431d1;
+  transition: all 300ms;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px;
+  gap: 10px;
+}
+
+.favorite {
+  width: 19px;
+  cursor: pointer;
+}
+
+.icon_new_box {
+  position: absolute;
+  bottom: -29px;
+  right: -36px;
+  width: 74px;
+  height: 30px;
+}
+
+.cart__button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 47px;
+}
+
+.button__add_cart {
+  flex: 1;
+  height: 100%;
+}
+
+.button__add_favorite, .button__add_favorite_love {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 50px;
+  height: 100%;
+  flex: 1;
+  border-radius: 0px 0px 10px 0px;
+  background-color: rgb(252, 62, 62);
+}
+.button__add_favorite_love {
+  background-color: white;
+}

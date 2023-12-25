@@ -1,15 +1,15 @@
 .new_box {
-    max-width: 250px;
+    max-width: 260px;
     position: relative;
     background-color: white;
     border-radius: 10px;
     color: black;
-    overflow: hidden;
 }
 
 .image {
     max-width: 140px;
     margin: 0 auto;
+    transform: scale(1.4);
 }
 
 .title {
@@ -22,6 +22,7 @@
 .image_box {
     display: flex;
     justify-content: center;
+    transform: translateY(-24px);
 }
 
 .text_block {
@@ -48,7 +49,6 @@
     align-items: end;
     column-gap: 10px;
     margin-top: 5px;
-    // flex-direction: column;
     span {
         color: #A1A1A1;
         font-size: 15px;
@@ -67,13 +67,13 @@
 .btn_add {
     width: 100%;
     font-size: 15px;
+    height: 100%;
     font-style: normal;
     font-weight: 600; 
     border: 0;
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 0px 0px 0px 10px;
     background: #8338EC; 
     color: white;
-    padding: 15px 0;
     transition: all 300ms;
 
     &:hover {
@@ -91,17 +91,41 @@
 }
 
 .favorite {
-    position: absolute;
-    right: 20px;
-    border: 0;
-    width: 21px;
+    width: 19px;
     cursor: pointer;
 }
 
 .icon_new_box {
     position: absolute;
-    bottom: 0;
-    right: -38px;
-    width: 72px;
-    height: 36px;
+    bottom: -29px;
+    right: -36px;
+    width: 74px;
+    height: 30px;
+}
+
+.cart__button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 47px;
+}
+
+.button__add_cart {
+    flex: 1;
+    height: 100%;
+}
+
+.button__add_favorite {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 50px;
+    height: 100%;
+    flex: 1;
+    border-radius: 0px 0px 10px 0px;
+    background-color: rgb(252, 62, 62);
+    &_love {
+        @extend .button__add_favorite;
+        background-color:white;
+    }
 }

@@ -1,0 +1,76 @@
+@import url("normalize.css");
+@import url("./libs/reset.scss");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background: #00046F;
+  color: white;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.section__title {
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+}
+
+.wrapper {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  -moz-column-gap: 9px;
+       column-gap: 9px;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  cursor: pointer;
+}
+.header__logo img {
+  width: 40px;
+}
+
+a {
+  list-style: none;
+  color: inherit;
+  list-style-type: none;
+  text-decoration: none;
+}
+
+.bread-crumbs {
+  display: flex;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  padding-top: 20px;
+  font-size: 14px;
+}
+.bread-crumbs a {
+  display: flex;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  align-items: center;
+  color: #F14D29;
+}
+.bread-crumbs a::after {
+  content: "/";
+  color: white;
+}

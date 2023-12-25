@@ -208,17 +208,17 @@ const Main = () => {
             ))}
           </div>
         </section>
-        <section className={style.partner_block}>
+    </div>
+    <section className={style.partner_block}>
           <h2 className="section__title">Наши партнеры</h2>
           <div className={style.partner_list}>
-            <img className={style.image} src="./assets/partner-1.png" alt="" />
-            <img className={style.image} src="./assets/partner-1.png" alt="" />
-            <img className={style.image} src="./assets/partner-1.png" alt="" />
-            <img className={style.image} src="./assets/partner-1.png" alt="" />
-            <img className={style.image} src="./assets/partner-1.png" alt="" />
+            <img className={style.image} src="./assets/partner-1.png" alt="Google" />
+            <img className={style.image} src="./assets/partner-2.png" alt="Dropbox" />
+            <img className={style.image} src="./assets/partner-3.png" alt="Spotify" />
+            <img className={style.image} src="./assets/partner-4.png" alt="Invision" />
+            <img className={style.image} src="./assets/partner-5.png" alt="PayPal" />
           </div>
-        </section>
-    </div>
+    </section>
     <div className={style.good_people}>
           <h2 className="section__title">Тысячи довольных пользователей</h2>
     </div>
