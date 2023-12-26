@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
 import { useAuth } from "./hooks/auth.hook.js";
-import {  notification } from 'antd';
+import { notification } from 'antd';
 import './libs/ant.css'
 
 import Loading from "./components/loading/loading.jsx";
@@ -234,18 +234,6 @@ function App() {
                 cart.filter((item) => item._id != productId)
               );
             }
-            // const index = cart.findIndex(item => item._id === response.data.product._id);
-            // if(index !== -1) {
-            //   cart[index]['count'] = response.data.count
-            //   openNotification('bottomRight') 
-            // } else {
-            //   const product = {
-            //     ...response.data.product,
-            //     count: response.data.count
-            //   }
-            //   setCart((prevCart) => [...prevCart, product]);
-            //   openNotification('bottomRight')
-            // }
           })
           .catch(response => {
             if(response.response.status == 401) {
@@ -257,6 +245,24 @@ function App() {
       catch (error) {
         console.log(error.message)
       }
+  }
+
+  const sendEmailData = async (email) => {
+    const token = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.post('/api/email/send', {email: email}, {
+        headers: {
+          'Authorization': `${token.token}`,
+        }})
+        .then(response => {
+          console.log(response)
+        })
+        .catch(response => {
+          console.log(response)
+      });
+    } catch (error) {
+      console.log(error.message)
+    }
   }
 
   return (
@@ -281,7 +287,8 @@ function App() {
         favoriteItem,
         addProductFavorite,
         setFavoriteItem,
-        deleteProductFavorite
+        deleteProductFavorite,
+        sendEmailData
       }}
     >
         <Routes>

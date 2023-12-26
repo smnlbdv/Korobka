@@ -22,7 +22,7 @@
 .image_box {
   display: flex;
   justify-content: center;
-  transform: translateY(-26px);
+  transform: translateY(-26x);
 }
 
 .text_block {

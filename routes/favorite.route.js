@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import jwtToken from 'jsonwebtoken'
 
-
 import Favorite from '../models/Favorite.js'
 import verifyToken from '../validation/verifyToken.js'
 

@@ -117,11 +117,20 @@ const reviewsList = [
 const Main = () => {
 
   const [open, setOpen] = useState(3);
-  const {contextHolder, newBoxList} = useContext(AuthContext);
+  const [emailText, setEmailText] = useState('')
+  const {contextHolder, newBoxList, sendEmailData} = useContext(AuthContext);
 
   const openAnswer = (id) => {
     setOpen(id);
   };
+
+  const wrtieEmail  = (event) => {
+    setEmailText(event.target.value)
+  }
+
+  const sendEmail = () => {
+    sendEmailData(emailText)
+  }
 
   return (
     <>
@@ -254,14 +263,14 @@ const Main = () => {
                 <p className={style.text}>
                   Если у вас возникли вопросы наш менедежр ответит вам в течении 10 минут.
                 </p>
-                <input className={style.input_question} type="text" placeholder="Укажите почту..." />
-                <ButtonCreate text={"Отправить"} />
+                <input className={style.input_question} type="text" placeholder="Укажите почту..." value={emailText} onChange={wrtieEmail}/>
+                <ButtonCreate text={"Отправить"} sendEmailData={sendEmail}/>
               </div>
               <div className={style.block_woman}>
                 <img
                   className={style.block_woman_image}
                   src="./assets/mean-question.png"
-                  alt="woman"
+                  alt="Woman"
                 />
               </div>
           </div>

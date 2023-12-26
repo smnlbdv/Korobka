@@ -7,6 +7,7 @@ import route from './routes/auth.route.js'
 import productRoute from './routes/product.route.js'
 import cartRoute from './routes/cart.route.js'
 import favoriteRoute from './routes/favorite.route.js';
+import emailRoute from './routes/email.route.js';
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -20,6 +21,7 @@ app.use('/api/auth', route)
 app.use('/api/products', productRoute)
 app.use('/api/cart', cartRoute)
 app.use('/api/favorite', favoriteRoute)
+app.use('/api/email', emailRoute)
 
 async function start() {
     try {

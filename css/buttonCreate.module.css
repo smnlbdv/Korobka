@@ -8,14 +8,15 @@
   color: inherit;
   line-height: normal;
   border-radius: 30px;
-  background: #EF4444;
+  background-color: rgb(221, 56, 19);
   padding: 10px 40px;
+  transition: all 300ms;
 }
 .button_create:hover {
-  background-color: rgb(221, 56, 19);
+  background-color: rgb(215, 61, 26);
   transition: all 300ms;
 }
 .button_create:active {
-  background-color: rgb(249, 100, 67);
+  background-color: rgb(198, 56, 25);
   transition: all 300ms;
 }

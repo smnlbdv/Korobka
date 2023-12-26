@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import style from './buttonCreate.module.scss'
 
-const ButtonCreate = ({text}) => {
+const ButtonCreate = ({text, sendEmailData}) => {
     return ( 
-        <button className={style.button_create}>{text}</button>
+        <button className={style.button_create} onClick={() => sendEmailData()}>{text}</button>
     );
 }
  
