@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
 import { useAuth } from "./hooks/auth.hook.js";
-import { notification } from 'antd';
+import { notification, Modal } from 'antd';
 import './libs/ant.css'
 
 import Loading from "./components/loading/loading.jsx";
@@ -34,6 +34,26 @@ function App() {
   useEffect(() => {
     getNewProduct()
   }, [])
+  const [modal, contextHolderEmail] = Modal.useModal();
+  const countDown = (type, message) => {
+    let secondsToGo = 2;
+    let instance;
+    if(type === "success") {
+      instance = modal.success({
+        title: 'Подписка на новости Korobka',
+        content: `${message}`,
+      });
+    }
+    if (type === "error") {
+      instance = modal.error({
+        title: 'Подписка на новости Korobka',
+        content: `${message}`,
+      });
+    }
+    setTimeout(() => {
+      instance.destroy();
+    }, secondsToGo * 1000);
+  };
 
   const calculatePrice = () => {
     const total = cart.reduce((accumulator, product) => {
@@ -256,9 +276,18 @@ function App() {
         }})
         .then(response => {
           console.log(response)
+          if(response.status == 202) {
+            countDown('success', response.data.message)
+          } 
+          if(response.status == 400) {
+            countDown('error', response.data.message) 
+          }
         })
         .catch(response => {
-          console.log(response)
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
       });
     } catch (error) {
       console.log(error.message)
@@ -282,6 +311,7 @@ function App() {
         calculatePrice,
         cartPrice,
         contextHolder,
+        contextHolderEmail,
         newBoxList,
         unmountItem,
         favoriteItem,

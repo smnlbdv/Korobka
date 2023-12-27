@@ -1,6 +1,8 @@
 import { useState, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Navigation} from 'swiper/modules';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 import ButtonCreate from "../../components/buttonCreate/buttonCreate";
 import StepsCard from "../../components/stepsCard/stepsCard";
@@ -118,24 +120,36 @@ const Main = () => {
 
   const [open, setOpen] = useState(3);
   const [emailText, setEmailText] = useState('')
-  const {contextHolder, newBoxList, sendEmailData} = useContext(AuthContext);
+  const {contextHolder, newBoxList, sendEmailData, contextHolderEmail} = useContext(AuthContext);
+
+  const formik = useFormik({
+    initialValues: {
+      email: 'korobkabelarus@gmail.com',
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email('Некорректный адрес электронной почты').required('Обязательное поле'),
+    }),
+    onSubmit: (event) => {
+      console.log(event)
+      // sendEmailData(event.email)
+    }
+  });
+
+  const sendEmail = (event) => {
+    formik.handleChange(event)
+    setEmailText(event.target.value)
+    formik.initialValues.email = event.target.value
+  }
 
   const openAnswer = (id) => {
     setOpen(id);
   };
 
-  const wrtieEmail  = (event) => {
-    setEmailText(event.target.value)
-  }
-
-  const sendEmail = () => {
-    sendEmailData(emailText)
-  }
-
   return (
     <>
     <div className="wrapper">
     {contextHolder}
+    {contextHolderEmail}
       <section className={style.main_section}>
           <div className={style.flex_box}>
             <div className={style.left_block}>
@@ -258,14 +272,21 @@ const Main = () => {
       <div className="wrapper">
         <section className={`${style.section_advertising} ${style.section_question}`}>
           <div className={style.question_block}>
-            <div className={style.left_block}>
-                <h2 className={style.title_advertising}>Возникли вопросы?</h2>
+              <form className={style.left_block} onSubmit={formik.handleSubmit}>
+                <h2 className={style.title_advertising}>Узнавайте первыми <br></br> о скидках и бонусах!</h2>
                 <p className={style.text}>
-                  Если у вас возникли вопросы наш менедежр ответит вам в течении 10 минут.
+                  Подпишитесь и получайте полезные статьи и самые интересные предложения сети Korobka
                 </p>
-                <input className={style.input_question} type="text" placeholder="Укажите почту..." value={emailText} onChange={wrtieEmail}/>
-                <ButtonCreate text={"Отправить"} sendEmailData={sendEmail}/>
-              </div>
+                <input 
+                  className={formik.errors.email ? style.input_question_error : style.input_question}
+                  type="email"
+                  name="email"
+                  placeholder="Укажите почту..."
+                  value={formik.values.email}
+                  onChange={sendEmail}
+                />
+                <ButtonCreate text={"Отправить"} type={"submit"}/>
+              </form>
               <div className={style.block_woman}>
                 <img
                   className={style.block_woman_image}
