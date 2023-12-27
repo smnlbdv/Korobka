@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext, useEffect, useCallback, Suspense } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
-import api from '../../api/api.js'
 
 import CartItem from '../../components/cartItem/cartItem.jsx'
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
@@ -14,9 +12,7 @@ const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
     const [totalPrice, setPriceTotal] = useState()
-    const { cart, setCart, cartPrice, calculatePrice, logout  } = useContext(AuthContext)
-
-    const navigate = useNavigate();
+    const { cart, setCart, cartPrice, calculatePrice } = useContext(AuthContext)
 
     useEffect(() => {
         calculatePrice()
@@ -26,47 +22,11 @@ const Cart = () => {
         setPriceTotal(cartPrice * 1)
     }, [cartPrice])
 
-    useEffect(() => {
-        if(cart.length == 0) {
-            getCart()
-        }
-    }, [])
-
     const clickButtonAll = () => {  
         setCheckAll(!checkAll)
     }
     const clearCart = () => {
         setCart([])
-    }
-
-    const getCart = async () => {
-        const data = JSON.parse(localStorage.getItem('userData')) || '';
-        try {
-          await api.get(`/api/cart/${data.userId}`, {
-            headers: {
-                'Authorization': `${data.token}`,
-            }})
-            .then(response => {
-              const product = response.data.map(item => 
-                {
-                  return {
-                    ...item.product,
-                    count: item.quantity
-                  }; 
-                } 
-              );
-              setCart(product)
-            })
-            .catch(response => {
-              if(response.response.status == 401) {
-                logout()
-                navigate("/api/auth/login");
-              }
-            })
-            
-        } catch (error) {
-          console.log("Ошибка", error);
-        }
     }
 
     return ( 

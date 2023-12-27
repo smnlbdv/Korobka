@@ -34,25 +34,58 @@ function App() {
   useEffect(() => {
     getNewProduct()
   }, [])
+  useEffect(() => {
+    if(cart.length == 0) {
+        getCart()
+    }
+  }, [])
+
+  const getCart = async () => {
+  const data = JSON.parse(localStorage.getItem('userData')) || '';
+  try {
+    await api.get(`/api/cart/${data.userId}`, {
+      headers: {
+          'Authorization': `${data.token}`,
+      }})
+      .then(response => {
+        const product = response.data.map(item => 
+          {
+            return {
+              ...item.product,
+              count: item.quantity
+            }; 
+          } 
+        );
+        setCart(product)
+      })
+      .catch(response => {
+        if(response.response.status == 401) {
+          logout()
+          navigate("/api/auth/login");
+        }
+      })
+      
+  } catch (error) {
+    console.log("Ошибка", error);
+  }
+}
+
   const [modal, contextHolderEmail] = Modal.useModal();
   const countDown = (type, message) => {
-    let secondsToGo = 2;
-    let instance;
-    if(type === "success") {
-      instance = modal.success({
-        title: 'Подписка на новости Korobka',
-        content: `${message}`,
-      });
-    }
-    if (type === "error") {
-      instance = modal.error({
-        title: 'Подписка на новости Korobka',
-        content: `${message}`,
-      });
-    }
-    setTimeout(() => {
-      instance.destroy();
-    }, secondsToGo * 1000);
+  if(type === 'success') {
+    modal.success({
+      title: 'Подписка на новости Korobka',
+      content: `${message}`,
+    });
+
+  }
+  if (type === 'error') {
+    modal.error({
+      title: 'Подписка на новости Korobka',
+      content: `${message}`,
+    });
+
+  }
   };
 
   const calculatePrice = () => {
@@ -275,15 +308,14 @@ function App() {
           'Authorization': `${token.token}`,
         }})
         .then(response => {
-          console.log(response)
           if(response.status == 202) {
             countDown('success', response.data.message)
           } 
-          if(response.status == 400) {
-            countDown('error', response.data.message) 
-          }
         })
         .catch(response => {
+          if(response.response.status == 400) {
+            countDown('error', response.response.data.message) 
+          }
           if(response.response.status == 401) {
             logout()
             navigate("/api/auth/login");

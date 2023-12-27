@@ -6,24 +6,17 @@ import jwtToken from 'jsonwebtoken'
 import { validationResult } from 'express-validator'
 
 import verifyToken from '../validation/verifyToken.js'
-import emailValidation from '../validation/email.js'
 import sendEmail from '../utils/mailer.js'
 import fs from 'fs' 
 import Email from '../models/Email.js'
 
 const emailRoute = Router()
 
-emailRoute.post('/send', emailValidation, verifyToken, async (req, res) => {
+emailRoute.post('/send', verifyToken, async (req, res) => {
     try {
-        
-        const email  = validationResult(req)
-        if (!email.isEmpty()) {
-            return res.status(400).json({ error: false });
-        }
         const resultEmailSend = await Email.findOne({email: req.body.email})
-        console.log(resultEmailSend)
         if(resultEmailSend) {
-            res.status(202).json({
+            res.status(400).json({
                 message: "Подписка уже оформлена"
             })
         } else {
@@ -34,13 +27,9 @@ emailRoute.post('/send', emailValidation, verifyToken, async (req, res) => {
                 await Email.insertMany({email: req.body.email})
                             .then (() => {
                                 res.status(202).json({
-                                    message: "Подписка оформлена"
+                                    message: "Теперь вы будете получать самые интересные предложения первыми. Подтверждение отправлено на указанный e-mail"
                                 })
                             })
-                // res.status(202).json({
-                //     success: false,
-                //     message: "Подписка оформлена"
-                // })
             } else {
                 res.status(400).json({
                     message: "Указаны неверные данные"

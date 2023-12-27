@@ -12,3 +12,13 @@
     padding: 16px 20px !important;
 }
 
+.ant-modal-wrap {
+    display: flex!important;
+    align-items: center !important;
+}
+
+.ant-modal {
+    padding: 0 !important;
+    top: 0px !important;
+}
+

@@ -22,7 +22,7 @@
 .image_box {
     display: flex;
     justify-content: center;
-    transform: translateY(-26x);
+    transform: translateY(-27px);
 }
 
 .text_block {
@@ -69,7 +69,7 @@
     font-size: 15px;
     height: 100%;
     font-style: normal;
-    font-weight: 600; 
+    font-weight: 500; 
     border: 0;
     border-radius: 0px 0px 0px 10px;
     background: #8338EC; 
@@ -99,7 +99,7 @@
 .icon_new_box {
     position: absolute;
     bottom: -29px;
-    right: -35px;
+    right: -35.5px;
     width: 74px;
     height: 30px;
 }
@@ -108,7 +108,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 47px;
+    height: 46px;
 }
 
 .button__add_cart {
@@ -124,7 +124,7 @@
     height: 100%;
     flex: 1;
     border-radius: 0px 0px 10px 0px;
-    background-color: rgb(252, 62, 62);
+    background-color: rgb(243, 45, 45);
     transition: all 200ms;
     &_love {
         @extend .button__add_favorite;
