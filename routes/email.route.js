@@ -27,7 +27,7 @@ emailRoute.post('/send', verifyToken, async (req, res) => {
                 await Email.insertMany({email: req.body.email})
                             .then (() => {
                                 res.status(202).json({
-                                    message: "Теперь вы будете получать самые интересные предложения первыми. Подтверждение отправлено на указанный e-mail"
+                                    message: "Теперь вы будете получать самые интересные предложения первыми. Подтверждение отправлено на указанный e-mail."
                                 })
                             })
             } else {

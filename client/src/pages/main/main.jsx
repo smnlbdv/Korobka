@@ -130,8 +130,12 @@ const Main = () => {
       email: Yup.string().email('Некорректный адрес электронной почты').required('Обязательное поле'),
     }),
     onSubmit: (event) => {
-      sendEmailData(event.email)
-      setEmailText('')
+      if(emailText.length == 0) {
+        return false 
+      } else {
+        sendEmailData(event.email)
+        setEmailText('')
+      }
     }
   });
 
@@ -238,16 +242,16 @@ const Main = () => {
             </div>
           </section>
       </div>
-      <section className={style.partner_block}>
+      {/* <section className={style.partner_block}>
             <h2 className="section__title">Наши партнеры</h2>
             <div className={style.partner_list}>
               <img className={style.image} src="./assets/partner-1.png" alt="Google" />
-              <img className={style.image} src="./assets/partner-2.png" alt="Dropbox" />
-              <img className={style.image} src="./assets/partner-3.png" alt="Spotify" />
-              <img className={style.image} src="./assets/partner-4.png" alt="Invision" />
-              <img className={style.image} src="./assets/partner-5.png" alt="PayPal" />
+              <img className={style.image} src="./assets/partner-1.png" alt="Dropbox" />
+              <img className={style.image} src="./assets/partner-1.png" alt="Spotify" />
+              <img className={style.image} src="./assets/partner-1.png" alt="Invision" />
+              <img className={style.image} src="./assets/partner-1.png" alt="PayPal" />
             </div>
-      </section>
+      </section> */}
       <div className={style.good_people}>
             <h2 className="section__title">Тысячи довольных пользователей</h2>
       </div>
@@ -291,7 +295,7 @@ const Main = () => {
                     value={emailText}
                     onChange={sendEmail}
                   />
-                  <ButtonCreate text={"Отправить"} type={"submit"} disabled={formik.errors.email && true}/>
+                  <ButtonCreate text={"Отправить"} type={"submit"}/>
                 </form>
                 <div className={style.block_woman}>
                   <img

@@ -57,9 +57,9 @@ const Liked = () => {
                 <Link to="/">
                 <li>Главная</li>
                 </Link>
-                <li>Закладки</li>
+                <li>Избранное</li>
             </ul>
-            <h2 className={`${style.section_title} section__title`}>Закладки</h2>
+            <h2 className={`${style.section_title} section__title`}>Избранное</h2>
             {
                 favoriteItem.length != 0 ?
                 <div className={style.favorite_items}>

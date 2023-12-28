@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
+import { Link  } from 'react-router-dom';
 
 import style from './product.module.scss'
 
@@ -62,23 +63,24 @@ const Product = ({_id, img, title, text, price, count, favorite = false, newProd
 
     return (
         <div className={style.new_box}>
-            <div className={style.info}>
-                <div className={style.image_box}>
-                
-                    <img className={style.image} src={img} alt="image new" />
-                    {newProduct && <img className={style.icon_new_box} src="./assets/icon-new.svg" alt="" />}
-                </div>
-                <div className={style.text_block}>
-                    <h2 className={style.title}>{title}</h2>
-                    <p className={style.text}>{text}</p>
-                </div>
-                <div className={style.block_price}>
-                    <div className={style.price}>
-                        <span>Цена:</span>
-                        <p>{price} BYN</p>
+            <Link to={`/product/${_id}`}>
+                <div className={style.info}>
+                    <div className={style.image_box}>
+                        <img className={style.image} src={img} alt="image new" />
+                        {/* {newProduct && <img className={style.icon_new_box} src="./assets/icon-new.svg" alt="" />} */}
+                    </div>
+                    <div className={style.text_block}>
+                        <h2 className={style.title}>{title}</h2>
+                        <p className={style.text}>{text}</p>
+                    </div>
+                    <div className={style.block_price}>
+                        <div className={style.price}>
+                            <span>Цена:</span>
+                            <p>{price} BYN</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </Link>
             <div className={style.cart__button}>
                 <div className={style.button__add_cart}>
                     {
@@ -96,8 +98,8 @@ const Product = ({_id, img, title, text, price, count, favorite = false, newProd
                         <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
                     }
                 </div>
-                <div className={!isFavorite ? style.button__add_favorite : style.button__add_favorite_love}>
-                    <img className={style.favorite} src={isFavorite ? "./assets/favorite-love.svg" : "./assets/love.svg"} alt="" onClick={clickHeart}/>
+                <div className={!isFavorite ? style.button__add_favorite : style.button__add_favorite_love} onClick={clickHeart}>
+                    <img className={style.favorite} src={isFavorite ? "./assets/favorite-love.svg" : "./assets/love.svg"} alt=""/>
                 </div>
             </div>
         </div>

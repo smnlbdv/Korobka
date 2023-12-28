@@ -9,7 +9,7 @@
 .image {
   max-width: 140px;
   margin: 0 auto;
-  transform: scale(1.4);
+  transform: scale(1.35);
 }
 
 .title {
@@ -42,6 +42,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 7px;
 }
 
 .price {
@@ -60,7 +61,7 @@
 }
 .price p {
   color: #1D1D1D;
-  font-size: 19px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 600;
 }
@@ -84,6 +85,7 @@
 
 .info {
   display: flex;
+  cursor: pointer;
   flex-direction: column;
   padding: 20px 20px;
   gap: 10px;
@@ -107,7 +109,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 46px;
+  height: 44px;
 }
 
 .button__add_cart {
@@ -120,10 +122,11 @@
   justify-content: center;
   align-items: center;
   max-width: 50px;
+  cursor: pointer;
   height: 100%;
   flex: 1;
   border-radius: 0px 0px 10px 0px;
-  background-color: rgb(243, 45, 45);
+  background-color: rgb(235, 43, 169);
   transition: all 200ms;
 }
 .button__add_favorite_love {

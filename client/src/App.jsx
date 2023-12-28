@@ -10,6 +10,7 @@ import './libs/ant.css'
 import Loading from "./components/loading/loading.jsx";
 import Cart from "./pages/cart/cart.jsx";
 import api from './api/api.js'
+import ProductPage from "./components/productPage/productPage.jsx";
 
 const HomePage = lazy(() => import("./pages/home/homePage.jsx"));
 const Auth = lazy(() => import("./pages/auth/auth.jsx"));
@@ -368,6 +369,7 @@ function App() {
             <Route path="about-us" element={<AboutUs />} />
             <Route path="cart" element={<Cart />} />
             <Route path="liked" element={<Liked />} />
+            <Route path="product/:id" element={<ProductPage/>}/>
           </Route>
           <Route path="/api/auth/*" element={
               <Suspense fallback={<Loading />}>

@@ -1,4 +1,12 @@
 .header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: #00046FFA;
+    z-index: 999;
+}
+
+.header__inner {
     display: flex;
     align-items: center;
     height: 70px;

@@ -1,5 +1,6 @@
 .section_about {
-  min-height: calc(100% - 150px);
+  flex: 1;
+  width: 100%;
   background-image: url("./assets/bg-about-us.png");
   background-repeat: no-repeat;
   background-size: contain;
