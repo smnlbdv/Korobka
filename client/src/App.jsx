@@ -35,11 +35,6 @@ function App() {
   useEffect(() => {
     getNewProduct()
   }, [])
-  useEffect(() => {
-    if(cart.length == 0) {
-        getCart()
-    }
-  }, [])
 
   const getCart = async () => {
   const data = JSON.parse(localStorage.getItem('userData')) || '';
@@ -351,7 +346,8 @@ function App() {
         addProductFavorite,
         setFavoriteItem,
         deleteProductFavorite,
-        sendEmailData
+        sendEmailData,
+        getCart
       }}
     >
         <Routes>

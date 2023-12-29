@@ -17,4 +17,14 @@ productRoute.get('/new', async (req, res) => {
     }
 })
 
+productRoute.get('/:id', async (req, res) => {
+    try {
+        console.log(req.params.id)
+        // const newProduct = await Product.find({category: 'new'})
+        // res.json(newProduct)
+    } catch (error) {
+        console.log(error.message)
+    }
+})
+
 export default productRoute

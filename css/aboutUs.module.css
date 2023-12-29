@@ -16,7 +16,6 @@
   display: flex;
   justify-content: space-between;
   margin-top: 50px;
-  margin-bottom: 100px;
   -moz-column-gap: 50px;
        column-gap: 50px;
 }
