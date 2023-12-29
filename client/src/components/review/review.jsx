@@ -10,11 +10,11 @@ const Review = ({img, name, lastName, text, data}) => {
                     <p className={style.first_last}>{name} {lastName}</p>
                 </div>
                 <div className={style.static} >
-                    <img src='./assets/star.svg' alt="" />
-                    <img src='./assets/star.svg' alt="" />
-                    <img src='./assets/star.svg' alt="" />
-                    <img src='./assets/star.svg' alt="" />
-                    <img src='./assets/star.svg' alt="" />
+                    <img src='/assets/star.svg' alt="" />
+                    <img src='/assets/star.svg' alt="" />
+                    <img src='/assets/star.svg' alt="" />
+                    <img src='/assets/star.svg' alt="" />
+                    <img src='/assets/star.svg' alt="" />
                 </div>
             </div>
             <div className={style.text}>

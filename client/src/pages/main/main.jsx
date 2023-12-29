@@ -176,7 +176,7 @@ const Main = () => {
               <div className={style.right_block}>
                 <img
                   className={style.image_main}
-                  src="./assets/main-img.png"
+                  src="/assets/main-img.png"
                   alt="surprise box"
                 />
               </div>
@@ -225,7 +225,7 @@ const Main = () => {
             <div className={style.block_woman}>
               <img
                 className={style.block_woman_image}
-                src="./assets/woman-advertising.png"
+                src="/assets/woman-advertising.png"
                 alt="woman"
               />
             </div>
@@ -300,7 +300,7 @@ const Main = () => {
                 <div className={style.block_woman}>
                   <img
                     className={style.block_woman_image}
-                    src="./assets/mean-question.png"
+                    src="/assets/mean-question.png"
                     alt="Woman"
                   />
                 </div>

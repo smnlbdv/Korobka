@@ -13,44 +13,8 @@ import style from './liked.module.scss'
 
 
 const Liked = () => {
-    const { favoriteItem, logout, setFavoriteItem } = useContext(AuthContext)
-    const navigate = useNavigate();
+    const { favoriteItem } = useContext(AuthContext)
 
-    useEffect(() => {
-        if(favoriteItem.length == 0) {
-            getFavorite()
-        }
-    }, [])
-
-    const getFavorite = async () => {
-        const data = JSON.parse(localStorage.getItem('userData')) || '';
-        try {
-          await api.get(`/api/favorite/${data.userId}`, {
-            headers: {
-                'Authorization': `${data.token}`,
-            }})
-            .then(response => {
-                const favorite = response.data.map(item => 
-                    {
-                      return {
-                        ...item.product,
-                      }; 
-                    } 
-                  );
-                setFavoriteItem(favorite)
-            })
-            .catch(response => {
-              if(response.status == 401) {
-                logout()
-                navigate("/api/auth/login");
-              }
-            })
-            
-        } catch (error) {
-          console.log("Ошибка", error);
-        }
-    }
-    
     return ( 
         <section className={`${style.section_cart} wrapper`}>
             <ul className="bread-crumbs">

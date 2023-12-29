@@ -19,9 +19,13 @@ productRoute.get('/new', async (req, res) => {
 
 productRoute.get('/:id', async (req, res) => {
     try {
-        console.log(req.params.id)
-        // const newProduct = await Product.find({category: 'new'})
-        // res.json(newProduct)
+        await Product.find({_id: req.params.id})
+                     .then((product) => {
+                        res.status(200).json(product)
+                     })
+                     .catch((error) => {
+                        res.status(400).json({error: error})
+                     })
     } catch (error) {
         console.log(error.message)
     }

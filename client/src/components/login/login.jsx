@@ -41,8 +41,8 @@ const Login = () => {
             <div className={style.block_reg}>
                 <h2 className="section__title">Авторизация</h2>
                 <form className={style.form} onSubmit={e => e.preventDefault()}>
-                    <InputReg img={"../../assets/email-sign-up.svg"} name={"email"} type={"email"} placeholder={"E-mail"} changeHandler={changeHandler}/>
-                    <InputReg img={"../../assets/lock-sign-up.svg"} name={"password"} type={"password"} placeholder={"Пароль"} chek={true} changeHandler={changeHandler}/>
+                    <InputReg img={"/assets/email-sign-up.svg"} name={"email"} type={"email"} placeholder={"E-mail"} changeHandler={changeHandler}/>
+                    <InputReg img={"/assets/lock-sign-up.svg"} name={"password"} type={"password"} placeholder={"Пароль"} chek={true} changeHandler={changeHandler}/>
                     <ButtonLogin title={"Авторизоваться"} submitInfo={() => submitInfo()}/>
                 </form>
             </div>

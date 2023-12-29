@@ -12,13 +12,7 @@ const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
     const [totalPrice, setPriceTotal] = useState()
-    const { cart, setCart, cartPrice, calculatePrice, getCart } = useContext(AuthContext)
-
-    useEffect(() => {
-        if(cart.length == 0) {
-            getCart()
-        }
-    }, [cart.length, getCart])
+    const { cart, setCart, cartPrice, calculatePrice } = useContext(AuthContext)
 
     useEffect(() => {
         calculatePrice()
@@ -50,7 +44,7 @@ const Cart = () => {
                     <div className={style.cart__left_block}>
                         <div className={style.cart__block__buttons}>
                             <div className={style.cart__block_check}>
-                                <img className={style.cart__img_check} src={checkAll ? "./assets/yes-check.svg" : "./assets/no-check.svg"} alt="check" />
+                                <img className={style.cart__img_check} src={checkAll ? "/assets/yes-check.svg" : "/assets/no-check.svg"} alt="check" />
                                 <button className={style.cart__button_all} onClick={clickButtonAll}>Выбрать все</button>
                             </div>
                             <button className={style.cart__button_delete} onClick={clearCart}>Удалить все</button>

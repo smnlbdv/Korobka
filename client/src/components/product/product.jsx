@@ -63,7 +63,7 @@ const Product = ({_id, img, title, text, price, count, favorite = false, newProd
 
     return (
         <div className={style.new_box}>
-            <Link to={`/product/${_id}`}>
+            <Link to={`product/${_id}`} key={_id}>
                 <div className={style.info}>
                     <div className={style.image_box}>
                         <img className={style.image} src={img} alt="image new" />
@@ -86,20 +86,20 @@ const Product = ({_id, img, title, text, price, count, favorite = false, newProd
                     {
                         isAdded ? 
                         <div className={style.counter__block}>
-                            <img className={style.counter__image} src="./assets/product-cart-decrease.svg" alt="Decrease" onClick={subtractProduct}/>
+                            <img className={style.counter__image} src="/assets/product-cart-decrease.svg" alt="Decrease" onClick={subtractProduct}/>
                             <div className={style.counter__info}>
                                 <p className={style.counter__count}>
                                     {countProduct} шт.
                                 </p>
                             </div>
-                            <img className={style.counter__image} src="./assets/product-cart-increase.svg" alt="Increase" onClick={addProduct}/>
+                            <img className={style.counter__image} src="/assets/product-cart-increase.svg" alt="Increase" onClick={addProduct}/>
                         </div>
                         :
                         <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
                     }
                 </div>
                 <div className={!isFavorite ? style.button__add_favorite : style.button__add_favorite_love} onClick={clickHeart}>
-                    <img className={style.favorite} src={isFavorite ? "./assets/favorite-love.svg" : "./assets/love.svg"} alt=""/>
+                    <img className={style.favorite} src={isFavorite ? "/assets/favorite-love.svg" : "/assets/love.svg"} alt=""/>
                 </div>
             </div>
         </div>

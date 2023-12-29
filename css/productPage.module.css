@@ -2,3 +2,64 @@
   flex: 1;
   background-color: white;
 }
+
+.block__adding__product {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  margin-top: 100px;
+}
+
+.product__image {
+  width: 50%;
+}
+.product__image .image {
+  width: 350px;
+}
+
+.functions__card {
+  color: #161616;
+}
+.functions__card .title__product {
+  font-size: 27px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  color: #161616;
+}
+.functions__card .price__product {
+  color: #161616;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 20px;
+}
+.functions__card .quantity__product {
+  margin-top: 20px;
+  font-weight: 400;
+}
+.functions__card .button__add__cart {
+  display: flex;
+  align-items: center;
+  -moz-column-gap: 10px;
+       column-gap: 10px;
+  margin-top: 20px;
+}
+.functions__card .add__title {
+  font-weight: 400;
+}
+.functions__card .title__favorite__adding {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 400;
+}
+.functions__card button {
+  color: white;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+.functions__card .title__messange {
+  font-weight: 400;
+  margin-top: 20px;
+}

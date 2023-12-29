@@ -38,7 +38,7 @@ const Header = () => {
         <div className={`${style.header__inner} wrapper` }>
             <Link to="/" replace={true} >
                 <div className="header__logo">
-                    <img className="header__image" src="./assets/logo.svg" alt="logo" />
+                    <img className="header__image" src="/assets/logo.svg" alt="logo" />
                     <span>Коробка</span>
                 </div>
             </Link> 
@@ -83,18 +83,18 @@ const Header = () => {
                     <ul className={style.user_list}>
                         <Link to="cart">
                             <li className={style.list_item}>
-                                <img src="./assets/bag.svg" alt="bag logo" />
+                                <img src="/assets/bag.svg" alt="bag logo" />
                                 <p>Корзина</p>
                             </li>
                         </Link>
                         <Link to="liked">
                             <li className={style.list_item}>
-                                <img src="./assets/heart.svg" alt="favorite logo" />
+                                <img src="/assets/heart.svg" alt="favorite logo" />
                                 <p>Избранное</p>
                             </li>
                         </Link>
                         <li className={style.list_item}>
-                            <img src="./assets/user.svg" alt="user logo" />
+                            <img src="/assets/user.svg" alt="user logo" />
                             <p>Профиль</p>
                         </li>
                     </ul>

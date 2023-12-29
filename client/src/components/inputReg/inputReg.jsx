@@ -19,7 +19,7 @@ const InputReg = ({img, name, placeholder, type, chek = false, changeHandler}) =
                 <input className={style.input} name={name} type={show ? "text" : type} placeholder={placeholder} onChange={changeHandler} required/>
             </div>
             {
-                chek && <img  className={style.img_secret} src="../../assets/secret.svg" alt="secret" onClick={showPass} />
+                chek && <img  className={style.img_secret} src="/assets/secret.svg" alt="secret" onClick={showPass} />
             }
         </div>
     );

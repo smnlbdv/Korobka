@@ -1,6 +1,7 @@
+import { Outlet } from "react-router-dom";
+
 import Footer from '../../components/footer/footer.jsx'
 import Header from '../../components/header/header.jsx'
-import { Outlet } from "react-router-dom";
 
 const HomePage = () => {
     

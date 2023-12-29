@@ -8,9 +8,7 @@ import { notification, Modal } from 'antd';
 import './libs/ant.css'
 
 import Loading from "./components/loading/loading.jsx";
-import Cart from "./pages/cart/cart.jsx";
 import api from './api/api.js'
-import ProductPage from "./components/productPage/productPage.jsx";
 
 const HomePage = lazy(() => import("./pages/home/homePage.jsx"));
 const Auth = lazy(() => import("./pages/auth/auth.jsx"));
@@ -21,6 +19,9 @@ const Login = lazy(() => import("./components/login/login.jsx"));
 const Contacts = lazy(() => import("./pages/contacts/contacts.jsx"));
 const AboutUs = lazy(() => import("./pages/aboutUs/aboutUs.jsx"));
 const Liked = lazy(() => import("./pages/liked/liked.jsx"));
+const ProductPage= lazy(() => import("./pages/productPage/productPage.jsx"));
+const Cart= lazy(() => import("./pages/cart/cart.jsx"));
+
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -34,38 +35,43 @@ function App() {
 
   useEffect(() => {
     getNewProduct()
+    if(cart.length == 0) {
+      getCart()
+    }
+    if(favoriteItem.length == 0) {
+      getFavorite()
+    }
   }, [])
 
   const getCart = async () => {
-  const data = JSON.parse(localStorage.getItem('userData')) || '';
-  try {
-    await api.get(`/api/cart/${data.userId}`, {
-      headers: {
-          'Authorization': `${data.token}`,
-      }})
-      .then(response => {
-        const product = response.data.map(item => 
-          {
-            return {
-              ...item.product,
-              count: item.quantity
-            }; 
-          } 
-        );
-        setCart(product)
-      })
-      .catch(response => {
-        if(response.response.status == 401) {
-          logout()
-          navigate("/api/auth/login");
-        }
-      })
-      
-  } catch (error) {
-    console.log("Ошибка", error);
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.get(`/api/cart/${data.userId}`, {
+        headers: {
+            'Authorization': `${data.token}`,
+        }})
+        .then(response => {
+          const product = response.data.map(item => 
+            {
+              return {
+                ...item.product,
+                count: item.quantity
+              }; 
+            } 
+          );
+          setCart(product)
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+        })
+        
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
   }
-}
-
   const [modal, contextHolderEmail] = Modal.useModal();
   const countDown = (type, message) => {
   if(type === 'success') {
@@ -321,6 +327,34 @@ function App() {
       console.log(error.message)
     }
   }
+  const getFavorite = async () => {
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.get(`/api/favorite/${data.userId}`, {
+        headers: {
+            'Authorization': `${data.token}`,
+        }})
+        .then(response => {
+            const favorite = response.data.map(item => 
+                {
+                  return {
+                    ...item.product,
+                  }; 
+                } 
+              );
+            setFavoriteItem(favorite)
+        })
+        .catch(response => {
+          if(response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+        })
+        
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
 
   return (
     <AuthContext.Provider
@@ -347,7 +381,8 @@ function App() {
         setFavoriteItem,
         deleteProductFavorite,
         sendEmailData,
-        getCart
+        getCart,
+        getFavorite
       }}
     >
         <Routes>
