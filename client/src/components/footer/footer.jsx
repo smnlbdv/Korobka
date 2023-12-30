@@ -5,7 +5,7 @@ const Footer = () => {
         <footer className={`${style.footer} wrapper `}>
             <div className={style.footer__inner}>
                 <div className="header__logo">
-                    <img className="header__image" src="./assets/logo.svg" alt="logo" />
+                    <img className="header__image" src="/assets/logo.svg" alt="logo" />
                     <span>Коробка</span>
                 </div>
                 <p className={style.footer_text}>2023 © Все права защищены</p>
