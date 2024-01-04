@@ -1,0 +1,11 @@
+.section_profile {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+
+.section_title {
+  padding-top: 45px;
+  text-align: left !important;
+}

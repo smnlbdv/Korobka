@@ -93,10 +93,12 @@ const Header = () => {
                                 <p>Избранное</p>
                             </li>
                         </Link>
-                        <li className={style.list_item}>
-                            <img src="/assets/user.svg" alt="user logo" />
-                            <p>Профиль</p>
-                        </li>
+                        <Link to="profile">
+                            <li className={style.list_item}>
+                                <img src="/assets/user.svg" alt="user logo" />
+                                <p>Профиль</p>
+                            </li>
+                        </Link>
                     </ul>
                 </div>
                 :

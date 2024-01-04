@@ -19,8 +19,10 @@ const Login = lazy(() => import("./components/login/login.jsx"));
 const Contacts = lazy(() => import("./pages/contacts/contacts.jsx"));
 const AboutUs = lazy(() => import("./pages/aboutUs/aboutUs.jsx"));
 const Liked = lazy(() => import("./pages/liked/liked.jsx"));
+const Profile = lazy(() => import("./pages/profile/profile.jsx"));
 const ProductPage= lazy(() => import("./pages/productPage/productPage.jsx"));
 const Cart= lazy(() => import("./pages/cart/cart.jsx"));
+const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
 
 
 function App() {
@@ -35,12 +37,6 @@ function App() {
 
   useEffect(() => {
     getNewProduct()
-    if(cart.length == 0) {
-      getCart()
-    }
-    if(favoriteItem.length == 0) {
-      getFavorite()
-    }
   }, [])
 
   const getCart = async () => {
@@ -400,6 +396,7 @@ function App() {
             <Route path="about-us" element={<AboutUs />} />
             <Route path="cart" element={<Cart />} />
             <Route path="liked" element={<Liked />} />
+            <Route path="profile" element={<Profile />} />
             <Route path="product/:id" element={<ProductPage/>}/>
           </Route>
           <Route path="/api/auth/*" element={
@@ -409,6 +406,7 @@ function App() {
             }>
             <Route path="registration" element={<Registration />} />
             <Route path="login" element={<Login />} />
+            <Route path="forgot" element={<Forgot />} />
           </Route>
         </Routes>
     </AuthContext.Provider>

@@ -6,7 +6,7 @@ import { Link  } from 'react-router-dom';
 import style from './product.module.scss'
 
 
-const Product = ({_id, img, title, text, price, count, favorite = false, newProduct = true}) => {
+const Product = ({_id, img, title, price, count, favorite = false, newProduct = true, pretext}) => {
 
     const [isFavorite, setIsFavorite] = useState(favorite);
     const [isAdded, setIsAdded] = useState(false)
@@ -15,7 +15,7 @@ const Product = ({_id, img, title, text, price, count, favorite = false, newProd
     const { cart, addCart, addProductFavorite, deleteProductFavorite, increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext)
 
     const clickBtnAdd = async () => {
-        await addCart({_id, img, title, text, price, count})
+        await addCart({_id, img, title, pretext, price, count})
         const product = cart.find(obj => obj._id === _id);
         if(!product) {
             setCountProduct(1)
@@ -71,7 +71,7 @@ const Product = ({_id, img, title, text, price, count, favorite = false, newProd
                     </div>
                     <div className={style.text_block}>
                         <h2 className={style.title}>{title}</h2>
-                        <p className={style.text}>{text}</p>
+                        <p className={style.text}>{pretext}</p>
                     </div>
                     <div className={style.block_price}>
                         <div className={style.price}>

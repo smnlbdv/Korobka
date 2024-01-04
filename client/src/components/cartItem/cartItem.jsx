@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/authContext.js";
 import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
 
-const CartItem = ({ _id, img, title, text, price, count, checkAll }) => {
+const CartItem = ({ _id, img, title, pretext, price, count, checkAll }) => {
   const [choose, setСhoose] = useState(checkAll);
   const [counts, setCounts] = useState(count);
   const { deleteItemCart } = useContext(AuthContext);
@@ -34,7 +34,7 @@ const CartItem = ({ _id, img, title, text, price, count, checkAll }) => {
       <img className={style.image_product} src={img} alt="Image item" />
       <div className={style.cart__item_info}>
         <p className={style.title}>{title}</p>
-        <p className={style.text}>{text}</p>
+        <p className={style.text}>{pretext}</p>
       </div>
       <CounterInput
         counts={counts}

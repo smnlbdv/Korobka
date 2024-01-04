@@ -12,11 +12,17 @@ const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
     const [totalPrice, setPriceTotal] = useState()
-    const { cart, setCart, cartPrice, calculatePrice } = useContext(AuthContext)
+    const { cart, setCart, cartPrice, calculatePrice, getCart } = useContext(AuthContext)
 
     useEffect(() => {
         calculatePrice()
     }, [calculatePrice, cart])
+
+    useEffect(() => {
+        if(cart.length == 0 ) {
+            getCart()
+        }
+    }, [])
 
     useEffect(() => {
         setPriceTotal(cartPrice * 1)
