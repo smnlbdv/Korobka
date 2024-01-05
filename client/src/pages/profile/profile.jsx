@@ -26,7 +26,15 @@ const Profil = () => {
             
             <form className={style.block__user}>
                 <div className={style.header__block}>
-
+                    <div className={style.update__image__block}>
+                        <img src="http://localhost:5000/avatar.jpg" alt="" />
+                    </div>
+                    <div>
+                        <p className={style.fullname__name}>Семён Лебедев</p>
+                        <p className={style.user__status}>Активный пользователь</p>
+                    </div>
+                    <button className={`${style.button__header__block} ${style.button__add__photo}`}>Добавить фото</button>
+                    <button className={`${style.button__header__block} ${style.button__delete__photo}`}>Удалить фото </button>
                 </div>
                 <div className={style.fullname__block}>
 
