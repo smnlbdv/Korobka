@@ -39,6 +39,7 @@ function App() {
     getNewProduct()
   }, [])
 
+
   const getCart = async () => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
@@ -351,6 +352,29 @@ function App() {
       console.log("Ошибка", error);
     }
   }
+  const uploadAvatar = async (formData) => {
+    console.log(formData)
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.post('/api/profile/upload-image', formData, {
+        headers: {
+            'Authorization': `${data.token}`,
+        }})
+        .then(response => {
+            console.log(response)
+        })
+        .catch(response => {
+          console.log(response)
+          // if(response.status == 401) {
+          //   logout()
+          //   navigate("/api/auth/login");
+          // }
+        })
+        
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
 
   return (
     <AuthContext.Provider
@@ -378,7 +402,8 @@ function App() {
         deleteProductFavorite,
         sendEmailData,
         getCart,
-        getFavorite
+        getFavorite,
+        uploadAvatar
       }}
     >
         <Routes>
