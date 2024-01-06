@@ -10,7 +10,6 @@ import AnswerCard from "../../components/answerCard/answerCard";
 import Product from "../../components/product/product";
 import Review from "../../components/review/review";
 
-
 import style from "./main.module.scss";
 import "swiper/css";
 import 'swiper/css/navigation';

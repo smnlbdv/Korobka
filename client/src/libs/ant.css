@@ -22,3 +22,17 @@
     top: 0px !important;
 }
 
+:where(.css-dev-only-do-not-override-2q8sxy).ant-tabs {
+    all: unset!important;
+}
+
+:where(.css-dev-only-do-not-override-2q8sxy).ant-tabs .ant-tabs-ink-bar {
+    background: #f83939 !important;
+}
+
+.ant-tabs-tab-btn {
+    color: white !important;
+}
+
+
+

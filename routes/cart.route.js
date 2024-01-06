@@ -24,15 +24,6 @@ const checkItems = (arr, itemId) => {
     }
 }
 
-// дописать
-
-// const getItemProduct =  async (itemId) => {
-//     await CartItem.findOne(
-//                     { 'items': { $elemMatch: { 'product': itemId } } },
-//                     { 'items.$': 1 })
-//                     .populate('items.product');
-// }
-
 cartRoute.post('/add', verifyToken, async (req, res) => {
     try {
         const { userId, itemId } = req.body
@@ -135,7 +126,6 @@ cartRoute.post('/decrease/', verifyToken, async (req, res) => {
         res.status(400).json({error: error.message})
     }
 })
-
 
 cartRoute.get('/:userId', verifyToken, async (req, res) => {
     const userId = req.params.userId

@@ -8,7 +8,7 @@ import './index.scss'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <StyleProvider hashPriority="high">
+    <StyleProvider hashPriority={"low"}>
         <Router>
           <App/>
         </Router>

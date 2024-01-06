@@ -27,6 +27,7 @@ const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [profile, setProfile] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
   const [cartPrice, setCartPrice] = useState();
   const [newBoxList, setNewBoxList] = useState([]);
@@ -69,6 +70,29 @@ function App() {
       console.log("Ошибка", error);
     }
   }
+
+  const getProfile = async () => {
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.get(`/api/profile/${data.userId}`, {
+        headers: {
+            'Authorization': `${data.token}`,
+        }})
+        .then(response => {
+          setProfile(response.data)
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+        })
+        
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
+
   const [modal, contextHolderEmail] = Modal.useModal();
   const countDown = (type, message) => {
   if(type === 'success') {
@@ -353,27 +377,29 @@ function App() {
     }
   }
   const uploadAvatar = async (formData) => {
-    console.log(formData)
     const data = JSON.parse(localStorage.getItem('userData')) || '';
+    let url;
     try {
-      await api.post('/api/profile/upload-image', formData, {
+      await api.post("/api/profile/upload-image", formData, {
         headers: {
             'Authorization': `${data.token}`,
+            'Content-Type': 'multipart/form-data',
         }})
         .then(response => {
-            console.log(response)
+          url = response.data.url
         })
         .catch(response => {
           console.log(response)
-          // if(response.status == 401) {
-          //   logout()
-          //   navigate("/api/auth/login");
-          // }
+          if(response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
         })
         
     } catch (error) {
       console.log("Ошибка", error);
     }
+    return url
   }
 
   return (
@@ -403,7 +429,9 @@ function App() {
         sendEmailData,
         getCart,
         getFavorite,
-        uploadAvatar
+        uploadAvatar,
+        getProfile,
+        profile
       }}
     >
         <Routes>
