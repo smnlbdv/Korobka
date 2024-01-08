@@ -11,11 +11,13 @@ const shema = new mongoose.Schema({
     },
     name: {
         type: String,
-        default: 'Пользователь'
+        default: 'Пользователь',
+        required: true,
     },
     surname: {
         type: String,
-        default: ''
+        default: '',
+        required: true,
     },
     email: {
         type: String,

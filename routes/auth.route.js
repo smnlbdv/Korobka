@@ -22,7 +22,7 @@ router.post('/registration', registerValidation, async (req, res) => {
             })
         }
 
-        const { name, email, password} = req.body
+        const { name, email, surname, password} = req.body
 
         const isUser = await User.findOne({email})
 
@@ -35,6 +35,7 @@ router.post('/registration', registerValidation, async (req, res) => {
             const user = new User({
                 name,
                 email,
+                surname,
                 passwordHash: passwordHash
             })
             await user.save()

@@ -23,7 +23,8 @@ const Profil = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: profile.name,
+      name: "",
+      surname: "",
       email: "",
       phone: "",
     },
@@ -50,7 +51,16 @@ const Profil = () => {
     }
   }, []);
 
-  console.log(profile);
+  useEffect(() => {
+    if (profile.length != 0) {
+      formik.setValues({
+        name: profile.name,
+        surname: profile.surname,
+        email: profile.email,
+        phone: profile.phone,
+      })
+    }
+  }, [profile]);
 
   const handleChangeFile = async (e) => {
     try {
@@ -86,7 +96,7 @@ const Profil = () => {
               <img ref={avatarUser} src={profile.avatarUser} alt="" />
             </div>
             <div>
-              <p className={style.fullname__name}>{profile.name + profile.surname}</p>
+              <p className={style.fullname__name}>{profile.name + " " + profile.surname}</p>
               <p className={style.user__status}>{profile.status}</p>
             </div>
             <input
@@ -138,7 +148,8 @@ const Profil = () => {
                     <p className={style.input__title}>Фамилия</p>
                     <InputProfile
                       typeInput={"text"}
-                      value={profile.surname}
+                      value={formik.values.surname}
+                      onChange={formik.handleChange}
                       placeholder={"Иванов"}
                     />
                   </div>
