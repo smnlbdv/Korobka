@@ -12,6 +12,7 @@ const Registration = () => {
 
     const [form, setForm] = useState({
         name: '',
+        surname: '',
         email: '',
         password: ''
     })
@@ -40,6 +41,7 @@ const Registration = () => {
                 <h2 className="section__title">Регистарция</h2>
                 <form className={style.form} onSubmit={e => e.preventDefault()}>
                     <InputReg img={"/assets/user-sign-up.svg"} name={"name"} type={"text"} placeholder={"Имя"} changeHandler={changeHandler}/>
+                    <InputReg img={"/assets/user-sign-up.svg"} name={"surname"} type={"text"} placeholder={"Фамилия"} changeHandler={changeHandler}/>
                     <InputReg img={"/assets/email-sign-up.svg"} name={"email"} type={"email"} placeholder={"E-mail"} changeHandler={changeHandler}/>
                     <InputReg img={"/assets/lock-sign-up.svg"} name={"password"} type={"password"} placeholder={"Пароль"} chek={true} changeHandler={changeHandler}/>
                     <ButtonLogin title={"Зарегистрироваться"} submitInfo={() => submitInfo()}/>

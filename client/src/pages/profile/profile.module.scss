@@ -90,15 +90,18 @@
 .personal__data {
     display: flex;
     flex-direction: column;
-    row-gap: 16px;
+    row-gap: 20px;
     margin-top: 25px;
 }
 
 .input__title {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
     font-size: 14px;
     font-style: normal;
-    font-weight: 600; 
-    margin-bottom: 16px;
+    font-weight: 500; 
+    margin-bottom: 10px;
 }
 
 .order__title {

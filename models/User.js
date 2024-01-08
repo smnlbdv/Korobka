@@ -11,6 +11,11 @@ const shema = new mongoose.Schema({
     },
     name: {
         type: String,
+        default: 'Пользователь'
+    },
+    surname: {
+        type: String,
+        default: ''
     },
     email: {
         type: String,

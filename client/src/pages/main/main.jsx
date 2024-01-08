@@ -148,6 +148,10 @@ const Main = () => {
     setOpen(id);
   };
 
+  const onBlurInput = () => {
+    if(!formik.errors.email || formik.values.email == "") formik.resetForm();
+  }
+
   useEffect(() => {
     if(emailText.length == 0) {
       formik.resetForm();
@@ -293,6 +297,7 @@ const Main = () => {
                     placeholder="Укажите почту..."
                     value={emailText}
                     onChange={sendEmail}
+                    onBlur={onBlurInput}
                   />
                   <ButtonCreate text={"Отправить"} type={"submit"}/>
                 </form>
