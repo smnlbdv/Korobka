@@ -29,17 +29,12 @@ const Profil = () => {
     validate: values => {
       const errors = {};
 
-      if (!values.password) {
-        errors.password = 'Введите пароль';
-      }
-
-      if (!values.confirmPassword) {
-        errors.confirmPassword = 'Подтвердите пароль';
-      } else if (values.password !== values.confirmPassword) {
+      if (values.password !== values.confirmPassword) {
         errors.confirmPassword = 'Пароли не совпадают';
       }
 
       return errors;
+
     },
     onSubmit: values => {
       console.log(values)
@@ -65,7 +60,6 @@ const Profil = () => {
         )
     }),
     onSubmit: (values) => {
-      // Выполните необходимые действия при отправке формы
       console.log(values);
     },
   });
