@@ -34,5 +34,9 @@
     color: white !important;
 }
 
+.ant-tooltip-content {
+    transform: translateY(5px) !important;
+}
+
 
 

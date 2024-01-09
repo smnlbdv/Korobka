@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Tabs } from "antd";
-const { TabPane } = Tabs;
 import * as Yup from "yup";
 
 import "../../libs/ant.css";
@@ -23,6 +22,7 @@ const Profil = () => {
 
   const formikPass = useFormik({
     initialValues: {
+      prepassword: '',
       password: '',
       confirmPassword: '',
     },
@@ -60,7 +60,12 @@ const Profil = () => {
         )
     }),
     onSubmit: (values) => {
-      console.log(values);
+      // if(Object.keys(formikPersonal.errors).length !== 0) {
+      //   console.log("Ошибки")
+      // } else {
+      //   console.log(values);
+      // }
+      console.log(values)
     },
   });
 
@@ -81,6 +86,137 @@ const Profil = () => {
     }
   }, [profile]);
 
+  const itemsTabs = [
+    {
+      key: '1',
+      label: 'Личные данные',
+      children: 
+        <form
+          onSubmit={formikPersonal.handleSubmit}
+          className={style.personal__data}
+        >
+          <div className={style.personal__input__block}>
+            <div className={style.input__block}>
+              <p className={style.input__title}>
+                Имя *
+              </p>
+              <InputProfile
+                id="name"
+                name="name"
+                typeInput={"text"}
+                value={formikPersonal.values.name}
+                placeholder={"Иван"}
+                onChange={formikPersonal.handleChange}
+                errorChange = {formikPersonal.errors.name && "true"}
+              />
+            </div>
+            <div className={style.input__block}>
+              <p className={style.input__title}>Фамилия</p>
+              <InputProfile
+                id="surname"
+                name="surname"
+                typeInput={"text"}
+                value={formikPersonal.values.surname}
+                onChange={formikPersonal.handleChange}
+                placeholder={"Иванов"}
+              />
+            </div>
+          </div>
+          <div className={style.personal__input__block}>
+            <div className={style.input__block}>
+              <p className={style.input__title}>E-mail *</p>
+              <InputProfile
+                id="email"
+                name="email"
+                typeInput={"text"}
+                placeholder={"ivanov@gmail.com"}
+                value={formikPersonal.values.email}
+                onChange={formikPersonal.handleChange}
+                errorChange = {formikPersonal.errors.email && "true"}
+              />
+            </div>
+            <div className={style.input__block}>
+              <p className={style.input__title}>Номер телефона</p>
+              <InputProfile
+                id="phone"
+                name="phone"
+                typeInput={"text"}
+                placeholder={"+375 (99) 999-99-99"}
+                value={formikPersonal.values.phone}
+                onChange={formikPersonal.handleChange}
+                errorChange = {formikPersonal.errors.phone && "true"}
+                tel = {"true"}
+              />
+            </div>
+          </div>
+          <p className={style.required__title}>* - поля обязательные для заполнения</p>
+          <div className={style.button__save}>
+            <ButtonCreate text={"Сохранить"} type={"submit"} />
+          </div>
+        </form>
+              ,
+    },
+    {
+      key: '2',
+      label: 'Сброс пароля',
+      children: 
+        <form className={style.personal__data} onSubmit={formikPass.handleSubmit}>
+        <div className={style.personal__input__block}>
+          <div className={style.input__block}>
+            <p className={style.input__title}>Старый пароль</p>
+            <InputProfile
+              id="prepassword"
+              name="prepassword"
+              typeInput={"password"}
+              hiddenImage={true}
+              value={formikPass.values.prepassword}
+              url={"/assets/lock-sign-up.svg"}
+              placeholder={""}
+              onChange={prePassword}
+            />
+          </div>
+          <button className={style.button__hidden__pass}>
+            Показать пароли
+          </button>
+        </div>
+        <div className={style.personal__input__block}>
+          <div className={style.input__block}>
+            <p className={style.input__title}>Новый пароль</p>
+            <InputProfile
+              id="password"
+              name="password"
+              value={formikPass.values.password}
+              onChange={formikPass.handleChange}
+              typeInput={"password"}
+              hiddenImage={true}
+              url={"/assets/lock-sign-up.svg"}
+              placeholder={""}
+              errorChange = {formikPass.errors.confirmPassword && "true"}
+            />
+          </div>
+          <div className={style.input__block}>
+            <p className={style.input__title}>Повторите пароль</p>
+            <InputProfile
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formikPass.values.confirmPassword}
+              onChange={formikPass.handleChange}
+              typeInput={"password"}
+              hiddenImage={true}
+              url={"/assets/lock-sign-up.svg"}
+              placeholder={""}
+              errorChange = {formikPass.errors.confirmPassword && "true"}
+            />
+          </div>
+        </div>
+        <div className={style.button__save}>
+          <ButtonCreate text={"Сбросить"} type={"submit"} />
+        </div>
+      </form>
+      ,
+    }
+  ];
+
   const handleChangeFile = async (e) => {
     try {
       const formData = new FormData();
@@ -98,6 +234,10 @@ const Profil = () => {
     logout();
     navigate("/");
   };
+
+  function prePassword () {
+
+  }
 
   return (
     <section className={`${style.section_profile} wrapper`}>
@@ -142,121 +282,7 @@ const Profil = () => {
             </button>
           </div>
 
-          <Tabs defaultActiveKey="1">
-            <TabPane tab="Личная информация" key="1">
-              <form
-                onSubmit={formikPersonal.handleSubmit}
-                className={style.personal__data}
-              >
-                <div className={style.personal__input__block}>
-                  <div className={style.input__block}>
-                    <p className={style.input__title}>
-                      Имя *
-                    </p>
-                    <InputProfile
-                      id="name"
-                      name="name"
-                      typeInput={"text"}
-                      value={formikPersonal.values.name}
-                      placeholder={"Иван"}
-                      onChange={formikPersonal.handleChange}
-                      errorChange = {formikPersonal.errors.name && "true"}
-                    />
-                  </div>
-                  <div className={style.input__block}>
-                    <p className={style.input__title}>Фамилия</p>
-                    <InputProfile
-                      typeInput={"text"}
-                      value={formikPersonal.values.surname}
-                      onChange={formikPersonal.handleChange}
-                      placeholder={"Иванов"}
-                    />
-                  </div>
-                </div>
-                <div className={style.personal__input__block}>
-                  <div className={style.input__block}>
-                    <p className={style.input__title}>E-mail *</p>
-                    <InputProfile
-                      id="email"
-                      name="email"
-                      typeInput={"text"}
-                      placeholder={"ivanov@gmail.com"}
-                      value={formikPersonal.values.email}
-                      onChange={formikPersonal.handleChange}
-                      errorChange = {formikPersonal.errors.email && "true"}
-                    />
-                  </div>
-                  <div className={style.input__block}>
-                    <p className={style.input__title}>Номер телефона</p>
-                    <InputProfile
-                      id="phone"
-                      name="phone"
-                      typeInput={"text"}
-                      placeholder={"+375 (99) 999-99-99"}
-                      value={formikPersonal.values.phone}
-                      onChange={formikPersonal.handleChange}
-                      errorChange = {formikPersonal.errors.phone && "true"}
-                      tel = {"true"}
-                    />
-                  </div>
-                </div>
-                <p className={style.required__title}>* - поля обязательные для заполнения</p>
-                <div className={style.button__save}>
-                  <ButtonCreate text={"Сохранить"} type={"submit"} />
-                </div>
-              </form>
-            </TabPane>
-            <TabPane tab="Сброс пароля" key="2">
-              <form className={style.personal__data} onSubmit={formikPass.handleSubmit}>
-                <div className={style.personal__input__block}>
-                  <div className={style.input__block}>
-                    <p className={style.input__title}>Старый пароль</p>
-                    <InputProfile
-                      typeInput={"password"}
-                      hiddenImage={true}
-                      url={"/assets/lock-sign-up.svg"}
-                      placeholder={""}
-                    />
-                  </div>
-                  <button className={style.button__hidden__pass}>
-                    Показать пароли
-                  </button>
-                </div>
-                <div className={style.personal__input__block}>
-                  <div className={style.input__block}>
-                    <p className={style.input__title}>Новый пароль</p>
-                    <InputProfile
-                      id="password"
-                      name="password"
-                      onChange={formikPass.handleChange}
-                      value={formikPass.values.password}
-                      typeInput={"password"}
-                      hiddenImage={true}
-                      url={"/assets/lock-sign-up.svg"}
-                      placeholder={""}
-                      errorChange = {formikPass.errors.confirmPassword && "true"}
-                    />
-                  </div>
-                  <div className={style.input__block}>
-                    <p className={style.input__title}>Повторите пароль</p>
-                    <InputProfile
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      onChange={formikPass.handleChange}
-                      value={formikPass.values.confirmPassword}
-                      typeInput={"password"}
-                      hiddenImage={true}
-                      url={"/assets/lock-sign-up.svg"}
-                      placeholder={""}
-                      errorChange = {formikPass.errors.confirmPassword && "true"}
-                    />
-                  </div>
-                </div>
-                <div className={style.button__save}>
-                  <ButtonCreate text={"Сбросить"} type={"submit"} />
-                </div>
-              </form>
-            </TabPane>
+          <Tabs defaultActiveKey="1" items={itemsTabs}>
           </Tabs>
         </div>
 
