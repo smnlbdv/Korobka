@@ -15,10 +15,10 @@ import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 
 const Profil = () => {
   //   const [checkAll, setCheckAll] = useState(false);
-  const { uploadAvatar, profile, getProfile, logout } = useContext(AuthContext);
-  const avatarUser = useRef();
+  const { uploadAvatar, profile, getProfile, logout, updateProfileUser, contextHolder } = useContext(AuthContext);
   const navigate = useNavigate();
   const inputFileRef = useRef(null);
+  const [avatarUser, setAvatarUser] = useState("")
 
   const formikPass = useFormik({
     initialValues: {
@@ -28,13 +28,10 @@ const Profil = () => {
     },
     validate: values => {
       const errors = {};
-
       if (values.password !== values.confirmPassword) {
         errors.confirmPassword = 'Пароли не совпадают';
       }
-
       return errors;
-
     },
     onSubmit: values => {
       console.log(values)
@@ -45,11 +42,12 @@ const Profil = () => {
     initialValues: {
       name: "",
       surname: "",
-      email: "",
       phone: "",
+      email: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Обязательное поле").max(50,"Превышено кол-во допустимых символов"),
+      name: Yup.string().required("Обязательное поле").max(50,"Превышено кол-во допустимых символов").min(3,"Слишком короткое имя"),
+      surname: Yup.string().required("Обязательное поле").max(50,"Превышено кол-во допустимых символов"),
       email: Yup.string()
         .email("Некорректный адрес электронной почты")
         .required("Обязательное поле"),
@@ -60,12 +58,23 @@ const Profil = () => {
         )
     }),
     onSubmit: (values) => {
-      // if(Object.keys(formikPersonal.errors).length !== 0) {
-      //   console.log("Ошибки")
-      // } else {
-      //   console.log(values);
-      // }
-      console.log(values)
+      const formData = {
+        ...values,
+        status: profile.status,
+        avatarUser: profile.avatarUser
+      }
+
+      const isRighData = JSON.stringify(profile) === JSON.stringify(formData);
+
+      if(!isRighData) {
+        const changedItems = Object.keys(profile).reduce((result, key) => {
+          if (profile[key] !== formData[key]) {
+            result[key] = formData[key]; // Записываем измененное значение
+          }
+          return result;
+        }, {});
+        updateProfileUser(changedItems);
+      }
     },
   });
 
@@ -83,6 +92,7 @@ const Profil = () => {
         email: profile.email,
         phone: profile.phone,
       })
+      setAvatarUser(profile.avatarUser)
     }
   }, [profile]);
 
@@ -111,7 +121,7 @@ const Profil = () => {
               />
             </div>
             <div className={style.input__block}>
-              <p className={style.input__title}>Фамилия</p>
+              <p className={style.input__title}>Фамилия *</p>
               <InputProfile
                 id="surname"
                 name="surname"
@@ -119,6 +129,7 @@ const Profil = () => {
                 value={formikPersonal.values.surname}
                 onChange={formikPersonal.handleChange}
                 placeholder={"Иванов"}
+                errorChange = {formikPersonal.errors.surname && "true"}
               />
             </div>
           </div>
@@ -223,7 +234,7 @@ const Profil = () => {
       const file = e.target.files[0];
       formData.append("image", file);
       await uploadAvatar(formData).then(
-        (response) => (avatarUser.current.src = response)
+        (response) => (setAvatarUser(response))
       );
     } catch (error) {
       console.log(error);
@@ -241,6 +252,7 @@ const Profil = () => {
 
   return (
     <section className={`${style.section_profile} wrapper`}>
+      {contextHolder}
       <ul className="bread-crumbs">
         <Link to="/">
           <li>Главная</li>
@@ -252,7 +264,7 @@ const Profil = () => {
         <div className={style.block__user}>
           <div className={style.header__block}>
             <div className={style.update__image__block}>
-              <img ref={avatarUser} src={profile.avatarUser} alt="" />
+              <img src={avatarUser} alt="" />
             </div>
             <div>
               <p className={style.fullname__name}>{profile.name + " " + profile.surname}</p>

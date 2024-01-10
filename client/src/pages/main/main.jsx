@@ -157,6 +157,7 @@ const Main = () => {
       formik.resetForm();
     }
   }, [emailText])
+  
 
   return (
     <section>

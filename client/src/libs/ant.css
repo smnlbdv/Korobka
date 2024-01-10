@@ -7,6 +7,10 @@
     font-family: inherit !important;
 }
 
+.ant-tabs {
+    all: unset !important;
+}
+
 .ant-notification-notice {
     width: max-content !important;
     padding: 16px 20px !important;
@@ -22,11 +26,11 @@
     top: 0px !important;
 }
 
-:where(.css-dev-only-do-not-override-2q8sxy).ant-tabs {
+.ant-tabs {
     all: unset!important;
 }
 
-:where(.css-dev-only-do-not-override-2q8sxy).ant-tabs .ant-tabs-ink-bar {
+.ant-tabs .ant-tabs-ink-bar {
     background: rgb(248, 53, 53) !important;
 }
 

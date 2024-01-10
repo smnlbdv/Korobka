@@ -28,7 +28,10 @@ const shema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone: String,
+    phone: {
+        type: String,
+        default: ''
+    },
     avatarUrl: String,
     order: [{
         type: Types.ObjectId, reg: "Order"

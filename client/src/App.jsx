@@ -138,6 +138,15 @@ function App() {
     });
   };
 
+  const openNotificationError = (placement, text) => {
+    apis.error({
+      message: <p>{text}</p>,
+      placement,
+      closeIcon: false,
+      duration: 1.5,
+    });
+  };
+
   const unmountItem = (id) => {
     setCart((prev) =>
       prev.filter((item) => item._id != id)
@@ -377,6 +386,7 @@ function App() {
     }
   }
   const uploadAvatar = async (formData) => {
+    console.log(formData)
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     let url;
     try {
@@ -386,6 +396,7 @@ function App() {
             'Content-Type': 'multipart/form-data',
         }})
         .then(response => {
+          openNotification('bottomRight', response.data.message)
           url = response.data.url
         })
         .catch(response => {
@@ -400,6 +411,35 @@ function App() {
       console.log("Ошибка", error);
     }
     return url
+  }
+
+  const updateProfileUser = async (changedData) => {
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    console.log(changedData)
+    try {
+      await api.post("/api/profile/update", changedData, {
+        headers: {
+            'Authorization': `${data.token}`,
+        }})
+        .then(response => {
+            openNotification('bottomRight', response.data.message)
+        })
+        .catch(response => {
+          if(response.response.status == 400) {
+            openNotificationError('bottomRight', response.response.data.message)
+          }
+          if(response.response.status == 409) {
+            openNotificationError('bottomRight', response.response.data.message)
+          }
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+        })
+        
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
   }
 
   return (
@@ -431,7 +471,8 @@ function App() {
         getFavorite,
         uploadAvatar,
         getProfile,
-        profile
+        profile,
+        updateProfileUser
       }}
     >
         <Routes>
