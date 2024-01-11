@@ -13,26 +13,39 @@ import InputProfile from "../../components/inputProfile/inputProfile.jsx";
 import style from "./profile.module.scss";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 
-const Profil = () => {
-  //   const [checkAll, setCheckAll] = useState(false);
-  const { uploadAvatar, profile, getProfile, logout, updateProfileUser, contextHolder } = useContext(AuthContext);
+const Profile = () => {
+  const { uploadAvatar, profile, setProfile, getProfile, logout, updateProfileUser, contextHolder } = useContext(AuthContext);
   const navigate = useNavigate();
   const inputFileRef = useRef(null);
+  const inputNewPass = useRef(null);
+  const inputPrePass = useRef(null);
+  const inputDoublePass = useRef(null);
   const [avatarUser, setAvatarUser] = useState("")
+  const [typeInputPass, setTypeInputPass] = useState("password")
+
+  const hiddenPass = (e) => {
+    e.preventDefault()
+    if(typeInputPass == "password") {
+      setTypeInputPass("text")
+    } else {
+      setTypeInputPass("password")
+    }
+    
+  }
 
   const formikPass = useFormik({
     initialValues: {
       prepassword: '',
       password: '',
-      confirmPassword: '',
+      confirmPassword: '',  
     },
-    validate: values => {
-      const errors = {};
-      if (values.password !== values.confirmPassword) {
-        errors.confirmPassword = 'Пароли не совпадают';
-      }
-      return errors;
-    },
+    validationSchema: Yup.object().shape({
+      password: Yup.string()
+        .min(5, 'Длинна меньше 5 символов'),
+      confirmPassword: Yup.string()
+        .min(5, 'Длинна меньше 5 символов')
+        .oneOf([Yup.ref('password'), null], 'Пароли не совпадают')
+    }),
     onSubmit: values => {
       console.log(values)
     },
@@ -49,12 +62,12 @@ const Profil = () => {
       name: Yup.string().required("Обязательное поле").max(50,"Превышено кол-во допустимых символов").min(3,"Слишком короткое имя"),
       surname: Yup.string().required("Обязательное поле").max(50,"Превышено кол-во допустимых символов"),
       email: Yup.string()
-        .email("Некорректный адрес электронной почты")
+        .email("Некорректный e-mail")
         .required("Обязательное поле"),
       phone: Yup.string()
         .matches(
           /^\+375 \([0-9]{2}\) [0-9]{3}-[0-9]{2}-[0-9]{2}$/,
-          "Неверный формат телефона. Введите в формате: +375 (99) 999-99-99"
+          "Неверный формат телефона"
         )
     }),
     onSubmit: (values) => {
@@ -69,7 +82,7 @@ const Profil = () => {
       if(!isRighData) {
         const changedItems = Object.keys(profile).reduce((result, key) => {
           if (profile[key] !== formData[key]) {
-            result[key] = formData[key]; // Записываем измененное значение
+            result[key] = formData[key];
           }
           return result;
         }, {});
@@ -119,6 +132,12 @@ const Profil = () => {
                 onChange={formikPersonal.handleChange}
                 errorChange = {formikPersonal.errors.name && "true"}
               />
+              {
+                formikPersonal.errors.name &&
+                <p className={style.error__message}>
+                  {formikPersonal.errors.name}
+                </p>
+              }
             </div>
             <div className={style.input__block}>
               <p className={style.input__title}>Фамилия *</p>
@@ -131,6 +150,12 @@ const Profil = () => {
                 placeholder={"Иванов"}
                 errorChange = {formikPersonal.errors.surname && "true"}
               />
+              {
+                formikPersonal.errors.surname &&
+                <p className={style.error__message}>
+                  {formikPersonal.errors.surname}
+                </p>
+              }
             </div>
           </div>
           <div className={style.personal__input__block}>
@@ -145,6 +170,12 @@ const Profil = () => {
                 onChange={formikPersonal.handleChange}
                 errorChange = {formikPersonal.errors.email && "true"}
               />
+              {
+                formikPersonal.errors.email &&
+                <p className={style.error__message}>
+                  {formikPersonal.errors.email}
+                </p>
+              }
             </div>
             <div className={style.input__block}>
               <p className={style.input__title}>Номер телефона</p>
@@ -157,7 +188,14 @@ const Profil = () => {
                 onChange={formikPersonal.handleChange}
                 errorChange = {formikPersonal.errors.phone && "true"}
                 tel = {"true"}
+                
               />
+              {
+                formikPersonal.errors.phone &&
+                <p className={style.error__message}>
+                  {formikPersonal.errors.phone}
+                </p>
+              }
             </div>
           </div>
           <p className={style.required__title}>* - поля обязательные для заполнения</p>
@@ -178,15 +216,16 @@ const Profil = () => {
             <InputProfile
               id="prepassword"
               name="prepassword"
-              typeInput={"password"}
+              typeInput={typeInputPass}
               hiddenImage={true}
               value={formikPass.values.prepassword}
               url={"/assets/lock-sign-up.svg"}
               placeholder={""}
-              onChange={prePassword}
+              onChange={formikPass.handleChange}
+              ref={inputPrePass}
             />
           </div>
-          <button className={style.button__hidden__pass}>
+          <button className={style.button__hidden__pass} onClick={hiddenPass}>
             Показать пароли
           </button>
         </div>
@@ -198,12 +237,19 @@ const Profil = () => {
               name="password"
               value={formikPass.values.password}
               onChange={formikPass.handleChange}
-              typeInput={"password"}
+              typeInput={typeInputPass}
               hiddenImage={true}
               url={"/assets/lock-sign-up.svg"}
               placeholder={""}
-              errorChange = {formikPass.errors.confirmPassword && "true"}
+              errorChange = {formikPass.errors.password && "true"}
+              ref={inputNewPass}
             />
+            {
+                formikPass.errors.password &&
+                <p className={style.error__message}>
+                  {formikPass.errors.password}
+                </p>
+            }
           </div>
           <div className={style.input__block}>
             <p className={style.input__title}>Повторите пароль</p>
@@ -212,12 +258,19 @@ const Profil = () => {
               name="confirmPassword"
               value={formikPass.values.confirmPassword}
               onChange={formikPass.handleChange}
-              typeInput={"password"}
+              typeInput={typeInputPass}
               hiddenImage={true}
               url={"/assets/lock-sign-up.svg"}
               placeholder={""}
               errorChange = {formikPass.errors.confirmPassword && "true"}
+              ref={inputDoublePass}
             />
+            {
+                formikPass.errors.confirmPassword &&
+                <p className={style.error__message}>
+                  {formikPass.errors.confirmPassword}
+                </p>
+            }
           </div>
         </div>
         <div className={style.button__save}>
@@ -242,13 +295,10 @@ const Profil = () => {
   };
 
   const logoutUser = () => {
+    setProfile("")
     logout();
     navigate("/");
   };
-
-  function prePassword () {
-
-  }
 
   return (
     <section className={`${style.section_profile} wrapper`}>
@@ -307,4 +357,4 @@ const Profil = () => {
   );
 };
 
-export default Profil;
+export default Profile;

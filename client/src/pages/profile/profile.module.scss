@@ -68,16 +68,13 @@
     flex: 1;
 }
 
-.button__save {
-    margin-top: 20px;
-}
-
 .main__block__profile {
     display: flex;
     column-gap: 50px;
 }
 
 .input__block {
+    position: relative;
     flex: 1;
 }
 
@@ -90,7 +87,7 @@
 .personal__data {
     display: flex;
     flex-direction: column;
-    row-gap: 20px;
+    row-gap: 30px;
     margin-top: 25px;
 }
 
@@ -112,4 +109,15 @@
 
 .required__title {
     font-size: 14px;
+}
+
+.error__message {
+    position: absolute;
+    text-align: left;
+    font-size: 13px;
+    color:rgb(248, 53, 53);
+    font-weight: 500;
+    margin-top: 5px;
+    width: 100%;
+    transition: all 200ms;
 }

@@ -472,6 +472,7 @@ function App() {
         uploadAvatar,
         getProfile,
         profile,
+        setProfile,
         updateProfileUser
       }}
     >
