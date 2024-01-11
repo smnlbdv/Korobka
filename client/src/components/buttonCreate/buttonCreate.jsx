@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import style from './buttonCreate.module.scss'
 
-const ButtonCreate = ({text, sendEmailData, type }) => {
+const ButtonCreate = ({text, sendEmailData, type, disabled = false }) => {
     const sendEmailMessage = () => {
         sendEmailData()
     }
     return ( 
-        <button className={style.button_create} onClick={sendEmailData && sendEmailMessage()} type={type}>{text}</button>
+        <button className={style.button_create } onClick={sendEmailData && sendEmailMessage()} type={type} disabled={disabled}>{text}</button>
     );
 }
  

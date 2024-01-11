@@ -7,30 +7,33 @@ import { Tabs } from "antd";
 import * as Yup from "yup";
 
 import "../../libs/ant.css";
-// import CartItem from '../../components/cartItem/cartItem.jsx'
-// import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
+
+import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import InputProfile from "../../components/inputProfile/inputProfile.jsx";
 import style from "./profile.module.scss";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 
 const Profile = () => {
-  const { uploadAvatar, profile, setProfile, getProfile, logout, updateProfileUser, contextHolder } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { uploadAvatar, profile, setProfile, getProfile, logout, updateProfileUser, contextHolder, order, updatePassUser } = useContext(AuthContext);
+  const [name, setName] = useState()
   const inputFileRef = useRef(null);
   const inputNewPass = useRef(null);
   const inputPrePass = useRef(null);
   const inputDoublePass = useRef(null);
   const [avatarUser, setAvatarUser] = useState("")
   const [typeInputPass, setTypeInputPass] = useState("password")
+  const [titleHiddenButton, setTitleHiddenButton] = useState(true)
+  const navigate = useNavigate();
 
   const hiddenPass = (e) => {
     e.preventDefault()
     if(typeInputPass == "password") {
       setTypeInputPass("text")
+      setTitleHiddenButton(false)
     } else {
       setTypeInputPass("password")
+      setTitleHiddenButton(true)
     }
-    
   }
 
   const formikPass = useFormik({
@@ -46,9 +49,21 @@ const Profile = () => {
         .min(5, 'Длинна меньше 5 символов')
         .oneOf([Yup.ref('password'), null], 'Пароли не совпадают')
     }),
-    onSubmit: values => {
-      console.log(values)
-    },
+    onSubmit: (values, { setFieldError }) => {
+      if (values.prepassword != 0 && values.password != 0 && values.confirmPassword != 0) {
+          updatePassUser(values) && setFieldError('prepassword', 'Неверный пароль');
+      } else {
+        if (!values.prepassword) { 
+          setFieldError('prepassword', 'Введите значение');
+        }
+        if (!values.password) { 
+          setFieldError('password', 'Введите значение');
+        }
+        if (!values.confirmPassword) { 
+          setFieldError('confirmPassword', 'Введите значение');
+        }
+      }
+    }
   });
 
   const formikPersonal = useFormik({
@@ -91,6 +106,12 @@ const Profile = () => {
     },
   });
 
+  const changeUserName = (e) => {
+    formikPersonal.handleChange(e)
+    // console.log(e.target.value)
+    // formikPersonal.setFieldValue("name", e.target.value)
+  }
+
   useEffect(() => {
     if (profile.length == 0) {
       getProfile();
@@ -98,14 +119,14 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    if (profile.length != 0) {
-      formikPersonal.setValues({
-        name: profile.name,
-        surname: profile.surname,
-        email: profile.email,
-        phone: profile.phone,
-      })
-      setAvatarUser(profile.avatarUser)
+      if (profile.length != 0) {
+        formikPersonal.setValues({
+          name: profile.name,
+          surname: profile.surname,
+          email: profile.email,
+          phone: profile.phone,
+        })
+        setAvatarUser(profile.avatarUser)
     }
   }, [profile]);
 
@@ -129,7 +150,7 @@ const Profile = () => {
                 typeInput={"text"}
                 value={formikPersonal.values.name}
                 placeholder={"Иван"}
-                onChange={formikPersonal.handleChange}
+                onChange={changeUserName}
                 errorChange = {formikPersonal.errors.name && "true"}
               />
               {
@@ -200,7 +221,7 @@ const Profile = () => {
           </div>
           <p className={style.required__title}>* - поля обязательные для заполнения</p>
           <div className={style.button__save}>
-            <ButtonCreate text={"Сохранить"} type={"submit"} />
+            <ButtonCreate text={"Сохранить"} type={"submit"} disabled={Object.keys(formikPersonal.errors).length > 0}/>
           </div>
         </form>
               ,
@@ -223,10 +244,17 @@ const Profile = () => {
               placeholder={""}
               onChange={formikPass.handleChange}
               ref={inputPrePass}
+              errorChange = {formikPass.errors.prepassword && "true"}
             />
+            {
+                formikPass.errors.prepassword &&
+                <p className={style.error__message}>
+                  {formikPass.errors.prepassword}
+                </p>
+            }
           </div>
           <button className={style.button__hidden__pass} onClick={hiddenPass}>
-            Показать пароли
+            {titleHiddenButton ? "Показать пароли" : "Скрыть пароли"}
           </button>
         </div>
         <div className={style.personal__input__block}>
@@ -274,7 +302,7 @@ const Profile = () => {
           </div>
         </div>
         <div className={style.button__save}>
-          <ButtonCreate text={"Сбросить"} type={"submit"} />
+          <ButtonCreate text={"Сбросить"} type={"submit"}  disabled={Object.keys(formikPass.errors).length > 0}/>
         </div>
       </form>
       ,
@@ -350,7 +378,22 @@ const Profile = () => {
 
         <div className={style.block__order}>
           <h3 className={style.order__title}>Мои заказы</h3>
-          <div></div>
+          {
+            order.length != 0 ?
+            <div>
+
+            </div>
+            :
+            <div className={style.profile__block_null}>
+                <div className={style.block__info}>
+                    <p className={style.title}>У вас нет заказов</p>
+                    <div className={style.btn_block}>
+                        <ButtonNull title={"В каталог"} path={'/ready-gifts'}/>
+                        <ButtonNull title={"Собрать"} path={'/'}/>
+                    </div>
+                </div>
+            </div>
+          }
         </div>
       </div>
     </section>

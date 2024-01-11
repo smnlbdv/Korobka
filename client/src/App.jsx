@@ -28,6 +28,7 @@ const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
 function App() {
   const [cart, setCart] = useState([]);
   const [profile, setProfile] = useState([]);
+  const [order, setOrder] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
   const [cartPrice, setCartPrice] = useState();
   const [newBoxList, setNewBoxList] = useState([]);
@@ -390,7 +391,7 @@ function App() {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     let url;
     try {
-      await api.post("/api/profile/upload-image", formData, {
+      await api.patch("/api/profile/upload-image", formData, {
         headers: {
             'Authorization': `${data.token}`,
             'Content-Type': 'multipart/form-data',
@@ -415,9 +416,8 @@ function App() {
 
   const updateProfileUser = async (changedData) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
-    console.log(changedData)
     try {
-      await api.post("/api/profile/update", changedData, {
+      await api.patch("/api/profile/update", changedData, {
         headers: {
             'Authorization': `${data.token}`,
         }})
@@ -440,6 +440,38 @@ function App() {
     } catch (error) {
       console.log("Ошибка", error);
     }
+  }
+
+  const updatePassUser = async (passData) => {
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    let resultPass;
+    try {
+      await api.patch(`/api/profile/${data.userId}/password`, passData, {
+        headers: {
+            'Authorization': `${data.token}`,
+        }})
+        .then(response => {
+          if(response.status == 201){ 
+            openNotification('bottomRight', response.data.message)
+          }
+        })
+        .catch(response => {
+          if(response.response.status == 400) {
+            resultPass = response.response.data.resultPass
+          }
+          if(response.response.status == 500) {
+            openNotificationError('bottomRight', response.response.data.message)
+          }
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+        })
+        
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+    return resultPass
   }
 
   return (
@@ -473,7 +505,9 @@ function App() {
         getProfile,
         profile,
         setProfile,
-        updateProfileUser
+        updateProfileUser,
+        order,
+        updatePassUser
       }}
     >
         <Routes>

@@ -9,7 +9,7 @@
     border-radius: 8px;
     background-color: rgb(248, 53, 53);
     padding: 10px 30px;
-    transition: all 200ms;
+    transition: all 500ms;
 
     &:hover { 
         transition: all 200ms;
@@ -21,4 +21,11 @@
         transition: all 200ms;
         box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
     }
+}
+
+.button_create:disabled {
+    @extend .button_create;
+    background-color: gray;
+    opacity: 0.7;
+    transition: all 500ms;
 }

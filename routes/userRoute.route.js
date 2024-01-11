@@ -36,7 +36,7 @@ userRoute.get('/:userId', verifyToken, async (req, res) => {
         .catch(error => res.status(400).json({error: error}))
 })
 
-userRoute.post('/upload-image', verifyToken, upload.single('image'), async (req, res) => {
+userRoute.patch('/upload-image', verifyToken, upload.single('image'), async (req, res) => {
     try {
         const userId = req.userId
         const url = `http://localhost:5000/avatar/${req.file.originalname}`
@@ -54,7 +54,7 @@ userRoute.post('/upload-image', verifyToken, upload.single('image'), async (req,
     }
 })
 
-userRoute.post('/update', verifyToken, async (req, res) => {
+userRoute.patch('/update', verifyToken, async (req, res) => {
     try {
         const userId = req.userId
         const body = req.body
@@ -70,6 +70,32 @@ userRoute.post('/update', verifyToken, async (req, res) => {
                 })
                 .catch(error => res.status(400).json({message: "Ошибка сохранения данных"}))
         }
+    } catch (error) {
+        res.status(401).json({error: error.message})
+    }
+})
+
+userRoute.patch('/:id/password', verifyToken, async (req, res) => {
+    try {
+        const userId = req.params.id
+        const body = req.body
+        const user = await User.findOne({_id: userId})
+
+        if(user) {
+            const isMatch = await bcrypt.compare(body.prepassword, user.passwordHash)
+            if(!isMatch) {
+                return res.status(400).json({message: "Старый пароль неверный", resultPass: false})
+            } else {
+                user.passwordHash = await bcrypt.hash(body.confirmPassword, 12);
+                await user.save();
+                res.status(201).json({
+                    message: "Данные успешно сохранены"
+                })
+            }
+        } else {
+            res.status(500).json({error: "Ошибка сервера"})
+        }
+
     } catch (error) {
         res.status(401).json({error: error.message})
     }

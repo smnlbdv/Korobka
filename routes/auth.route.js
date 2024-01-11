@@ -68,7 +68,7 @@ router.post('/login', loginValidation, async (req, res) => {
             return res.status(400).json({message: "Такого email не существует"})
         }
 
-        const isMatch = bcrypt.compare(password, user.passwordHash)
+        const isMatch = await bcrypt.compare(password, user.passwordHash)
 
         if(!isMatch) {
             return res.status(400).json({message: "Пароли не совпадают"})
