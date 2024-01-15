@@ -89,7 +89,8 @@ userRoute.patch('/:id/password', verifyToken, async (req, res) => {
                 user.passwordHash = await bcrypt.hash(body.confirmPassword, 12);
                 await user.save();
                 res.status(201).json({
-                    message: "Данные успешно сохранены"
+                    message: "Данные успешно сохранены",
+                    resultPass: true
                 })
             }
         } else {

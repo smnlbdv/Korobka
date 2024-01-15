@@ -50,7 +50,6 @@ router.post('/registration', registerValidation, async (req, res) => {
 
 router.post('/login', loginValidation, async (req, res) => {
     try {
-
         const errors = validationResult(req)
 
         if(!errors.isEmpty()) {

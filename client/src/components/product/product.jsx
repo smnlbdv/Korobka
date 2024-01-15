@@ -63,7 +63,7 @@ const Product = ({_id, img, title, price, count, favorite = false, newProduct = 
 
     return (
         <div className={style.new_box}>
-            <Link to={`product/${_id}`} key={_id}>
+            <Link to={`/product/${_id}`} key={_id}>
                 <div className={style.info}>
                     <div className={style.image_box}>
                         <img className={style.image} src={img} alt="image new" />

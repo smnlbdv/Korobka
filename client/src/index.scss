@@ -65,11 +65,12 @@ a {
     padding-top: 20px;
     font-size: 14px;
 
-    a {
+    a:not(:last-child) {
         display: flex;
         column-gap: 10px;
         align-items: center;
-        color: #F14D29;
+        color: #f8522d;
+        font-weight: 500;
 
         &::after {
             content: "/";

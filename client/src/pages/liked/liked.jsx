@@ -13,7 +13,7 @@ import style from './liked.module.scss'
 
 
 const Liked = () => {
-    const { favoriteItem, getFavorite } = useContext(AuthContext)
+    const { favoriteItem, getFavorite, contextHolder } = useContext(AuthContext)
 
     useEffect(() => {
         if(favoriteItem.length == 0 ) {
@@ -23,6 +23,7 @@ const Liked = () => {
 
     return ( 
         <section className={`${style.section_cart} wrapper`}>
+        {contextHolder}
             <ul className="bread-crumbs">
                 <Link to="/">
                 <li>Главная</li>

@@ -15,7 +15,6 @@ import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 
 const Profile = () => {
   const { uploadAvatar, profile, setProfile, getProfile, logout, updateProfileUser, contextHolder, order, updatePassUser } = useContext(AuthContext);
-  const [name, setName] = useState()
   const inputFileRef = useRef(null);
   const inputNewPass = useRef(null);
   const inputPrePass = useRef(null);
@@ -49,9 +48,15 @@ const Profile = () => {
         .min(5, 'Длинна меньше 5 символов')
         .oneOf([Yup.ref('password'), null], 'Пароли не совпадают')
     }),
-    onSubmit: (values, { setFieldError }) => {
+    onSubmit: async (values, { setFieldError }) => {
       if (values.prepassword != 0 && values.password != 0 && values.confirmPassword != 0) {
-          updatePassUser(values) && setFieldError('prepassword', 'Неверный пароль');
+        await updatePassUser(values).then(
+          (response) => {
+            if(!response) {
+              setFieldError('prepassword', 'Неверный пароль');
+            }
+          }
+        );
       } else {
         if (!values.prepassword) { 
           setFieldError('prepassword', 'Введите значение');
@@ -224,7 +229,6 @@ const Profile = () => {
             <ButtonCreate text={"Сохранить"} type={"submit"} disabled={Object.keys(formikPersonal.errors).length > 0}/>
           </div>
         </form>
-              ,
     },
     {
       key: '2',

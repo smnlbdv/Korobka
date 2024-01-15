@@ -246,16 +246,6 @@ const Main = () => {
             </div>
           </section>
       </div>
-      {/* <section className={style.partner_block}>
-            <h2 className="section__title">Наши партнеры</h2>
-            <div className={style.partner_list}>
-              <img className={style.image} src="./assets/partner-1.png" alt="Google" />
-              <img className={style.image} src="./assets/partner-1.png" alt="Dropbox" />
-              <img className={style.image} src="./assets/partner-1.png" alt="Spotify" />
-              <img className={style.image} src="./assets/partner-1.png" alt="Invision" />
-              <img className={style.image} src="./assets/partner-1.png" alt="PayPal" />
-            </div>
-      </section> */}
       <div className={style.good_people}>
             <h2 className="section__title">Тысячи довольных пользователей</h2>
       </div>

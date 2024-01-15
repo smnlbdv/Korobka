@@ -387,7 +387,6 @@ function App() {
     }
   }
   const uploadAvatar = async (formData) => {
-    console.log(formData)
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     let url;
     try {
@@ -453,6 +452,7 @@ function App() {
         .then(response => {
           if(response.status == 201){ 
             openNotification('bottomRight', response.data.message)
+            resultPass = response.data.resultPass
           }
         })
         .catch(response => {
@@ -528,6 +528,7 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="product/:id" element={<ProductPage/>}/>
           </Route>
+          
           <Route path="/api/auth/*" element={
               <Suspense fallback={<Loading />}>
                 <Auth />
