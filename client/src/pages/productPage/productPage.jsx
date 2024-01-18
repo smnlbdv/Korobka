@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback, useState } from "react";
+import { useContext, useEffect, useCallback, useState, useRef } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 
 import style from './productPage.module.scss'
@@ -10,9 +10,11 @@ import api from '../../api/api.js';
 const ProductPage = () => {
     const [counts, setCounts] = useState(0);
     const [checkFavorites, setCheckFavorites] = useState(false)
-    const [selectedProduct, setSelectedProduct] = useState({});
+    const [selectedProduct, setSelectedProduct] = useState([]);
+    const [sliderProduct, setSliderProduct]= useState([]);
     const { id } = useParams();
     const { cart, logout } = useContext(AuthContext);
+    const mainImage = useRef()
 
     const navigate = useNavigate();
 
@@ -25,10 +27,15 @@ const ProductPage = () => {
             }})
             .then(response => {
               if(response.status == 200) {
+                console.log(response)
                 setSelectedProduct(...response.data)
+
+                const copiedData = [...response.data[0].slider];
+                setSliderProduct(copiedData)
               } 
             })
             .catch(response => {
+              console.log(response)
               if(response.response.status == 400) {
                 console.log(response)
               }
@@ -53,9 +60,27 @@ const ProductPage = () => {
     const clickFavoriteIcon = () => {
       checkFavorites ? setCheckFavorites(false) : setCheckFavorites(true)
     }
+
+    const clickOnItem = (e) => {
+      const itemSlider = document.querySelectorAll(`.${style.product__image_item}`)
+      
+      itemSlider.forEach((element, index) => {
+        if (index === 0) {
+          element.classList.add(style.slider__item_active);
+        }
+      });
+
+      itemSlider.forEach(element => {
+        element.classList.remove(style.slider__item_active)
+      });
+
+      const parentElement = e.target.parentNode
+      parentElement.classList.add(style.slider__item_active)
+      mainImage.current.src = e.target.src
+    }
   
     useEffect(() => {
-      fetchData();
+        fetchData();
     }, [fetchData]);
 
     useEffect(() => {
@@ -67,7 +92,16 @@ const ProductPage = () => {
             <div className="wrapper">
               <div className={style.block__adding__product}>
                   <div className={style.product__image}>
-                      <img className={style.image} src={selectedProduct.img} alt="Product image" />
+                      <div className={style.product__image_main}>
+                        <img className={style.product__image_active} ref={mainImage} src={sliderProduct[0]} alt="Product image" />
+                      </div>
+                      <div className={style.block__slider_item}>
+                        {sliderProduct.map((item, index) => (
+                          <div className={style.product__image_item} id={index} key={index}>
+                            <img className={style.product__slider_image} src={item} alt="Slider image" onClick={clickOnItem}/>
+                          </div>  
+                        ))}
+                      </div>
                   </div>
                   <div className={style.functions__card}>
                     <div className={style.header__product}>
