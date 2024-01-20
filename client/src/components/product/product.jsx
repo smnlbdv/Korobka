@@ -3,19 +3,19 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
 import { Link  } from 'react-router-dom';
 
+import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './product.module.scss'
 
 
-const Product = ({_id, slider, title, price, count, favorite = false, newProduct = true, pretext}) => {
+const Product = ({_id, slider, title, price, count, favorite = false, newProduct = true, pretext }) => {
 
-    const [isFavorite, setIsFavorite] = useState(favorite);
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
 
-    const { cart, addCart, addProductFavorite, deleteProductFavorite, increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext)
+    const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem, userId } = useContext(AuthContext)
 
     const clickBtnAdd = async () => {
-        await addCart({_id, img, title, pretext, price, count})
+        await addCart({_id, slider, title, pretext, price, count})
         const product = cart.find(obj => obj._id === _id);
         if(!product) {
             setCountProduct(1)
@@ -48,19 +48,9 @@ const Product = ({_id, slider, title, price, count, favorite = false, newProduct
         }
     }
 
-    const clickHeart = () => {
-        if(isFavorite) {
-            deleteProductFavorite(_id)
-            setIsFavorite(false)
-        } else {
-            addProductFavorite(_id) 
-            setIsFavorite(true)
-        }
-    }
-
     return (
         <div className={style.new_box}>
-            <Link to={`/product/${_id}`} key={_id}>
+            <Link to={`/product/${_id}/${userId}`} key={_id}>
                 <div className={style.info}>
                     <div className={style.image_box}>
                         <img className={style.image} src={slider[0]} alt="image new" />
@@ -95,9 +85,7 @@ const Product = ({_id, slider, title, price, count, favorite = false, newProduct
                         <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
                     }
                 </div>
-                <div className={!isFavorite ? style.button__add_favorite : style.button__add_favorite_love} onClick={clickHeart}>
-                    <img className={style.favorite} src={isFavorite ? "/assets/favorite-love.svg" : "/assets/love.svg"} alt=""/>
-                </div>
+                <FavoriteHeart _id={_id}/> 
             </div>
         </div>
     );

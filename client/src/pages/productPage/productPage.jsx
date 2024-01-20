@@ -4,27 +4,33 @@ import { useParams, useNavigate } from 'react-router-dom';
 import style from './productPage.module.scss'
 import { AuthContext } from "../../context/authContext.js";
 import CounterInput from "../../components/counterInput/counterInput.jsx";
+import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
+import FavoriteHeart from "../../components/favoriteHeart/favoriteHeart.jsx";
 
 import api from '../../api/api.js';
 
 const ProductPage = () => {
     const [counts, setCounts] = useState(0);
-    const [checkFavorites, setCheckFavorites] = useState(false)
+    const [checkFavorites, setCheckFavorites] = useState(false);
+    const [isCounter, setIsCounter] = useState(false)
     const [selectedProduct, setSelectedProduct] = useState([]);
     const [sliderProduct, setSliderProduct]= useState([]);
-    const { id } = useParams();
+    const { id, userId } = useParams();
     const { cart, logout } = useContext(AuthContext);
     const mainImage = useRef()
 
     const navigate = useNavigate();
 
+    console.log(selectedProduct)
+
     const fetchData = useCallback(async () => {
       const token = JSON.parse(localStorage.getItem('userData')) || '';
         try {
-          await api.get(`/api/products/${id}`, {
+          await api.get(`/api/products/${id}/${userId}`, {
             headers: {
               'Authorization': `${token.token}`,
-            }})
+            },
+          })
             .then(response => {
               if(response.status == 200) {
                 console.log(response)
@@ -49,17 +55,15 @@ const ProductPage = () => {
         }
     }, [id]); 
 
-    const getCountProduct = (_id) => { 
-      cart.forEach(element => {
-        if(element._id === _id) {
-          setCounts(element.count)
-        }
-      });
+    const getCountProduct = () => { 
+      if(cart) {
+        setCounts(cart.length)  
+      }
     }
 
-    const clickFavoriteIcon = () => {
-      checkFavorites ? setCheckFavorites(false) : setCheckFavorites(true)
-    }
+    // const clickFavoriteIcon = () => {
+    //   checkFavorites ? setCheckFavorites(false) : setCheckFavorites(true)
+    // }
 
     const clickOnItem = (e) => {
       const itemSlider = document.querySelectorAll(`.${style.product__image_item}`)
@@ -84,7 +88,7 @@ const ProductPage = () => {
     }, [fetchData]);
 
     useEffect(() => {
-      getCountProduct(id)
+      getCountProduct()
     }, [])
 
     return ( 
@@ -104,15 +108,25 @@ const ProductPage = () => {
                       </div>
                   </div>
                   <div className={style.functions__card}>
-                    <div className={style.header__product}>
+                    {/* <div className={style.header__product}>
                       <h2 className={style.title__product}>{selectedProduct.title}</h2>
                       <img className={style.product__love} src={checkFavorites ? "/assets/product-page-love-check.svg" :  "/assets/product-page-love.svg"} alt="" onClick={clickFavoriteIcon}/>
-                    </div>
-                    <p className={style.price__product}>Стоимость: {selectedProduct.price} BYN</p>
-                    <p className={style.quantity__product}>Кол-во товаров к корзине:{`  ${counts}`}</p>
+                    </div> */}
+                    <span className={style.product__name_company}>Name Company</span>
+                    <h2 className={style.title__product}>{selectedProduct.title}</h2>
+                    <p className={style.text__product}>
+                      {selectedProduct.pretext}
+                    </p>
+                    <p className={style.price__product}>{selectedProduct.price} BYN</p>
+                    <p className={style.quantity__product}>В корзине:{`  ${counts}`}</p>
+
                     <div className={style.button__add__cart}>
-                      <p className={style.add__title}>Добавить в корзину: </p>
-                      <CounterInput counts={counts} setCounts={setCounts} _id={id}/>
+                      <div className={style.product__button__add}>
+                        <ButtonCreate text={"Добавить"} isCounter={false} counter={counts} />
+                        <div className={style.favorite__block}> 
+                          <FavoriteHeart _id={id}  />
+                        </div>
+                      </div>
                     </div>
                     <div>
                       <p className={style.title__messange}>Расскажите об этом товаре друзьям</p>
@@ -146,7 +160,7 @@ const ProductPage = () => {
                 </div>
                 <div className={style.review__product}>
                   <p className={style.title__information}>Отзывы</p>
-                </div>
+                </div>  
               </div>
             </div>
         </section>

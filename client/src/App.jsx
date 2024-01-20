@@ -526,7 +526,7 @@ function App() {
             <Route path="cart" element={<Cart />} />
             <Route path="liked" element={<Liked />} />
             <Route path="profile" element={<Profile />} />
-            <Route path="product/:id" element={<ProductPage/>}/>
+            <Route path="product/:id/:userId" element={<ProductPage/>}/>
           </Route>
           
           <Route path="/api/auth/*" element={

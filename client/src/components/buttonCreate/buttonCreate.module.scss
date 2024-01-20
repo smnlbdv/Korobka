@@ -29,3 +29,24 @@
     opacity: 0.7;
     transition: all 500ms;
 }
+
+.counter__block {
+    display: flex;
+    align-items: center;
+}
+
+.image__minus {
+    transform: translateX(-30px);
+    width: 20px;
+    height: 20px;
+}
+
+.image__plus {
+    transform: translateX(30px);
+    width: 20px;
+    height: 20px;
+}
+
+.image__counter {
+    font-size: 16px;
+}
