@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import style from './productPage.module.scss'
 import { AuthContext } from "../../context/authContext.js";
-import CounterInput from "../../components/counterInput/counterInput.jsx";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 import FavoriteHeart from "../../components/favoriteHeart/favoriteHeart.jsx";
 
@@ -11,7 +10,6 @@ import api from '../../api/api.js';
 
 const ProductPage = () => {
     const [counts, setCounts] = useState(0);
-    const [checkFavorites, setCheckFavorites] = useState(false);
     const [isCounter, setIsCounter] = useState(false)
     const [selectedProduct, setSelectedProduct] = useState([]);
     const [sliderProduct, setSliderProduct]= useState([]);
@@ -112,7 +110,6 @@ const ProductPage = () => {
                       <h2 className={style.title__product}>{selectedProduct.title}</h2>
                       <img className={style.product__love} src={checkFavorites ? "/assets/product-page-love-check.svg" :  "/assets/product-page-love.svg"} alt="" onClick={clickFavoriteIcon}/>
                     </div> */}
-                    <span className={style.product__name_company}>Name Company</span>
                     <h2 className={style.title__product}>{selectedProduct.title}</h2>
                     <p className={style.text__product}>
                       {selectedProduct.pretext}
@@ -122,7 +119,7 @@ const ProductPage = () => {
 
                     <div className={style.button__add__cart}>
                       <div className={style.product__button__add}>
-                        <ButtonCreate text={"Добавить"} isCounter={false} counter={counts} />
+                        <ButtonCreate text={"Добавить"} isCounter={isCounter} setIsCounter={setIsCounter} counter={counts} />
                         <div className={style.favorite__block}> 
                           <FavoriteHeart _id={id}  />
                         </div>
@@ -155,12 +152,12 @@ const ProductPage = () => {
                 <p className={style.text__information}>
                   {selectedProduct.text}
                 </p>
-                <div className={style.similar__product}>
+                {/* <div className={style.similar__product}>
                   <p className={style.title__information}>Похожие товары</p>
                 </div>
                 <div className={style.review__product}>
                   <p className={style.title__information}>Отзывы</p>
-                </div>  
+                </div>   */}
               </div>
             </div>
         </section>

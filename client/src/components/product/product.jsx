@@ -7,7 +7,7 @@ import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './product.module.scss'
 
 
-const Product = ({_id, slider, title, price, count, favorite = false, newProduct = true, pretext }) => {
+const Product = ({_id, slider = [], title, price, count, favorite = false, newProduct = true, pretext }) => {
 
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
@@ -85,7 +85,7 @@ const Product = ({_id, slider, title, price, count, favorite = false, newProduct
                         <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
                     }
                 </div>
-                <FavoriteHeart _id={_id}/> 
+                <FavoriteHeart _id={_id} favorite={favorite}/> 
             </div>
         </div>
     );

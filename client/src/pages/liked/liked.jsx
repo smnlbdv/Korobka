@@ -13,6 +13,7 @@ import style from './liked.module.scss'
 
 
 const Liked = () => {
+
     const { favoriteItem, getFavorite, contextHolder } = useContext(AuthContext)
 
     useEffect(() => {
@@ -35,9 +36,9 @@ const Liked = () => {
                 favoriteItem.length != 0 ?
                 <div className={style.favorite_items}>
                     {
-                        favoriteItem.map((obj) => 
+                        favoriteItem.map((obj, index) => 
                             <Product
-                                key={obj._id}
+                                key={index}
                                 favorite={true}
                                 {...obj}
                             />

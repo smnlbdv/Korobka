@@ -50,10 +50,6 @@
     margin-top: -40px;
 }
 
-.good_people {
-    margin-top: 220px;
-}
-
 .yellow_rectangle{
     position: absolute;
     top: 0;
@@ -222,7 +218,12 @@
 }
 
 .new__list_box {
-    margin-top: 142px;
+    padding-top: 142px;
+    background-image: url('./assets/bg-main-2.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    padding-bottom: 220px;
 }
 
 .input_question {
