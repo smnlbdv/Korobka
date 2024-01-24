@@ -7,13 +7,14 @@
     color: inherit;
     line-height: normal;
     border-radius: 8px;
-    background-color: rgb(248, 53, 53);
-    padding: 10px 30px;
+    background-color: rgb(247, 25, 25);
     transition: all 150ms;
+    width: 160px;
+    height: 39px;
 
     &:hover { 
         transition: all 150ms;
-        background-color: rgb(247, 25, 25);
+        background-color: rgb(248, 53, 53);
     }
 
     &:active {   
@@ -36,17 +37,18 @@
 }
 
 .image__minus {
-    transform: translateX(-30px);
     width: 29.6px;
     height: 18px;
+    transform: translateX(10px);
 }
 
 .image__plus {
-    transform: translateX(30px);
+    transform: translateX(-10px);
     width: 29.6px;
     height: 18px;
 }
 
 .image__counter {
     font-size: 14px;
+    margin: 0 auto;
 }

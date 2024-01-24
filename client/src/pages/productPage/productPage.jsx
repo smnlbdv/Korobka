@@ -10,16 +10,14 @@ import api from '../../api/api.js';
 
 const ProductPage = () => {
     const [counts, setCounts] = useState(0);
-    const [isCounter, setIsCounter] = useState(false)
+    const [isCounter, setIsCounter] = useState(false);
+    const [favorite, setFavorite] = useState(true);
     const [selectedProduct, setSelectedProduct] = useState([]);
     const [sliderProduct, setSliderProduct]= useState([]);
     const { id, userId } = useParams();
-    const { cart, logout } = useContext(AuthContext);
+    const { cart, logout, contextHolder, favoriteItem } = useContext(AuthContext);
     const mainImage = useRef()
-
     const navigate = useNavigate();
-
-    console.log(selectedProduct)
 
     const fetchData = useCallback(async () => {
       const token = JSON.parse(localStorage.getItem('userData')) || '';
@@ -59,10 +57,6 @@ const ProductPage = () => {
       }
     }
 
-    // const clickFavoriteIcon = () => {
-    //   checkFavorites ? setCheckFavorites(false) : setCheckFavorites(true)
-    // }
-
     const clickOnItem = (e) => {
       const itemSlider = document.querySelectorAll(`.${style.product__image_item}`)
       
@@ -87,10 +81,14 @@ const ProductPage = () => {
 
     useEffect(() => {
       getCountProduct()
+      if(favoriteItem.some(item => item._id === id)) {
+        setFavorite(false)
+      }
     }, [])
 
     return ( 
         <section className={style.main__block_product}>
+            {contextHolder}
             <div className="wrapper">
               <div className={style.block__adding__product}>
                   <div className={style.product__image}>
@@ -106,28 +104,23 @@ const ProductPage = () => {
                       </div>
                   </div>
                   <div className={style.functions__card}>
-                    {/* <div className={style.header__product}>
-                      <h2 className={style.title__product}>{selectedProduct.title}</h2>
-                      <img className={style.product__love} src={checkFavorites ? "/assets/product-page-love-check.svg" :  "/assets/product-page-love.svg"} alt="" onClick={clickFavoriteIcon}/>
-                    </div> */}
                     <div className={style.product__header}>
                       <div className={style.header__left_block}>
                         <h2 className={style.title__product}>{selectedProduct.title}</h2>
                         <p className={style.price__product}>{selectedProduct.price} BYN</p>
                       </div>
                       <div className={style.header__right_block}>
-                        <FavoriteHeart _id={id}  />
+                        <FavoriteHeart _id={id} favorite={favorite} />
                       </div>
                     </div>
+                    <p className={style.instock__product}>В наличии: <span>Есть</span></p>
                     <p className={style.text__product}>
-                      {selectedProduct.pretext}
+                      {selectedProduct.pageDesc}
                     </p>
                     <p className={style.quantity__product}>В корзине:{`  ${counts}`}</p>
 
                     <div className={style.button__add__cart}>
-                      <div className={style.product__button__add}>
-                        <ButtonCreate text={"Добавить"} isCounter={isCounter} setIsCounter={setIsCounter} counter={counts} />
-                      </div>
+                      <ButtonCreate text={"Добавить"} isCounter={isCounter} setIsCounter={setIsCounter} counter={counts} _id={id}/>
                     </div>
                     <div>
                       <p className={style.title__messange}>Расскажите об этом товаре друзьям</p>
@@ -152,7 +145,7 @@ const ProductPage = () => {
                   </div>
               </div>
               <div className={style.block__information}>
-                <p className={style.title__information}>Информация о товаре</p>
+                <p className={style.title__information}>Характеристики</p>
                 <p className={style.text__information}>
                   {selectedProduct.text}
                 </p>

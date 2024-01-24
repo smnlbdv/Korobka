@@ -10,30 +10,31 @@ const favoriteRoute = Router()
 
 favoriteRoute.post('/add', verifyToken, async (req, res) => {
     try {
-        const { userId, favoriteId } = req.body
-        const favoriteItem = await Favorite.findOne({owner: userId})
+        const { userId, favoriteId } = req.body,
+              favoriteItem = await Favorite.findOne({owner: userId})
+
         if(favoriteItem) {
-            await Favorite.updateOne({owner: userId }, { $push: { items: { product: favoriteId } } }, { new: true })
-            await Favorite.findOne({owner: userId }, { items: { $elemMatch: { product: favoriteId }}})
-                          .populate('items.product')
-                          .then((response) => res.status(200).json(
-                                {
-                                    product: response.items[0].product,
-                                    success: false,
-                                    message: "Товар добавлен в закладки"
-                                },
-                            ))
+            await Favorite.updateMany({ owner: userId }, { $push: { items: favoriteId } } );
+            const response = await Favorite.findOne({ owner: userId }, { items : favoriteId })
+                                            .populate('items').exec();
+
+            res.status(200).json({
+                product: response.items[0],
+                success: true,
+                message: "Товар добавлен в закладки"
+            });
         } else {
-            const infoFavorite = {
-                product: favoriteId,
-            }
-            await Favorite.insertMany({owner: userId, items: infoFavorite})
-            await Favorite.findOne({owner: userId }, { items: { $elemMatch: { product: favoriteId }}})
-                          .populate('items.product')
-                          .then((response) => res.status(200).json(response.items[0].product))
-            
+            await Favorite.insertMany({ owner: userId}, { $push: { items: favoriteId } } );
+            const response = await Favorite.findOne({ owner: userId }, { items : favoriteId })
+                                            .populate('items').exec();
+            res.status(200).json({
+                product: response.items[0],
+                success: true,
+                message: "Товар добавлен в закладки"
+            });
         }
     } catch (error) {
+        console.log (error);
         res.status(404).json({
             success: false,
             message: "Товар не был добавлен в закладки"
