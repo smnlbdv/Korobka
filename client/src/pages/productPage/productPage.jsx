@@ -110,19 +110,23 @@ const ProductPage = () => {
                       <h2 className={style.title__product}>{selectedProduct.title}</h2>
                       <img className={style.product__love} src={checkFavorites ? "/assets/product-page-love-check.svg" :  "/assets/product-page-love.svg"} alt="" onClick={clickFavoriteIcon}/>
                     </div> */}
-                    <h2 className={style.title__product}>{selectedProduct.title}</h2>
+                    <div className={style.product__header}>
+                      <div className={style.header__left_block}>
+                        <h2 className={style.title__product}>{selectedProduct.title}</h2>
+                        <p className={style.price__product}>{selectedProduct.price} BYN</p>
+                      </div>
+                      <div className={style.header__right_block}>
+                        <FavoriteHeart _id={id}  />
+                      </div>
+                    </div>
                     <p className={style.text__product}>
                       {selectedProduct.pretext}
                     </p>
-                    <p className={style.price__product}>{selectedProduct.price} BYN</p>
                     <p className={style.quantity__product}>В корзине:{`  ${counts}`}</p>
 
                     <div className={style.button__add__cart}>
                       <div className={style.product__button__add}>
                         <ButtonCreate text={"Добавить"} isCounter={isCounter} setIsCounter={setIsCounter} counter={counts} />
-                        <div className={style.favorite__block}> 
-                          <FavoriteHeart _id={id}  />
-                        </div>
                       </div>
                     </div>
                     <div>
