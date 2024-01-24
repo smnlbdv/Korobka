@@ -12,27 +12,28 @@ const shema = new mongoose.Schema({
         required: true,
     },
     text: {
-        type: Types.String,
+        type: String,
         required: true,
     },
     stars: {
-        type: Types.Number,
+        type: Number,
         required: true,
         default: 0,
     },
-    data: {
-        type: Types.Date,
+    date: {
+        type: Date,
         required: true,
     },
-    slider: [{
-        type: String
-    }],
-    tags: [{
-        type: Types.String,
-    }],
+    slider: [String],
+    tags: [String],
     comments: [{
-        type: Types.String,
+        type: Types.ObjectId,
+        ref: 'Comment',
     }],
+    likes: {
+        type: Number,
+        default: 0,
+    }
 })
 
-export default mongoose.model('Cart', shema)
+export default mongoose.model('Review', shema)

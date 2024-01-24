@@ -34,10 +34,12 @@ const shema = new mongoose.Schema({
     },
     avatarUrl: String,
     order: [{
-        type: Types.ObjectId, reg: "Order"
+        type: Types.ObjectId, 
+        reg: 'Order'
     }],
     cart: [{
-        type: Types.ObjectId, reg: "Cart"
+        type: Types.ObjectId,
+        reg: 'Cart'
     }]
 })
 

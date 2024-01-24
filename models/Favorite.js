@@ -6,10 +6,8 @@ const shema = new mongoose.Schema({
         ref: 'User'
     },
     items: [{
-        product: {
-            type: Types.ObjectId,
-            ref: 'Product'
-        },
+        type: Types.ObjectId,
+        ref: 'Product'
     }],
 })
 
