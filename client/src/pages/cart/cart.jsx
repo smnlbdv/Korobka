@@ -14,6 +14,7 @@ const Cart = () => {
     const [totalPrice, setPriceTotal] = useState()
     const { cart, setCart, cartPrice, calculatePrice } = useContext(AuthContext)
 
+    console.log(cart);  
     useEffect(() => {
         calculatePrice()
     }, [calculatePrice, cart])
@@ -52,9 +53,9 @@ const Cart = () => {
                         <span className={style.cart__span}></span>
                         <div className={style.cart__list}>
                         {
-                            cart.map((obj) => 
+                            cart.map((obj, index) => 
                                 <CartItem
-                                    key={obj._id}
+                                    key={index}
                                     checkAll={checkAll}
                                     {...obj}
                                 />

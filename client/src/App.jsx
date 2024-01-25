@@ -159,6 +159,7 @@ function App() {
   }
 
   const addCart = async (obj) => {
+    console.log(obj)
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post('/api/cart/add', {userId, itemId: obj._id}, {

@@ -4,12 +4,12 @@ import { AuthContext } from "../../context/authContext.js";
 import style from './buttonCreate.module.scss'
 
 
-const ButtonCreate = ({_id, text, sendEmailData = false, type, isCounter = false, setIsCounter, disabled = false, counter = 0 }) => {
+const ButtonCreate = ({_id, text, sendEmailData = false, type, isCounter = false, addCart, setIsCounter, disabled = false, counter = 0, addCartPage }) => {
     
     const { increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext);
     const [counterCart, setCounterCart] = useState(counter)
 
-    const addProduct = () => {
+    const addProduct = () => {  
         if (counterCart >= 200) {
             setCounterCart(counterCart);
         } else {
@@ -32,8 +32,9 @@ const ButtonCreate = ({_id, text, sendEmailData = false, type, isCounter = false
     const sendEmailMessage = () => {
         sendEmailData()
     }
-    const openCounterBlock = () => {
+    const openCounterBlock = async () => {
         setIsCounter(true)
+        addCartPage()
     }
 
     return ( 

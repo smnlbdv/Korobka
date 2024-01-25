@@ -15,7 +15,7 @@ const ProductPage = () => {
     const [selectedProduct, setSelectedProduct] = useState([]);
     const [sliderProduct, setSliderProduct]= useState([]);
     const { id, userId } = useParams();
-    const { cart, logout, contextHolder, favoriteItem } = useContext(AuthContext);
+    const { cart, logout, contextHolder, favoriteItem, addCart } = useContext(AuthContext);
     const mainImage = useRef()
     const navigate = useNavigate();
 
@@ -37,7 +37,6 @@ const ProductPage = () => {
               } 
             })
             .catch(response => {
-              console.log(response)
               if(response.response.status == 400) {
                 console.log(response)
               }
@@ -53,7 +52,11 @@ const ProductPage = () => {
 
     const getCountProduct = () => { 
       if(cart) {
-        setCounts(cart.length)  
+        cart.forEach((product, index) => {
+          if(product._id === id) {
+            setCounts(cart[index].count) 
+          } 
+        }) 
       }
     }
 
@@ -73,6 +76,10 @@ const ProductPage = () => {
       const parentElement = e.target.parentNode
       parentElement.classList.add(style.slider__item_active)
       mainImage.current.src = e.target.src
+    }
+
+    const addCartPage = async () => {
+      await addCart({_id: selectedProduct._id, slider: selectedProduct.slider, title: selectedProduct.title, pretext: selectedProduct.pretext, price: selectedProduct.price, count: selectedProduct.count})
     }
   
     useEffect(() => {
@@ -120,7 +127,7 @@ const ProductPage = () => {
                     <p className={style.quantity__product}>В корзине:{`  ${counts}`}</p>
 
                     <div className={style.button__add__cart}>
-                      <ButtonCreate text={"Добавить"} isCounter={isCounter} setIsCounter={setIsCounter} counter={counts} _id={id}/>
+                      <ButtonCreate text={"Добавить"} isCounter={isCounter} setIsCounter={setIsCounter} addCartPage={addCartPage} counter={counts} _id={id}/>
                     </div>
                     <div>
                       <p className={style.title__messange}>Расскажите об этом товаре друзьям</p>
