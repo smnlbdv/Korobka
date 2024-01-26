@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 import style from './buttonCreate.module.scss'
 
 
-const ButtonCreate = ({_id, text, sendEmailData = false, type, isCounter = false, addCart, setIsCounter, disabled = false, counter = 0, addCartPage }) => {
+const ButtonCreate = ({_id, text, sendEmailData = false, type, isCounter = false, addCart, setIsCounter, disabled = false, counter, addCartPage }) => {
     
     const { increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext);
     const [counterCart, setCounterCart] = useState(counter)

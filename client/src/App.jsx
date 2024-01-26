@@ -39,10 +39,10 @@ function App() {
 
   useEffect(() => {
     getNewProduct()
-    if(cart.length == 0 && isLogin) {
+    if(cart.length == 0 || !isLogin) {
       getCart()
     } 
-  }, [isLogin])
+  }, [])
 
 
   const getCart = async () => {

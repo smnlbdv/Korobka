@@ -19,46 +19,47 @@ const ProductPage = () => {
     const mainImage = useRef()
     const navigate = useNavigate();
 
-    const fetchData = useCallback(async () => {
+
+    const fetchData = async () => {
       const token = JSON.parse(localStorage.getItem('userData')) || '';
-        try {
-          await api.get(`/api/products/${id}/${userId}`, {
-            headers: {
-              'Authorization': `${token.token}`,
-            },
+      try {
+        await api.get(`/api/products/${id}/${userId}`, {
+          headers: {
+            'Authorization': `${token.token}`,
+          },
+        })
+          .then(response => {
+            if(response.status == 200) {
+              console.log(response)
+              setSelectedProduct(...response.data)
+
+              const copiedData = [...response.data[0].slider];
+              setSliderProduct(copiedData)
+            } 
           })
-            .then(response => {
-              if(response.status == 200) {
-                console.log(response)
-                setSelectedProduct(...response.data)
-
-                const copiedData = [...response.data[0].slider];
-                setSliderProduct(copiedData)
-              } 
-            })
-            .catch(response => {
-              if(response.response.status == 400) {
-                console.log(response)
-              }
-              if(response.response.status == 401) {
-                logout()
-                navigate("/api/auth/login");
-              }
-          });
-        } catch (error) {
-          console.log(error.message)
-        }
-    }, [id]); 
-
-    const getCountProduct = () => { 
-      if(cart) {
-        cart.forEach((product, index) => {
-          if(product._id === id) {
-            setCounts(cart[index].count) 
-          } 
-        }) 
+          .catch(response => {
+            if(response.response.status == 400) {
+              console.log(response)
+            }
+            if(response.response.status == 401) {
+              logout()
+              navigate("/api/auth/login");
+            }
+        });
+      } catch (error) {
+        console.log(error.message)
       }
     }
+
+      const getCountProduct = () => { 
+        if(cart.length != 0) {
+          cart.forEach((product, index) => {
+            if(product._id === id) {
+              setCounts(cart[index].count) 
+            } 
+          }) 
+        }
+      }
 
     const clickOnItem = (e) => {
       const itemSlider = document.querySelectorAll(`.${style.product__image_item}`)
@@ -81,17 +82,17 @@ const ProductPage = () => {
     const addCartPage = async () => {
       await addCart({_id: selectedProduct._id, slider: selectedProduct.slider, title: selectedProduct.title, pretext: selectedProduct.pretext, price: selectedProduct.price, count: selectedProduct.count})
     }
-  
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
 
     useEffect(() => {
-      getCountProduct()
       if(favoriteItem.some(item => item._id === id)) {
         setFavorite(false)
       }
+      fetchData();
     }, [])
+
+    useEffect(() => {
+      getCountProduct();
+    }, [id]);
 
     return ( 
         <section className={style.main__block_product}>
