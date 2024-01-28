@@ -14,13 +14,7 @@ import style from './liked.module.scss'
 
 const Liked = () => {
 
-    const { favoriteItem, getFavorite, contextHolder } = useContext(AuthContext)
-
-    useEffect(() => {
-        if(favoriteItem.length == 0 ) {
-            getFavorite()
-        }
-    }, [])
+    const { favoriteItem, contextHolder } = useContext(AuthContext)
 
     return ( 
         <section className={`${style.section_cart} wrapper`}>

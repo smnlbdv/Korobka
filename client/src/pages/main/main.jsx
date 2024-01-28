@@ -72,54 +72,11 @@ const answersWhy = [
   },
 ];
 
-const reviewsList = [
-  {
-    id: 1,
-    avatar: "./assets/avatar-3.png",
-    name: "Сергей",
-    lastName: "Матус",
-    text: "Никогда не думал, что можно найти подарок, который так точно отражает мою личность, пока не заметил вашего сайта. Было так весело проходить процесс выбора и создавать индивидуальный подарок. Острые косырьки вперед!!!!",
-    date: "18 декабря 2023 года",
-  },
-  {
-    id: 2,
-    avatar: "./assets/avatar-1.png",
-    name: "Семён",
-    lastName: "Лебедев",
-    text: "Я был полностью в восторге от опыта заказа подарка на вашем сайте! Выбор был огромный, и я смогла найти идеальный подарок для своей любимой девушки. Процесс оформления заказа был прост и интуитивно понятен, а результат превзошел все мои ожидания. Большое спасибо за превосходный сервис!",
-    date: "18 декабря 2023 года",
-  },
-  {
-    id: 3,
-    avatar: "./assets/avatar-3.png",
-    name: "Сергей",
-    lastName: "Матус",
-    text: "Никогда не думал, что можно найти подарок, который так точно отражает мою личность, пока не заметил вашего сайта. Было так весело проходить процесс выбора и создавать индивидуальный подарок. Острые косырьки вперед!!!!",
-    date: "18 декабря 2023 года",
-  },
-  {
-    id: 4,
-    avatar: "./assets/avatar-2.png",
-    name: "Анасасия",
-    lastName: "Самойленко",
-    text: "Я регулярно заказываю подарки на вашем сайте, и каждый раз я впечатлена качеством обслуживания. Все мои хотелки были исполнены с большим вниманием к деталям, и подарок пришел во время. И впредь 'Коробка' будете моим первым выбором для подарков!",
-    date: "18 декабря 2023 года",
-  },
-  {
-    id: 5,
-    avatar: "./assets/avatar-3.png",
-    name: "Сергей",
-    lastName: "Матус",
-    text: "Никогда не думал, что можно найти подарок, который так точно отражает мою личность, пока не заметил вашего сайта. Было так весело проходить процесс выбора и создавать индивидуальный подарок. Острые косырьки вперед!!!!",
-    date: "18 декабря 2023 года",
-  },
-];
-
 const Main = () => {
 
   const [open, setOpen] = useState(3);
   const [emailText, setEmailText] = useState('')
-  const {contextHolder, newBoxList, sendEmailData, contextHolderEmail} = useContext(AuthContext);
+  const {contextHolder, newBoxList, sendEmailData, contextHolderEmail, reviewsList} = useContext(AuthContext);
 
   const formik = useFormik({
     initialValues: {
@@ -268,7 +225,7 @@ const Main = () => {
           >
             {reviewsList.map((item, index) => (
               <SwiperSlide key={index}>
-                <Review img={item.avatar} name={item.name} lastName={item.lastName} text={item.text} data={item.date}/>
+                <Review img={item.owner.avatarUser} name={item.owner.name} lastName={item.owner.surname} text={item.text} data={item.date}/>
               </SwiperSlide>  
             ))}
           </Swiper>

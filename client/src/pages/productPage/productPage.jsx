@@ -9,7 +9,7 @@ import FavoriteHeart from "../../components/favoriteHeart/favoriteHeart.jsx";
 import api from '../../api/api.js';
 
 const ProductPage = () => {
-    const [counts, setCounts] = useState(0);
+    const [counts, setCounts] = useState(1);
     const [isCounter, setIsCounter] = useState(false);
     const [favorite, setFavorite] = useState(true);
     const [selectedProduct, setSelectedProduct] = useState([]);
@@ -92,7 +92,7 @@ const ProductPage = () => {
 
     useEffect(() => {
       getCountProduct();
-    }, [id]);
+    }, [cart, id]); 
 
     return ( 
         <section className={style.main__block_product}>
@@ -128,7 +128,7 @@ const ProductPage = () => {
                     <p className={style.quantity__product}>В корзине:{`  ${counts}`}</p>
 
                     <div className={style.button__add__cart}>
-                      <ButtonCreate text={"Добавить"} isCounter={isCounter} setIsCounter={setIsCounter} addCartPage={addCartPage} counter={counts} _id={id}/>
+                      <ButtonCreate text={"Добавить"} isCounter={isCounter} setIsCounter={setIsCounter} addCartPage={addCartPage} getCountProduct={getCountProduct} counter={counts} _id={id}/>
                     </div>
                     <div>
                       <p className={style.title__messange}>Расскажите об этом товаре друзьям</p>
@@ -154,15 +154,20 @@ const ProductPage = () => {
               </div>
               <div className={style.block__information}>
                 <p className={style.title__information}>Характеристики</p>
-                <p className={style.text__information}>
+                <div className={style.text__information}>
                   {selectedProduct.text}
-                </p>
+                </div>
                 {/* <div className={style.similar__product}>
                   <p className={style.title__information}>Похожие товары</p>
-                </div>
+                </div> */}
                 <div className={style.review__product}>
                   <p className={style.title__information}>Отзывы</p>
-                </div>   */}
+
+                  <div className={style.block__all_reviews}>
+
+                  </div>
+
+                </div>  
               </div>
             </div>
         </section>

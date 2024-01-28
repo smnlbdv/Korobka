@@ -24,26 +24,32 @@ const ProductPage= lazy(() => import("./pages/productPage/productPage.jsx"));
 const Cart= lazy(() => import("./pages/cart/cart.jsx"));
 const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
 
-
 function App() {
   const [cart, setCart] = useState([]);
+  const [reviewsList, setReviewsList] = useState([])
   const [profile, setProfile] = useState([]);
   const [order, setOrder] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
   const [cartPrice, setCartPrice] = useState();
   const [newBoxList, setNewBoxList] = useState([]);
+  const [modal, contextHolderEmail] = Modal.useModal();
   const { login, logout, token, userId } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const isLogin = !!token;
 
   useEffect(() => {
+    if(isLogin) {
+      if(cart.length == 0) {
+        getCart()
+      } 
+      if(favoriteItem.length == 0 ) {
+        getFavorite()
+      }
+    }
     getNewProduct()
-    if(cart.length == 0 || !isLogin) {
-      getCart()
-    } 
+    getBestReviews()
   }, [])
-
 
   const getCart = async () => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
@@ -97,7 +103,7 @@ function App() {
     }
   }
 
-  const [modal, contextHolderEmail] = Modal.useModal();
+
   const countDown = (type, message) => {
   if(type === 'success') {
     modal.success({
@@ -362,6 +368,7 @@ function App() {
       console.log(error.message)
     }
   }
+
   const getFavorite = async () => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
@@ -390,6 +397,7 @@ function App() {
       console.log("Ошибка", error);
     }
   }
+
   const uploadAvatar = async (formData) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     let url;
@@ -478,6 +486,18 @@ function App() {
     return resultPass
   }
 
+  const getBestReviews = async () => {
+    try {
+      await api.get('/api/reviews/best')
+                .then(response => {
+                  setReviewsList(response.data)
+                })
+                .catch(error => alert(error.message))
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -511,7 +531,9 @@ function App() {
         setProfile,
         updateProfileUser,
         order,
-        updatePassUser
+        updatePassUser,
+        reviewsList,
+        getBestReviews
       }}
     >
         <Routes>

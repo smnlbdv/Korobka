@@ -9,6 +9,7 @@ import cartRoute from './routes/cart.route.js'
 import favoriteRoute from './routes/favorite.route.js';
 import emailRoute from './routes/email.route.js';
 import userRoute from './routes/userRoute.route.js';
+import reviewsRoute from './routes/reviews.route.js';
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -24,6 +25,7 @@ app.use('/api/cart', cartRoute)
 app.use('/api/favorite', favoriteRoute)
 app.use('/api/email', emailRoute)
 app.use('/api/profile', userRoute)
+app.use('/api/reviews', reviewsRoute)
 
 async function start() {
     try {

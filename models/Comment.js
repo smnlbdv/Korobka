@@ -1,11 +1,6 @@
 import mongoose, { Types } from 'mongoose'
 
 const shema = new mongoose.Schema({
-    review: {
-        type: Types.ObjectId,
-        ref: 'Review',
-        required: true
-    },
     text: {
         type: String,
         required: true
@@ -17,7 +12,11 @@ const shema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        required: true
+        required: true,
+        get: function(date) {
+            return new Intl.DateTimeFormat('ru-RU').format(date);
+        },
+        default: Date.now,
     }
 })
 
