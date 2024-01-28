@@ -13,9 +13,6 @@ const shema = new mongoose.Schema({
     date: {
         type: Date,
         required: true,
-        get: function(date) {
-            return new Intl.DateTimeFormat('ru-RU').format(date);
-        },
         default: Date.now,
     }
 })

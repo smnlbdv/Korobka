@@ -41,6 +41,8 @@
 .ant-tooltip-content {
     transform: translateY(5px) !important;
 }
-
+.anticon-star path {
+    color: #ffba37;
+}
 
 

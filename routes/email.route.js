@@ -12,7 +12,7 @@ import Email from '../models/Email.js'
 
 const emailRoute = Router()
 
-emailRoute.post('/send', verifyToken, async (req, res) => {
+emailRoute.post('/send', async (req, res) => {
     try {
         const resultEmailSend = await Email.findOne({email: req.body.email})
         if(resultEmailSend) {

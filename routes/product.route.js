@@ -18,10 +18,6 @@ productRoute.get('/new', async (req, res) => {
 })
 
 productRoute.get('/:id/:userId', async (req, res) => {
-
-    const userId = req.params
-    console.log(userId)
-
     try {
         await Product.find({_id: req.params.id})
                      .then((product) => {

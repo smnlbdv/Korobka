@@ -1,5 +1,6 @@
 import { useContext, useEffect, useCallback, useState, useRef } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
+import { Tabs } from "antd";
 
 import style from './productPage.module.scss'
 import { AuthContext } from "../../context/authContext.js";
@@ -7,17 +8,55 @@ import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 import FavoriteHeart from "../../components/favoriteHeart/favoriteHeart.jsx";
 
 import api from '../../api/api.js';
+import Review from "../../components/review/review.jsx";
+import './ant.css'
 
 const ProductPage = () => {
     const [counts, setCounts] = useState(1);
     const [isCounter, setIsCounter] = useState(false);
     const [favorite, setFavorite] = useState(true);
     const [selectedProduct, setSelectedProduct] = useState([]);
+    const [productReviews, setProductReviews] = useState([]);
     const [sliderProduct, setSliderProduct]= useState([]);
     const { id, userId } = useParams();
     const { cart, logout, contextHolder, favoriteItem, addCart } = useContext(AuthContext);
     const mainImage = useRef()
     const navigate = useNavigate();
+
+    const itemsTabs = [
+      {
+        key: '1',
+        label: 'Характеристики',
+        children: 
+        <div className={style.text__information}>
+          {selectedProduct.text}
+        </div>
+      },
+      {
+        key: '2',
+        label: 'Отзывы',
+        children: 
+        <div className={style.block__all_reviews}>
+          {productReviews.map((item, index) => (
+              <Review
+                key={index}
+                // img={}
+                img={item.owner.avatarUser}
+                name={item.owner.name}
+                lastName={item.owner.surname}
+                text={item.text}
+                data={item.date}
+                stars={item.stars}
+                likes={item.likes}
+                tags={item.tags}
+                reviewProduct={true}
+              />
+            ))
+          }
+        </div>
+        ,
+      }
+    ];
 
 
     const fetchData = async () => {
@@ -30,9 +69,7 @@ const ProductPage = () => {
         })
           .then(response => {
             if(response.status == 200) {
-              console.log(response)
               setSelectedProduct(...response.data)
-
               const copiedData = [...response.data[0].slider];
               setSliderProduct(copiedData)
             } 
@@ -51,15 +88,15 @@ const ProductPage = () => {
       }
     }
 
-      const getCountProduct = () => { 
-        if(cart.length != 0) {
-          cart.forEach((product, index) => {
-            if(product._id === id) {
-              setCounts(cart[index].count) 
-            } 
-          }) 
-        }
+    const getCountProduct = () => { 
+      if(cart.length != 0) {
+        cart.forEach((product, index) => {
+          if(product._id === id) {
+            setCounts(cart[index].count) 
+          } 
+        }) 
       }
+    }
 
     const clickOnItem = (e) => {
       const itemSlider = document.querySelectorAll(`.${style.product__image_item}`)
@@ -83,11 +120,37 @@ const ProductPage = () => {
       await addCart({_id: selectedProduct._id, slider: selectedProduct.slider, title: selectedProduct.title, pretext: selectedProduct.pretext, price: selectedProduct.price, count: selectedProduct.count})
     }
 
+    const fetchReviewsProduct = async () => {
+      try {
+        await api.get(`/api/reviews/${id}`, {
+        })
+          .then(response => {
+            if(response.status == 200) {
+              console.log(response.data)
+              setProductReviews(response.data)
+              console.log(productReviews)
+            } 
+          })
+          .catch(response => {
+            if(response.response.status == 400) {
+              console.log(response)
+            }
+            if(response.response.status == 401) {
+              logout()
+              navigate("/api/auth/login");
+            }
+        });
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+
     useEffect(() => {
       if(favoriteItem.some(item => item._id === id)) {
         setFavorite(false)
       }
       fetchData();
+      fetchReviewsProduct()
     }, [])
 
     useEffect(() => {
@@ -153,21 +216,7 @@ const ProductPage = () => {
                   </div>
               </div>
               <div className={style.block__information}>
-                <p className={style.title__information}>Характеристики</p>
-                <div className={style.text__information}>
-                  {selectedProduct.text}
-                </div>
-                {/* <div className={style.similar__product}>
-                  <p className={style.title__information}>Похожие товары</p>
-                </div> */}
-                <div className={style.review__product}>
-                  <p className={style.title__information}>Отзывы</p>
-
-                  <div className={style.block__all_reviews}>
-
-                  </div>
-
-                </div>  
+                <Tabs defaultActiveKey="1"  titleFontSize={20} items={itemsTabs}></Tabs>
               </div>
             </div>
         </section>
