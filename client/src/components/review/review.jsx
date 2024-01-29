@@ -5,10 +5,9 @@ import style from './review.module.scss'
 
 import '../../libs/ant.css'
 import Tage from '../tags/tage.jsx';
+import LikeButton from '../likeButton/likeButton.jsx';
 
 const Review = ({img, name, lastName, text, data, stars, likes, tags = [], reviewProduct = false}) => {
-
-    const [tagsArr, setTagsArr] = useState(tags)
 
     return ( 
         <div className={style.slide_item}>
@@ -28,10 +27,7 @@ const Review = ({img, name, lastName, text, data, stars, likes, tags = [], revie
                     </div>
                     <div className={style.footer__review}>
                         <span className={style.date}>{data}</span>
-                        <div className={style.likes__review}>
-                            <img src="" alt="" />
-                            <p>{likes}</p>
-                        </div>
+                        <LikeButton likes={likes}/>
                     </div>
                 </div>
                 {/* {
@@ -43,7 +39,7 @@ const Review = ({img, name, lastName, text, data, stars, likes, tags = [], revie
             </div>
             <div className={style.review__footer__block}>
                 {
-                    tagsArr.map((item, index) => (
+                    tags.map((item, index) => (
                         <Tage key={index} text={item}/>
                     ))
                 }

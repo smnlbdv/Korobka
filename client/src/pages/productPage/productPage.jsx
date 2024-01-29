@@ -14,7 +14,7 @@ import './ant.css'
 const ProductPage = () => {
     const [counts, setCounts] = useState(1);
     const [isCounter, setIsCounter] = useState(false);
-    const [favorite, setFavorite] = useState(true);
+    const [favorite, setFavorite] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState([]);
     const [productReviews, setProductReviews] = useState([]);
     const [sliderProduct, setSliderProduct]= useState([]);
@@ -126,9 +126,7 @@ const ProductPage = () => {
         })
           .then(response => {
             if(response.status == 200) {
-              console.log(response.data)
               setProductReviews(response.data)
-              console.log(productReviews)
             } 
           })
           .catch(response => {
@@ -146,9 +144,11 @@ const ProductPage = () => {
     }
 
     useEffect(() => {
-      if(favoriteItem.some(item => item._id === id)) {
-        setFavorite(false)
-      }
+      favoriteItem.forEach(item => {
+        if(item._id === id) {
+          setFavorite(true);
+        }
+      })
       fetchData();
       fetchReviewsProduct()
     }, [])
@@ -216,7 +216,7 @@ const ProductPage = () => {
                   </div>
               </div>
               <div className={style.block__information}>
-                <Tabs defaultActiveKey="1"  titleFontSize={20} items={itemsTabs}></Tabs>
+                <Tabs defaultActiveKey="1" items={itemsTabs}></Tabs>
               </div>
             </div>
         </section>

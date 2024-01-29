@@ -1,7 +1,6 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import morgan  from 'morgan';
-// import {validationResult} from 'express-validator'
 import cors from 'cors'
 import route from './routes/auth.route.js'
 import productRoute from './routes/product.route.js'
@@ -14,7 +13,7 @@ import reviewsRoute from './routes/reviews.route.js';
 const app = express()
 const PORT = process.env.PORT || 5000
 
-app.use(morgan(process.env.LOG_LEVEL))
+app.use(morgan('combined'))
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(express.static('public'))

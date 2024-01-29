@@ -1,0 +1,17 @@
+.likes__review {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+    img {
+        width: 19px;
+        height: 19px;
+        cursor: pointer;
+    }
+
+    p {
+        font-weight: 400;
+    }
+}
