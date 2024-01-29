@@ -223,11 +223,13 @@ const Main = () => {
           modules={[EffectCoverflow, Navigation]}
           className="mySwiper"
           >
-            {reviewsList.map((item, index) => (
+            {
+            reviewsList.map((item, index) => (
               <SwiperSlide key={index}>
                 <Review img={item.owner.avatarUser} name={item.owner.name} stars={item.stars} lastName={item.owner.surname} text={item.text} data={item.date}/>
               </SwiperSlide>  
-            ))}
+            ))
+          }
           </Swiper>
         </div>
         <div className="wrapper">

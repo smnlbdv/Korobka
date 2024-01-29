@@ -3,7 +3,6 @@ import mongoose, { Types } from 'mongoose'
 const shema = new mongoose.Schema({
     avatarUser: {
         type: String,
-        default: 'http://localhost:5000/avatar/default-avatar.png'
     },
     status: {
         type: String,
@@ -33,14 +32,14 @@ const shema = new mongoose.Schema({
         default: ''
     },
     avatarUrl: String,
-    order: [{
+    order: {
         type: Types.ObjectId, 
         reg: 'Order'
-    }],
-    cart: [{
+    },
+    cart: {
         type: Types.ObjectId,
         reg: 'Cart'
-    }]
+    }
 })
 
 export default mongoose.model('User', shema)

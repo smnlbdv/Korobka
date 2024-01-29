@@ -377,15 +377,14 @@ function App() {
             'Authorization': `${data.token}`,
         }})
         .then(response => {
-            // const favorite = response.data.map(item => 
-            //     {
-            //       return {
-            //         ...item.product,
-            //       }; 
-            //     } 
-            //   );
-            // setFavoriteItem(favorite)
-            console.log
+            const favorite = response.data.map(item => 
+                {
+                  return {
+                    ...item.product,
+                  }; 
+                } 
+              );
+            setFavoriteItem(favorite)
         })
         .catch(response => {
           if(response.status == 401) {
