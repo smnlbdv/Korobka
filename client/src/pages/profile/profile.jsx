@@ -113,8 +113,6 @@ const Profile = () => {
 
   const changeUserName = (e) => {
     formikPersonal.handleChange(e)
-    // console.log(e.target.value)
-    // formikPersonal.setFieldValue("name", e.target.value)
   }
 
   useEffect(() => {

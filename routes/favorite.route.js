@@ -24,9 +24,11 @@ favoriteRoute.post('/add', verifyToken, async (req, res) => {
                 message: "Товар добавлен в закладки"
             });
         } else {
-            await Favorite.insertMany({ owner: userId}, { $push: { items: favoriteId } } );
-            const response = await Favorite.findOne({ owner: userId }, { items : favoriteId })
-                                            .populate('items').exec();
+            const favorite = new Favorite({ owner: userId });
+            await favorite.save();
+            favorite.items.push(favoriteId);
+            await favorite.save();
+            const response = await Favorite.findOne({ owner: userId }).populate('items');
             res.status(200).json({
                 product: response.items[0],
                 success: true,
@@ -42,15 +44,16 @@ favoriteRoute.post('/add', verifyToken, async (req, res) => {
     }
 })
 
-favoriteRoute.get('/:userId', verifyToken, async (req, res) => {
-    const userId = req.params.userId
-    await Favorite.findOne({owner: userId})
-        .populate('items.product')
-        .then(item => {
-            res.json(item.items)
-        })
-        .catch(error => res.status(400).json({error: error}))
-})
+// favoriteRoute.get('/:userId', verifyToken, async (req, res) => {
+//     const userId = req.params.userId
+//     console.log(userId)
+//     // await Favorite.findOne({owner: userId})
+//     //     .populate('items.product')
+//     //     .then(item => {
+//     //         res.json(item.items)
+//     //     })
+//     //     .catch(error => res.status(400).json({error: error}))
+// })
 
 favoriteRoute.delete('/delete/:productId', verifyToken, async (req, res) => {
     const productId = req.params.productId

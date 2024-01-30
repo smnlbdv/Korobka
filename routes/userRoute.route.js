@@ -22,16 +22,10 @@ const userRoute = Router()
 
 userRoute.get('/:userId', verifyToken, async (req, res) => {
     const userId = req.params.userId
-    await User.findOne({_id: userId})
+    await User.findOne({_id: userId}).populate('order cart favorite')
         .then(item => {
-            res.status(201).json({
-                name: item.name,
-                surname: item.surname,
-                email: item.email,
-                phone: item.phone,
-                status: item.status,
-                avatarUser: item.avatarUser
-            })
+            console.log(item)
+            res.status(201).json(item)
         })
         .catch(error => res.status(400).json({error: error}))
 })

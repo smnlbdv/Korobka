@@ -16,13 +16,13 @@ const Product = ({_id, slider = [], title, price, count, favorite = false, newPr
 
     const clickBtnAdd = async () => {
         await addCart({_id, slider, title, pretext, price, count})
-        const product = cart.find(obj => obj._id === _id);
-        if(!product) {
-            setCountProduct(1)
-            setIsAdded(true)
-        }
-        setCountProduct(product.count)
-        setIsAdded(true)
+        // const product = cart.find(obj => obj._id == _id);
+        // if(!product) {
+        //     setCountProduct(1)
+        //     setIsAdded(true)
+        // }
+        // setCountProduct(product.count)
+        // setIsAdded(true)
     }
   
     const addProduct = () => {

@@ -25,12 +25,12 @@ const Cart= lazy(() => import("./pages/cart/cart.jsx"));
 const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
 
 function App() {
-  const [cart, setCart] = useState([]);
   const [reviewsList, setReviewsList] = useState([])
-  const [profile, setProfile] = useState([]);
+  const [profile, setProfile] = useState({});
   const [order, setOrder] = useState([]);
+  const [cart, setCart] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
-  const [cartPrice, setCartPrice] = useState();
+  const [cartPrice, setCartPrice] = useState({});
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
   const { login, logout, token, userId } = useAuth();
@@ -40,46 +40,41 @@ function App() {
 
   useEffect(() => {
     if(isLogin) {
-      if(cart.length == 0) {
-        getCart()
-      } 
-      if(favoriteItem.length == 0 ) {
-        getFavorite()
-      }
+      getProfile()
     }
     getNewProduct()
     getBestReviews()
-  }, [])
+  }, [isLogin])
 
-  const getCart = async () => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
-    try {
-      await api.get(`/api/cart/${data.userId}`, {
-        headers: {
-            'Authorization': `${data.token}`,
-        }})
-        .then(response => {
-          const product = response.data.map(item => 
-            {
-              return {
-                ...item.product,
-                count: item.quantity
-              }; 
-            } 
-          );
-          setCart(product)
-        })
-        .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
-        })
+  // const getCart = async () => {
+  //   const data = JSON.parse(localStorage.getItem('userData')) || '';
+  //   try {
+  //     await api.get(`/api/cart/${data.userId}`, {
+  //       headers: {
+  //           'Authorization': `${data.token}`,
+  //       }})
+  //       .then(response => {
+  //         const product = response.data.map(item => 
+  //           {
+  //             return {
+  //               ...item.product,
+  //               count: item.quantity
+  //             }; 
+  //           } 
+  //         );
+  //         setCart(product)
+  //       })
+  //       .catch(response => {
+  //         if(response.response.status == 401) {
+  //           logout()
+  //           navigate("/api/auth/login");
+  //         }
+  //       })
         
-    } catch (error) {
-      console.log("Ошибка", error);
-    }
-  }
+  //   } catch (error) {
+  //     console.log("Ошибка", error);
+  //   }
+  // }
 
   const getProfile = async () => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
@@ -89,9 +84,28 @@ function App() {
             'Authorization': `${data.token}`,
         }})
         .then(response => {
-          setProfile(response.data)
+          const fieldsToExclude = ['cart', 'older', 'favorite'];
+          const userObject = Object.assign({}, response.data);
+          for (const field of fieldsToExclude) {
+            if (Object.prototype.hasOwnProperty.call(userObject, field)) {
+              delete userObject[field];
+            }
+          }
+
+          setProfile({...userObject})
+
+          if(response.data.cart) {
+            setCart(response.data.cart.slice())
+          }
+          if(response.data.order) {
+            setOrder(...response.data.order.slice())
+          }
+          if(response.data.favorite) {
+            setFavoriteItem(...response.data.favorite.slice())
+          }
         })
         .catch(response => {
+          console.log(response)
           if(response.response.status == 401) {
             logout()
             navigate("/api/auth/login");
@@ -165,10 +179,10 @@ function App() {
   }
 
   const addCart = async (obj) => {
-    console.log(obj)
     const token = JSON.parse(localStorage.getItem('userData')) || '';
+    const itemId =  obj._id
     try {
-      await api.post('/api/cart/add', {userId, itemId: obj._id}, {
+      await api.post(`/api/cart/add/${itemId}`, {userId}, {
         headers: {
           'Authorization': `${token.token}`,
         }})
@@ -369,34 +383,34 @@ function App() {
     }
   }
 
-  const getFavorite = async () => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
-    try {
-      await api.get(`/api/favorite/${data.userId}`, {
-        headers: {
-            'Authorization': `${data.token}`,
-        }})
-        .then(response => {
-            const favorite = response.data.map(item => 
-                {
-                  return {
-                    ...item.product,
-                  }; 
-                } 
-              );
-            setFavoriteItem(favorite)
-        })
-        .catch(response => {
-          if(response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
-        })
+  // const getFavorite = async () => {
+  //   const data = JSON.parse(localStorage.getItem('userData')) || '';
+  //   try {
+  //     await api.get(`/api/favorite/${data.userId}`, {
+  //       headers: {
+  //           'Authorization': `${data.token}`,
+  //       }})
+  //       .then(response => {
+  //           const favorite = response.data.map(item => 
+  //               {
+  //                 return {
+  //                   ...item.product,
+  //                 }; 
+  //               } 
+  //             );
+  //           setFavoriteItem(favorite)
+  //       })
+  //       .catch(response => {
+  //         if(response.status == 401) {
+  //           logout()
+  //           navigate("/api/auth/login");
+  //         }
+  //       })
         
-    } catch (error) {
-      console.log("Ошибка", error);
-    }
-  }
+  //   } catch (error) {
+  //     console.log("Ошибка", error);
+  //   }
+  // }
 
   const uploadAvatar = async (formData) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
@@ -523,8 +537,6 @@ function App() {
         setFavoriteItem,
         deleteProductFavorite,
         sendEmailData,
-        getCart,
-        getFavorite,
         uploadAvatar,
         getProfile,
         profile,

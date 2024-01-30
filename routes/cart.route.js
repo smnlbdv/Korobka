@@ -24,65 +24,91 @@ const checkItems = (arr, itemId) => {
     }
 }
 
-cartRoute.post('/add', verifyToken, async (req, res) => {
+cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
     try {
-        const { userId, itemId } = req.body
+        const { userId } = req.body
+        const itemId = req.params.itemId
         const cartItem = await CartItem.findOne({owner: userId})
 
-        if(cartItem) {            
-            const checkItem = checkItems(cartItem.items, itemId)
-
-            if(checkItem.answer) {
-                const newQuantity = checkItem.quantity + 1
-                await CartItem.updateOne(
-                    { "items.product": itemId },
-                    { $set: { "items.$.quantity": newQuantity }}, 
-                );
-                const cart = await CartItem.findOne(
-                    { 'items': { $elemMatch: { 'product': itemId } } },
-                    { 'items.$': 1 })
-                    .populate('items.product');
-    
-                const product = cart.items[0].product
-                const count = cart.items[0].quantity
-                res.status(201).json({product, count})
-
-            } else {
-                const infoItem = {
+        if(cartItem) {
+            if(cartItem.items.length == 0) {
+                const item = {
                     product: itemId,
                     quantity: 1
                 }
-                await CartItem.updateOne(
-                    {owner: userId}, { $push: { items: infoItem }},
-                );
-                
-                const cart = await CartItem.findOne(
-                    { 'items': { $elemMatch: { 'product': itemId } } },
-                    { 'items.$': 1 })
-                    .populate('items.product');
-    
-                const product = cart.items[0].product
-                const count = cart.items[0].quantity
-                res.status(201).json({product, count})
+                await CartItem.insertMany({ owner: userId, items: item });
+            } else {
+                cartItem.items.forEach((item, index) => {
+                    console.log(item)
+                    if(item.product == itemId) {
+                        cartItem.items[index].quantity += 1
+                    }
+                });
+                cartItem.save();
             }
-
         } else {
-            const infoItem = {
+            const item = {
                 product: itemId,
                 quantity: 1
             }
-
-            await CartItem.insertMany({owner: userId, items: infoItem})
-
-            const cart = await CartItem.findOne(
-                { 'items': { $elemMatch: { 'product': itemId } } },
-                { 'items.$': 1 })
-                .populate('items.product');
+            await CartItem.insertMany({ owner: userId, items: item });
             
-            const product = cart.items[0].product
-            const count = cart.items[0].quantity
-            res.status(201).json({product, count})
         }
+
+        // if(cartItem.cart) {            
+        //     const checkItem = checkItems(cartItem.items, itemId)
+
+        //     if(checkItem.answer) {
+        //         const newQuantity = checkItem.quantity + 1
+        //         await CartItem.updateOne(
+        //             { "items.product": itemId },
+        //             { $set: { "items.$.quantity": newQuantity }}, 
+        //         );
+        //         const cart = await CartItem.findOne(
+        //             { 'items': { $elemMatch: { 'product': itemId } } },
+        //             { 'items.$': 1 })
+        //             .populate('items.product');
+    
+        //         const product = cart.items[0].product
+        //         const count = cart.items[0].quantity
+        //         res.status(201).json({product, count})
+
+        //     } else {
+        //         const infoItem = {
+        //             product: itemId,
+        //             quantity: 1
+        //         }
+        //         await CartItem.updateOne(
+        //             {owner: userId}, { $push: { items: infoItem }},
+        //         );
+                
+        //         const cart = await CartItem.findOne(
+        //             { 'items': { $elemMatch: { 'product': itemId } } },
+        //             { 'items.$': 1 })
+        //             .populate('items.product');
+    
+        //         const product = cart.items[0].product
+        //         const count = cart.items[0].quantity
+        //         res.status(201).json({product, count})
+        //     }
+
+        // } else {
+        //     const infoItem = {
+        //         product: itemId,
+        //         quantity: 1
+        //     }
+
+        //     await CartItem.insertMany({owner: userId, items: infoItem})
+
+        //     const cart = await CartItem.findOne(
+        //         { 'items': { $elemMatch: { 'product': itemId } } },
+        //         { 'items.$': 1 })
+        //         .populate('items.product');
+            
+        //     const product = cart.items[0].product
+        //     const count = cart.items[0].quantity
+        //     res.status(201).json({product, count})
+        // }
 
     } catch (error) {
         res.status(400).json({error: error.message})
@@ -127,16 +153,16 @@ cartRoute.post('/decrease/', verifyToken, async (req, res) => {
     }
 })
 
-cartRoute.get('/:userId', verifyToken, async (req, res) => {
-    const userId = req.params.userId
+// cartRoute.get('/:userId', verifyToken, async (req, res) => {
+//     const userId = req.params.userId
     
-    await CartItem.findOne({owner: userId})
-        .populate('items.product')
-        .then(item => {
-            res.json(item.items)
-        })
-        .catch(error => res.status(400).json({error: error}))
-})
+//     await CartItem.findOne({owner: userId})
+//         .populate('items.product')
+//         .then(item => {
+//             res.json(item.items)
+//         })
+//         .catch(error => res.status(400).json({error: error}))
+// })
 
 
 
