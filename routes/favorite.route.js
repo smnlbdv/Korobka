@@ -8,52 +8,69 @@ import verifyToken from '../validation/verifyToken.js'
 
 const favoriteRoute = Router()
 
-favoriteRoute.post('/add', verifyToken, async (req, res) => {
+favoriteRoute.post('/add/:itemId', verifyToken, async (req, res) => {
     try {
-        const { userId, favoriteId } = req.body,
-              favoriteItem = await Favorite.findOne({owner: userId})
+        const { userId } = req.body
+        const itemId = req.params.itemId
+        // const cartItem = await CartItem.findOne({owner: userId})
 
-        if(favoriteItem) {
-            await Favorite.updateMany({ owner: userId }, { $push: { items: favoriteId } } );
-            const response = await Favorite.findOne({ owner: userId }, { items : favoriteId })
-                                            .populate('items').exec();
+        console.log(userId)
+        console.log(itemId);
 
-            res.status(200).json({
-                product: response.items[0],
-                success: true,
-                message: "Товар добавлен в закладки"
-            });
-        } else {
-            const favorite = new Favorite({ owner: userId });
-            await favorite.save();
-            favorite.items.push(favoriteId);
-            await favorite.save();
-            const response = await Favorite.findOne({ owner: userId }).populate('items');
-            res.status(200).json({
-                product: response.items[0],
-                success: true,
-                message: "Товар добавлен в закладки"
-            });
-        }
+        // if (cartItem) {
+        //     if (cartItem.items.length === 0) {
+        //         const item = {
+        //             product: itemId,
+        //             quantity: 1
+        //         };
+        //         await CartItem.create({ owner: userId, items: [item] });
+        //         const newCartItem = await CartItem.find({ owner: userId, items: { $elemMatch: { product: itemId } } })
+        //                                         .populate('items.product');
+
+        //         const product = newCartItem[0].items[0].product;
+        //         const count = newCartItem[0].items[0].quantity
+        //         res.status(201).json({product, count})
+
+        //     } else {
+        //         const cartItemIndex = cartItem.items.findIndex(item => item.product == itemId);
+        //         if (cartItemIndex != -1) {
+        //             cartItem.items[cartItemIndex].quantity += 1;
+        //         } else {
+        //             const newItem = {
+        //             product: itemId,
+        //             quantity: 1
+        //             };
+        //             cartItem.items.push(newItem);
+        //         }
+        //         cartItem.save();
+        //         const newCartItem = await CartItem.find({ owner: userId, items: { $elemMatch: { product: itemId } } })
+        //                                         .populate('items.product');
+
+
+        //         const product = newCartItem[0].items[0].product;
+        //         const count = newCartItem[0].items[0].quantity
+        //         res.status(201).json({product, count})
+        //     }
+        // } else {
+        //     const item = {
+        //         product: itemId,
+        //         quantity: 1
+        //     };
+        //     await CartItem.create({ owner: userId, items: [item]});
+        //     const newCartItem = await CartItem.find({ owner: userId, items: { $elemMatch: { product: itemId } } })
+        //                                         .populate('items.product');
+
+        //     await User.findByIdAndUpdate({_id: userId}, {cart: newCartItem[0]._id})
+
+        //     const product = newCartItem[0].items[0].product;
+        //     const count = newCartItem[0].items[0].quantity
+        //     res.status(201).json({product, count})
+        // }
+
     } catch (error) {
-        console.log (error);
-        res.status(404).json({
-            success: false,
-            message: "Товар не был добавлен в закладки"
-          })
+        // res.status(400).json({error: error.message})
     }
 })
-
-// favoriteRoute.get('/:userId', verifyToken, async (req, res) => {
-//     const userId = req.params.userId
-//     console.log(userId)
-//     // await Favorite.findOne({owner: userId})
-//     //     .populate('items.product')
-//     //     .then(item => {
-//     //         res.json(item.items)
-//     //     })
-//     //     .catch(error => res.status(400).json({error: error}))
-// })
 
 favoriteRoute.delete('/delete/:productId', verifyToken, async (req, res) => {
     const productId = req.params.productId

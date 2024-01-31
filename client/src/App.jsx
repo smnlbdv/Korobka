@@ -30,7 +30,7 @@ function App() {
   const [order, setOrder] = useState([]);
   const [cart, setCart] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
-  const [cartPrice, setCartPrice] = useState({});
+  const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
   const { login, logout, token, userId } = useAuth();
@@ -45,6 +45,14 @@ function App() {
     getNewProduct()
     getBestReviews()
   }, [isLogin])
+
+  const calculatePrice = useCallback(() => {
+    const total = cart.reduce((accumulator, product) => {
+      const subtotal = product.count * product.price;
+      return accumulator + subtotal;
+    }, 0);
+    setCartTotalPrice(total);
+  }, [cart]);
 
   // const getCart = async () => {
   //   const data = JSON.parse(localStorage.getItem('userData')) || '';
@@ -95,7 +103,7 @@ function App() {
 
           setProfile({...userObject})
 
-          if(typeof(response.data.cart) !== 'string' && cart.length == 0) {
+          if(response.data.cart && cart.length == 0) {
             const newCart = [...response.data.cart.items]
             const newCartItem = newCart.map(item => ({
               ...item.product,
@@ -104,17 +112,17 @@ function App() {
             setCart(newCartItem);
           }
 
+          if(response.data.favorite && favoriteItem.length == 0) {
+            setFavoriteItem(...response.data.favorite)
+          }
+
           // if(typeof(response.data.order) !== 'string') {
           //   setOrder(...response.data.order.slice())
-          // }
-          // if(typeof(response.data.favorite) !== 'string') {
-          //   setFavoriteItem(...response.data.favorite.slice())
           // }
 
         })
         .catch(response => {
-          console.log(response)
-          if(response.response.status == 401) {
+          if(response.status == 401) {
             logout()
             navigate("/api/auth/login");
           }
@@ -142,14 +150,6 @@ function App() {
 
   }
   };
-
-  const calculatePrice = () => {
-    const total = cart.reduce((accumulator, product) => {
-        const subtotal = product.count * product.price;
-        return accumulator + subtotal;
-    }, 0);
-    setCartPrice(total)
-  }
 
   const getNewProduct = async () => {
     try {
@@ -186,36 +186,26 @@ function App() {
     deleteItemCart(id)
   }
 
-  const addCart = async (obj) => {
+  const addCart = async (objId) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
-    const itemId =  obj._id
     try {
-      await api.post(`/api/cart/add/${itemId}`, {userId}, {
+      await api.post(`/api/cart/add/${objId}`, {userId}, {
         headers: {
           'Authorization': `${token.token}`,
         }})
         .then(response => {
-          // console.log(response)
-          
-          const product = {
-                ...response.data.product,
-                count: response.data.count
+          const index = cart.findIndex(item => item._id == response.data.product._id);
+          if(index !== -1) {
+            cart[index]['count'] = response.data.count
+            openNotification('bottomRight', 'Товар успешно добавлен в корзину') 
+          } else {
+            const product = {
+              ...response.data.product,
+              count: response.data.count
+            }
+            setCart((prevCart) => [...prevCart, product]);
+            openNotification('bottomRight', 'Товар успешно добавлен в корзину')
           }
-          setCart((prevCart) => [...prevCart, product]);
-          openNotification('bottomRight', 'Товар успешно добавлен в корзину')
-          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину')
-          // const index = cart.findIndex(item => item._id === response.data.product._id);
-          // if(index !== -1) {
-          //   cart[index]['count'] = response.data.count
-          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину') 
-          // } else {
-          //   const product = {
-          //     ...response.data.product,
-          //     count: response.data.count
-          //   }
-          //   setCart((prevCart) => [...prevCart, product]);
-          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину')
-          // }
         })
         .catch(response => {
           if(response.response.status == 401) {
@@ -281,7 +271,6 @@ function App() {
     }
   }
 
-
   const deleteItemCart = async (productId) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
@@ -308,43 +297,73 @@ function App() {
     }
   }
 
-  const addProductFavorite = async (productId) => {
-    if(favoriteItem.some(item => item._id == productId)) {
-      // favoriteItem.filter((item) => item._id !== productId)
-    } else {
-      const data = JSON.parse(localStorage.getItem('userData')) || '';
-      try {
-        await api.post('/api/favorite/add', {userId: data.userId, favoriteId: productId}, {
-          headers: {
-            'Authorization': `${data.token}`,
-          }})
-          .then(response => {
-            setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
-            openNotification('bottomRight', response.data.message)
-            // const index = cart.findIndex(item => item._id === response.data.product._id);
-            // if(index !== -1) {
-            //   cart[index]['count'] = response.data.count
-            //   openNotification('bottomRight') 
-            // } else {
-            //   const product = {
-            //     ...response.data.product,
-            //     count: response.data.count
-            //   }
-            //   setCart((prevCart) => [...prevCart, product]);
-            //   openNotification('bottomRight')
-            // }
-          })
-          .catch(response => {
-            if(response.response.status == 401) {
-              logout()
-              navigate("/api/auth/login");
-            }
-        }); 
-      }
-      catch (error) {
-        console.log(error.message)
-      }
+  const addProductFavorite = async (objId) => {
+    const token = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.post(`/api/favorite/add/${objId}`, {userId}, {
+        headers: {
+          'Authorization': `${token.token}`,
+        }})
+        .then(response => {
+          console.log(response)
+          // const index = cart.findIndex(item => item._id == response.data.product._id);
+          // if(index !== -1) {
+          //   cart[index]['count'] = response.data.count
+          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину') 
+          // } else {
+          //   const product = {
+          //     ...response.data.product,
+          //     count: response.data.count
+          //   }
+          //   setCart((prevCart) => [...prevCart, product]);
+          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину')
+          // }
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+      });
+    } catch (error) {
+      console.log(error.message)
     }
+    // if(favoriteItem.some(item => item._id == productId)) {
+    //   // favoriteItem.filter((item) => item._id !== productId)
+    // } else {
+    //   const data = JSON.parse(localStorage.getItem('userData')) || '';
+    //   try {
+    //     await api.post('/api/favorite/add', {userId: data.userId, favoriteId: productId}, {
+    //       headers: {
+    //         'Authorization': `${data.token}`,
+    //       }})
+    //       .then(response => {
+    //         setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
+    //         openNotification('bottomRight', response.data.message)
+    //         // const index = cart.findIndex(item => item._id === response.data.product._id);
+    //         // if(index !== -1) {
+    //         //   cart[index]['count'] = response.data.count
+    //         //   openNotification('bottomRight') 
+    //         // } else {
+    //         //   const product = {
+    //         //     ...response.data.product,
+    //         //     count: response.data.count
+    //         //   }
+    //         //   setCart((prevCart) => [...prevCart, product]);
+    //         //   openNotification('bottomRight')
+    //         // }
+    //       })
+    //       .catch(response => {
+    //         if(response.response.status == 401) {
+    //           logout()
+    //           navigate("/api/auth/login");
+    //         }
+    //     }); 
+    //   }
+    //   catch (error) {
+    //     console.log(error.message)
+    //   }
+    // }
   }
 
   const deleteProductFavorite = async (productId) => {
@@ -499,6 +518,7 @@ function App() {
       console.log("Ошибка", error);
     }
   }
+  
 
   return (
     <AuthContext.Provider
@@ -514,8 +534,7 @@ function App() {
         deleteItemCart,
         increaseCartItem,
         decreaseCartItem,
-        calculatePrice,
-        cartPrice,
+        cartTotalPrice,
         contextHolder,
         contextHolderEmail,
         newBoxList,
@@ -533,7 +552,8 @@ function App() {
         order,
         updatePassUser,
         reviewsList,
-        getBestReviews
+        getBestReviews,
+        calculatePrice
       }}
     >
         <Routes>

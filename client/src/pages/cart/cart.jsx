@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext, useEffect, React } from "react";
+import { useState, useContext, useEffect, useCallback} from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
+import { CartContext } from "../../context/cartContext.js";
 
 import CartItem from '../../components/cartItem/cartItem.jsx'
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
@@ -11,16 +12,12 @@ import style from './cart.module.scss'
 const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
-    // const [totalPrice, setPriceTotal] = useState(0)
-    const { cart, setCart } = useContext(AuthContext)
+    const { cart, setCart, calculatePrice, cartTotalPrice } = useContext(AuthContext)
 
-    // useEffect(() => {
-    //     calculatePrice()
-    // }, [calculatePrice, cart])
 
-    // useEffect(() => {
-    //     setPriceTotal(cartPrice * 1)    
-    // }, [cartPrice])
+    useEffect(() => {
+        calculatePrice(); 
+    }, [cart]); 
 
     const clickButtonAll = () => {  
         setCheckAll(!checkAll)
@@ -30,7 +27,8 @@ const Cart = () => {
     }
 
     return ( 
-        <section className={`${style.section_cart} wrapper`}>
+        <CartContext.Provider value={{calculatePrice}}>
+            <section className={`${style.section_cart} wrapper`}>
             <ul className="bread-crumbs">
                 <Link to="/">
                 <li>Главная</li>
@@ -71,7 +69,7 @@ const Cart = () => {
                                 </div>
                                 <div className={style.info__item}>
                                     <p>Сумма:</p>
-                                    <p> BYN</p>
+                                    <p>{cartTotalPrice} BYN</p>
                                 </div>
                                 <div className={style.info__item}>
                                     <p>Скидка:</p>
@@ -99,7 +97,8 @@ const Cart = () => {
                     </div>
                 </div>
             }
-        </section>
+            </section>
+        </CartContext.Provider>
      );
 }
  

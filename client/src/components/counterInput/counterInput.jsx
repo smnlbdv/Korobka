@@ -1,13 +1,14 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
 
 import style from './counterInput.module.scss'
 
 // eslint-disable-next-line react/prop-types
 const CounterInput = ({ counts, setCounts, _id }) => {
-    const { increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext);
     const [input, setInput] = useState(false);
-    const subtractProduct = () => {
+    const { increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext);
+
+    const subtractProduct = async () => {
       if (counts <= 1) {
         unmountItem(_id);
       } else {
@@ -17,6 +18,7 @@ const CounterInput = ({ counts, setCounts, _id }) => {
         }
       }
     };
+
     const handleChange = (e) => {
       if (e.target.value > 200) {
         setCounts(200);
@@ -24,6 +26,7 @@ const CounterInput = ({ counts, setCounts, _id }) => {
         setCounts(Number(e.target.value));
       }
     };
+
     const changeOnInput = () => {
       setInput(true);
     };
@@ -31,7 +34,8 @@ const CounterInput = ({ counts, setCounts, _id }) => {
     const onBlurInput = () => {
       setInput(false);
     };
-    const addProduct = () => {
+
+    const addProduct = async () => {
       if (counts >= 200) {
         setCounts(counts);
       } else {

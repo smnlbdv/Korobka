@@ -15,14 +15,15 @@ const Product = ({_id, slider = [], title, price, count, favorite = false, newPr
     const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem, userId } = useContext(AuthContext)
 
     const clickBtnAdd = async () => {
-        await addCart({_id, slider, title, pretext, price, count})
-        // const product = cart.find(obj => obj._id == _id);
-        // if(!product) {
-        //     setCountProduct(1)
-        //     setIsAdded(true)
-        // }
-        // setCountProduct(product.count)
-        // setIsAdded(true)
+        // addCart(_id)
+        const product = cart.find(obj => obj._id === _id);
+        if(!product) {
+            setCountProduct(1)
+            setIsAdded(true)
+        } else {
+            setCountProduct(product.count + 1)
+            setIsAdded(true)
+        }
     }
   
     const addProduct = () => {

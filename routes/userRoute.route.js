@@ -24,7 +24,6 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
   const userId = req.params.userId;
   await User.findOne({ _id: userId })
     .populate("order")
-    .populate("cart")
     .populate("favorite")
     .populate({
       path: "cart",
@@ -36,17 +35,13 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
       },
     })
     .then((item) => {
-      console.log(item.cart.items);
+      console.log(item)
       res.status(201).json(item);
     })
-    .catch((error) => res.status(400).json({ error: error }));
+    .catch((error) => console.log(error));
 });
 
-userRoute.patch(
-  "/upload-image",
-  verifyToken,
-  upload.single("image"),
-  async (req, res) => {
+userRoute.patch( "/upload-image", verifyToken, upload.single("image"), async (req, res) => {
     try {
       const userId = req.userId;
       const url = `http://localhost:5000/avatar/${req.file.originalname}`;
