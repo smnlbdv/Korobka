@@ -84,6 +84,7 @@ function App() {
             'Authorization': `${data.token}`,
         }})
         .then(response => {
+
           const fieldsToExclude = ['cart', 'older', 'favorite'];
           const userObject = Object.assign({}, response.data);
           for (const field of fieldsToExclude) {
@@ -94,15 +95,22 @@ function App() {
 
           setProfile({...userObject})
 
-          if(response.data.cart) {
-            setCart(response.data.cart.slice())
+          if(typeof(response.data.cart) !== 'string' && cart.length == 0) {
+            const newCart = [...response.data.cart.items]
+            const newCartItem = newCart.map(item => ({
+              ...item.product,
+              count: item.quantity,
+            }));
+            setCart(newCartItem);
           }
-          if(response.data.order) {
-            setOrder(...response.data.order.slice())
-          }
-          if(response.data.favorite) {
-            setFavoriteItem(...response.data.favorite.slice())
-          }
+
+          // if(typeof(response.data.order) !== 'string') {
+          //   setOrder(...response.data.order.slice())
+          // }
+          // if(typeof(response.data.favorite) !== 'string') {
+          //   setFavoriteItem(...response.data.favorite.slice())
+          // }
+
         })
         .catch(response => {
           console.log(response)
@@ -187,18 +195,27 @@ function App() {
           'Authorization': `${token.token}`,
         }})
         .then(response => {
-          const index = cart.findIndex(item => item._id === response.data.product._id);
-          if(index !== -1) {
-            cart[index]['count'] = response.data.count
-            openNotification('bottomRight', 'Товар успешно добавлен в корзину') 
-          } else {
-            const product = {
-              ...response.data.product,
-              count: response.data.count
-            }
-            setCart((prevCart) => [...prevCart, product]);
-            openNotification('bottomRight', 'Товар успешно добавлен в корзину')
+          // console.log(response)
+          
+          const product = {
+                ...response.data.product,
+                count: response.data.count
           }
+          setCart((prevCart) => [...prevCart, product]);
+          openNotification('bottomRight', 'Товар успешно добавлен в корзину')
+          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину')
+          // const index = cart.findIndex(item => item._id === response.data.product._id);
+          // if(index !== -1) {
+          //   cart[index]['count'] = response.data.count
+          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину') 
+          // } else {
+          //   const product = {
+          //     ...response.data.product,
+          //     count: response.data.count
+          //   }
+          //   setCart((prevCart) => [...prevCart, product]);
+          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину')
+          // }
         })
         .catch(response => {
           if(response.response.status == 401) {
@@ -382,35 +399,6 @@ function App() {
       console.log(error.message)
     }
   }
-
-  // const getFavorite = async () => {
-  //   const data = JSON.parse(localStorage.getItem('userData')) || '';
-  //   try {
-  //     await api.get(`/api/favorite/${data.userId}`, {
-  //       headers: {
-  //           'Authorization': `${data.token}`,
-  //       }})
-  //       .then(response => {
-  //           const favorite = response.data.map(item => 
-  //               {
-  //                 return {
-  //                   ...item.product,
-  //                 }; 
-  //               } 
-  //             );
-  //           setFavoriteItem(favorite)
-  //       })
-  //       .catch(response => {
-  //         if(response.status == 401) {
-  //           logout()
-  //           navigate("/api/auth/login");
-  //         }
-  //       })
-        
-  //   } catch (error) {
-  //     console.log("Ошибка", error);
-  //   }
-  // }
 
   const uploadAvatar = async (formData) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';

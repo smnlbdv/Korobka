@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, React } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 
@@ -11,21 +11,21 @@ import style from './cart.module.scss'
 const Cart = () => {
 
     const [checkAll, setCheckAll] = useState(false)
-    const [totalPrice, setPriceTotal] = useState()
-    const { cart, setCart, cartPrice, calculatePrice } = useContext(AuthContext)
- 
-    useEffect(() => {
-        calculatePrice()
-    }, [calculatePrice, cart])
+    // const [totalPrice, setPriceTotal] = useState(0)
+    const { cart, setCart } = useContext(AuthContext)
 
-    useEffect(() => {
-        setPriceTotal(cartPrice * 1)
-    }, [cartPrice])
+    // useEffect(() => {
+    //     calculatePrice()
+    // }, [calculatePrice, cart])
+
+    // useEffect(() => {
+    //     setPriceTotal(cartPrice * 1)    
+    // }, [cartPrice])
 
     const clickButtonAll = () => {  
         setCheckAll(!checkAll)
     }
-    const clearCart = () => {
+    const clearCart = () => {   
         setCart([])
     }
 
@@ -39,7 +39,7 @@ const Cart = () => {
             </ul>
             <h2 className={`${style.section_title} section__title`}>Корзина</h2>
             {
-                cart.length != 0 ?
+                cart.length !== 0 ?
                 <div className={style.cart__main_block}>
                     <div className={style.cart__left_block}>
                         <div className={style.cart__block__buttons}>
@@ -51,15 +51,15 @@ const Cart = () => {
                         </div>
                         <span className={style.cart__span}></span>
                         <div className={style.cart__list}>
-                        {
-                            cart.map((obj, index) => 
-                                <CartItem
-                                    key={index}
-                                    checkAll={checkAll}
-                                    {...obj}
-                                />
-                            )
-                        }
+                            {
+                                cart.map((obj, index) => 
+                                    <CartItem
+                                        key={index}
+                                        checkAll={checkAll}
+                                        {...obj}
+                                    />
+                                )
+                            }
                         </div>
                     </div>
                     <div className={style.cart__right_block}>
@@ -71,7 +71,7 @@ const Cart = () => {
                                 </div>
                                 <div className={style.info__item}>
                                     <p>Сумма:</p>
-                                    <p>{cartPrice} BYN</p>
+                                    <p> BYN</p>
                                 </div>
                                 <div className={style.info__item}>
                                     <p>Скидка:</p>
@@ -82,7 +82,7 @@ const Cart = () => {
                             <div className={style.pay}>
                                 <div className={style.pay_item}>
                                     <p>Итог к оплате:</p>
-                                    <p className={style.totalPrice}> {totalPrice} BYN</p>
+                                    <p className={style.totalPrice}>BYN</p>
                                 </div>
                                 <button className={style.btn_checkout}>Оформить</button>
                             </div>

@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/authContext.js";
 import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
 
-const CartItem = ({ _id, slider , title, pretext, price, count, checkAll }) => {
+const CartItem = ({ _id, slider, title, pretext, price, count, checkAll }) => {
   const [choose, setСhoose] = useState(checkAll);
   const [counts, setCounts] = useState(count);
   const { deleteItemCart } = useContext(AuthContext);

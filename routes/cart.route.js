@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs'
 import jwtToken from 'jsonwebtoken'
 import { registerValidation, loginValidation } from './../validation/auth.js'
 
+import User from '../models/User.js'
 import CartItem from '../models/Cart.js'
 import verifyToken from '../validation/verifyToken.js'
 
@@ -30,29 +31,55 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
         const itemId = req.params.itemId
         const cartItem = await CartItem.findOne({owner: userId})
 
-        if(cartItem) {
-            if(cartItem.items.length == 0) {
+        if (cartItem) {
+            if (cartItem.items.length === 0) {
                 const item = {
                     product: itemId,
                     quantity: 1
-                }
-                await CartItem.insertMany({ owner: userId, items: item });
+                };
+                const newCart = await CartItem.create({ owner: userId, items: [item] });
+                
+                const newCartItem = await CartItem.find({ owner: userId, items: { $elemMatch: { product: itemId } } })
+                                                .populate('items.product');
+
+                const product = newCartItem[0].items[0].product;
+                const count = newCartItem[0].items[0].quantity
+                res.status(201).json({product, count})
+
             } else {
-                cartItem.items.forEach((item, index) => {
-                    console.log(item)
-                    if(item.product == itemId) {
-                        cartItem.items[index].quantity += 1
-                    }
-                });
+                const cartItemIndex = cartItem.items.findIndex(item => item.product == itemId);
+                if (cartItemIndex != -1) {
+                    cartItem.items[cartItemIndex].quantity += 1;
+                } else {
+                    const newItem = {
+                    product: itemId,
+                    quantity: 1
+                    };
+                    cartItem.items.push(newItem);
+                }
                 cartItem.save();
+                const newCartItem = await CartItem.find({ owner: userId, items: { $elemMatch: { product: itemId } } })
+                                                .populate('items.product');
+
+
+                const product = newCartItem[0].items[0].product;
+                const count = newCartItem[0].items[0].quantity
+                res.status(201).json({product, count})
             }
         } else {
             const item = {
                 product: itemId,
                 quantity: 1
-            }
-            await CartItem.insertMany({ owner: userId, items: item });
-            
+            };
+            await CartItem.create({ owner: userId, items: [item]});
+            const newCartItem = await CartItem.find({ owner: userId, items: { $elemMatch: { product: itemId } } })
+                                                .populate('items.product');
+
+            await User.findByIdAndUpdate({_id: userId}, {cart: newCartItem[0]._id})
+
+            const product = newCartItem[0].items[0].product;
+            const count = newCartItem[0].items[0].quantity
+            res.status(201).json({product, count})
         }
 
         // if(cartItem.cart) {            

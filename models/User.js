@@ -35,15 +35,18 @@ const shema = new mongoose.Schema({
     avatarUrl: String,
     order: {
         type: Types.ObjectId, 
-        reg: 'Order',
+        ref: 'Order',
+        default: ''
     },
     cart: {
         type: Types.ObjectId,
-        reg: 'Cart',
+        ref: 'Cart',
+        default: ''
     },
     favorite: {
         type: Types.ObjectId,
-        reg: 'Favorite',
+        ref: 'Favorite',
+        default: ''
     }
 })
 
