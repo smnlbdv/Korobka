@@ -12,7 +12,7 @@ import Review from "../../components/review/review.jsx";
 import './ant.css'
 
 const ProductPage = () => {
-    const [counts, setCounts] = useState(1);
+    const [counts, setCounts] = useState(0);
     const [isCounter, setIsCounter] = useState(false);
     const [favorite, setFavorite] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState([]);
@@ -40,7 +40,6 @@ const ProductPage = () => {
           {productReviews.map((item, index) => (
               <Review
                 key={index}
-                // img={}
                 img={item.owner.avatarUser}
                 name={item.owner.name}
                 lastName={item.owner.surname}
@@ -117,7 +116,7 @@ const ProductPage = () => {
     }
 
     const addCartPage = async () => {
-      await addCart({_id: selectedProduct._id, slider: selectedProduct.slider, title: selectedProduct.title, pretext: selectedProduct.pretext, price: selectedProduct.price, count: selectedProduct.count})
+      await addCart({_id: selectedProduct._id})
     }
 
     const fetchReviewsProduct = async () => {
@@ -155,7 +154,7 @@ const ProductPage = () => {
 
     useEffect(() => {
       getCountProduct();
-    }, [cart, id]); 
+    }, []); 
 
     return ( 
         <section className={style.main__block_product}>

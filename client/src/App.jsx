@@ -54,36 +54,6 @@ function App() {
     setCartTotalPrice(total);
   }, [cart]);
 
-  // const getCart = async () => {
-  //   const data = JSON.parse(localStorage.getItem('userData')) || '';
-  //   try {
-  //     await api.get(`/api/cart/${data.userId}`, {
-  //       headers: {
-  //           'Authorization': `${data.token}`,
-  //       }})
-  //       .then(response => {
-  //         const product = response.data.map(item => 
-  //           {
-  //             return {
-  //               ...item.product,
-  //               count: item.quantity
-  //             }; 
-  //           } 
-  //         );
-  //         setCart(product)
-  //       })
-  //       .catch(response => {
-  //         if(response.response.status == 401) {
-  //           logout()
-  //           navigate("/api/auth/login");
-  //         }
-  //       })
-        
-  //   } catch (error) {
-  //     console.log("Ошибка", error);
-  //   }
-  // }
-
   const getProfile = async () => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
@@ -136,20 +106,20 @@ function App() {
 
 
   const countDown = (type, message) => {
-  if(type === 'success') {
-    modal.success({
-      title: 'Подписка на новости Korobka',
-      content: `${message}`,
-    });
+    if(type === 'success') {
+      modal.success({
+        title: 'Подписка на новости Korobka',
+        content: `${message}`,
+      });
 
-  }
-  if (type === 'error') {
-    modal.error({
-      title: 'Подписка на новости Korobka',
-      content: `${message}`,
-    });
+    }
+    if (type === 'error') {
+      modal.error({
+        title: 'Подписка на новости Korobka',
+        content: `${message}`,
+      });
 
-  }
+    }
   };
 
   const getNewProduct = async () => {
@@ -285,6 +255,7 @@ function App() {
             setCart((cart) =>
               cart.filter((item) => item._id != productId)
             );
+            openNotificationError('bottomRight', "Товар удален из корзины")
           }
         })
         .catch(response => {
@@ -359,7 +330,7 @@ function App() {
   const deleteProductFavorite = async (productId) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
       try {
-        await api.delete(`/api/favorite/delete/${productId}`, {userId}, {
+        await api.delete(`/api/favorite/delete/${productId}`, {
           headers: {
             'Authorization': `${token.token}`,
           }
@@ -368,7 +339,8 @@ function App() {
             if(response.data.delete === true) {
               setFavoriteItem((cart) =>
                 cart.filter((item) => item._id != productId)
-              );
+              );  
+              openNotificationError('bottomRight', "Товар удален из избранного")
             }
           })
           .catch(response => {

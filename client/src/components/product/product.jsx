@@ -14,7 +14,7 @@ const Product = ({_id, slider = [], title, price, count, newProduct = true, pret
     const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem, userId } = useContext(AuthContext)
 
     const clickBtnAdd = async () => {
-        // addCart(_id)
+        addCart(_id)
         const product = cart.find(obj => obj._id === _id);
         if(!product) {
             setCountProduct(1)

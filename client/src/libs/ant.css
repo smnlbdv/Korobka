@@ -45,4 +45,8 @@
     color: #ffba37;
 }
 
+.ant-notification-notice-message p {
+    transform: translateY(-1px) !important;
+}
+
 
