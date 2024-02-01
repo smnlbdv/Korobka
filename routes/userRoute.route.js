@@ -24,7 +24,12 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
   const userId = req.params.userId;
   await User.findOne({ _id: userId })
     .populate("order")
-    .populate("favorite")
+    .populate({
+      path: "favorite",
+      populate: {
+        path: "items"
+      },
+    })
     .populate({
       path: "cart",
       populate: {

@@ -7,9 +7,10 @@ import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './product.module.scss'
 
 
-const Product = ({_id, slider = [], title, price, count, favorite = false, newProduct = true, pretext }) => {
+const Product = ({_id, slider = [], title, price, count, newProduct = true, pretext }) => {
 
     const [isAdded, setIsAdded] = useState(false)
+    const [favorite, setFavorite] = useState(false)
     const [countProduct, setCountProduct] = useState()
 
     const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem, userId } = useContext(AuthContext)

@@ -113,7 +113,8 @@ function App() {
           }
 
           if(response.data.favorite && favoriteItem.length == 0) {
-            setFavoriteItem(...response.data.favorite)
+            const newFavorite = [...response.data.favorite.items]
+            setFavoriteItem(newFavorite)
           }
 
           // if(typeof(response.data.order) !== 'string') {
@@ -122,7 +123,7 @@ function App() {
 
         })
         .catch(response => {
-          if(response.status == 401) {
+          if(response.response.status == 401) {
             logout()
             navigate("/api/auth/login");
           }
@@ -305,7 +306,8 @@ function App() {
           'Authorization': `${token.token}`,
         }})
         .then(response => {
-          console.log(response)
+          setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
+          openNotification('bottomRight', response.data.message)
           // const index = cart.findIndex(item => item._id == response.data.product._id);
           // if(index !== -1) {
           //   cart[index]['count'] = response.data.count
