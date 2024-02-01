@@ -13,8 +13,8 @@ import style from './liked.module.scss'
 
 
 const Liked = () => {
-
     const { favoriteItem, contextHolder } = useContext(AuthContext)
+
     return ( 
         <section className={`${style.section_cart} wrapper`}>
         {contextHolder}
@@ -29,9 +29,9 @@ const Liked = () => {
                 favoriteItem.length != 0 ?
                 <div className={style.favorite_items}>
                     {
-                        favoriteItem.map((obj, index) => 
+                        favoriteItem.map((obj) => 
                             <Product
-                                key={index}
+                                key={obj._id}
                                 favorite={true}
                                 {...obj}
                             />

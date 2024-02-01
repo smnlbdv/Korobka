@@ -308,18 +308,6 @@ function App() {
         .then(response => {
           setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
           openNotification('bottomRight', response.data.message)
-          // const index = cart.findIndex(item => item._id == response.data.product._id);
-          // if(index !== -1) {
-          //   cart[index]['count'] = response.data.count
-          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину') 
-          // } else {
-          //   const product = {
-          //     ...response.data.product,
-          //     count: response.data.count
-          //   }
-          //   setCart((prevCart) => [...prevCart, product]);
-          //   openNotification('bottomRight', 'Товар успешно добавлен в корзину')
-          // }
         })
         .catch(response => {
           if(response.response.status == 401) {
@@ -369,11 +357,11 @@ function App() {
   }
 
   const deleteProductFavorite = async (productId) => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    const token = JSON.parse(localStorage.getItem('userData')) || '';
       try {
-        await api.delete(`/api/favorite/delete/${productId}`, {
+        await api.delete(`/api/favorite/delete/${productId}`, {userId}, {
           headers: {
-            'Authorization': `${data.token}`,
+            'Authorization': `${token.token}`,
           }
         })
           .then(response => {

@@ -1,14 +1,19 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
 
 import style from './favoriteHeart.module.scss'
 
 // eslint-disable-next-line react/prop-types
-const FavoriteHeart = ({_id, favorite}) => {
+const FavoriteHeart = ({_id}) => {
 
-    const [isFavorite, setIsFavorite] = useState(favorite);
+    const [isFavorite, setIsFavorite] = useState(false);
 
-    const { addProductFavorite, deleteProductFavorite } = useContext(AuthContext)
+    const { addProductFavorite, deleteProductFavorite, favoriteItem } = useContext(AuthContext)
+
+    useEffect(() => {
+        const isExist = favoriteItem.some((product) => product._id == _id);
+        setIsFavorite(isExist)
+    }, [])
 
     const clickHeart = () => {
         if(isFavorite) {

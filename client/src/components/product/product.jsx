@@ -8,9 +8,7 @@ import style from './product.module.scss'
 
 
 const Product = ({_id, slider = [], title, price, count, newProduct = true, pretext }) => {
-
     const [isAdded, setIsAdded] = useState(false)
-    const [favorite, setFavorite] = useState(false)
     const [countProduct, setCountProduct] = useState()
 
     const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem, userId } = useContext(AuthContext)
@@ -87,7 +85,7 @@ const Product = ({_id, slider = [], title, price, count, newProduct = true, pret
                         <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
                     }
                 </div>
-                <FavoriteHeart _id={_id} favorite={favorite}/> 
+                <FavoriteHeart _id={_id}/> 
             </div>
         </div>
     );
