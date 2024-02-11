@@ -9,6 +9,10 @@ const shema = new mongoose.Schema({
         type: String,
         default: 'Начинающий покупатель'
     },
+    role: {
+        type: Number,
+        default: 0
+    },
     name: {
         type: String,
         default: 'Пользователь',
@@ -36,17 +40,17 @@ const shema = new mongoose.Schema({
     order: {
         type: Types.ObjectId, 
         ref: 'Order',
-        default: ''
+        default: '65b937ebbb6114084771a1b9'
     },
     cart: {
         type: Types.ObjectId,
         ref: 'Cart',
-        default: ''
+        default: '65b937ebbb6114084771a1b9'
     },
     favorite: {
         type: Types.ObjectId,
         ref: 'Favorite',
-        default: ''
+        default: '65b937ebbb6114084771a1b9'
     }
 })
 

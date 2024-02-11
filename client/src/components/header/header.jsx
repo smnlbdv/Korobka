@@ -12,26 +12,32 @@ const Header = () => {
     
     const items = [
         {
-          label: <Link to="ready-gifts">
-                    <li>Для мужчин</li>
-                 </Link>,
+          label: (
+            <Link to="ready-gifts">
+              Для мужчин
+            </Link>
+          ),
           key: '0',
         },
         {
-          label: <Link to="ready-gifts">
-                    <li>На 14 февраля</li>
-                 </Link>,
+          label: (
+            <Link to="ready-gifts">
+              На 14 февраля
+            </Link>
+          ),
           key: '1',
         },
         {
-          label: <Link to="ready-gifts">
-                    <li>Для девушек</li>
-                 </Link>,
+          label: (
+            <Link to="ready-gifts">
+              Для девушек
+            </Link>
+          ),
           key: '2',
         },
       ];
       
-  const { isLogin } = useContext(AuthContext)
+  const { isLogin, role, userId } = useContext(AuthContext)
 
   return (
     <header className={`${style.header}`}>
@@ -45,61 +51,65 @@ const Header = () => {
 
             <nav className={style.navigation}>
                 <ul className={style.list__navigation}>
-                    
-                    {/* <Link to="#"> */}
-                        <li className={style.list__item}>
-                            <p className={style.list__text}>Собрать</p>
-                        </li>
-                    {/* </Link> */}
                     <li className={style.list__item}>
-                        <Dropdown
-                            menu={{
-                            items,
-                            }}
-                            trigger={['click']}
-                        >
+                        <Link to="#">
+                            <p className={style.list__text}>Собрать</p>
+                        </Link>
+                    </li>
+                    <li className={style.list__item}>
+                        <Dropdown menu={{ items }} trigger={['click']}>
                             <a onClick={(e) => e.preventDefault()}>
-                                <Space>
-                                    <p>Готовые подарки</p>
-                                </Space>    
+                            <Space>
+                                <p>Готовые подарки</p>
+                            </Space>    
                             </a>
                         </Dropdown>
                     </li>
-                    <Link to="contacts">
-                        <li className={style.list__item}>
+                    <li className={style.list__item}>
+                        <Link to="contacts">
                             <p className={style.list__text}>Контакты</p>
-                        </li>
-                    </Link>
-                    <Link to="about-us">
-                        <li className={style.list__item}>
+                        </Link>
+                    </li>
+                    <li className={style.list__item}>
+                        <Link to="about-us">
                             <p className={style.list__text}>О нас</p>
-                        </li>
-                    </Link>
+                        </Link>
+                    </li>
                 </ul>
-            </nav>
+                </nav>
             {
                 isLogin ? 
                 <div className={style.user_nav}>
-                    <ul className={style.user_list}>
-                        <Link to="cart">
-                            <li className={style.list_item}>
-                                <img src="/assets/bag.svg" alt="bag logo" />
-                                <p>Корзина</p>
-                            </li>
-                        </Link>
-                        <Link to="liked">
-                            <li className={style.list_item}>
-                                <img src="/assets/heart.svg" alt="favorite logo" />
-                                <p>Избранное</p>
-                            </li>
-                        </Link>
-                        <Link to="profile">
-                            <li className={style.list_item}>
-                                <img src="/assets/user.svg" alt="user logo" />
-                                <p>Профиль</p>
-                            </li>
-                        </Link>
-                    </ul>
+                    {
+                        <ul className={style.user_list}>
+                            <Link to="cart">
+                                <li className={style.list_item}>
+                                    <img src="/assets/bag.svg" alt="bag logo" />
+                                    <p>Корзина</p>
+                                </li>
+                            </Link>
+                            <Link to="liked">
+                                <li className={style.list_item}>
+                                    <img src="/assets/heart.svg" alt="favorite logo" />
+                                    <p>Избранное</p>
+                                </li>
+                            </Link>
+                            <Link to="profile">
+                                <li className={style.list_item}>
+                                    <img src="/assets/user.svg" alt="user logo" />
+                                    <p>Профиль</p>
+                                </li>
+                            </Link>
+                            {
+                                role == 1 ? 
+                                <Link to={`/api/auth/admin/${userId}`}>
+                                    <button className={style.admin__btn} type="button">Админ панель</button>
+                                </Link>
+                                :
+                                ''
+                            }
+                        </ul>
+                    }
                 </div>
                 :
                 <div className={style.buttons_block}>

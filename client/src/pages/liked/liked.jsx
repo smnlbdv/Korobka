@@ -29,9 +29,9 @@ const Liked = () => {
                 favoriteItem.length != 0 ?
                 <div className={style.favorite_items}>
                     {
-                        favoriteItem.map((obj) => 
+                        favoriteItem.map((obj, index) => 
                             <Product
-                                key={obj._id}
+                                key={index}
                                 favorite={true}
                                 {...obj}
                             />

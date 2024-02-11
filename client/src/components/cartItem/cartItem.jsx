@@ -5,32 +5,32 @@ import { AuthContext } from "../../context/authContext.js";
 import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
 
-const CartItem = ({ _id, slider, title, pretext, price, count, checkAll }) => {
-  const [choose, setСhoose] = useState(checkAll);
+const CartItem = ({ _id, slider, title, pretext, price, count }) => {
   const [counts, setCounts] = useState(count);
-  const { deleteItemCart } = useContext(AuthContext);
-
-  useEffect(() => {
-    setСhoose(checkAll);
-  }, [checkAll]);
-
-  const clickCheckButton = () => {
-    setСhoose(!choose);
-  };
+  const [isFavorite, setIsFavorite] = useState(false);
+  const { cart,  deleteItemCart, deleteProductFavorite, addProductFavorite, favoriteItem } = useContext(AuthContext);
 
   const clickDeleteButton = () => {
     deleteItemCart(_id);
   };
 
+  useEffect(() => {
+    const isExist = favoriteItem.some((product) => product._id == _id);
+    setIsFavorite(isExist)
+  }, [cart])
+
+  const clickHeart = () => {
+    if(isFavorite) {
+        deleteProductFavorite(_id)
+        setIsFavorite(false)
+    } else {
+        addProductFavorite(_id) 
+        setIsFavorite(true)
+    }
+}
+
   return (
     <div className={style.cart__item_block}>
-      <button className={style.btn__check} onClick={clickCheckButton}>
-        <img
-          className={style.image_check}
-          src={choose ? "/assets/yes-check.svg" : "/assets/no-check.svg"}
-          alt="check"
-        />
-      </button>
       <img className={style.image_product} src={slider[0]} alt="Image item" />
       <div className={style.cart__item_info}>
         <p className={style.title}>{title}</p>
@@ -42,6 +42,9 @@ const CartItem = ({ _id, slider, title, pretext, price, count, checkAll }) => {
         _id={_id}
       />
       <p className={style.price}>{price} BYN</p>
+      <div className={!isFavorite ? style.page__product_love : style.page__product_nolove} onClick={clickHeart}>
+        <img className={style.favorite} src={isFavorite ? "/assets/favorite-love.svg" : "/assets/love.svg"} alt=""/>
+      </div>
       <button className={style.btn__delete_item}>
         <img
           className={style.delete_icon}

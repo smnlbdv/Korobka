@@ -9,25 +9,14 @@ import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import style from './cart.module.scss'
 
 const Cart = () => {
-
-    const [checkAll, setCheckAll] = useState(false)
-    const { cart, setCart, calculatePrice, cartTotalPrice, contextHolder } = useContext(AuthContext)
-
+    const { cart, calculatePrice, cartTotalPrice     } = useContext(AuthContext)
 
     useEffect(() => {
         calculatePrice(); 
     }, [cart]); 
 
-    const clickButtonAll = () => {  
-        setCheckAll(!checkAll)
-    }
-    const clearCart = () => {   
-        setCart([])
-    }
-
     return ( 
         <section className={`${style.section_cart} wrapper`}>
-            {contextHolder}
             <ul className="bread-crumbs">
                 <Link to="/">
                 <li>Главная</li>
@@ -39,20 +28,12 @@ const Cart = () => {
             cart.length !== 0 ?
             <div className={style.cart__main_block}>
                 <div className={style.cart__left_block}>
-                    <div className={style.cart__block__buttons}>
-                        <div className={style.cart__block_check}>
-                            <img className={style.cart__img_check} src={checkAll ? "/assets/yes-check.svg" : "/assets/no-check.svg"} alt="check" />
-                            <button className={style.cart__button_all} onClick={clickButtonAll}>Выбрать все</button>
-                        </div>
-                        <button className={style.cart__button_delete} onClick={clearCart}>Удалить все</button>
-                    </div>
                     <span className={style.cart__span}></span>
                     <div className={style.cart__list}>
                         {
                             cart.map((obj, index) => 
                                 <CartItem
                                     key={index}
-                                    checkAll={checkAll}
                                     {...obj}
                                 />
                             )

@@ -81,6 +81,7 @@ reviewsRoute.get('/:id', async (req, res) => {
     try {
         const reviewsProduct = await Review.find({product: req.params.id}).populate('owner comments');
         const modifiedData = modifiedReaviews(reviewsProduct)
+
         res.status(200).json(modifiedData);
 
     } catch (error) {

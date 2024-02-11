@@ -27,7 +27,9 @@ const Review = ({img, name, lastName, text, data, stars, likes, tags = [], revie
                     </div>
                     <div className={style.footer__review}>
                         <span className={style.date}>{data}</span>
-                        <LikeButton likes={likes}/>
+                        {
+                            likes && <LikeButton likes={likes}/>
+                        }
                     </div>
                 </div>
                 {/* {

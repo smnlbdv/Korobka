@@ -17,7 +17,7 @@ productRoute.get('/new', async (req, res) => {
     }
 })
 
-productRoute.get('/:id/:userId', async (req, res) => {
+productRoute.get('/:id', async (req, res) => {
     try {
         await Product.find({_id: req.params.id})
                      .then((product) => {

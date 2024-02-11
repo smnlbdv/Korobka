@@ -1,11 +1,11 @@
 import jwtToken from 'jsonwebtoken'
 
-const generationToken = (userId) => {
+const generationToken = (userId, role) => {
 
     const jwtSecret = 'ssdjksdlfksjdflkjdflkjdflkjdk'
 
     const token = jwtToken.sign(
-        {userId: userId}, 
+        {userId: userId, role: role}, 
         jwtSecret,
         {expiresIn: '1h'}
     )

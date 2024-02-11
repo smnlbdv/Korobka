@@ -36,10 +36,15 @@
 }
 
 .cart__button_delete {
-    color: #FC4D4D;
+    color: #ffffff;
     font-size: 14px;
     font-style: normal;
     font-weight: 500; 
+    border-radius: 20px;
+    font-size: 13px;
+    background:#FC4D4D !important;
+    padding: 8px 20px;
+    margin-right: 10px;
 }
 
 .cart__block_check {

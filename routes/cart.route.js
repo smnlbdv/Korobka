@@ -20,35 +20,53 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
                     quantity: 1
                 };
 
-                cartItem.items.push(newItem);
-                await cartItem.save();
+                const item = await CartItem.findOneAndUpdate(
+                    { owner: userId },
+                    { $push: { items: newItem } },
+                    { new: true }
+                ).populate('items.product');
+            
+                const addedItem = item.items.find(item => item.product._id.toString() === itemId.toString());
 
-                const newCartItem = await CartItem.find({ owner: userId, items: { $elemMatch: { product: itemId } } })
-                                                .populate('items.product');    
-
-                const product = newCartItem[0].items[0].product;
-                const count = newCartItem[0].items[0].quantity
-                res.status(201).json({product, count})
+                const product = addedItem.product;
+                const count = addedItem.quantity;
+                res.status(201).json({ product, count });
 
             } else {
-                const cartItemIndex = cartItem.items.findIndex(item => item.product == itemId);
-                if (cartItemIndex != -1) {
-                    cartItem.items[cartItemIndex].quantity += 1;
+
+                const existingItem = cartItem.items.find((item) => item.product.equals(itemId));
+
+                if (existingItem) {
+                    const item = await CartItem.findOneAndUpdate(
+                        { owner: userId, items: { $elemMatch: { product: itemId } } },
+                        { $inc: { 'items.$.quantity': 1 } },
+                        { new: true }
+                    ).populate('items.product');
+
+                    const addedItem = item.items.find(item => item.product._id.toString() === itemId.toString());
+
+                    const product = addedItem.product;
+                    const count = addedItem.quantity;
+                    res.status(201).json({ product, count });
+
                 } else {
                     const newItem = {
                         product: itemId,
                         quantity: 1
                     };
-                    cartItem.items.push(newItem);
+    
+                    const item = await CartItem.findOneAndUpdate(
+                        { owner: userId },
+                        { $push: { items: newItem } },
+                        { new: true }
+                    ).populate('items.product');
+
+                    const addedItem = item.items.find(item => item.product._id.toString() === itemId.toString());
+
+                    const product = addedItem.product;
+                    const count = addedItem.quantity;
+                    res.status(201).json({ product, count });
                 }
-                await cartItem.save();
-
-                const newCartItem = await CartItem.find({ owner: userId, items: { $elemMatch: { product: itemId } } })
-                                                .populate('items.product');
-
-                const product = newCartItem[0].items[0].product;
-                const count = newCartItem[0].items[0].quantity
-                res.status(201).json({product, count})
             }
         } else {
             const item = {
@@ -67,8 +85,7 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error);
-        // res.status(400).json({error: error.message})
+        res.status(400).json({error: error.message})
     }
 })
 

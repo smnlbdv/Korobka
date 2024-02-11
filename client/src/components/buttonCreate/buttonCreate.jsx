@@ -38,7 +38,7 @@ const ButtonCreate = ({_id, text, sendEmailData = false, type, getCountProduct, 
     }
 
     return ( 
-        <button className={style.button_create } onClick={sendEmailData ? sendEmailMessage : openCounterBlock} type={type} disabled={disabled}>
+        <button className={style.button_create } type={type} disabled={disabled}>
             {
             !isCounter ? 
                 text

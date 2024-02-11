@@ -26,7 +26,7 @@ const Login = () => {
         try {
             await api.post('/api/auth/login', {...form})
             .then(res => {
-                login(res.data.token, res.data.userId)
+                login(res.data.token, res.data.userId, res.data.role)
                 if(res.status === 200) {
                     nav("/")
                 }

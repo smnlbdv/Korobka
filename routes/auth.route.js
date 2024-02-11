@@ -73,13 +73,34 @@ router.post('/login', loginValidation, async (req, res) => {
             return res.status(400).json({message: "Пароли не совпадают"})
         }
 
-        const token = generationToken(user.id)
+        const token = generationToken(user.id, user.role)
 
         res.json({
             token,
-            userId: user.id
+            userId: user.id,
+            role: user.role
         })
 
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.get('/admin/:userId', async (req, res) => {
+    try {
+        const response = req.params.userId
+        
+        await User.findOne({_id: response})
+                  .then((user) => {
+                    if(user.role == 1) {
+                        res.status(200).json({message: true})
+                    } else {
+                        res.status(400).json({message: "Вы не админ"})
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error)
+                  })
     } catch (error) {
         console.log(error)
     }

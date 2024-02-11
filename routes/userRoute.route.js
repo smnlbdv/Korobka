@@ -7,6 +7,7 @@ import verifyToken from "../validation/verifyToken.js";
 import multer from "multer";
 
 import User from "../models/User.js";
+import Order from "../models/Order.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -40,7 +41,6 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
       },
     })
     .then((item) => {
-      console.log(item)
       res.status(201).json(item);
     })
     .catch((error) => console.log(error));

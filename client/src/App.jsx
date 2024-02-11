@@ -23,6 +23,7 @@ const Profile = lazy(() => import("./pages/profile/profile.jsx"));
 const ProductPage= lazy(() => import("./pages/productPage/productPage.jsx"));
 const Cart= lazy(() => import("./pages/cart/cart.jsx"));
 const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
+const Admin = lazy(() => import("./pages/admin/admin.jsx"));
 
 function App() {
   const [reviewsList, setReviewsList] = useState([])
@@ -33,7 +34,7 @@ function App() {
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
-  const { login, logout, token, userId } = useAuth();
+  const { login, logout, token, userId, role, setRole } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const isLogin = !!token;
@@ -55,11 +56,11 @@ function App() {
   }, [cart]);
 
   const getProfile = async () => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.get(`/api/profile/${data.userId}`, {
+      await api.get(`/api/profile/${userId}`, {
         headers: {
-            'Authorization': `${data.token}`,
+            'Authorization': `${token.token}`,
         }})
         .then(response => {
 
@@ -72,6 +73,7 @@ function App() {
           }
 
           setProfile({...userObject})
+          setRole(userObject.role)
 
           if(response.data.cart && cart.length == 0) {
             const newCart = [...response.data.cart.items]
@@ -103,7 +105,6 @@ function App() {
       console.log("Ошибка", error);
     }
   }
-
 
   const countDown = (type, message) => {
     if(type === 'success') {
@@ -165,18 +166,20 @@ function App() {
           'Authorization': `${token.token}`,
         }})
         .then(response => {
-          const index = cart.findIndex(item => item._id == response.data.product._id);
-          if(index !== -1) {
-            cart[index]['count'] = response.data.count
-            openNotification('bottomRight', 'Товар успешно добавлен в корзину') 
+
+          console.log(response.data)
+          if(response.data.count > 1) {
+            const cartItemIndex = cart.findIndex(item => item._id === response.data.product._id);
+            cart[cartItemIndex].count = response.data.count;
+            openNotification('bottomRight', 'Товар успешно добавлен в корзину');
           } else {
             const product = {
               ...response.data.product,
-              count: response.data.count
-            }
-            setCart((prevCart) => [...prevCart, product]);
-            openNotification('bottomRight', 'Товар успешно добавлен в корзину')
-          }
+              count: response.data.count,
+            };
+            setCart(prevCart => [...prevCart, product]);
+            openNotification('bottomRight', 'Товар успешно добавлен в корзину');
+          }          
         })
         .catch(response => {
           if(response.response.status == 401) {
@@ -338,7 +341,7 @@ function App() {
           .then(response => {
             if(response.data.delete === true) {
               setFavoriteItem((cart) =>
-                cart.filter((item) => item._id != productId)
+                cart.filter((item) => item._id !== productId)
               );  
               openNotificationError('bottomRight', "Товар удален из избранного")
             }
@@ -480,6 +483,25 @@ function App() {
       console.log("Ошибка", error);
     }
   }
+
+  const adminFetch = async () => {
+    let message;
+    try {
+      await api.get(`/api/auth/admin/${userId}`)
+        .then(response => {
+          message = response.data.message;    
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+      });
+    } catch (error) {
+      console.log(error.message)
+    }
+    return message
+  }
   
 
   return (
@@ -490,6 +512,7 @@ function App() {
         token,
         userId,
         isLogin,
+        role,
         addCart,
         cart,
         setCart,
@@ -515,26 +538,27 @@ function App() {
         updatePassUser,
         reviewsList,
         getBestReviews,
-        calculatePrice
+        calculatePrice,
+        adminFetch
       }}
     >
         <Routes>
           <Route
-            path="/"
-            element={
-              <Suspense fallback={<Loading />}>
-                <HomePage/>
-              </Suspense>
-            }
-          >
-            <Route index element={<Main />} />
-            <Route path="ready-gifts" element={<ReadyGifts />} />
-            <Route path="contacts" element={<Contacts />} />
-            <Route path="about-us" element={<AboutUs />} />
-            <Route path="cart" element={<Cart />} />
-            <Route path="liked" element={<Liked />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="product/:id/:userId" element={<ProductPage/>}/>
+              path="/"
+              element={
+                <Suspense fallback={<Loading />}>
+                  <HomePage/>
+                </Suspense>
+              }
+            >
+              <Route index element={<Main />} />
+              <Route path="ready-gifts" element={<ReadyGifts />} />
+              <Route path="contacts" element={<Contacts />} />
+              <Route path="about-us" element={<AboutUs />} />
+              <Route path="cart" element={<Cart />} />
+              <Route path="liked" element={<Liked />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="product/:id" element={<ProductPage/>}/>
           </Route>
           
           <Route path="/api/auth/*" element={
@@ -545,6 +569,7 @@ function App() {
             <Route path="registration" element={<Registration />} />
             <Route path="login" element={<Login />} />
             <Route path="forgot" element={<Forgot />} />
+            <Route path="admin/:userId" element={<Admin />} />
           </Route>
         </Routes>
     </AuthContext.Provider>

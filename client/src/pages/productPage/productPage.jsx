@@ -18,7 +18,7 @@ const ProductPage = () => {
     const [selectedProduct, setSelectedProduct] = useState([]);
     const [productReviews, setProductReviews] = useState([]);
     const [sliderProduct, setSliderProduct]= useState([]);
-    const { id, userId } = useParams();
+    const { id } = useParams();
     const { cart, logout, contextHolder, favoriteItem, addCart } = useContext(AuthContext);
     const mainImage = useRef()
     const navigate = useNavigate();
@@ -37,20 +37,26 @@ const ProductPage = () => {
         label: 'Отзывы',
         children: 
         <div className={style.block__all_reviews}>
-          {productReviews.map((item, index) => (
-              <Review
-                key={index}
-                img={item.owner.avatarUser}
-                name={item.owner.name}
-                lastName={item.owner.surname}
-                text={item.text}
-                data={item.date}
-                stars={item.stars}
-                likes={item.likes}
-                tags={item.tags}
-                reviewProduct={true}
-              />
-            ))
+          {productReviews.length !== 0 ? (
+              productReviews.map((item, index) => (
+                <Review
+                  key={index}
+                  img={item.owner.avatarUser}
+                  name={item.owner.name}
+                  lastName={item.owner.surname}
+                  text={item.text}
+                  data={item.date}
+                  stars={item.stars}
+                  likes={item.likes}
+                  tags={item.tags}
+                  reviewProduct={true}
+                />
+              ))
+            ) : (
+              <div className={style.block__null__product}>
+                <p>У данного товара нет отзывов</p>
+              </div>
+            )
           }
         </div>
         ,
@@ -61,7 +67,7 @@ const ProductPage = () => {
     const fetchData = async () => {
       const token = JSON.parse(localStorage.getItem('userData')) || '';
       try {
-        await api.get(`/api/products/${id}/${userId}`, {
+        await api.get(`/api/products/${id}`, {
           headers: {
             'Authorization': `${token.token}`,
           },
@@ -124,7 +130,20 @@ const ProductPage = () => {
         await api.get(`/api/reviews/${id}`, {
         })
           .then(response => {
+
             if(response.status == 200) {
+
+              const newArray = response.data
+              newArray.forEach((element, index) => {
+                if(element.owner == null) {
+                  newArray[index].owner = {
+                    avatarUser: 'http://localhost:5000/avatar/default-avatar.png',
+                    name: 'Василий',
+                    surname: 'Иванкович'
+                  }
+                }
+              });
+
               setProductReviews(response.data)
             } 
           })

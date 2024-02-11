@@ -7,11 +7,11 @@ import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './product.module.scss'
 
 
-const Product = ({_id, slider = [], title, price, count, newProduct = true, pretext }) => {
+const Product = ({_id, slider = [], title, price, pretext }) => {
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
 
-    const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem, userId } = useContext(AuthContext)
+    const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem  } = useContext(AuthContext)
 
     const clickBtnAdd = async () => {
         addCart(_id)
@@ -50,7 +50,7 @@ const Product = ({_id, slider = [], title, price, count, newProduct = true, pret
 
     return (
         <div className={style.new_box}>
-            <Link to={`/product/${_id}/${userId}`} key={_id}>
+            <Link to={`/product/${_id}`} key={_id}>
                 <div className={style.info}>
                     <div className={style.image_box}>
                         <img className={style.image} src={slider[0]} alt="image new" />
