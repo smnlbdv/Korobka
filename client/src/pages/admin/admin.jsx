@@ -6,9 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Loading from "../../components/loading/loading.jsx";
 const HomePageAdmin = lazy(() => import("../../pages/home/homePageAdmin.jsx"));
-
-import style from './admin.module.scss'
-
+const ProductPage = lazy(() => import("../adminProduct/productPage.jsx"));
 
 const Admin = () => {
 
@@ -55,7 +53,7 @@ const Admin = () => {
               </Suspense>
             }
           >
-            {/* <Route index element={<MainAdmin />} /> */}
+            <Route index element={<ProductPage />} />
         </Route>
       </Routes>
      );

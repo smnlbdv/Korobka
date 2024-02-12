@@ -1,0 +1,25 @@
+.info {
+    display: flex;
+    align-items: center;
+    color: rgb(239, 239, 239);
+    background-color: #090d8e;
+    border-radius: 10px;
+    column-gap: 15px;
+    padding: 20px;
+}
+
+.image_box {
+    width: 110px;
+    height: 110px;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+.text_block {
+    max-width: 350px;
+    font-size: 14px;
+}
