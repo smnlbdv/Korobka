@@ -67,11 +67,11 @@ const AdminProductItem = ({_id, slider = [], title, price, pretext }) => {
                 </div>
             </Link>
             <div className={style.cart__button}>
-                <button>
-                    <img src="" alt="" />
+                <button className={style.button}>
+                    <p>Обновить продукт</p>
                 </button>
-                <button>
-                    <img src="" alt="" />
+                <button className={style.button}>
+                    <p>Удалить продукт</p>
                 </button>
             </div>
         </div>

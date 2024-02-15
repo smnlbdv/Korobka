@@ -23,3 +23,16 @@
     max-width: 350px;
     font-size: 14px;
 }
+
+.button {
+    border: 0;
+    font-size: 13px;
+    background-color: blue;
+    margin-top: 5px;
+    padding: 8px 15px;
+    border-radius: 10px;
+
+    &:first-child {
+        margin-right: 10px;
+    }
+}

@@ -10,7 +10,7 @@ const NavigateAdmin = () => {
                 <li>Пользователи</li>
                 <li>Email</li>
             </ul>
-            <p className={style.lowtitle__panel}>2023 © Все права защищены</p>
+            <p className={style.lowtitle__panel}>2024 © Все права защищены</p>
         </div>
      );
 }
