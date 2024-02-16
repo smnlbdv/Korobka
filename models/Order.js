@@ -25,19 +25,19 @@ const shema = new mongoose.Schema({
         type: String,
         default: 'Новый'
     },
-    shippingAddress: {
+    address: {
         type: String,
         required: true
     },
-    paymentMethod: {
+    wayPay: {
         type: String,
         required: true
     },
-    createdAt: {
+    createdOrder: {
         type: Date,
         default: Date.now,
     },
-    updatedAt: {
+    updatedOrder: {
         type: Date,
     }
 })

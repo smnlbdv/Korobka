@@ -36,12 +36,11 @@ const shema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    avatarUrl: String,
-    order: {
+    order: [{
         type: Types.ObjectId, 
         ref: 'Order',
         default: '65b937ebbb6114084771a1b9'
-    },
+    }],
     cart: {
         type: Types.ObjectId,
         ref: 'Cart',
