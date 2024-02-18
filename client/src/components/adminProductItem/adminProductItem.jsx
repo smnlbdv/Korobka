@@ -7,7 +7,7 @@ import { Link  } from 'react-router-dom';
 import style from './adminProductItem.module.scss'
 
 
-const AdminProductItem = ({_id, slider = [], title, price, pretext }) => {
+const AdminProductItem = ({_id, img, title, price, preText }) => {
     
     // const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem  } = useContext(AuthContext)
 
@@ -51,12 +51,12 @@ const AdminProductItem = ({_id, slider = [], title, price, pretext }) => {
             <Link to={`/product/${_id}`} key={_id}>
                 <div className={style.info}>
                     <div className={style.image_box}>
-                        <img className={style.image} src={slider[0]} alt="image new" />
+                        <img className={style.image} src={img} alt="image new" />
                         {/* {newProduct && <img className={style.icon_new_box} src="./assets/icon-new.svg" alt="" />} */}
                     </div>
                     <div className={style.text_block}>
                         <h2 className={style.title}>{title}</h2>
-                        <p className={style.text}>{pretext}</p>
+                        <p className={style.text}>{preText}</p>
                     </div>
                     <div className={style.block_price}>
                         <div className={style.price}>

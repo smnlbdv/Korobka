@@ -16,7 +16,7 @@ const shema = new mongoose.Schema({
         type: String,
         required: true
     },
-    pretext: {
+    preText: {
         type: String,
         required: true
     },

@@ -11,18 +11,57 @@ import InputProfile from "../../components/inputProfile/inputProfile.jsx";
 
 const ProductPage = () => {
   const [allProduct, setAllProduct] = useState([]);
+  const [selectedImage, setSelectedImage] = useState('');
+  const [pathImage, setPathImage] = useState('');
+  const [selectedSlider, setSelectedSlider] = useState([]);
+  const [pathSlider, setPathSlider] = useState([]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    setPathImage(file);
+
+    reader.onload = () => {
+      setSelectedImage(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleSliderImage = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    if(pathSlider.length < 4) {
+      setPathSlider([...pathSlider, file]);
+    }
+
+    reader.onload = () => {
+      if(selectedSlider.length < 4) {
+        setSelectedSlider([...selectedSlider, reader.result]);
+      }
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const deleteSliderImage = (indexItem) => {
+    const updatedArray = selectedSlider.filter((item, index) => index !== indexItem);
+    setSelectedSlider([...updatedArray])
+  }
 
   const formikProduct = useFormik({
     initialValues: {
-      titleProduct: "",
+      title: "",
       text: "",
       price: "",
       category: "",
-      preText: "",
+      pretext: "",
       pageDesc: "",
     },
     validationSchema: Yup.object({
-      titleProduct: Yup.string().required(
+      title: Yup.string().required(
         'Поле "Название продукта" обязательно для заполнения'
       ),
       text: Yup.string().required('Поле "Текст" обязательно для заполнения'),
@@ -37,15 +76,46 @@ const ProductPage = () => {
         'Поле "Описание страницы" обязательно для заполнения'
       ),
     }),
-    onSubmit: (item) => {
+    onSubmit: async (item) => {
       console.log(item);
+      if(selectedImage.length == 0) {
+        console.log('Выберите основное фото')
+      } else if(selectedSlider.length < 4) {
+        console.log('Недостаточно фото для слайдера')
+      } else {
+
+        const formData = new FormData();
+        formData.append("image", pathImage);
+        
+        pathSlider.forEach(image => {
+          formData.append("sliderImages", image, image.name);
+        });
+
+        Object.keys(item).forEach(key => {
+          formData.append(key, item[key]);
+        });
+
+        try {
+          const token = JSON.parse(localStorage.getItem('userData')) || '';
+          await api.post("/api/admin/add", formData, {
+            headers: {
+              'Authorization': `${token.token}`,
+              'Content-Type': 'multipart/form-data',
+            }})
+            .then(() => {
+              console.log('Товaр добавлен')
+            })
+            .catch((error) => alert(error.message));
+        } catch (error) {
+          console.log("Ошибка", error);
+        }
+      }
     },
   });
 
   const getAllProduct = async () => {
     try {
-      await api
-        .get("/api/products/all")
+      await api.get("/api/products/all")
         .then((response) => {
           setAllProduct(response.data.product);
         })
@@ -75,7 +145,7 @@ const ProductPage = () => {
       key: "2",
       label: "Добавление товара",
       children: (
-        <div>
+        <div className={style.main__block_product}>
           <form
             className={style.form__add}
             onSubmit={formikProduct.handleSubmit}
@@ -83,13 +153,13 @@ const ProductPage = () => {
             <div className={style.form__block__input}>
               <p>Введите название товара:</p>
               <InputProfile
-                id="titleProduct"
-                name="titleProduct"
+                id="title"
+                name="title"
                 typeInput={"text"}
-                value={formikProduct.values.titleProduct}
+                value={formikProduct.values.title}
                 onChange={formikProduct.handleChange}
                 placeholder={"Денежный бокс"}
-                errorChange={formikProduct.errors.titleProduct && "true"}
+                errorChange={formikProduct.errors.title && "true"}
               />
             </div>
             <div className={style.form__block__input}>
@@ -130,17 +200,19 @@ const ProductPage = () => {
             <div className={style.form__block__input}>
               <p>Введите текст для карточки товара:</p>
               <textarea 
-                id="preText"
-                name="preText"
-                value={formikProduct.values.preText}
+                id="pretext"
+                name="pretext"
+                value={formikProduct.values.pretext}
                 onChange={formikProduct.handleChange}
                 placeholder={"Это самый..."}
-                className={formikProduct.errors.preText ? style.block__input__error : style.block__input}
+                className={formikProduct.errors.pretext ? style.block__input__error : style.block__input}
               ></textarea>
             </div>
             <div className={style.form__block__buttons}>
-              <button>Выбрать основное фото</button>
-              <button>Выбрать фото</button>
+              <label htmlFor="mainImage">Выбрать основное фото</label>
+              <input id="mainImage" name="mainImage" type="file" accept="image/*" onChange={handleImageChange} />
+              <label htmlFor="slide-image">Выбрать фото</label>
+              <input id="slide-image" name="slide-image" type="file" accept="image/*" onChange={handleSliderImage} />
             </div>
             <div className={style.form__block__input}>
               <p>Введите описание для страницы описания товара:</p>
@@ -158,10 +230,17 @@ const ProductPage = () => {
               Добавить новый товар
             </button>
           </form>
-          <div>
-            <img src="" alt="" />
-
-            <div></div>
+          <div className={style.product__image}>
+            <div className={style.block__rigth}>
+              <img className={style.main__product__image} src={selectedImage} alt="" onDoubleClick={() => setSelectedImage(null)}/>
+              <div className={style.slider__block}>
+                {
+                  selectedSlider.map((item, index) => (
+                    <img key={index} src={item} alt="Slider image" onDoubleClick={() => deleteSliderImage(index)}/>
+                  ))
+                }
+              </div>
+            </div>
           </div>
         </div>
       ),
