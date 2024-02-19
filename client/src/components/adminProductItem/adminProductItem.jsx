@@ -5,11 +5,12 @@ import { Link  } from 'react-router-dom';
 
 // import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './adminProductItem.module.scss'
+import { AdminContext } from "../../context/adminContext.js";
 
 
 const AdminProductItem = ({_id, img, title, price, preText }) => {
     
-    // const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem  } = useContext(AuthContext)
+    const {deleteProductDB} = useContext(AdminContext);
 
     // const clickBtnAdd = async () => {
     //     addCart(_id)
@@ -70,7 +71,7 @@ const AdminProductItem = ({_id, img, title, price, preText }) => {
                 <button className={style.button}>
                     <p>Обновить продукт</p>
                 </button>
-                <button className={style.button}>
+                <button className={`${style.button} ${style.button__delete}`} onClick={() => deleteProductDB(_id)}>
                     <p>Удалить продукт</p>
                 </button>
             </div>

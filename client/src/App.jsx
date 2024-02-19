@@ -569,7 +569,7 @@ function App() {
             <Route path="registration" element={<Registration />} />
             <Route path="login" element={<Login />} />
             <Route path="forgot" element={<Forgot />} />
-            <Route path="admin/:userId" element={<Admin />} />
+            <Route path="admin/:userId/*" element={<Admin />} />
           </Route>
         </Routes>
     </AuthContext.Provider>

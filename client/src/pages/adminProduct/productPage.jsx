@@ -1,20 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Tabs } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 import style from "./productPage.module.scss";
 import api from "../../api/api.js";
 
 import AdminProductItem from "../../components/adminProductItem/adminProductItem.jsx";
 import InputProfile from "../../components/inputProfile/inputProfile.jsx";
+import { AdminContext } from "../../context/adminContext.js";
+import { AuthContext } from "../../context/authContext.js";
 
 const ProductPage = () => {
-  const [allProduct, setAllProduct] = useState([]);
   const [selectedImage, setSelectedImage] = useState('');
   const [pathImage, setPathImage] = useState('');
   const [selectedSlider, setSelectedSlider] = useState([]);
   const [pathSlider, setPathSlider] = useState([]);
+  const navigate = useNavigate();
+
+  const { countDown, openNotification, allProduct, setAllProduct } = useContext(AdminContext);
+  const {logout} = useContext(AuthContext);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -57,7 +63,7 @@ const ProductPage = () => {
       text: "",
       price: "",
       category: "",
-      pretext: "",
+      preText: "",
       pageDesc: "",
     },
     validationSchema: Yup.object({
@@ -76,12 +82,14 @@ const ProductPage = () => {
         'Поле "Описание страницы" обязательно для заполнения'
       ),
     }),
-    onSubmit: async (item) => {
-      console.log(item);
-      if(selectedImage.length == 0) {
-        console.log('Выберите основное фото')
+    onSubmit: async (item, { resetForm }) => {
+
+      if(selectedImage.length == 0 && selectedSlider.length < 4) {
+        countDown('error', 'Выберите фото для товара')
+      } else if(selectedImage.length == 0) {
+        countDown('error', 'Выберите пожалуйста основное фото товара')
       } else if(selectedSlider.length < 4) {
-        console.log('Недостаточно фото для слайдера')
+        countDown('error', `Выберите еще ${4 - selectedSlider.length} фото для слайдера`)
       } else {
 
         const formData = new FormData();
@@ -102,10 +110,25 @@ const ProductPage = () => {
               'Authorization': `${token.token}`,
               'Content-Type': 'multipart/form-data',
             }})
-            .then(() => {
-              console.log('Товaр добавлен')
+            .then((response) => {
+              if(response.status === 202) {
+                resetForm();
+                setSelectedImage('')
+                setSelectedSlider([])
+                setPathImage('')
+                setPathSlider([])
+                setAllProduct((prev) => [...prev, response.data.newProduct])
+                openNotification('bottomRight', 'Товар успешно добавлен БД');
+              }
             })
-            .catch((error) => alert(error.message));
+            .catch((response) => 
+              {
+                if(response.response.status == 401) {
+                  logout()
+                  navigate("/api/auth/login");
+                }
+              }
+            );
         } catch (error) {
           console.log("Ошибка", error);
         }
@@ -113,21 +136,6 @@ const ProductPage = () => {
     },
   });
 
-  const getAllProduct = async () => {
-    try {
-      await api.get("/api/products/all")
-        .then((response) => {
-          setAllProduct(response.data.product);
-        })
-        .catch((error) => alert(error.message));
-    } catch (error) {
-      console.log("Ошибка", error);
-    }
-  };
-
-  useEffect(() => {
-    getAllProduct();
-  }, []);
 
   const itemsTabs = [
     {
@@ -200,12 +208,12 @@ const ProductPage = () => {
             <div className={style.form__block__input}>
               <p>Введите текст для карточки товара:</p>
               <textarea 
-                id="pretext"
-                name="pretext"
-                value={formikProduct.values.pretext}
+                id="preText"
+                name="preText"
+                value={formikProduct.values.preText}
                 onChange={formikProduct.handleChange}
                 placeholder={"Это самый..."}
-                className={formikProduct.errors.pretext ? style.block__input__error : style.block__input}
+                className={formikProduct.errors.preText ? style.block__input__error : style.block__input}
               ></textarea>
             </div>
             <div className={style.form__block__buttons}>
@@ -226,7 +234,7 @@ const ProductPage = () => {
               ></textarea>
             </div>
 
-            <button className={style.form__buttons}>
+            <button type="submit" className={style.form__buttons}>
               Добавить новый товар
             </button>
           </form>
