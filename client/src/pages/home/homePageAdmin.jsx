@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 import NavigateAdmin from "../../components/navigateAdmin/navigateAdmin";
 
-import style from './homePafeAdmin.module.scss'
+import style from './homePageAdmin.module.scss'
 import { AdminContext } from "../../context/adminContext";
 
 const HomePageAdmin = () => {

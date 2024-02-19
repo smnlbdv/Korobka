@@ -35,7 +35,6 @@
 }
 
 .product__image_active {
-    width: 80%;
     height: 80%;
     object-fit: cover;
 }
@@ -95,8 +94,8 @@
     }
     .share__icon__link {
         cursor: pointer;
-        width: 34px;
-        height: 34px;
+        width: 30px;
+        height: 30px;
 
         img {
             width: 100%;
@@ -245,6 +244,6 @@
 
     p {
         color: white;
-        font-size: 19px;
+        font-size: 16px;
     }
 }

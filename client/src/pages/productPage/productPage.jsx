@@ -182,7 +182,7 @@ const ProductPage = () => {
               <div className={style.block__adding__product}>
                   <div className={style.product__image}>
                       <div className={style.product__image_main}>
-                        <img className={style.product__image_active} ref={mainImage} src={sliderProduct[0]} alt="Product image" />
+                        <img className={style.product__image_active} ref={mainImage} src={selectedProduct.img} alt="Product image" />
                       </div>
                       <div className={style.block__slider_item}>
                         {sliderProduct.map((item, index) => (

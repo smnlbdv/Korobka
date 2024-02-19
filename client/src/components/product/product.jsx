@@ -7,7 +7,7 @@ import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './product.module.scss'
 
 
-const Product = ({_id, slider = [], title, price, pretext }) => {
+const Product = ({_id, img, title, price, preText }) => {
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
 
@@ -53,12 +53,12 @@ const Product = ({_id, slider = [], title, price, pretext }) => {
             <Link to={`/product/${_id}`} key={_id}>
                 <div className={style.info}>
                     <div className={style.image_box}>
-                        <img className={style.image} src={slider[0]} alt="image new" />
+                        <img className={style.image} src={img} alt="image new" />
                         {/* {newProduct && <img className={style.icon_new_box} src="./assets/icon-new.svg" alt="" />} */}
                     </div>
                     <div className={style.text_block}>
                         <h2 className={style.title}>{title}</h2>
-                        <p className={style.text}>{pretext}</p>
+                        <p className={style.text}>{preText}</p>
                     </div>
                     <div className={style.block_price}>
                         <div className={style.price}>
