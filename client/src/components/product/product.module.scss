@@ -1,9 +1,17 @@
 .new_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     max-width: 260px;
     position: relative;
     background-color: white;
     border-radius: 10px;
     color: black;
+    margin: 0 auto;
+
+    a {
+        flex: 1;
+    }
 }
 
 .image {
@@ -37,6 +45,10 @@
     text-align: justify;
     margin-top: 10px;
     line-height: normal;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
 }
 
 .block_price {
@@ -44,6 +56,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 7px;
+    margin-top: auto;
 }
 
 .price {
@@ -60,7 +73,7 @@
     }
     p {
         color: #1D1D1D; 
-        font-size: 18px;
+        font-size: 15px;
         font-style: normal;
         font-weight: 600; 
     }
@@ -90,6 +103,7 @@
     flex-direction: column;
     padding: 20px 20px ;
     gap: 10px;
+    height: 100%;
 }
 
 .icon_new_box {

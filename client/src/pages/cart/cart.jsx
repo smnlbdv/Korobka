@@ -9,7 +9,8 @@ import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import style from './cart.module.scss'
 
 const Cart = () => {
-    const { cart, calculatePrice, cartTotalPrice     } = useContext(AuthContext)
+    const [sale, setSale] = useState(0)
+    const { cart, calculatePrice, cartTotalPrice } = useContext(AuthContext)
 
     useEffect(() => {
         calculatePrice(); 
@@ -59,8 +60,13 @@ const Cart = () => {
                         <input className={style.promo} type="text" placeholder="Промокод..." />
                         <div className={style.pay}>
                             <div className={style.pay_item}>
-                                <p>Итог к оплате:</p>
-                                <p className={style.totalPrice}>BYN</p>
+                                <p>Итог к оплате: </p>
+                                <p className={style.totalPrice}> {
+                                    sale !== 0 ? 
+                                    cartTotalPrice * sale
+                                    :
+                                    cartTotalPrice
+                                } BYN</p>
                             </div>
                             <button className={style.btn_checkout}>Оформить</button>
                         </div>

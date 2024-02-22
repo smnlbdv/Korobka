@@ -151,7 +151,7 @@ const ProductPage = () => {
     },
     {
       key: "2",
-      label: "Добавление товара",
+      label: "Добавление бокса",
       children: (
         <div className={style.main__block_product}>
           <form

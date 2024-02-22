@@ -9,9 +9,15 @@ import Product from '../models/Product.js'
 const productRoute = Router()
 
 productRoute.get('/all', async (req, res) => {
+    const page = parseInt(req.query._page) || 1;
+    const limit = parseInt(req.query._limit) || 10;
+
     try {
-        const newProduct = await Product.find()
-        res.json({product: newProduct})
+        const totalCount = await Product.find().countDocuments();
+        const products = await Product.find()
+                 .skip((page - 1) * limit)
+                 .limit(limit);
+        res.json({ total: totalCount, products: products });
     } catch (error) {
         console.log(error.message)
     }

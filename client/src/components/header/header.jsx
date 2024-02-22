@@ -57,12 +57,12 @@ const Header = () => {
                         </Link>
                     </li>
                     <li className={style.list__item}>
-                        <Dropdown menu={{ items }} trigger={['click']}>
-                            <a onClick={(e) => e.preventDefault()}>
-                            <Space>
-                                <p>Готовые подарки</p>
-                            </Space>    
-                            </a>
+                        <Dropdown menu={{ items }} trigger={['hover']}>
+                            <Link to="ready-gifts">
+                                <Space>
+                                    <p className={style.all__boxes}>Готовые подарки</p>
+                                </Space>    
+                            </Link>
                         </Dropdown>
                     </li>
                     <li className={style.list__item}>
