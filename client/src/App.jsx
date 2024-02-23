@@ -30,6 +30,7 @@ function App() {
   const [profile, setProfile] = useState({});
   const [order, setOrder] = useState([]);
   const [cart, setCart] = useState([]);
+  const [categories,setCategories] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [newBoxList, setNewBoxList] = useState([]);
@@ -45,6 +46,7 @@ function App() {
     }
     getNewProduct()
     getBestReviews()
+    getCategories()
   }, [isLogin])
 
   const calculatePrice = useCallback(() => {
@@ -93,6 +95,25 @@ function App() {
           //   setOrder(...response.data.order.slice())
           // }
 
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+        })
+        
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
+
+  const getCategories = async () => {
+    try {
+      await api.get('/api/category/all')
+        .then(response => {
+          console.log(response);
+          setCategories(response.data.categories);
         })
         .catch(response => {
           if(response.response.status == 401) {
@@ -539,7 +560,8 @@ function App() {
         reviewsList,
         getBestReviews,
         calculatePrice,
-        adminFetch
+        adminFetch,
+        categories
       }}
     >
         <Routes>
@@ -552,7 +574,7 @@ function App() {
               }
             >
               <Route index element={<Main />} />
-              <Route path="ready-gifts" element={<ReadyGifts />} />
+              <Route path="ready-gifts/:category" element={<ReadyGifts />} />
               <Route path="contacts" element={<Contacts />} />
               <Route path="about-us" element={<AboutUs />} />
               <Route path="cart" element={<Cart />} />

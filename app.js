@@ -11,6 +11,7 @@ import emailRoute from './routes/email.route.js';
 import userRoute from './routes/userRoute.route.js';
 import reviewsRoute from './routes/reviews.route.js';
 import adminRoute from './routes/admin.route.js';
+import category from './routes/category.route.js';
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -30,6 +31,8 @@ app.use('/api/email', emailRoute)
 app.use('/api/profile', userRoute)
 app.use('/api/reviews', reviewsRoute)
 app.use('/api/admin', adminRoute)
+app.use('/api/category', category)
+
 
 async function start() {
     try {

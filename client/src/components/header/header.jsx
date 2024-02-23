@@ -12,30 +12,38 @@ const Header = () => {
     
     const items = [
         {
-          label: (
-            <Link to="ready-gifts">
-              Для мужчин
-            </Link>
-          ),
-          key: '0',
+            label: (
+                <Link to="ready-gifts/all">
+                    Все боксы
+                </Link>
+            ),
+            key: '0', 
+        },
+        {
+            label: (
+                <Link to={`ready-gifts/men`}>
+                    Для мужчин
+                </Link>
+            ),
+            key: '1',
         },
         {
           label: (
-            <Link to="ready-gifts">
-              На 14 февраля
-            </Link>
-          ),
-          key: '1',
-        },
-        {
-          label: (
-            <Link to="ready-gifts">
-              Для девушек
-            </Link>
+                <Link to="ready-gifts/valentines-day">
+                На 14 февраля
+                </Link>
           ),
           key: '2',
         },
-      ];
+        {
+          label: (
+                <Link to="ready-gifts/women">
+                Для девушек
+                </Link>
+          ),
+          key: '3',
+        },
+    ];
       
   const { isLogin, role, userId } = useContext(AuthContext)
 
@@ -58,11 +66,7 @@ const Header = () => {
                     </li>
                     <li className={style.list__item}>
                         <Dropdown menu={{ items }} trigger={['hover']}>
-                            <Link to="ready-gifts">
-                                <Space>
-                                    <p className={style.all__boxes}>Готовые подарки</p>
-                                </Space>    
-                            </Link>
+                                <p className={style.all__boxes}>Готовые подарки</p>    
                         </Dropdown>
                     </li>
                     <li className={style.list__item}>

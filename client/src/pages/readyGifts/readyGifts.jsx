@@ -1,32 +1,67 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom' 
+import { useEffect, useState, useContext } from 'react';
+import { Link, useParams } from 'react-router-dom' 
+import debounce from 'debounce';
+import { Pagination } from 'antd';
 
 import fetchAllBox from '../../services/PostService';
-
 import style from './readyGifts.module.scss'
-
-import { Pagination } from 'antd';
 import Product from '../../components/product/product';
+import { AuthContext } from '../../context/authContext';
 import './ant.css'
 
-const ReadyGifts = ({type = null}) => {
+const ReadyGifts = () => {
 
+    const { category } = useParams()
     const [boxes, setBoxes] = useState([])
     const [totalCount, setTotalCount] = useState(0)
     const [limit, setLimit] = useState(10)
     const [page, setPage] = useState(1)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const fetchData = async (limit, page) => {
-        const response = await fetchAllBox(limit, page);
-        setBoxes([...response.data.products]);
-        setTotalCount(response.data.total)
-        // setTotalCount(response.totalCount); // Предположим, что в ответе также содержится общее количество записей
+    const { categories } = useContext(AuthContext)
+
+    const scrollToTop = () => {
+        const c = document.documentElement.scrollTop || document.body.scrollTop;
+        if (c > 0) {
+            window.requestAnimationFrame(scrollToTop);
+            window.scrollTo(0, c - c / 20);
+        }
+    };
+
+    const renderItems = () => {
+        return (isLoading ? boxes : [...Array(7)] ).map((obj, index) => (
+            <Product key={index} loading = {isLoading} {...obj} />
+        ))
     }
 
+    const fetchData = async (limit, page, search = null) => {
+        const response = await fetchAllBox(limit, page, search);
+        setBoxes([...response.data.products]);
+        setTotalCount(response.data.total)
+        scrollToTop()
+        setTimeout(() => {
+            setIsLoading(true)
+        }, 1000)
+    }
+
+    const delayedSearch = debounce((search) => {
+        setBoxes([])
+        setIsLoading(false)
+        fetchData(limit, page, search.toLowerCase());
+    }, 500);
+
     const onChange = (page) => {
+        setBoxes([])
+        setIsLoading(false)
         fetchData(limit, page);
+        setPage(page);
     };
+
+    const setCategories = () => {
+        const foundCategory = categories.find(item => item.key === category);
+        return foundCategory.value
+    }
     
     useEffect(() => {
         const fetch = async () => {
@@ -43,20 +78,22 @@ const ReadyGifts = ({type = null}) => {
                 </Link>
                 <li>Готовые подарки</li>
             </ul>
-            {
-                type !== null ?
+            <div className={style.block__gifts}>
                 <h2 className={`${style.section_title} section__title`}>
-                    {type}
+                    {
+                        (category !== undefined && category !== 'all') ?
+                        `Подарочные боксы "${
+                            setCategories()
+                        }"`
+                        :
+                        "Подарочные боксы"
+                    }
                 </h2>
-                :
-                <h2 className={`${style.section_title} section__title`}>
-                    Подарочные боксы
-                </h2>
-            }
+            </div>
             <div className={style.search_block}>
                 <div className={style.search}>
                     <img src="./assets/search.svg" alt="" />
-                    <input type="text" placeholder='Поиск..'/>
+                    <input type="text" placeholder='Поиск..' onInput={(event) => delayedSearch(event.target.value)}/>
                 </div>
                 <div className={style.filter_item}>
                     <img src="./assets/dollar-circle.svg" alt="" />
@@ -65,9 +102,9 @@ const ReadyGifts = ({type = null}) => {
             </div>
             <span className={style.span}></span>
             <div className={style.block__all__boxes}>
-                {boxes.map((obj, index) => (
-                    <Product key={index} {...obj} />
-                ))}
+                {
+                    renderItems()
+                }
             </div>
 
             <div className={style.pagination}>
