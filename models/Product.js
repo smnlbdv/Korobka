@@ -28,10 +28,11 @@ const shema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    category: {
-        type: String,
+    category: [{
+        type: Types.ObjectId,
+        ref: 'Category',
         required: true
-    },
+    }],
 })
 
 export default mongoose.model('Product', shema)

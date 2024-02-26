@@ -5,32 +5,38 @@ import jwtToken from 'jsonwebtoken'
 import { registerValidation, loginValidation } from './../validation/auth.js'
 
 import Product from '../models/Product.js'
+import Category from '../models/Category.js'
 
 const productRoute = Router()
 
 productRoute.get('/all', async (req, res) => {
     const page = parseInt(req.query._page) || 1;
-    const limit = parseInt(req.query._limit) || 10;
-    const searchQuery = req.query._search || '';
-    // const categoryId = req.query._category;
-
-    // console.log(categoryId);
+    const limit = parseInt(req.query._limit) || 12;
+    const searchQuery = req.query._search;
+    const categoryId = req.query._category;
 
     try {
-        const totalCount = await Product.find({
-            $or: [
+        let query = {};
+
+        if (searchQuery) {
+            query.$or = [
                 { title: { $regex: searchQuery, $options: 'i' } },
                 { preText: { $regex: searchQuery, $options: 'i' } }
-            ]
-        }).countDocuments();
-        const products = await Product.find({
-            $or: [
-                { title: { $regex: searchQuery, $options: 'i' } },
-                { preText: { $regex: searchQuery, $options: 'i' } }
-            ]
-        })
-        .skip((page - 1) * limit)
-        .limit(limit);
+            ];
+        }
+    
+        if (categoryId) {
+            const category = await Category.findOne({ _id: categoryId });
+            
+            if (category && category.key !== "all") {
+                query['category'] = { $in: [category._id] };
+            }
+        }
+    
+        const totalCount = await Product.find(query).countDocuments();
+        const products = await Product.find(query)
+            .skip((page - 1) * limit)
+            .limit(limit);
         res.json({ total: totalCount, products: products });
     } catch (error) {
         console.log(error.message)

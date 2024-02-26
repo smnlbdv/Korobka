@@ -14,10 +14,13 @@ const ReadyGifts = () => {
     const { category } = useParams()
     const [boxes, setBoxes] = useState([])
     const [totalCount, setTotalCount] = useState(0)
-    const [limit, setLimit] = useState(10)
+    const [limit, setLimit] = useState(12)
+    const [search, setSearch] = useState(null)
     const [page, setPage] = useState(1)
+    const [categoryId, setCategoryId] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const { categories } = useContext(AuthContext)
+
 
     const [valueCategory, setValueCategory] = useState()
 
@@ -35,37 +38,45 @@ const ReadyGifts = () => {
         ))
     }
 
-    const fetchData = async (limit, page) => {
-        const response = await fetchAllBox(limit, page);
+    const fetchData = async (limits = limit, pages = page, searchs = search, categories = categoryId ) => {
+        const response = await fetchAllBox(limits, pages, searchs, categories);
         setBoxes([...response.data.products]);
         setTotalCount(response.data.total)
         scrollToTop()
+        setPage(1);
         setTimeout(() => {
             setIsLoading(true)
         }, 1000)
     }
 
-    const delayedSearch = debounce((search) => {
+    const delayedSearch = debounce(async (search) => {
         setBoxes([])
         setIsLoading(false)
-        fetchData(limit, page, search.toLowerCase());
+        setSearch(search)
+        fetchData(limit, page, search, categoryId);
     }, 500);
 
-    const onChange = (page) => {
+    const onChange = async (page) => {
         setBoxes([])
         setIsLoading(false)
-        fetchData(limit, page);
         setPage(page);
+        fetchData(limit, page, search, categoryId);
     };
 
 
     useEffect(() => {
-        console.log("ghbdtn");
+        const cookieValue = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('id_category='))
+            .split('=')[1];
+
+        setCategoryId(cookieValue)
+
         const value = categories.find(item => item.key === category);
         setValueCategory(value.value)
 
         const fetch = async () => {
-            await fetchData(limit, page);
+            await fetchData(limit, page, search, cookieValue);
         }
         fetch();
         
@@ -93,11 +104,11 @@ const ReadyGifts = () => {
             </div>
             <div className={style.search_block}>
                 <div className={style.search}>
-                    <img src="./assets/search.svg" alt="" />
+                    <img src="/assets/search.svg" alt="" />
                     <input type="text" placeholder='Поиск..' onInput={(event) => delayedSearch(event.target.value)}/>
                 </div>
                 <div className={style.filter_item}>
-                    <img src="./assets/dollar-circle.svg" alt="" />
+                    <img src="/assets/dollar-circle.svg" alt="" />
                     <p>Цена</p>
                 </div>
             </div>
@@ -109,7 +120,7 @@ const ReadyGifts = () => {
             </div>
 
             <div className={style.pagination}>
-                <Pagination defaultCurrent={1} onChange={onChange} total={totalCount} />
+                <Pagination defaultCurrent={1} onChange={onChange} total={totalCount} pageSize={12} />
             </div>
             
         </section>
