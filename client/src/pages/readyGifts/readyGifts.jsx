@@ -11,15 +11,15 @@ import { AuthContext } from '../../context/authContext';
 import './ant.css'
 
 const ReadyGifts = () => {
-
     const { category } = useParams()
     const [boxes, setBoxes] = useState([])
     const [totalCount, setTotalCount] = useState(0)
     const [limit, setLimit] = useState(10)
     const [page, setPage] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
-
     const { categories } = useContext(AuthContext)
+
+    const [valueCategory, setValueCategory] = useState()
 
     const scrollToTop = () => {
         const c = document.documentElement.scrollTop || document.body.scrollTop;
@@ -35,8 +35,8 @@ const ReadyGifts = () => {
         ))
     }
 
-    const fetchData = async (limit, page, search = null) => {
-        const response = await fetchAllBox(limit, page, search);
+    const fetchData = async (limit, page) => {
+        const response = await fetchAllBox(limit, page);
         setBoxes([...response.data.products]);
         setTotalCount(response.data.total)
         scrollToTop()
@@ -58,17 +58,18 @@ const ReadyGifts = () => {
         setPage(page);
     };
 
-    const setCategories = () => {
-        const foundCategory = categories.find(item => item.key === category);
-        return foundCategory.value
-    }
-    
+
     useEffect(() => {
+        console.log("ghbdtn");
+        const value = categories.find(item => item.key === category);
+        setValueCategory(value.value)
+
         const fetch = async () => {
             await fetchData(limit, page);
         }
         fetch();
-    }, []);
+        
+    }, [category])
 
     return (
         <section className={`${style.section_ready_gifts} wrapper`}>
@@ -83,7 +84,7 @@ const ReadyGifts = () => {
                     {
                         (category !== undefined && category !== 'all') ?
                         `Подарочные боксы "${
-                            setCategories()
+                            valueCategory
                         }"`
                         :
                         "Подарочные боксы"

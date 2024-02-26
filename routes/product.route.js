@@ -12,8 +12,9 @@ productRoute.get('/all', async (req, res) => {
     const page = parseInt(req.query._page) || 1;
     const limit = parseInt(req.query._limit) || 10;
     const searchQuery = req.query._search || '';
+    // const categoryId = req.query._category;
 
-    console.log(searchQuery);
+    // console.log(categoryId);
 
     try {
         const totalCount = await Product.find({
