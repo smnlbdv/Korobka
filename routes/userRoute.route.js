@@ -77,7 +77,7 @@ userRoute.patch("/update", verifyToken, async (req, res) => {
     const body = req.body;
 
     if (body.email) {
-      const email = await User.findOne({ email: body.email });
+      const email = await User.findMany({ email: body.email });
       email
         ? res.status(409).json({ message: "Такая почта уже существует" })
         : await User.updateOne({ _id: userId }, body, { new: true })

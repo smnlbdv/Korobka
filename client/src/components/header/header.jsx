@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState} from 'react';
-import { Dropdown, Space } from 'antd';
+import { Dropdown } from 'antd';
 
 import style from './header.module.scss'
 import './header.scss'

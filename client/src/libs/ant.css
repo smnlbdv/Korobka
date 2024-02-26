@@ -49,4 +49,7 @@
     transform: translateY(-1px) !important;
 }
 
+.ant-slider-track  {
+    background-color: #1770c3 !important;
+}
 

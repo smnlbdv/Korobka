@@ -29,8 +29,8 @@ favoriteRoute.post('/add/:itemId', verifyToken, async (req, res) => {
                 await Favorite.updateMany({ owner: userId }, { $push: { items: itemId } });
                 const newFavoriteItem = await Favorite.find({ owner: userId, items: itemId })
                                                 .populate('items');
-
-                res.status(201).json({product: newFavoriteItem[0].items[0], message: 'Товар успешно добавлен в закладки'})
+                const newItem = newFavoriteItem[0].items.reverse()
+                res.status(201).json({product: newItem[0], message: 'Товар успешно добавлен в закладки'})
             }
         } else {
             await Favorite.create({ owner: userId, items: [itemId] });

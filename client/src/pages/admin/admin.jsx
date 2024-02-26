@@ -44,7 +44,7 @@ const Admin = () => {
       try {
         await api.get("/api/products/all")
           .then((response) => {
-            setAllProduct(response.data.product);
+            setAllProduct(response.data.products);
           })
           .catch((error) => alert(error.message));
       } catch (error) {

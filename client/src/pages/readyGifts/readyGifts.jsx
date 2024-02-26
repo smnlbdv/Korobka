@@ -7,6 +7,7 @@ import { Pagination } from 'antd';
 import fetchAllBox from '../../services/PostService';
 import style from './readyGifts.module.scss'
 import Product from '../../components/product/product';
+import Slider from '../../components/slider/slider.jsx';
 import { AuthContext } from '../../context/authContext';
 import './ant.css'
 
@@ -19,10 +20,13 @@ const ReadyGifts = () => {
     const [page, setPage] = useState(1)
     const [categoryId, setCategoryId] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [showSlider, setShowSlider] = useState(false);
     const { categories } = useContext(AuthContext)
-
-
     const [valueCategory, setValueCategory] = useState()
+
+    const toggleSlider = () => {
+        setShowSlider(!showSlider);
+      };
 
     const scrollToTop = () => {
         const c = document.documentElement.scrollTop || document.body.scrollTop;
@@ -38,8 +42,8 @@ const ReadyGifts = () => {
         ))
     }
 
-    const fetchData = async (limits = limit, pages = page, searchs = search, categories = categoryId ) => {
-        const response = await fetchAllBox(limits, pages, searchs, categories);
+    const fetchData = async (limits = limit, pages = page, searchs = search, categories = categoryId, filterPrice = null ) => {
+        const response = await fetchAllBox(limits, pages, searchs, categories, filterPrice);
         setBoxes([...response.data.products]);
         setTotalCount(response.data.total)
         scrollToTop()
@@ -63,8 +67,16 @@ const ReadyGifts = () => {
         fetchData(limit, page, search, categoryId);
     };
 
+    const filterPrice = async (minPrice, maxPrice) => {
+        setBoxes([])
+        setIsLoading(false)
+        fetchData(limit, page, search, categoryId, {min: minPrice, max: maxPrice});
+    }
+
 
     useEffect(() => {
+        setBoxes([])
+        setIsLoading(false)
         const cookieValue = document.cookie
             .split('; ')
             .find(row => row.startsWith('id_category='))
@@ -107,9 +119,12 @@ const ReadyGifts = () => {
                     <img src="/assets/search.svg" alt="" />
                     <input type="text" placeholder='Поиск..' onInput={(event) => delayedSearch(event.target.value)}/>
                 </div>
-                <div className={style.filter_item}>
-                    <img src="/assets/dollar-circle.svg" alt="" />
-                    <p>Цена</p>
+                <div className={style.filter_item__block}>
+                    <div className={style.filter_item} onClick={() => toggleSlider()}>
+                        <img src="/assets/dollar-circle.svg" alt="" />
+                        <p>Цена</p>
+                    </div>
+                    {showSlider && <Slider filterPrice={filterPrice}/>}
                 </div>
             </div>
             <span className={style.span}></span>

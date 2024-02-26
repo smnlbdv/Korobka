@@ -14,6 +14,8 @@ productRoute.get('/all', async (req, res) => {
     const limit = parseInt(req.query._limit) || 12;
     const searchQuery = req.query._search;
     const categoryId = req.query._category;
+    const minPrice = parseInt(req.query.minPrice) || 0;
+    const maxPrice = parseInt(req.query.maxPrice) || Number.MAX_SAFE_INTEGER;
 
     try {
         let query = {};
@@ -32,6 +34,16 @@ productRoute.get('/all', async (req, res) => {
                 query['category'] = { $in: [category._id] };
             }
         }
+
+        if (minPrice || maxPrice) {
+            query.price = {};
+            if (minPrice) {
+                query.price.$gte = minPrice;
+            }
+            if (maxPrice) {
+                query.price.$lte = maxPrice;
+            }
+        }
     
         const totalCount = await Product.find(query).countDocuments();
         const products = await Product.find(query)
@@ -45,8 +57,11 @@ productRoute.get('/all', async (req, res) => {
 
 productRoute.get('/new', async (req, res) => {
     try {
-        const newProduct = await Product.find({category: 'new'})
-        res.json(newProduct)
+        const newProducts = await Product.find().populate({
+            path: 'category',
+            match: { key: 'new' }
+        }).limit(4).exec();
+        res.json(newProducts)
     } catch (error) {
         console.log(error.message)
     }
