@@ -68,7 +68,9 @@ const Cart = () => {
                                     cartTotalPrice
                                 } BYN</p>
                             </div>
-                            <button className={style.btn_checkout}>Оформить</button>
+                            <Link to="order">
+                                <button className={style.btn_checkout}>Оформить</button>
+                            </Link>
                         </div>
                 </div>
             </div>

@@ -24,6 +24,7 @@ const ProductPage= lazy(() => import("./pages/productPage/productPage.jsx"));
 const Cart= lazy(() => import("./pages/cart/cart.jsx"));
 const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
 const Admin = lazy(() => import("./pages/admin/admin.jsx"));
+const OrderPage = lazy(() => import("./pages/orderPage/orderPage.jsx"));
 
 function App() {
   const [reviewsList, setReviewsList] = useState([])
@@ -530,7 +531,7 @@ function App() {
     >
         <Routes>
           <Route
-              path="/"
+              path="/*"
               element={
                   <HomePage/>
               }
@@ -539,10 +540,11 @@ function App() {
               <Route path="ready-gifts/:category" element={<ReadyGifts />} />
               <Route path="contacts" element={<Contacts />} />
               <Route path="about-us" element={<AboutUs />} />
-              <Route path="cart" element={<Cart />} />
+              <Route path="cart" element={<Cart />}></Route>
               <Route path="liked" element={<Liked />} />
               <Route path="profile" element={<Profile />} />
               <Route path="product/:id" element={<ProductPage/>}/>
+              <Route path="cart/order" element={<OrderPage/>}/>
           </Route>
           
           <Route path="/api/auth/*" element={

@@ -1,0 +1,31 @@
+.section_cart {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+}
+
+.section_title {
+    padding-top: 45px;
+    text-align: left !important;
+}
+
+.block__orders {
+    display: flex;
+    margin-top: 20px;
+}
+
+.block__form {
+    max-width: 400px;
+}
+
+.block__form {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.personal__input__block {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}

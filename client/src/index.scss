@@ -65,17 +65,19 @@ a {
     column-gap: 10px;
     padding-top: 20px;
     font-size: 14px;
+    font-weight: 500;
+    color: white;
 
     a:not(:last-child) {
         display: flex;
         column-gap: 10px;
         align-items: center;
-        color: #f8522d;
+        color:  rgba(205, 205, 205, 0.814);
         font-weight: 500;
 
         &::after {
             content: "/";
-            color: white;
+            color: #ffffff;
         }
     }
 }
