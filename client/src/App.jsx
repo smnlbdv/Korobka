@@ -532,9 +532,7 @@ function App() {
           <Route
               path="/"
               element={
-                <Suspense fallback={<Loading />}>
                   <HomePage/>
-                </Suspense>
               }
             >
               <Route index element={<Main />} />

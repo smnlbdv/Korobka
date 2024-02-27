@@ -53,3 +53,8 @@
     background-color: #1770c3 !important;
 }
 
+.ant-scroll-number {
+    background-color: #f33632 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.068) !important;
+}
+

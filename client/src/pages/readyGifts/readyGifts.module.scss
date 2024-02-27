@@ -55,12 +55,24 @@
 }
 
 .block__all__boxes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     justify-content: space-between;
     margin-top: 60px;
     column-gap: 10px;
     row-gap: 70px;
+    min-height: 300px;
+}
+
+.block__all__bg {
+    @extend .block__all__boxes;
+    background-image: url('./assets/bg-main-img.png');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
 }
 
 .pagination {
@@ -71,4 +83,9 @@
 
 .filter_item__block {
     position: relative;
+}
+
+.product__null__text {
+    text-align: center;
+    font-size: 18px;
 }

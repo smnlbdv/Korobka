@@ -21,6 +21,7 @@ const ReadyGifts = () => {
     const [categoryId, setCategoryId] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [showSlider, setShowSlider] = useState(false);
+    const [hiddenPagination, setHiddenPagination] = useState(true);
     const { categories } = useContext(AuthContext)
     const [valueCategory, setValueCategory] = useState()
 
@@ -37,9 +38,21 @@ const ReadyGifts = () => {
     };
 
     const renderItems = () => {
-        return (isLoading ? boxes : [...Array(7)] ).map((obj, index) => (
-            <Product key={index} loading = {isLoading} {...obj} />
-        ))
+        const itemsToRender = (isLoading ? boxes : [...Array(7)]).map((obj, index) => (
+            <Product key={index} loading={isLoading} {...obj} />
+        ));
+    
+        if (itemsToRender.length > 0) {
+            if (!hiddenPagination) {
+                setHiddenPagination(true);
+            }
+            return itemsToRender;
+        } else {
+            if (hiddenPagination) {
+                setHiddenPagination(false);
+            }
+            return <p className={style.product__null__text}>Товаров на данную категорию не найдено</p>;
+        }
     }
 
     const fetchData = async (limits = limit, pages = page, searchs = search, categories = categoryId, filterPrice = null ) => {
@@ -128,15 +141,18 @@ const ReadyGifts = () => {
                 </div>
             </div>
             <span className={style.span}></span>
-            <div className={style.block__all__boxes}>
+            <div className={hiddenPagination ? style.block__all__bg : style.block__all__boxes}>
                 {
                     renderItems()
                 }
             </div>
 
-            <div className={style.pagination}>
-                <Pagination defaultCurrent={1} onChange={onChange} total={totalCount} pageSize={12} />
-            </div>
+            {
+                hiddenPagination && 
+                <div className={style.pagination}>
+                    <Pagination defaultCurrent={1} onChange={onChange} total={totalCount} pageSize={12} />
+                </div>
+            }
             
         </section>
     );

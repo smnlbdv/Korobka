@@ -1,15 +1,21 @@
 import { useContext, useEffect, useState} from 'react';
-import { Dropdown } from 'antd';
+import { Link  } from 'react-router-dom';
+import { Dropdown, Badge } from 'antd';
 
 import style from './header.module.scss'
 import './header.scss'
-import Button from '../button/button';
-import { Link  } from 'react-router-dom';
+import '../../libs/ant.css'
 
+import Button from '../button/button';
 import { AuthContext } from "../../context/authContext.js";
 
 const Header = () => {
-    const { isLogin, role, userId, categories } = useContext(AuthContext)
+    const [countCart, setCountCart] = useState(0)
+    const { isLogin, cart, role, userId, categories } = useContext(AuthContext)
+
+    useEffect(() => {
+        setCountCart(cart.length)
+    }, [cart])
 
     const getIdLink = (e) => {
         const li = e.target.closest('li')
@@ -67,13 +73,17 @@ const Header = () => {
                             <ul className={style.user_list}>
                                 <Link to="cart">
                                     <li className={style.list_item}>
-                                        <img src="/assets/bag.svg" alt="bag logo" />
+                                        <Badge count={countCart}>
+                                            <img src="/assets/bag.svg" alt="bag logo" />
+                                        </Badge>
                                         <p>Корзина</p>
                                     </li>
                                 </Link>
                                 <Link to="liked">
                                     <li className={style.list_item}>
-                                        <img src="/assets/heart.svg" alt="favorite logo" />
+                                        <Badge count={countCart}>
+                                            <img src="/assets/heart.svg" alt="favorite logo" />
+                                        </Badge>  
                                         <p>Избранное</p>
                                     </li>
                                 </Link>
