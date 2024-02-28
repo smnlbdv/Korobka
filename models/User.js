@@ -39,7 +39,7 @@ const shema = new mongoose.Schema({
     order: [{
         type: Types.ObjectId, 
         ref: 'Order',
-        default: '65b937ebbb6114084771a1b9'
+        default: []
     }],
     cart: {
         type: Types.ObjectId,

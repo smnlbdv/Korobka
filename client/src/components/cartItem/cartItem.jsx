@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 
 import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
+import { Link  } from 'react-router-dom';
 
 const CartItem = ({ _id, img, title, preText, price, count }) => {
   const [counts, setCounts] = useState(count);
@@ -31,7 +32,9 @@ const CartItem = ({ _id, img, title, preText, price, count }) => {
 
   return (
     <div className={style.cart__item_block}>
-      <img className={style.image_product} src={img} alt="Image item" />
+      <Link to={`/product/${_id}`} key={_id}>
+        <img className={style.image_product} src={img} alt="Image item" />
+      </Link>
       <div className={style.cart__item_info}>
         <p className={style.title}>{title}</p>
         <p className={style.text}>{preText}</p>

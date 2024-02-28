@@ -22,7 +22,7 @@ const ReadyGifts = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [showSlider, setShowSlider] = useState(false);
     const [hiddenPagination, setHiddenPagination] = useState(true);
-    const { categories } = useContext(AuthContext)
+    const { categories, contextHolder, } = useContext(AuthContext)
     const [valueCategory, setValueCategory] = useState()
 
     const toggleSlider = () => {
@@ -108,53 +108,56 @@ const ReadyGifts = () => {
     }, [category])
 
     return (
-        <section className={`${style.section_ready_gifts} wrapper`}>
-            <ul className='bread-crumbs'>
-                <Link to="/">
-                    <li>Главная</li>
-                </Link>
-                <li>Готовые подарки</li>
-            </ul>
-            <div className={style.block__gifts}>
-                <h2 className={`${style.section_title} section__title`}>
-                    {
-                        (category !== undefined && category !== 'all') ?
-                        `Подарочные боксы "${
-                            valueCategory
-                        }"`
-                        :
-                        "Подарочные боксы"
-                    }
-                </h2>
-            </div>
-            <div className={style.search_block}>
-                <div className={style.search}>
-                    <img src="/assets/search.svg" alt="" />
-                    <input type="text" placeholder='Поиск..' onInput={(event) => delayedSearch(event.target.value)}/>
+        <>
+            {contextHolder}
+            <section className={`${style.section_ready_gifts} wrapper`}>
+                <ul className='bread-crumbs'>
+                    <Link to="/">
+                        <li>Главная</li>
+                    </Link>
+                    <li>Готовые подарки</li>
+                </ul>
+                <div className={style.block__gifts}>
+                    <h2 className={`${style.section_title} section__title`}>
+                        {
+                            (category !== undefined && category !== 'all') ?
+                            `Подарочные боксы "${
+                                valueCategory
+                            }"`
+                            :
+                            "Подарочные боксы"
+                        }
+                    </h2>
                 </div>
-                <div className={style.filter_item__block}>
-                    <div className={style.filter_item} onClick={() => toggleSlider()}>
-                        <img src="/assets/dollar-circle.svg" alt="" />
-                        <p>Цена</p>
+                <div className={style.search_block}>
+                    <div className={style.search}>
+                        <img src="/assets/search.svg" alt="" />
+                        <input type="text" placeholder='Поиск..' onInput={(event) => delayedSearch(event.target.value)}/>
                     </div>
-                    {showSlider && <Slider filterPrice={filterPrice}/>}
+                    <div className={style.filter_item__block}>
+                        <div className={style.filter_item} onClick={() => toggleSlider()}>
+                            <img src="/assets/dollar-circle.svg" alt="" />
+                            <p>Цена</p>
+                        </div>
+                        {showSlider && <Slider filterPrice={filterPrice}/>}
+                    </div>
                 </div>
-            </div>
-            <span className={style.span}></span>
-            <div className={hiddenPagination ? style.block__all__bg : style.block__all__boxes}>
-                {
-                    renderItems()
-                }
-            </div>
+                <span className={style.span}></span>
+                <div className={hiddenPagination ? style.block__all__bg : style.block__all__boxes}>
+                    {
+                        renderItems()
+                    }
+                </div>
 
-            {
-                hiddenPagination && 
-                <div className={style.pagination}>
-                    <Pagination defaultCurrent={1} onChange={onChange} total={totalCount} pageSize={12} />
-                </div>
-            }
-            
-        </section>
+                {
+                    hiddenPagination && 
+                    <div className={style.pagination}>
+                        <Pagination defaultCurrent={1} onChange={onChange} total={totalCount} pageSize={12} />
+                    </div>
+                }
+                
+            </section>
+        </>
     );
 }
  

@@ -11,11 +11,16 @@ import { AuthContext } from "../../context/authContext.js";
 
 const Header = () => {
     const [countCart, setCountCart] = useState(0)
-    const { isLogin, cart, role, userId, categories } = useContext(AuthContext)
+    const [countFavorite, setCountFavorite] = useState(0)
+    const { isLogin, cart, role, userId, categories, favoriteItem } = useContext(AuthContext)
 
     useEffect(() => {
         setCountCart(cart.length)
     }, [cart])
+
+    useEffect(() => {
+        setCountFavorite(favoriteItem.length)
+    }, [favoriteItem])
 
     const getIdLink = (e) => {
         const li = e.target.closest('li')
@@ -81,7 +86,7 @@ const Header = () => {
                                 </Link>
                                 <Link to="liked">
                                     <li className={style.list_item}>
-                                        <Badge count={countCart}>
+                                        <Badge count={countFavorite}>
                                             <img src="/assets/heart.svg" alt="favorite logo" />
                                         </Badge>  
                                         <p>Избранное</p>

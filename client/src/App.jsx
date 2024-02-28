@@ -26,6 +26,16 @@ const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
 const Admin = lazy(() => import("./pages/admin/admin.jsx"));
 const OrderPage = lazy(() => import("./pages/orderPage/orderPage.jsx"));
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   const [reviewsList, setReviewsList] = useState([])
   const [profile, setProfile] = useState({});
@@ -56,6 +66,7 @@ function App() {
       return accumulator + subtotal;
     }, 0);
     setCartTotalPrice(total);
+    return total;
   }, [cart]);
 
   const getProfile = async () => {
@@ -488,6 +499,34 @@ function App() {
     }
     return message
   }
+
+  const placeOrder = async (order) => {
+    let result;
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.post(`/api/profile/order`, {order: order, cart: cart, totalAmount: calculatePrice() }, {
+        headers: {
+            'Authorization': `${data.token}`,
+        }})
+        .then(response => {
+          if(response.status == 200 && response.data.success === true) {
+            console.log(response.data.message)
+          }
+          // result = response.data.message;  
+          console.log(response.data.message);  
+        })
+        .catch(response => {
+          console.log(response.data.message);  
+          // if(response.response.status == 401) {
+          //   logout()
+          //   navigate("/api/auth/login");
+          // }
+      });
+    } catch (error) {
+      console.log(error.message)
+    }
+    return result
+  }
   
 
   return (
@@ -526,7 +565,8 @@ function App() {
         getBestReviews,
         calculatePrice,
         adminFetch,
-        categories
+        categories,
+        placeOrder
       }}
     >
         <Routes>

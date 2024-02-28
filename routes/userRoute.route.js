@@ -123,4 +123,42 @@ userRoute.patch("/:id/password", verifyToken, async (req, res) => {
   }
 });
 
+userRoute.post("/order", verifyToken, async (req, res) => {
+  const userId = req.userId;
+  const body = req.body;
+
+  let newOrder = {
+    owner: userId,
+    totalAmount: body.totalAmount,
+    address: body.order.address,
+    wayPay: body.order.wayPay
+  }
+
+  newOrder.items = body.cart.map(item => ({
+    productId: item._id,
+    quantity: item.count
+  }))
+
+  const order = new Order(newOrder);
+  order.save()
+    .then(async (savedOrder) => {
+        if (savedOrder) {
+            const user = await User.findById(userId);
+            if (user) {
+                user.order.push(savedOrder._id.toString());
+                await user.save();
+                res.status(200).json({ message: 'Заказ оформлен '});
+            } else {
+                res.status(404).json({ message: 'Пользователь не найден', success: true });
+            }
+        } else {
+            res.status(500).json({ message: 'Не удалось сохранить заказ' });
+        }
+    })
+    .catch(err => {
+        res.status(500).json({ message: 'Произошла ошибка при сохранении заказа', error: err });
+    });
+  
+});
+
 export default userRoute;

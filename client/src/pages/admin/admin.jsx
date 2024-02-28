@@ -78,30 +78,30 @@ const Admin = () => {
       });
     };
 
-      const deleteProductDB = async (id) => {
-        try {
-          const token = JSON.parse(localStorage.getItem('userData')) || '';
-          await api.delete(`/api/admin/delete/${id}`, {
-            headers: {
-              'Authorization': `${token.token}`,
-            }})
-            .then((response) => {
-              if(response.status === 202) {
-                setAllProduct(prevProducts => prevProducts.filter(product => product._id !== id));
-                openNotification('bottomRight', 'Товар успешно удален из БД');
+    const deleteProductDB = async (id) => {
+      try {
+        const token = JSON.parse(localStorage.getItem('userData')) || '';
+        await api.delete(`/api/admin/delete/${id}`, {
+          headers: {
+            'Authorization': `${token.token}`,
+          }})
+          .then((response) => {
+            if(response.status === 202) {
+              setAllProduct(prevProducts => prevProducts.filter(product => product._id !== id));
+              openNotification('bottomRight', 'Товар успешно удален из БД');
+            }
+          })
+          .catch(response => 
+            {
+              if(response.response.status == 401) {
+                logout()
+                nav("/api/auth/login");
               }
-            })
-            .catch(response => 
-              {
-                if(response.response.status == 401) {
-                  logout()
-                  nav("/api/auth/login");
-                }
-              }
-            );
-        } catch (error) {
-          console.log("Ошибка", error);
-        }
+            }
+          );
+      } catch (error) {
+        console.log("Ошибка", error);
+      }
     }
 
     if (isLoading) {
