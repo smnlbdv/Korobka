@@ -1,10 +1,11 @@
 import { Router } from "express";
-import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
-import jwtToken from "jsonwebtoken";
-import { registerValidation, loginValidation } from "../validation/auth.js";
 import verifyToken from "../validation/verifyToken.js";
 import multer from "multer";
+import fs from "fs";
+import pdf from 'html-pdf'
+import path from "path";
+import generateHTML from "../template/checkHtml.js";
 
 import User from "../models/User.js";
 import Order from "../models/Order.js";
@@ -39,6 +40,12 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
           path: "product",
         },
       },
+    })
+    .populate({
+      path: "order",
+      populate: {
+          path: "items.productId"
+      }
     })
     .then((item) => {
       res.status(201).json(item);
@@ -139,6 +146,21 @@ userRoute.post("/order", verifyToken, async (req, res) => {
     quantity: item.count
   }))
 
+  const publicDir = path.join(process.cwd(), 'public');
+  if (!fs.existsSync(publicDir)) {
+      fs.mkdirSync(publicDir);
+  }
+
+  const pdfDir = path.join(publicDir, 'pdf');
+  if (!fs.existsSync(pdfDir)) {
+      fs.mkdirSync(pdfDir);
+  }
+
+  let urlRes;
+  const outputFilePath = path.join(pdfDir, `output-${userId}.pdf`);
+
+
+
   const order = new Order(newOrder);
   order.save()
     .then(async (savedOrder) => {
@@ -147,9 +169,18 @@ userRoute.post("/order", verifyToken, async (req, res) => {
             if (user) {
                 user.order.push(savedOrder._id.toString());
                 await user.save();
-                res.status(200).json({ message: 'Заказ оформлен '});
+                const save = await savedOrder.populate('items.productId')
+
+                console.log(save.items.productId);
+                const htmlContent = generateHTML(save);
+                pdf.create(htmlContent, { format: 'Letter' }).toFile(outputFilePath, function(err, response) {
+                    if (err) return console.log(err);
+                    console.log('PDF файл успешно создан и сохранен в папку output!');
+                    urlRes = `http://localhost:5000/pdf/output-${userId}.pdf`
+                    res.status(200).json({ message: 'Заказ оформлен ', success: true, order: save, url: urlRes });
+                });
             } else {
-                res.status(404).json({ message: 'Пользователь не найден', success: true });
+              res.status(404).json({ message: 'Пользователь не найден' });
             }
         } else {
             res.status(500).json({ message: 'Не удалось сохранить заказ' });
@@ -160,5 +191,24 @@ userRoute.post("/order", verifyToken, async (req, res) => {
     });
   
 });
+
+userRoute.delete("/delete-order/:orderId", verifyToken, async (req, res) => {
+  const orderId = req.params.orderId
+  const userId = req.userId
+  try {
+    const response = await User.updateOne({ _id: userId }, { $pull: { order: orderId } });
+    const responseOrder = await Order.deleteOne({ _id: orderId });
+    if(response.acknowledged && responseOrder.acknowledged) {
+      res.status(200).json({ message: "Заказ успешно удален", success: true });
+    }
+    else {
+      res.status(400).json({ message: "Ошибка удаления111", success: false });
+    }
+  } catch (error) {
+      res.status(400).json({message: "Ошибка удаления", delete: error.acknowledged });
+  }
+})
+
+
 
 export default userRoute;

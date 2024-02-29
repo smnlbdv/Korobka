@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import style from "./cartItemOrder.module.scss";
+import style from "./orderItem.module.scss";
 import { Link  } from 'react-router-dom';
 
 const CartItemOrder = ({_id, img, title, preText, price, count }) => {

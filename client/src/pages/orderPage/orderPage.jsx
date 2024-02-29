@@ -9,12 +9,15 @@ import style from './orderPage.module.scss'
 
 import InputProfile from "../../components/inputProfile/inputProfile";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate";
-import CartItemOrder from "../../components/cartItemOrder/cartItemOrder.jsx";
+import OrderItem from "../../components/orderItem/orderItem.jsx";
+import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 // eslint-disable-next-line react/prop-types
 
 const OrderPage = () => {
 
-    const { profile, cart, placeOrder } = useContext(AuthContext);
+    const [successStatus, setSuccessStatus] = useState(false)
+    const [url, setUrl] = useState('#')
+    const { profile, cart, placeOrder, contextHolder, deleteItemCart, downloadCheck } = useContext(AuthContext);
 
     const formikOrder = useFormik({
         initialValues: {
@@ -38,8 +41,13 @@ const OrderPage = () => {
             )
             .required("Обязательное поле"),
         }),
-        onSubmit: (values) => {
-          placeOrder(values)
+        onSubmit: async (values) => {
+            const resultOrder = await placeOrder(values)
+            setSuccessStatus(resultOrder.result)
+            setUrl(resultOrder.url);
+            cart.map((item) => {
+                deleteItemCart(item._id, false);
+            });
         },
       });
     
@@ -60,6 +68,7 @@ const OrderPage = () => {
 
     return ( 
         <section className={`${style.section_cart} wrapper`}>
+            {contextHolder}
             <ul className="bread-crumbs">
                 <Link to="/">
                     <li>Главная</li>
@@ -70,120 +79,134 @@ const OrderPage = () => {
                 <li>Оформление заказа</li>
             </ul>
             <h2 className={`${style.section_title} section__title`}>Оформление заказа</h2>
-            <div className={style.block__orders}>
-                <div className={style.block__form}>
-                    <form
-                        onSubmit={formikOrder.handleSubmit}
-                        className={style.personal__data}
-                        >
-                        <div className={style.personal__input__block}>
-                            <div className={style.block__fullname}>
-                                <div className={style.input__block}>
-                                    <p className={style.input__title}>Имя *</p>
-                                    <InputProfile
-                                        id="name"
-                                        name="name"
-                                        typeInput={"text"}
-                                        value={formikOrder.values.name}
-                                        onChange={formikOrder.handleChange}
-                                        placeholder={"Иван"}
-                                        errorChange = {formikOrder.errors.name && "true"}
-                                    />
+            {
+                !successStatus ?
+                <div className={style.block__orders}>
+                    <div className={style.block__form}>
+                        <form
+                            onSubmit={formikOrder.handleSubmit}
+                            className={style.personal__data}
+                            >
+                            <div className={style.personal__input__block}>
+                                <div className={style.block__fullname}>
+                                    <div className={style.input__block}>
+                                        <p className={style.input__title}>Имя *</p>
+                                        <InputProfile
+                                            id="name"
+                                            name="name"
+                                            typeInput={"text"}
+                                            value={formikOrder.values.name}
+                                            onChange={formikOrder.handleChange}
+                                            placeholder={"Иван"}
+                                            errorChange = {formikOrder.errors.name && "true"}
+                                        />
+                                    </div>
+                                    <div className={style.input__block}>
+                                        <p className={style.input__title}>Фамилия *</p>
+                                        <InputProfile
+                                            id="lastname"
+                                            name="lastname"
+                                            typeInput={"text"}
+                                            value={formikOrder.values.lastname}
+                                            onChange={formikOrder.handleChange}
+                                            placeholder={"Иванов"}
+                                            errorChange = {formikOrder.errors.lastname && "true"}
+                                        />
+                                    </div>
                                 </div>
                                 <div className={style.input__block}>
-                                    <p className={style.input__title}>Фамилия *</p>
+                                        <p className={style.input__title}>Email*</p>
+                                        <InputProfile
+                                            id="email"
+                                            name="email"
+                                            typeInput={"text"}
+                                            value={formikOrder.values.email}
+                                            onChange={formikOrder.handleChange}
+                                            placeholder={"korobka@gmail.com"}
+                                            errorChange = {formikOrder.errors.email && "true"}
+                                        />
+                                    </div>
+                                <div className={style.input__block}>
+                                    <p className={style.input__title}>
+                                        Адрес *
+                                    </p>
                                     <InputProfile
-                                        id="lastname"
-                                        name="lastname"
+                                        id="address"
+                                        name="address"
                                         typeInput={"text"}
-                                        value={formikOrder.values.lastname}
+                                        value={formikOrder.values.address}
                                         onChange={formikOrder.handleChange}
-                                        placeholder={"Иванов"}
-                                        errorChange = {formikOrder.errors.lastname && "true"}
+                                        placeholder={"Беларусь, г. Гродно, ул. Врублевского 77/1"}
+                                        errorChange = {formikOrder.errors.address && "true"}
                                     />
                                 </div>
-                            </div>
-                            <div className={style.input__block}>
-                                    <p className={style.input__title}>Email*</p>
+                                <div className={style.input__block}>
+                                    <p className={style.input__title}>
+                                        Номер телефона *
+                                    </p>
                                     <InputProfile
-                                        id="email"
-                                        name="email"
-                                        typeInput={"text"}
-                                        value={formikOrder.values.email}
+                                        id="phone"
+                                        name="phone"
+                                        typeInput={"tel"}
+                                        placeholder={"+375 (99) 999-99-99"}
+                                        value={formikOrder.values.phone}
                                         onChange={formikOrder.handleChange}
-                                        placeholder={"korobka@gmail.com"}
-                                        errorChange = {formikOrder.errors.email && "true"}
+                                        errorChange = {formikOrder.errors.phone && "true"}
+                                        tel = {"true"}
                                     />
                                 </div>
-                            <div className={style.input__block}>
-                                <p className={style.input__title}>
-                                    Адрес *
-                                </p>
-                                <InputProfile
-                                    id="address"
-                                    name="address"
-                                    typeInput={"text"}
-                                    value={formikOrder.values.address}
-                                    onChange={formikOrder.handleChange}
-                                    placeholder={"Беларусь, г. Гродно, ул. Врублевского 77/1"}
-                                    errorChange = {formikOrder.errors.address && "true"}
-                                />
-                            </div>
-                            <div className={style.input__block}>
-                                <p className={style.input__title}>
-                                    Номер телефона *
-                                </p>
-                                <InputProfile
-                                    id="phone"
-                                    name="phone"
-                                    typeInput={"tel"}
-                                    placeholder={"+375 (99) 999-99-99"}
-                                    value={formikOrder.values.phone}
-                                    onChange={formikOrder.handleChange}
-                                    errorChange = {formikOrder.errors.phone && "true"}
-                                    tel = {"true"}
-                                />
-                            </div>
-                            <div className={style.input__block}>
-                                <p className={style.input__title}>Выберите способ оплаты *</p>
-                                <div className={style.block__pay}>
-                                    <Radio.Group id="wayPay" name="wayPay" onChange={formikOrder.handleChange} defaultValue={undefined}>
-                                        <Radio value={"visa"}>
-                                            <div className={style.block__pay__image}>
-                                                <img className={style.pay__image} src="../assets/visa.svg" alt="Visa" />
-                                            </div>
-                                        </Radio>
-                                        <Radio value={"mastercard"}>
-                                            <div className={style.block__pay__image}>
-                                                <img className={style.pay__image} src="../assets/mastercard.svg" alt="Mastercard" />
-                                            </div>
-                                        </Radio>
-                                        <Radio value={"verve"}>
-                                            <div className={style.block__pay__image}>
-                                                <img className={style.pay__image} src="../assets/verve.svg" alt="Verve" />
-                                            </div>
-                                        </Radio>
-                                    </Radio.Group>
+                                <div className={style.input__block}>
+                                    <p className={style.input__title}>Выберите способ оплаты *</p>
+                                    <div className={style.block__pay}>
+                                        <Radio.Group id="wayPay" name="wayPay" onChange={formikOrder.handleChange} defaultValue={undefined}>
+                                            <Radio value={"visa"}>
+                                                <div className={style.block__pay__image}>
+                                                    <img className={style.pay__image} src="../assets/visa.svg" alt="Visa" />
+                                                </div>
+                                            </Radio>
+                                            <Radio value={"mastercard"}>
+                                                <div className={style.block__pay__image}>
+                                                    <img className={style.pay__image} src="../assets/mastercard.svg" alt="Mastercard" />
+                                                </div>
+                                            </Radio>
+                                            <Radio value={"verve"}>
+                                                <div className={style.block__pay__image}>
+                                                    <img className={style.pay__image} src="../assets/verve.svg" alt="Verve" />
+                                                </div>
+                                            </Radio>
+                                        </Radio.Group>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <p className={style.required__title}>* - поля обязательные для заполнения</p>
-                        <div className={style.button__save}>
-                            <ButtonCreate text={"Заказать"} type={"submit"} disabled={Object.keys(formikOrder.errors).length > 0}/>
-                        </div>
+                            <p className={style.required__title}>* - поля обязательные для заполнения</p>
+                            <div className={style.button__save}>
+                                <ButtonCreate text={"Заказать"} type={"submit"} disabled={Object.keys(formikOrder.errors).length > 0}/>
+                            </div>
                         </form>
                     </div>
                     <div className={style.block__order__items}>
                         {
                             cart.map((obj, index) => 
-                                <CartItemOrder
+                                <OrderItem
                                     key={index}
                                     {...obj}
                                 />
                             )
                         }
                     </div>
-            </div>
+                </div>
+                :
+                <div className={style.block__successStatus}>
+                    <div className={style.inner__block__success}>
+                        <img className={style.block__successStatus__image} src="../../assets/party_popper.png" alt="Popper" />
+                        <p className={style.block__successStatus__text}>Заказ успешно оформлен</p>
+                        <div className={style.block__buttons}>
+                            <ButtonNull title={"В каталог"} path={'/ready-gifts/all'}/>
+                            <a className={style.button__check} href={url} target="_blank" rel="noopener noreferrer">Чек</a>
+                        </div>
+                    </div>
+                </div>
+            }
         </section>
      );
 }

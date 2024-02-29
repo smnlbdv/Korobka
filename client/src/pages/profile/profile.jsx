@@ -12,6 +12,7 @@ import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import InputProfile from "../../components/inputProfile/inputProfile.jsx";
 import style from "./profile.module.scss";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
+import ProfileOrderItem from "../../components/profileOrderItem/profileOrderItem.jsx";
 
 const Profile = () => {
   const { uploadAvatar, profile, setProfile, getProfile, logout, updateProfileUser, contextHolder, order, updatePassUser } = useContext(AuthContext);
@@ -383,7 +384,16 @@ const Profile = () => {
           {
             order.length != 0 ?
             <div>
-
+              {
+                order.map((obj, index) => 
+                <ProfileOrderItem
+                    key={index}
+                    favorite={true}
+                    groupImage={obj.items}
+                    {...obj}
+                />
+              )
+              }
             </div>
             :
             <div className={style.profile__block_null}>

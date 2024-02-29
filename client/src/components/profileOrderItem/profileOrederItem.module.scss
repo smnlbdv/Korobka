@@ -1,0 +1,103 @@
+.order__item_block {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 7px;
+    padding: 15px 20px;
+    width: 100%;
+    column-gap: 10px;
+    margin-top: 30px;
+    .image_product {
+        width: 85px;
+    }
+    .cart__item_info {
+        max-width: 279px;
+        color: black;
+    }
+    .title {
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 600; 
+        margin-bottom: 5px;
+    }
+    .text {
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400; 
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+    }  
+    .count__product {
+        color: #282727;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 400; 
+        white-space: nowrap;
+    }
+    .price {
+        color: #282727;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 500; 
+        white-space: nowrap;
+    }
+    .order__images {
+        position: relative;
+        display: flex;
+        align-items: center;
+        max-width: 263px;
+    }
+    .countOrder {
+        font-size: 20px;
+        color: rgb(255, 255, 255);
+
+    }
+    .block__count {
+        position: absolute;
+        left: 187px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        background-color: rgba(63, 63, 255, 0.88);
+    }
+    .list__info__order {
+        display: flex;
+        flex-direction: column;
+        color: #282727;
+        font-size: 12px;
+        margin-left: 15px;
+        b {
+            font-weight: 600;
+        }
+    }
+    .order__item__status {
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 80px;
+        border-radius: 7px;
+        background-color: #4345df;
+        padding: 4px;
+        font-size: 13px;
+        text-align: center;
+    }
+    .btn__delete_order {
+        all: unset;
+        cursor: pointer;
+
+        img {
+            width: 23px;
+            height: 23px;
+        }
+    }
+}

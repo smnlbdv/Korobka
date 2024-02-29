@@ -26,16 +26,6 @@ const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
 const Admin = lazy(() => import("./pages/admin/admin.jsx"));
 const OrderPage = lazy(() => import("./pages/orderPage/orderPage.jsx"));
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-}
-
 function App() {
   const [reviewsList, setReviewsList] = useState([])
   const [profile, setProfile] = useState({});
@@ -103,9 +93,9 @@ function App() {
             setFavoriteItem(newFavorite)
           }
 
-          // if(typeof(response.data.order) !== 'string') {
-          //   setOrder(...response.data.order.slice())
-          // }
+          if(response.data.order && order.length == 0) {
+            setOrder([...response.data.order])
+          }
 
         })
         .catch(response => {
@@ -198,8 +188,6 @@ function App() {
           'Authorization': `${token.token}`,
         }})
         .then(response => {
-
-          console.log(response.data)
           if(response.data.count > 1) {
             const cartItemIndex = cart.findIndex(item => item._id === response.data.product._id);
             cart[cartItemIndex].count = response.data.count;
@@ -277,7 +265,7 @@ function App() {
     }
   }
 
-  const deleteItemCart = async (productId) => {
+  const deleteItemCart = async (productId, order = true) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.delete(`/api/cart/delete/${productId}`, {
@@ -290,7 +278,7 @@ function App() {
             setCart((cart) =>
               cart.filter((item) => item._id != productId)
             );
-            openNotificationError('bottomRight', "Товар удален из корзины")
+            order && openNotificationError('bottomRight', "Товар удален из корзины")
           }
         })
         .catch(response => {
@@ -510,23 +498,54 @@ function App() {
         }})
         .then(response => {
           if(response.status == 200 && response.data.success === true) {
-            console.log(response.data.message)
+            result = {
+              result: response.data.success,
+              message: response.data.messagee,
+              url: response.data.url
+            }
+            setOrder((prev) => [...prev, response.data.order])
+            openNotification('bottomRight', response.data.message)
           }
-          // result = response.data.message;  
-          console.log(response.data.message);  
         })
         .catch(response => {
-          console.log(response.data.message);  
-          // if(response.response.status == 401) {
-          //   logout()
-          //   navigate("/api/auth/login");
-          // }
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
       });
     } catch (error) {
       console.log(error.message)
     }
     return result
   }
+
+  const deleteOrderItem = async(orderId) => {
+    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.delete(`/api/profile/delete-order/${orderId}`, {
+        headers: {
+            'Authorization': `${data.token}`,
+        }
+      })
+        .then(response => {
+          if(response.status === 200 && response.data.success === true) {
+            openNotificationError('bottomRight', response.data.message)
+            setOrder((cart) =>
+                cart.filter((item) => item._id !== orderId)
+            );  
+          } 
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+      });
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
   
 
   return (
@@ -566,7 +585,9 @@ function App() {
         calculatePrice,
         adminFetch,
         categories,
-        placeOrder
+        placeOrder,
+        setOrder,
+        deleteOrderItem,
       }}
     >
         <Routes>

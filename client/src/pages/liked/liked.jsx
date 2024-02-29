@@ -43,7 +43,7 @@ const Liked = () => {
                     <div className={style.block__info}>
                         <p className={style.title}>У вас нет понравившихся товаров</p>
                         <div className={style.btn_block}>
-                            <ButtonNull title={"В каталог"} path={'/ready-gifts'}/>
+                            <ButtonNull title={"В каталог"} path={'/ready-gifts/all'}/>
                         </div>
                     </div>
                 </div>
