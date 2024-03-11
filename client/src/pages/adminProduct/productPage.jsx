@@ -105,30 +105,31 @@ const ProductPage = () => {
 
         try {
           const token = JSON.parse(localStorage.getItem('userData')) || '';
-          await api.post("/api/admin/add", formData, {
-            headers: {
-              'Authorization': `${token.token}`,
-              'Content-Type': 'multipart/form-data',
-            }})
-            .then((response) => {
-              if(response.status === 202) {
-                resetForm();
-                setSelectedImage('')
-                setSelectedSlider([])
-                setPathImage('')
-                setPathSlider([])
-                setAllProduct((prev) => [...prev, response.data.newProduct])
-                openNotification('bottomRight', 'Товар успешно добавлен БД');
-              }
-            })
-            .catch((response) => 
-              {
-                if(response.response.status == 401) {
-                  logout()
-                  navigate("/api/auth/login");
-                }
-              }
-            );
+          console.log(formData);
+          // await api.post("/api/admin/add", formData, {
+          //   headers: {
+          //     'Authorization': `${token.token}`,
+          //     'Content-Type': 'multipart/form-data',
+          //   }})
+          //   .then((response) => {
+          //     if(response.status === 202) {
+          //       resetForm();
+          //       setSelectedImage('')
+          //       setSelectedSlider([])
+          //       setPathImage('')
+          //       setPathSlider([])
+          //       setAllProduct((prev) => [...prev, response.data.newProduct])
+          //       openNotification('bottomRight', 'Товар успешно добавлен БД');
+          //     }
+          //   })
+          //   .catch((response) => 
+          //     {
+          //       if(response.response.status == 401) {
+          //         logout()
+          //         navigate("/api/auth/login");
+          //       }
+          //     }
+            // );
         } catch (error) {
           console.log("Ошибка", error);
         }

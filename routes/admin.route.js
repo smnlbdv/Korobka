@@ -17,9 +17,9 @@ const storage = multer.diskStorage({
     },
   });
   
-  const upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
   
-  const adminRoute = Router();
+const adminRoute = Router();
   
 adminRoute.post('/add', verifyToken, upload.any(), async (req, res) => {
   try {
@@ -40,17 +40,19 @@ adminRoute.post('/add', verifyToken, upload.any(), async (req, res) => {
           ...req.body
     });
 
+    console.log(newProdcut);
+
     const newProdcut = await newProduct.save();
     
-    res.status(202).json({
-        message: "Товар успешно добавлен",
-        newProdcut
-    })
+    // res.status(202).json({
+    //     message: "Товар успешно добавлен",
+    //     newProdcut
+    // })
 
   } catch (error) {
-    res.status(500).json({
-      message: "Не удалось добавить товар. Пожалуйста, попробуйте еще раз."
-    });
+    // res.status(500).json({
+    //   message: "Не удалось добавить товар. Пожалуйста, попробуйте еще раз."
+    // });
   }
 });
 

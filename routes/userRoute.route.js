@@ -83,20 +83,15 @@ userRoute.patch("/update", verifyToken, async (req, res) => {
     const userId = req.userId;
     const body = req.body;
 
-    if (body.email) {
-      const email = await User.findMany({ email: body.email });
-      email
-        ? res.status(409).json({ message: "Такая почта уже существует" })
-        : await User.updateOne({ _id: userId }, body, { new: true })
+    await User.updateOne({ _id: userId }, body, { new: true })
             .then(() => {
-              res.status(201).json({
+              res.status(200).json({
                 message: "Данные успешно сохранены",
               });
             })
             .catch((error) =>
               res.status(400).json({ message: "Ошибка сохранения данных" })
             );
-    }
   } catch (error) {
     res.status(401).json({ error: error.message });
   }

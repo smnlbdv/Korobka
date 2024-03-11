@@ -1,6 +1,6 @@
 .button_login {
     font-size: 15px;
-    background-color: #F14D29;
+    background-color: rgb(247, 25, 25);
     border-radius: 4px;
     color: white;
     font-weight: 500; 
@@ -10,7 +10,7 @@
     cursor: pointer;
 
     &:hover {   
-        background-color: #fb5833;
+        background-color: #f74016;
         transition: all 300ms;
     }
 

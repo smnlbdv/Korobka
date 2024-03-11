@@ -10,11 +10,15 @@ import style from './cart.module.scss'
 
 const Cart = () => {
     const [sale, setSale] = useState(0)
-    const { cart, calculatePrice, cartTotalPrice } = useContext(AuthContext)
+    const { cart, calculatePrice, cartTotalPrice, scrollToTop } = useContext(AuthContext)
 
     useEffect(() => {
         calculatePrice(); 
     }, [cart]); 
+
+    useEffect(() => {
+        scrollToTop()
+    }, [])
 
     return ( 
         <section className={`${style.section_cart} wrapper`}>

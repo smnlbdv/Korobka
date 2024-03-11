@@ -15,12 +15,13 @@ import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 import ProfileOrderItem from "../../components/profileOrderItem/profileOrderItem.jsx";
 
 const Profile = () => {
-  const { uploadAvatar, profile, setProfile, getProfile, logout, updateProfileUser, contextHolder, order, updatePassUser } = useContext(AuthContext);
+  const { uploadAvatar, profile, setProfile, getProfile, logout, updateProfileUser, contextHolder, order, updatePassUser, scrollToTop } = useContext(AuthContext);
   const inputFileRef = useRef(null);
   const inputNewPass = useRef(null);
   const inputPrePass = useRef(null);
   const inputDoublePass = useRef(null);
   const [avatarUser, setAvatarUser] = useState("")
+  const [initialData, setInitialData] = useState({})
   const [typeInputPass, setTypeInputPass] = useState("password")
   const [titleHiddenButton, setTitleHiddenButton] = useState(true)
   const navigate = useNavigate();
@@ -72,6 +73,10 @@ const Profile = () => {
     }
   });
 
+  function compareObjects(obj1, obj2) {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
+
   const formikPersonal = useFormik({
     initialValues: {
       name: "",
@@ -92,23 +97,26 @@ const Profile = () => {
         )
     }),
     onSubmit: (values) => {
-      const formData = {
-        ...values,
-        status: profile.status,
-        avatarUser: profile.avatarUser
-      }
 
-      const isRighData = JSON.stringify(profile) === JSON.stringify(formData);
-
-      if(!isRighData) {
-        const changedItems = Object.keys(profile).reduce((result, key) => {
-          if (profile[key] !== formData[key]) {
-            result[key] = formData[key];
-          }
-          return result;
-        }, {});
-        updateProfileUser(changedItems);
-      }
+      if (!compareObjects(initialData, values)) {
+        const formData = {
+          ...values,
+          status: profile.status,
+          avatarUser: profile.avatarUser
+        }
+  
+        const isRighData = JSON.stringify(profile) === JSON.stringify(formData);
+  
+        if(!isRighData) {
+          const changedItems = Object.keys(profile).reduce((result, key) => {
+            if (profile[key] !== formData[key]) {
+              result[key] = formData[key];
+            }
+            return result;
+          }, {});
+          updateProfileUser(changedItems);
+        }
+      } 
     },
   });
 
@@ -120,16 +128,19 @@ const Profile = () => {
     if (profile.length == 0) {
       getProfile();
     }
+    scrollToTop()
   }, []);
 
   useEffect(() => {
       if (profile.length != 0) {
-        formikPersonal.setValues({
+        const newData = {
           name: profile.name,
           surname: profile.surname,
-          email: profile.email,
           phone: profile.phone,
-        })
+          email: profile.email,
+        }
+        formikPersonal.setValues(newData)
+        setInitialData(newData)
         setAvatarUser(profile.avatarUser)
     }
   }, [profile]);

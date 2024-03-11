@@ -22,20 +22,12 @@ const ReadyGifts = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [showSlider, setShowSlider] = useState(false);
     const [hiddenPagination, setHiddenPagination] = useState(true);
-    const { categories, contextHolder, } = useContext(AuthContext)
+    const { categories, contextHolder, scrollToTop, getCategories } = useContext(AuthContext)
     const [valueCategory, setValueCategory] = useState()
 
     const toggleSlider = () => {
         setShowSlider(!showSlider);
       };
-
-    const scrollToTop = () => {
-        const c = document.documentElement.scrollTop || document.body.scrollTop;
-        if (c > 0) {
-            window.requestAnimationFrame(scrollToTop);
-            window.scrollTo(0, c - c / 20);
-        }
-    };
 
     const renderItems = () => {
         const itemsToRender = (isLoading ? boxes : [...Array(7)]).map((obj, index) => (
@@ -85,6 +77,10 @@ const ReadyGifts = () => {
         setIsLoading(false)
         fetchData(limit, page, search, categoryId, {min: minPrice, max: maxPrice});
     }
+
+    useEffect(() => {
+        getCategories()
+    }, [])
 
 
     useEffect(() => {

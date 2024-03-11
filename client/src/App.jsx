@@ -114,7 +114,7 @@ function App() {
     try {
       await api.get('/api/category/all')
         .then(response => {
-          setCategories(response.data.categories);
+          setCategories([...response.data.categories]);
         })
         .catch(response => {
           if(response.response.status == 401) {
@@ -404,7 +404,9 @@ function App() {
             'Authorization': `${data.token}`,
         }})
         .then(response => {
-            openNotification('bottomRight', response.data.message)
+            if(response.status == 200) {
+              openNotification('bottomRight', response.data.message)
+            }
         })
         .catch(response => {
           if(response.response.status == 400) {
@@ -546,6 +548,14 @@ function App() {
     }
   }
 
+  const scrollToTop = () => {
+    const c = document.documentElement.scrollTop || document.body.scrollTop;
+    if (c > 0) {
+        window.requestAnimationFrame(scrollToTop);
+        window.scrollTo(0, c - c / 20);
+    }
+};
+
   
 
   return (
@@ -588,6 +598,8 @@ function App() {
         placeOrder,
         setOrder,
         deleteOrderItem,
+        scrollToTop,
+        getCategories
       }}
     >
         <Routes>

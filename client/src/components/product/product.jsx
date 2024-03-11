@@ -103,7 +103,7 @@ const Product = ({_id, img, title, price, preText, loading = true }) => {
                                             </p>
                                         </div>
                                         <img className={style.counter__image} src="/assets/product-cart-increase.svg" alt="Increase" onClick={addProduct}/>
-                                    </div>
+                                    </div>  
                                     :
                                     <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
                                 }
