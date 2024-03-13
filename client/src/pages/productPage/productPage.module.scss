@@ -6,7 +6,7 @@
 .block__adding__product {
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: flex-start;
     column-gap: 120px;
     margin-top: 50px;
     background-image: url('/assets/bg-main-img.png');
@@ -14,6 +14,7 @@
     background-size:contain;
     background-position: center;
 }
+
 
 .header__product {
     display: flex;
@@ -94,8 +95,8 @@
     }
     .share__icon__link {
         cursor: pointer;
-        width: 30px;
-        height: 30px;
+        width: 35px;
+        height: 35px;
 
         img {
             width: 100%;
@@ -180,7 +181,7 @@
 
 .slider__item_active {
     transition: all 300ms;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.986);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.889);
     &::after {
         position: absolute;
         top: 0;

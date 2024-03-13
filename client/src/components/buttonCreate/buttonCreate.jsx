@@ -4,41 +4,37 @@ import { AuthContext } from "../../context/authContext.js";
 import style from './buttonCreate.module.scss'
 
 
-const ButtonCreate = ({_id, text, sendEmailData = false, type, getCountProduct, isCounter = false, addCart, setIsCounter, disabled = false, counter, addCartPage }) => {
+const ButtonCreate = ({_id, text, type, isCounter = false, setIsCounter, getCountProduct, disabled = false }) => {
     
-    const { increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext);
-    const [counterCart, setCounterCart] = useState(counter)
+    const [counterCart, setCounterCart] = useState(0);
+    const { addCart, decreaseCartItem, unmountItem } = useContext(AuthContext);
 
-    const addProduct = () => {  
+    const addProduct = async () => { 
         if (counterCart >= 200) {
             setCounterCart(counterCart);
         } else {
-          const resultIncrease = increaseCartItem(_id);
-          if (resultIncrease) {
-            setCounterCart(counterCart + 1);
-          }
+          await addCart(_id)
+          await getCountProduct()
+          setCounterCart(counterCart + 1);
         }
     };
     const subtractProduct = () => {
-        if (counterCart <= 1) {
-          unmountItem(_id);
-        } else {
-          const resultDeCrease = decreaseCartItem(_id);
-          if (resultDeCrease) {
-            setCounterCart(counterCart - 1);
-          }
-        }
+        // if (counterCart <= 1) {
+        //   unmountItem(_id);
+        // } else {
+        //   const resultDeCrease = decreaseCartItem(_id);
+        //   if (resultDeCrease) {
+        //     setCounterCart(counterCart - 1);
+        //   }
+        // }
     };
-    const sendEmailMessage = () => {
-        sendEmailData()
-    }
     const openCounterBlock = async () => {
         setIsCounter(true)
-        addCartPage()
+        addProduct()
     }
 
     return ( 
-        <button className={style.button_create } type={type} disabled={disabled}>
+        <button className={style.button_create } type={type} disabled={disabled} onClick={() => openCounterBlock()}>
             {
             !isCounter ? 
                 text
@@ -46,7 +42,7 @@ const ButtonCreate = ({_id, text, sendEmailData = false, type, getCountProduct, 
                 <div className={style.counter__block}>
                     <img className={style.image__minus} src="/assets/minus-hidden-block.svg" alt="Minus" onClick={subtractProduct} />
                     <p className={style.image__counter}>{counterCart}</p>
-                    <img className={style.image__plus} src="/assets/plus-hidden-block.svg" alt="Plus" onClick={addProduct}/>
+                    <img className={style.image__plus} src="/assets/plus-hidden-block.svg" alt="Plus" onClick={() => addProduct}/>
                 </div>
             }
         </button>

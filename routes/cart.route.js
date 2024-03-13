@@ -100,7 +100,7 @@ cartRoute.delete('/delete/:productId', verifyToken, async (req, res) => {
 cartRoute.post('/increase/', verifyToken, async (req, res) => {
     try {
         const productId = req.body.id;
-        const userId = req.userId
+        const userId = req.userId;
         await CartItem.updateOne(
             { owner: userId, 'items.product': productId},
             { $inc: { 'items.$.quantity': 1 } },
