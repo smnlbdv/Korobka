@@ -16,7 +16,6 @@ import "./ant.css";
 
 const ProductPage = () => {
   const [counts, setCounts] = useState(0);
-  const [itemSlider, setItemSlider] = useState(0);
   const [isCounter, setIsCounter] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [productReviews, setProductReviews] = useState([]);

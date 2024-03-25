@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useContext } from 'react';
-import { Link, useParams } from 'react-router-dom' 
+import { Link, useParams, useNavigate } from 'react-router-dom' 
 import debounce from 'debounce';
-import { Pagination } from 'antd';
+import { Pagination, Select, Space } from 'antd';
 
 import fetchAllBox from '../../services/PostService';
 import style from './readyGifts.module.scss'
@@ -22,9 +22,17 @@ const ReadyGifts = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [showSlider, setShowSlider] = useState(false);
     const [hiddenPagination, setHiddenPagination] = useState(true);
-    const { categories, contextHolder, scrollToTop, getCategories } = useContext(AuthContext)
+    const { categories, contextHolder, scrollToTop } = useContext(AuthContext)
     const [valueCategory, setValueCategory] = useState()
+    const [categoriesOption, setCategoriesOption] = useState([])
+    const [startCategoryValue, setStartCategoryValue] = useState()
+    const nav = useNavigate()
 
+    const handleChange = (value, event) => {
+        nav(`/ready-gifts/${event.key}`)
+        setStartCategoryValue(value);
+        document.cookie = `id_category=${event.id}; expires= ${new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toUTCString()}; path=/; SameSite=None; Secure;`;
+    };
     const toggleSlider = () => {
         setShowSlider(!showSlider);
       };
@@ -43,7 +51,7 @@ const ReadyGifts = () => {
             if (hiddenPagination) {
                 setHiddenPagination(false);
             }
-            return <p className={style.product__null__text}>Товаров на данную категорию не найдено</p>;
+            return <p className={style.product__null__text}>Товаров по заданным фильтрам не найдено</p>;
         }
     }
 
@@ -79,7 +87,13 @@ const ReadyGifts = () => {
     }
 
     useEffect(() => {
-        getCategories()
+        setCategoriesOption(categories.map((item) => ({
+            value: item.value,
+            label: item.value,
+            key: item.key,
+            id: item._id
+        })))
+        setStartCategoryValue(valueCategory)
     }, [])
 
 
@@ -100,8 +114,10 @@ const ReadyGifts = () => {
             await fetchData(limit, page, search, cookieValue);
         }
         fetch();
+        setStartCategoryValue(value.value)
         
     }, [category])
+
 
     return (
         <>
@@ -131,6 +147,17 @@ const ReadyGifts = () => {
                         <input type="text" placeholder='Поиск..' onInput={(event) => delayedSearch(event.target.value)}/>
                     </div>
                     <div className={style.filter_item__block}>
+                        <Space wrap>
+                                <Select
+                                    value={startCategoryValue}
+                                    style={{
+                                        width: 160,
+                                    }}
+                                    onChange={(value, event) => handleChange(value, event)}
+                                    options={categoriesOption}
+                                />
+
+                        </Space>
                         <div className={style.filter_item} onClick={() => toggleSlider()}>
                             <img src="/assets/dollar-circle.svg" alt="" />
                             <p>Цена</p>

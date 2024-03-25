@@ -11,6 +11,7 @@ import { AuthContext } from "../../context/authContext.js";
 
 const Header = () => {
     const [countCart, setCountCart] = useState(0)
+    const [items, setItems] = useState([])
     const [countFavorite, setCountFavorite] = useState(0)
     const { isLogin, cart, role, userId, categories, favoriteItem } = useContext(AuthContext)
 
@@ -27,15 +28,17 @@ const Header = () => {
         document.cookie = `id_category=${li.id}; expires= ${new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toUTCString()}; path=/; SameSite=None; Secure;`;
     }
 
-    const items = categories.map((item, index) => ({
-        label: (
-            <Link to={`ready-gifts/${item.key}`} onClick={(event) => getIdLink(event)}>
-              {item.value}
-            </Link>
-        ),
-        key: index,
-        id: item._id
-    }))
+    useEffect(() => {
+        setItems(categories.map((item, index) => ({
+            label: (
+                <Link to={`ready-gifts/${item.key}`} onClick={(event) => getIdLink(event)}>
+                  {item.value}
+                </Link>
+            ),
+            key: index,
+            id: item._id
+        })))
+    }, [categories])
 
     return (
         <header className={`${style.header}`}>

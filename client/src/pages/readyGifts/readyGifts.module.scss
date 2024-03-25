@@ -83,6 +83,9 @@
 
 .filter_item__block {
     position: relative;
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
 }
 
 .product__null__text {
