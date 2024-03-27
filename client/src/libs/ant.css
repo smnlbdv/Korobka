@@ -24,6 +24,7 @@
 .ant-modal {
     padding: 0 !important;
     top: 0px !important;
+    font-family: 'Montserrat', sans-serif !important;
 }
 
 .ant-tabs {
@@ -58,4 +59,13 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.068) !important;
 }
 
+.ant-modal-body {
+    display: flex !important;
+    flex-direction: column;
+    padding-top: 20px !important;
+    row-gap: 30px !important;
+    max-height: 500px !important;
+    overflow: auto !important;
+    padding: 20px !important;
+}
 

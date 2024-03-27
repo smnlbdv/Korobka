@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/authContext.js";
 
 import style from "./profileOrederItem.module.scss";
 
-const ProfileOrderItem = ({_id, groupImage, wayPay, totalAmount, address, status, onClick }) => {
+const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, status, onClick }) => {
 
     const { deleteOrderItem } = useContext(AuthContext);
 
@@ -13,11 +13,15 @@ const ProfileOrderItem = ({_id, groupImage, wayPay, totalAmount, address, status
         deleteOrderItem(_id)
     }
 
+    const clickItem = () => {
+        onClick(_id)
+    }
+
     const widthMultiplier = groupImage.length > 3 ? 200 : 55 * groupImage.length;
 
 
     return (
-        <div className={style.order__item_block} onClick={onClick}>
+        <div className={style.order__item_block} onClick={clickItem}>
             <div className={style.order__images} style={ { width: widthMultiplier + 'px' } }>
             {
                 groupImage.map((item, index) => (

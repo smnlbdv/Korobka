@@ -37,9 +37,17 @@ const Profile = () => {
   const [titleHiddenButton, setTitleHiddenButton] = useState(true);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  const showModal = () => {
+  const showModal = (_id) => {
     setIsModalOpen(true);
+
+    order.forEach((orderItem) => {
+      if(String(orderItem._id) === String(_id)) {
+        setSelectedItems([...orderItem.items]);
+      }
+    })
+    // console.log(newArray);
   };
   const handleOk = () => {
     setIsModalOpen(false);
@@ -428,7 +436,30 @@ const Profile = () => {
             onCancel={handleCancel}
             width={800}
             footer={null}
-          ></Modal>
+          >
+            {selectedItems.map((item, index) => (
+              <div className={style.modal__block__items} key={index}>
+                <div className={style.modal__block__image}>
+                  <img src={item.productId.img} alt="" />
+                </div>
+                <div className={style.modal__block__description}>
+                  <p className={style.modal__item__title}>
+                    {item.productId.title}
+                  </p>
+                  <p className={style.modal__item__description}>
+                    {item.productId.preText}
+                  </p>
+                </div>
+                <p className={style.modal__item__quantity}>
+                  Кол-во: {item.quantity}
+                </p>
+                <div className={style.modal__item__price}>
+                  Цена: <br></br>{item.productId.price} BYN
+                </div>
+                
+              </div>
+            ))}
+          </Modal>
           {order.length != 0 ? (
             <div className={style.block__orders}>
               {order.map((obj, index) => (
@@ -437,7 +468,7 @@ const Profile = () => {
                   favorite={true}
                   groupImage={obj.items}
                   {...obj}
-                  onClick={() => showModal()}
+                  onClick={showModal}
                 />
               ))}
             </div>
