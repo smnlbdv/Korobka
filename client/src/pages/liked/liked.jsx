@@ -13,7 +13,11 @@ import style from './liked.module.scss'
 
 
 const Liked = () => {
-    const { favoriteItem, contextHolder } = useContext(AuthContext)
+    const { favoriteItem, contextHolder, scrollToTop } = useContext(AuthContext)
+
+    useEffect(() => {
+        scrollToTop();
+    }, [])
 
     return ( 
         <section className={`${style.section_cart} wrapper`}>

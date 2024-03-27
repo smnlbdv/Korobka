@@ -16,8 +16,8 @@
     padding: 16px 20px !important;
 }
 
-.ant-modal-wrap {
-    display: flex!important;
+.ant-modal-wrap:not([style*='display: none']) { 
+    display: flex !important;
     align-items: center !important;
 }
 
@@ -57,4 +57,5 @@
     background-color: #f33632 !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.068) !important;
 }
+
 

@@ -76,7 +76,7 @@ const Main = () => {
 
   const [open, setOpen] = useState(3);
   const [emailText, setEmailText] = useState('')
-  const {contextHolder, newBoxList, sendEmailData, contextHolderEmail, reviewsList} = useContext(AuthContext);
+  const {contextHolder, newBoxList, sendEmailData, contextHolderEmail, reviewsList, scrollToTop} = useContext(AuthContext);
 
   const formik = useFormik({
     initialValues: {
@@ -114,6 +114,10 @@ const Main = () => {
       formik.resetForm();
     }
   }, [emailText])
+
+  useEffect(() => {
+    scrollToTop();
+  }, [])
   
 
   return (

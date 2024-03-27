@@ -7,6 +7,7 @@
     background-repeat: no-repeat;
     background-size:contain;
     background-position: center;
+    padding-bottom: 80px;
 }
 .section_title {
     padding-top: 45px;
@@ -17,7 +18,14 @@
     flex: 1;
 }
 
+.block__orders {
+    padding-top: 15px;
+}
+
 .block__user {
+    position: sticky;
+    top: 40px;
+    height: max-content;
     max-width: 490px;
 }
 
@@ -82,6 +90,7 @@
 }
 
 .main__block__profile {
+    position: relative;
     display: flex;
     column-gap: 50px;
 }
@@ -157,5 +166,9 @@
         display: flex;
         column-gap: 10px;
     }
+}
+
+.block__item__order {
+    position: relative;
 }
 
