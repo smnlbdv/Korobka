@@ -133,6 +133,7 @@ function App() {
       modal.success({
         title: 'Подписка на новости Korobka',
         content: `${message}`,
+        okText: 'Хорошо',
       });
 
     }
@@ -140,6 +141,7 @@ function App() {
       modal.error({
         title: 'Подписка на новости Korobka',
         content: `${message}`,
+        okText: 'Хорошо',
       });
 
     }

@@ -13,11 +13,15 @@ import style from './liked.module.scss'
 
 
 const Liked = () => {
-    const { favoriteItem, contextHolder, scrollToTop } = useContext(AuthContext)
+    const { favoriteItem, contextHolder, scrollToTop, setFavoriteItem } = useContext(AuthContext)
 
     useEffect(() => {
         scrollToTop();
     }, [])
+
+    const clearFavorite = () => {
+        setFavoriteItem([])
+    }
 
     return ( 
         <section className={`${style.section_cart} wrapper`}>
@@ -28,7 +32,10 @@ const Liked = () => {
                 </Link>
                 <li>Избранное</li>
             </ul>
-            <h2 className={`${style.section_title} section__title`}>Избранное</h2>
+            <div className={style.section_cart__header}>
+                <h2 className={`${style.section_title} section__title`}>Избранное</h2>
+                <p onClick={clearFavorite}>Удалить все</p>
+            </div>
             {
                 favoriteItem.length != 0 ?
                 <div className={style.favorite_items}>

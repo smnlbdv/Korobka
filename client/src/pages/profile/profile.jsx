@@ -41,13 +41,12 @@ const Profile = () => {
 
   const showModal = (_id) => {
     setIsModalOpen(true);
-
+    
     order.forEach((orderItem) => {
       if(String(orderItem._id) === String(_id)) {
         setSelectedItems([...orderItem.items]);
       }
     })
-    // console.log(newArray);
   };
   const handleOk = () => {
     setIsModalOpen(false);

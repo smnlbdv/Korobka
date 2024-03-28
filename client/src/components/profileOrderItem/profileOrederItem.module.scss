@@ -1,7 +1,7 @@
 .order__item_block {
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr auto 80px 80px 25px;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     column-gap: 10px;
     justify-content: flex-end;
@@ -102,6 +102,15 @@
             height: 23px;
         }
     }
+}
+
+.order__click__block {
+    display: grid;
+    grid-template-columns: minmax(80px, auto) auto 80px 80px;
+    align-items: center;
+    column-gap: 10px;
+    width: 100%;
+    cursor: pointer;
 }
 
 .image__block {

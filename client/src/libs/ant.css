@@ -22,9 +22,14 @@
 }
 
 .ant-modal {
+    min-width: 530px !important;
     padding: 0 !important;
     top: 0px !important;
     font-family: 'Montserrat', sans-serif !important;
+}
+
+.ant-modal-content {
+    padding: 15px !important;
 }
 
 .ant-tabs {
