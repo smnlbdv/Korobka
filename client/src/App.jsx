@@ -38,6 +38,7 @@ function App() {
   const [modal, contextHolderEmail] = Modal.useModal();
   const { login, logout, token, userId, role, setRole } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
+  const [checkArray, setCheckArray] = useState([]);
   const navigate = useNavigate();
   const isLogin = !!token;
 
@@ -50,7 +51,7 @@ function App() {
     getCategories()
   }, [isLogin])
 
-  const calculatePrice = useCallback(() => {
+  const calculatePrice = useCallback((cart) => {
     const total = cart.reduce((accumulator, product) => {
       const subtotal = product.count * product.price;
       return accumulator + subtotal;
@@ -214,7 +215,7 @@ function App() {
     }
   };
 
-  const increaseCartItem = async (id) => {
+  const increaseCartItem = async (id, cartCheck) => {
     console.log(id);
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
@@ -226,7 +227,11 @@ function App() {
           const index = cart.findIndex(item => item._id === id);
           if(index !== -1) {
             cart[index]['count'] += 1
-            calculatePrice()
+            if(cartCheck) {
+              calculatePrice(checkArray)
+              return response.data.increase
+            }
+            calculatePrice(cart)
           }
           openNotification('bottomRight', 'Товар успешно добавлен в корзину')
           return response.data.increase
@@ -242,7 +247,7 @@ function App() {
     }
   }
 
-  const decreaseCartItem = async (id) => {
+  const decreaseCartItem = async (id, cartCheck) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post(`/api/cart/decrease/`, {id: id}, {
@@ -253,7 +258,11 @@ function App() {
           const index = cart.findIndex(item => item._id === id);
           if(index !== -1) {
             cart[index]['count'] -= 1
-            calculatePrice()
+            if(cartCheck) {
+              calculatePrice(checkArray)
+              return response.data.increase
+            }
+            calculatePrice(cart)
           }
           return response.data.increase
         })
@@ -497,7 +506,7 @@ function App() {
     let result;
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.post(`/api/profile/order`, {order: order, cart: cart, totalAmount: calculatePrice() }, {
+      await api.post(`/api/profile/order`, {order: order, cart: cart, totalAmount: calculatePrice(cart) }, {
         headers: {
             'Authorization': `${data.token}`,
         }})
@@ -602,7 +611,9 @@ function App() {
         setOrder,
         deleteOrderItem,
         scrollToTop,
-        getCategories
+        getCategories,
+        checkArray,
+        setCheckArray
       }}
     >
         <Routes>

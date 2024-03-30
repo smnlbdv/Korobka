@@ -6,10 +6,25 @@ import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
 import { Link  } from 'react-router-dom';
 
-const CartItem = ({ _id, img, title, preText, price, count }) => {
+const CartItem = ({ _id, img, title, preText, price, count, checkArray, setCheckArray }) => {
   const [counts, setCounts] = useState(count);
+  const [cartCheck, setCartCheck] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const { cart,  deleteItemCart, deleteProductFavorite, addProductFavorite, favoriteItem } = useContext(AuthContext);
+
+  const cartCheckClick = () => {
+    if(!cartCheck) {
+      const foundItem = cart.find(item => item._id === _id);
+      if(foundItem) {
+        setCheckArray(prevArray => [...prevArray, foundItem])
+        setCartCheck(true)
+      }
+    } else {
+      setCheckArray(checkArray.filter(item => item._id !== _id))
+      setCartCheck(false)
+    }
+    console.log(checkArray);
+  }
 
   const clickDeleteButton = () => {
     deleteItemCart(_id);
@@ -31,7 +46,8 @@ const CartItem = ({ _id, img, title, preText, price, count }) => {
 }
 
   return (
-    <div className={style.cart__item_block}>
+    <div className={`${style.cart__item_block} ${cartCheck && style.cart__item_active}`}>
+      <img className={style.check__image} src={cartCheck ? "/assets/cart-check-active.svg" : "/assets/cart-check.svg" } alt="Cart check" onClick={cartCheckClick}/>
       <Link to={`/product/${_id}`} key={_id}>
         <img className={style.image_product} src={img} alt="Image item" />
       </Link>
@@ -43,6 +59,7 @@ const CartItem = ({ _id, img, title, preText, price, count }) => {
         counts={counts}
         setCounts={setCounts}
         _id={_id}
+        cartCheck={cartCheck}
       />
       <p className={style.price}>{price} BYN</p>
       <div className={!isFavorite ? style.page__product_love : style.page__product_nolove} onClick={clickHeart}>

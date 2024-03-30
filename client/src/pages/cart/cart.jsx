@@ -10,11 +10,16 @@ import style from './cart.module.scss'
 
 const Cart = () => {
     const [sale, setSale] = useState(0)
-    const { cart, calculatePrice, cartTotalPrice, scrollToTop } = useContext(AuthContext)
+    const { cart, calculatePrice, cartTotalPrice, scrollToTop, checkArray, setCheckArray } = useContext(AuthContext)
 
     useEffect(() => {
-        calculatePrice(); 
-    }, [cart]); 
+        if(checkArray.length != 0) {
+            calculatePrice(checkArray); 
+        } else {
+            calculatePrice(cart); 
+        }
+
+    }, [calculatePrice, cart, checkArray]); 
 
     useEffect(() => {
         scrollToTop()
@@ -40,6 +45,8 @@ const Cart = () => {
                                 <CartItem
                                     key={index}
                                     {...obj}
+                                    checkArray={checkArray}
+                                    setCheckArray={setCheckArray}
                                 />
                             )
                         }

@@ -4,7 +4,8 @@
     justify-content: space-between;
     background-color: white;
     border-radius: 7px;
-    padding: 20px 30px;
+    padding: 16px 30px;
+    transition: all 250ms;
 
     .image_check {
         width: 23px;
@@ -76,4 +77,13 @@
     background-color: rgb(255, 255, 255);
     box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.079);
 }
+
+.check__image {
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    transition: all 250ms;
+    margin-right: 10px;
+}
+
 

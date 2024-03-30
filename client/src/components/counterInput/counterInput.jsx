@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 import style from './counterInput.module.scss'
 
 // eslint-disable-next-line react/prop-types
-const CounterInput = ({ counts, setCounts, _id }) => {
+const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
     const [input, setInput] = useState(false);
     const { increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext);
 
@@ -12,7 +12,7 @@ const CounterInput = ({ counts, setCounts, _id }) => {
       if (counts <= 1) {
         unmountItem(_id);
       } else {
-        const resultDeCrease = decreaseCartItem(_id);
+        const resultDeCrease = decreaseCartItem(_id, cartCheck);
         if (resultDeCrease) {
           setCounts(counts - 1);
         }
@@ -39,7 +39,7 @@ const CounterInput = ({ counts, setCounts, _id }) => {
       if (counts >= 200) {
         setCounts(counts);
       } else {
-        const resultIncrease = increaseCartItem(_id);
+        const resultIncrease = increaseCartItem(_id, cartCheck);
         if (resultIncrease) {
           setCounts(counts + 1);
         }
