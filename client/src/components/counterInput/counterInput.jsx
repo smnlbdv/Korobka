@@ -6,7 +6,7 @@ import style from './counterInput.module.scss'
 // eslint-disable-next-line react/prop-types
 const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
     const [input, setInput] = useState(false);
-    const { increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext);
+    const { increaseCartItem, decreaseCartItem, unmountItem, checkArray } = useContext(AuthContext);
 
     const subtractProduct = async () => {
       if (counts <= 1) {
@@ -36,12 +36,16 @@ const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
     };
 
     const addProduct = async () => {
-      if (counts >= 200) {
-        setCounts(counts);
+      if(checkArray.length !== 0 && cartCheck === false) {
+        return
       } else {
-        const resultIncrease = increaseCartItem(_id, cartCheck);
-        if (resultIncrease) {
-          setCounts(counts + 1);
+        if (counts >= 200) {
+          setCounts(counts);
+        } else {
+          const resultIncrease = increaseCartItem(_id, cartCheck);
+          if (resultIncrease) {
+            setCounts(counts + 1);
+          }
         }
       }
     };

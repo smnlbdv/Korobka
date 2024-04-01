@@ -216,7 +216,6 @@ function App() {
   };
 
   const increaseCartItem = async (id, cartCheck) => {
-    console.log(id);
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post(`/api/cart/increase/`, {id: id}, {

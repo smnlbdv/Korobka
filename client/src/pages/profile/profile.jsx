@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import { Tabs, Modal } from "antd";
 import * as Yup from "yup";
 
-import "../../libs/ant.css";
+import "./ant.css";
 
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import InputProfile from "../../components/inputProfile/inputProfile.jsx";
@@ -437,26 +437,27 @@ const Profile = () => {
             footer={null}
           >
             {selectedItems.map((item, index) => (
-              <div className={style.modal__block__items} key={index}>
-                <div className={style.modal__block__image}>
-                  <img src={item.productId.img} alt="" />
-                </div>
-                <div className={style.modal__block__description}>
-                  <p className={style.modal__item__title}>
-                    {item.productId.title}
-                  </p>
-                  <p className={style.modal__item__description}>
-                    {item.productId.preText}
-                  </p>
-                </div>
-                <p className={style.modal__item__quantity}>
-                  Кол-во: {item.quantity}
-                </p>
-                <div className={style.modal__item__price}>
-                  Цена: <br></br>{item.productId.price} BYN
-                </div>
-                
-              </div>
+               <Link to={`/product/${item.productId._id}`} key={index}>
+                  <div className={style.modal__block__items}>
+                    <div className={style.modal__block__image}>
+                      <img src={item.productId.img} alt="" />
+                    </div>
+                    <div className={style.modal__block__description}>
+                      <p className={style.modal__item__title}>
+                        {item.productId.title}
+                      </p>
+                      <p className={style.modal__item__description}>
+                        {item.productId.preText}
+                      </p>
+                    </div>
+                    <p className={style.modal__item__quantity}>
+                      Кол-во: {item.quantity}
+                    </p>
+                    <div className={style.modal__item__price}>
+                      Цена: <br></br>{item.productId.price} BYN
+                    </div>
+                  </div>
+               </Link>
             ))}
           </Modal>
           {order.length != 0 ? (

@@ -3,6 +3,7 @@ import {Router, response} from 'express'
 import User from '../models/User.js'
 import CartItem from '../models/Cart.js'
 import verifyToken from '../validation/verifyToken.js'
+import Discount from '../models/Discount.js'
 
 const cartRoute = Router()
 
@@ -122,6 +123,20 @@ cartRoute.post('/decrease/', verifyToken, async (req, res) => {
             { new: true })
             .then((response) => res.status(200).json({increase: response.acknowledged}))
             .catch((error) => res.status(400).json({increase: error.acknowledged}))
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
+})
+
+cartRoute.post('/promo', verifyToken, async (req, res) => {
+    try {
+        const promoCode = req.body.promoCode;
+        const discount = await Discount.findOne({ name: promoCode });
+        if (discount) {
+            res.status(200).json({ message: 'Скидка найдена!', active: true, percentage: discount.percentage });
+        } else {
+            res.status(404).json({ message: 'Скидка не найдена.'});
+        }
     } catch (error) {
         res.status(400).json({error: error.message})
     }

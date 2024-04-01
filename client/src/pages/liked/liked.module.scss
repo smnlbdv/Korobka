@@ -41,7 +41,7 @@
     grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
     justify-content: space-between;
     gap: 30px;
-    row-gap: 45px;
+    row-gap: 50px;
     margin-top: 70px;
     margin-bottom: 50px;
 }
@@ -53,7 +53,7 @@
     column-gap: 80px;
 
     p {
-        padding: 6px 30px;
+        padding: 5px 30px;
         border-radius: 7px;
         background-color: rgb(247, 25, 25);
         font-size: 13px;

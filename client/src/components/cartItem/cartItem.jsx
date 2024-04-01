@@ -35,6 +35,12 @@ const CartItem = ({ _id, img, title, preText, price, count, checkArray, setCheck
     setIsFavorite(isExist)
   }, [cart])
 
+  useEffect(() => {
+    const isExisting = checkArray.some(item => item._id === _id);
+    isExisting ? setCartCheck(true) : setCartCheck(false)
+  }, [_id, checkArray])
+
+
   const clickHeart = () => {
     if(isFavorite) {
         deleteProductFavorite(_id)

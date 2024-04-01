@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
+import debounce from "debounce";
+import api from "../../api/api.js";
 
 import CartItem from '../../components/cartItem/cartItem.jsx'
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
@@ -9,8 +12,63 @@ import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import style from './cart.module.scss'
 
 const Cart = () => {
-    const [sale, setSale] = useState(0)
-    const { cart, calculatePrice, cartTotalPrice, scrollToTop, checkArray, setCheckArray } = useContext(AuthContext)
+    const [sale, setSale] = useState({
+        active: false,
+        percentage: 0
+    })
+    const [cartCheckAll, setCartCheckAll] = useState(false)
+    const { cart, calculatePrice, cartTotalPrice, scrollToTop, logout, checkArray, setCheckArray, setCart, deleteItemCart } = useContext(AuthContext)
+    const navigate = useNavigate();
+
+    const clickCheck = () => {
+        if(!cartCheckAll) {
+            setCartCheckAll(true)
+            setCheckArray([...cart])
+        } else {
+            setCartCheckAll(false)
+            setCheckArray([])
+        }
+    }
+
+    const delayedSearch = debounce(async (search) => {
+        const token = JSON.parse(localStorage.getItem('userData')) || '';
+        try {
+        await api.post(`/api/cart/promo`, {promoCode: search}, {
+            headers: {
+                'Authorization': `${token.token}`,
+            }})
+            .then(response => {
+                if(response.status === 200) {
+                    setSale({
+                        active: response.data.active,
+                        percentage: response.data.percentage
+                    });
+                }
+            })
+            .catch(response => {
+                if(response.response.status === 401) {
+                    logout()
+                    navigate("/api/auth/login");
+                }
+                if(response.response.status === 404) {
+                    setSale({
+                        active: false,
+                        percentage: 0
+                    });
+                }
+        });
+        } catch (error) {
+            console.log(error.message)
+        }
+    }, 500);
+
+    const deleteChecket = () => {
+        checkArray.forEach(element => {
+            deleteItemCart(element._id)
+            setCart(cart.filter(item => item._id !== element._id))
+            setCheckArray(checkArray.filter(item => item._id !== element._id))
+        });
+    }
 
     useEffect(() => {
         if(checkArray.length != 0) {
@@ -33,7 +91,19 @@ const Cart = () => {
                 </Link>
                 <li>Корзина</li>
             </ul>
-            <h2 className={`${style.section_title} section__title`}>Корзина</h2>
+            <div className={style.cart__header__button}>
+                <h2 className={`${style.section_title} section__title`}>Корзина</h2>
+                {
+                    cart.length !== 0 && 
+                    <div className={style.button__check__all} onClick={clickCheck}>
+                        <img className={style.check__image} src={cartCheckAll && (cart.length === checkArray.length) ? "/assets/cart-check-active.svg" : "/assets/cart-check.svg" } alt="Cart check" />
+                        <p>Выбрать все</p>
+                    </div> 
+                }
+                {
+                    checkArray.length !== 0 && <p className={style.button__delete__hidden} onClick={deleteChecket}>Удалить выбранное</p>
+                }
+            </div>
             {
             cart.length !== 0 ?
             <div className={style.cart__main_block}>
@@ -57,7 +127,7 @@ const Cart = () => {
                         <div className={style.cart__info}>
                             <div className={style.info__item}>
                                 <p>Кол-во:</p>
-                                <p>{cart.length} шт.</p>
+                                <p>{checkArray.length !== 0 ? checkArray.length : cart.length} шт.</p>
                             </div>
                             <div className={style.info__item}>
                                 <p>Сумма:</p>
@@ -65,16 +135,16 @@ const Cart = () => {
                             </div>
                             <div className={style.info__item}>
                                 <p>Скидка:</p>
-                                <p>0 %</p>
+                                <p>{sale.percentage} %</p>
                             </div>
                         </div>
-                        <input className={style.promo} type="text" placeholder="Промокод..." />
+                        <input className={`${style.promo} ${sale.active == true ? style.promo__active__true : style.promo__active__false}`} type="text" placeholder="Промокод..." onInput={(event) => delayedSearch(event.target.value)} />
                         <div className={style.pay}>
                             <div className={style.pay_item}>
                                 <p>Итог к оплате: </p>
                                 <p className={style.totalPrice}> {
                                     sale !== 0 ? 
-                                    cartTotalPrice * sale
+                                    cartTotalPrice + (cartTotalPrice * (sale.percentage / 100))
                                     :
                                     cartTotalPrice
                                 } BYN</p>

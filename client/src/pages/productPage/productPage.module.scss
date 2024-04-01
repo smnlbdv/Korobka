@@ -1,6 +1,7 @@
 .main__block_product {
     flex: 1;
     color: rgb(238, 238, 238);
+    line-height: 110%;
 }
 
 .block__adding__product {
@@ -49,6 +50,7 @@
 .functions__card {
     max-width: 380px;
     background-color: #000478;
+
     .title__product {
         font-size: 23px;
         font-style: normal;
@@ -176,7 +178,7 @@
 .product__slider_image {
     width: 80%;
     height: 80%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .slider__item_active {
