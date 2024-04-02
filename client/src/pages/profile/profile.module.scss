@@ -48,6 +48,10 @@
     line-height: normal; 
 }
 .user__status {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
     color: #FFF;
     font-size: 13px;
     font-style: normal;
@@ -70,7 +74,6 @@
     background-color: rgb(247, 25, 25);
     color: #ffffff; 
     border: 0;
-    font-weight: 600;
 }
 
 .header__block {

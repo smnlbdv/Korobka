@@ -17,7 +17,7 @@ const OrderPage = () => {
 
     const [successStatus, setSuccessStatus] = useState(false)
     const [url, setUrl] = useState('#')
-    const { profile, cart, placeOrder, contextHolder, deleteItemCart, downloadCheck } = useContext(AuthContext);
+    const { profile, cart, placeOrder, contextHolder, deleteItemCart, downloadCheck, checkArray, setCart, setCheckArray } = useContext(AuthContext);
 
     const formikOrder = useFormik({
         initialValues: {
@@ -45,9 +45,18 @@ const OrderPage = () => {
             const resultOrder = await placeOrder(values)
             setSuccessStatus(resultOrder.result)
             setUrl(resultOrder.url);
-            cart.map((item) => {
-                deleteItemCart(item._id, false);
-            });
+
+            if(checkArray.length > 0) {
+                checkArray.forEach((element) => {
+                    deleteItemCart(element._id);
+                    setCart(cart.filter((item) => item._id !== element._id));
+                });
+                setCheckArray([]);
+            } else {
+                cart.map((item) => {
+                    deleteItemCart(item._id);
+                });
+            }
         },
       });
     
@@ -185,14 +194,21 @@ const OrderPage = () => {
                         </form>
                     </div>
                     <div className={style.block__order__items}>
-                        {
+                        {checkArray.length !== 0 ? (
+                            checkArray.map((obj, index) => 
+                                <OrderItem
+                                    key={index}
+                                    {...obj}
+                                />
+                            )
+                        ) : (
                             cart.map((obj, index) => 
                                 <OrderItem
                                     key={index}
                                     {...obj}
                                 />
                             )
-                        }
+                        )}
                     </div>
                 </div>
                 :

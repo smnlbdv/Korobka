@@ -276,7 +276,7 @@ function App() {
     }
   }
 
-  const deleteItemCart = async (productId, order = true) => {
+  const deleteItemCart = async (productId, order = false) => {
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.delete(`/api/cart/delete/${productId}`, {
@@ -503,9 +503,10 @@ function App() {
 
   const placeOrder = async (order) => {
     let result;
+    let finalCart = checkArray.length !== 0 ? checkArray : cart;
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.post(`/api/profile/order`, {order: order, cart: cart, totalAmount: calculatePrice(cart) }, {
+      await api.post(`/api/profile/order`, {order: order, cart: finalCart, totalAmount: calculatePrice(finalCart) }, {
         headers: {
             'Authorization': `${data.token}`,
         }})
