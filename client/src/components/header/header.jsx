@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState} from 'react';
 import { Link  } from 'react-router-dom';
-import { Dropdown, Badge } from 'antd';
+import { Dropdown, Badge, Popover } from 'antd';
 
 import style from './header.module.scss'
 import './header.scss'
@@ -8,12 +8,28 @@ import '../../libs/ant.css'
 
 import Button from '../button/button';
 import { AuthContext } from "../../context/authContext.js";
+import PopoverItem from '../popoverItem/popoverItem.jsx';
 
 const Header = () => {
     const [countCart, setCountCart] = useState(0)
     const [items, setItems] = useState([])
     const [countFavorite, setCountFavorite] = useState(0)
+    const [popoverCart, setPopoverCart] = useState([]);
     const { isLogin, cart, role, userId, categories, favoriteItem } = useContext(AuthContext)
+
+    useEffect(() => {
+        const contentCart = cart.map((element, index) => (
+            <PopoverItem key={index} obj={element} />
+        ));
+        contentCart.push(
+            <Link to="cart">
+                <div className={style.popover__button}>
+                    <p>Перейти в корзину</p>
+                </div>
+            </Link>
+        );
+        setPopoverCart(contentCart);
+    }, [cart]);
 
     useEffect(() => {
         setCountCart(cart.length)
@@ -79,14 +95,17 @@ const Header = () => {
                     <div className={style.user_nav}>
                         {
                             <ul className={style.user_list}>
-                                <Link to="cart">
-                                    <li className={style.list_item}>
-                                        <Badge count={countCart}>
-                                            <img src="/assets/bag.svg" alt="bag logo" />
-                                        </Badge>
-                                        <p>Корзина</p>
-                                    </li>
-                                </Link>
+                                
+                                <Popover placement="bottomLeft" content={popoverCart}>
+                                    <Link to="cart">
+                                        <li className={style.list_item}>
+                                            <Badge count={countCart}>
+                                                <img src="/assets/bag.svg" alt="bag logo" />
+                                            </Badge>
+                                            <p>Корзина</p>
+                                        </li>
+                                    </Link>
+                                </Popover>
                                 <Link to="liked">
                                     <li className={style.list_item}>
                                         <Badge count={countFavorite}>

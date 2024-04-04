@@ -100,5 +100,34 @@
     }
 }
 
+.popover__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    height: 50px;
+    left: 0;
+    width: 100%;
+    border-radius: 0 0 8px 8px;
+    cursor: pointer;
+    background-color: rgb(248, 38, 38);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    color: white;
+    transition: all 250ms;
+
+    &:hover {
+        background-color: rgb(250, 52, 52);
+        transition: all 250ms;
+    }
+
+    &:active {
+        background-color: rgb(252, 29, 29);
+        transition: all 250ms;
+    }
+}
+
 
 

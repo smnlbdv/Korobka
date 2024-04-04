@@ -13,14 +13,28 @@ import style from './liked.module.scss'
 
 
 const Liked = () => {
-    const { favoriteItem, contextHolder, scrollToTop, setFavoriteItem } = useContext(AuthContext)
+    const { favoriteItem, contextHolder, scrollToTop, setFavoriteItem, deleteProductFavorite } = useContext(AuthContext)
 
     useEffect(() => {
         scrollToTop();
     }, [])
 
+
+    useEffect(() => {
+        const favoriteList = document.querySelector(`.${style.favorite_items}`);
+        if(favoriteList) {
+            if (favoriteItem.length < 4) {
+                console.log("ok");
+                favoriteList.style.justifyContent = "flex-start";
+                favoriteList.style.gridTemplateColumns = "repeat(auto-fit, minmax(235px, 260px))";
+            }
+        }
+    }, [favoriteItem])
+
     const clearFavorite = () => {
-        setFavoriteItem([])
+        favoriteItem.forEach(element => {
+            deleteProductFavorite(element._id)
+        });
     }
 
     return ( 

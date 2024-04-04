@@ -311,7 +311,6 @@ function App() {
           'Authorization': `${token.token}`,
         }})
         .then(response => {
-          console.log(response.data);
           setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
           openNotification('bottomRight', response.data.message)
         })
@@ -339,7 +338,6 @@ function App() {
               setFavoriteItem((cart) =>
                 cart.filter((item) => item._id !== productId)
               );  
-              openNotificationError('bottomRight', "Товар удален из избранного")
             }
           })
           .catch(response => {

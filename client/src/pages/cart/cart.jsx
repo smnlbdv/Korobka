@@ -73,11 +73,11 @@ const Cart = () => {
                 active: response.response.data.active,
                 percentage: 0,
                 });
-                console.log(response.response.data.active);
+
             }
             });
         } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
         }
     }
   }, 500);
