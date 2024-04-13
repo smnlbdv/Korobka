@@ -433,31 +433,38 @@ const Profile = () => {
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
-            width={800}
+            width={850}
             footer={null}
           >
             {selectedItems.map((item, index) => (
-               <Link to={`/product/${item.productId._id}`} key={index}>
-                  <div className={style.modal__block__items}>
-                    <div className={style.modal__block__image}>
-                      <img src={item.productId.img} alt="" />
-                    </div>
-                    <div className={style.modal__block__description}>
-                      <p className={style.modal__item__title}>
-                        {item.productId.title}
-                      </p>
-                      <p className={style.modal__item__description}>
-                        {item.productId.preText}
-                      </p>
-                    </div>
-                    <p className={style.modal__item__quantity}>
-                      Кол-во: {item.quantity}
-                    </p>
-                    <div className={style.modal__item__price}>
-                      Цена: <br></br>{item.productId.price} BYN
-                    </div>
+                  <div className={style.main__block__modal} key={index}>
+                    <Link to={`/product/${item.productId._id}`}>
+                      <div className={style.modal__block__items}>
+                        <div className={style.modal__block__image}>
+                          <img src={item.productId.img} alt="" />
+                        </div>
+                        <div className={style.modal__block__description}>
+                          <p className={style.modal__item__title}>
+                            {item.productId.title}
+                          </p>
+                          <p className={style.modal__item__description}>
+                            {item.productId.preText}
+                          </p>
+                        </div>
+                        <p className={style.modal__item__quantity}>
+                          Кол-во: {item.quantity}
+                        </p>
+                        <div className={style.modal__item__price}>
+                          Цена: <br></br>{item.productId.price} BYN
+                        </div>
+                      </div>
+                    </Link>
+                    <button className={style.button__review}>
+                      <Link to={`/product/${item.productId._id}/review`}>
+                        Оставить отзыв
+                      </Link>
+                    </button>
                   </div>
-               </Link>
             ))}
           </Modal>
           {order.length != 0 ? (
