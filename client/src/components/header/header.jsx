@@ -18,17 +18,23 @@ const Header = () => {
     const { isLogin, cart, role, userId, categories, favoriteItem } = useContext(AuthContext)
 
     useEffect(() => {
-        const contentCart = cart.map((element, index) => (
-            <PopoverItem key={index} obj={element} />
-        ));
-        contentCart.push(
-            <Link to="cart">
-                <div className={style.popover__button}>
-                    <p>Перейти в корзину</p>
-                </div>
-            </Link>
-        );
-        setPopoverCart(contentCart);
+        var contentCart;
+
+        if(cart.length > 0) {
+            contentCart = cart.map((element, index) => (
+                <PopoverItem key={index} obj={element} />
+            ));
+            contentCart.push(
+                <Link to="cart">
+                    <div className={style.popover__button}>
+                        <p>Перейти в корзину</p>
+                    </div>
+                </Link>
+            );
+            setPopoverCart(contentCart);
+        } else {
+            setPopoverCart(null)
+        }
     }, [cart]);
 
     useEffect(() => {

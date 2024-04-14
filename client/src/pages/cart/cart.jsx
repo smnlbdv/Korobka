@@ -26,10 +26,9 @@ const Cart = () => {
     checkArray,
     setCheckArray,
     setCart,
-    deleteItemCart,
+    deleteItemCart
   } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [promoCode, setPromoCode] = useState("");
 
   const clickCheck = () => {
     if (!cartCheckAll) {

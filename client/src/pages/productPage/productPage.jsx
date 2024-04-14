@@ -13,15 +13,17 @@ import FavoriteHeart from "../../components/favoriteHeart/favoriteHeart.jsx";
 import api from "../../api/api.js";
 import Review from "../../components/review/review.jsx";
 import "./ant.css";
+import ButtonReview from "../../components/buttonReview/buttonReview.jsx";
 
 const ProductPage = () => {
   const [counts, setCounts] = useState(0);
   const [isCounter, setIsCounter] = useState(false);
+  const [hiddenButton, setHiddenButton] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [productReviews, setProductReviews] = useState([]);
   const [sliderProduct, setSliderProduct] = useState([]);
   const { id } = useParams();
-  const { cart, logout, contextHolder, favoriteItem, scrollToTop } = useContext(AuthContext);
+  const { cart, logout, contextHolder, favoriteItem, scrollToTop, order } = useContext(AuthContext);
   const mainImage = useRef();
   const navigate = useNavigate();
 
@@ -49,7 +51,6 @@ const ProductPage = () => {
                 data={item.date}
                 stars={item.stars}
                 likes={item.likes}
-                tags={item.tags}
                 reviewProduct={true}
               />
             ))
@@ -158,12 +159,18 @@ const ProductPage = () => {
   };
 
   useEffect(() => {
+
     fetchData();
     fetchReviewsProduct();
     getCountProduct();
     scrollToTop();
-  }, [favoriteItem, id]);
 
+    const result = order.some(orderItem => 
+      orderItem.items.some(item => item.productId._id === id)
+    );
+    setHiddenButton(result)
+
+  }, [favoriteItem, id]);
 
   return (
     <section className={style.main__block_product}>
@@ -249,6 +256,10 @@ const ProductPage = () => {
                 getCountProduct={getCountProduct}
                 _id={id}
               />
+              {
+                hiddenButton && 
+                <ButtonReview id={id} />
+              }
             </div>
             <div>
               <p className={style.title__messange}>

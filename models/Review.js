@@ -25,12 +25,17 @@ const shema = new mongoose.Schema({
         required: true,
         default: Date.now,
     },
-    slider: [String],
-    tags: [String],
-    comments: [{
-        type: Types.ObjectId,
-        ref: 'Comment',
-    }],
+    slider: {
+        type: [String],
+        default: [],
+    },
+    comments: {
+        type: [{
+            type: Types.ObjectId,
+            ref: 'Comment',
+        }],
+        default: [],
+    },
     likes: {
         type: Number,
         default: 0,

@@ -8,13 +8,34 @@ import multer from 'multer'
 import moment from 'moment'
 import { fakerRU as faker } from '@faker-js/faker'
 import axios from 'axios'
+import crypto from 'crypto'
+import path from 'path'
+import iconv from 'iconv-lite'
 
 import Review from '../models/Review.js'
 import User from '../models/User.js'
 import Comment from '../models/Comment.js'
 
 moment.locale('ru');
+
 const reviewsRoute = Router()
+var slider = []
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "public/review");
+    },
+    filename: function (req, file, cb) {
+        crypto.pseudoRandomBytes(16, function (err, raw) {
+            const encodedFilename = iconv.encode(raw.toString('hex') + Date.now() + path.extname(file.originalname), 'win1251');
+            const filename = encodedFilename.toString();
+            cb(null, filename);
+            slider.push(`http://localhost:5000/review/${filename}`);
+        });
+    }
+});
+
+const upload = multer({ storage: storage });
 
 function modifiedReaviews(obj) {
     return obj.map(obj => ({
@@ -83,6 +104,27 @@ reviewsRoute.get('/:id', async (req, res) => {
         const modifiedData = modifiedReaviews(reviewsProduct)
 
         res.status(200).json(modifiedData);
+
+    } catch (error) {
+        console.log(error.message)
+    }
+})
+
+reviewsRoute.post('/create/new-review', verifyToken, upload.array('image'), async (req, res) => {
+    try {
+
+        const infoReview = {
+            ...req.body,
+            slider: slider
+        }
+        const newReview = new Review(infoReview);
+        newReview.save()
+                .then((savedReview) => {
+                    res.status(201).json({ message: 'Отзыв успешно создан', create: true})
+                })
+                .catch((error) => {
+                    res.status(400).json({message: 'Ошибка создания отзыва', create: false})
+                });
 
     } catch (error) {
         console.log(error.message)

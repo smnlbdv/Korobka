@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 import style from './buttonCreate.module.scss'
 
 
-const ButtonCreate = ({_id, text, type, isCounter = false, setIsCounter, getCountProduct, disabled = false }) => {
+const ButtonCreate = ({_id, text, type, isCounter = false, setIsCounter, button = false, getCountProduct, disabled = false }) => {
     
     const [counterCart, setCounterCart] = useState(0);
     const { addCart, decreaseCartItem, unmountItem } = useContext(AuthContext);
@@ -34,7 +34,7 @@ const ButtonCreate = ({_id, text, type, isCounter = false, setIsCounter, getCoun
     }
 
     return ( 
-        <button className={style.button_create } type={type} disabled={disabled} onClick={() => openCounterBlock()}>
+        <button className={style.button_create } type={type} disabled={disabled} onClick={() => button && openCounterBlock()}>
             {
             !isCounter ? 
                 text

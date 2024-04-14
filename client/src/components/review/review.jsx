@@ -4,10 +4,9 @@ import { Rate } from 'antd';
 import style from './review.module.scss'
 
 import '../../libs/ant.css'
-import Tage from '../tags/tage.jsx';
 import LikeButton from '../likeButton/likeButton.jsx';
 
-const Review = ({img, name, lastName, text, data, stars, likes, tags = [], reviewProduct = false}) => {
+const Review = ({img, name, lastName, text, data, stars, likes }) => {
 
     return ( 
         <div className={style.slide_item}>
@@ -27,24 +26,9 @@ const Review = ({img, name, lastName, text, data, stars, likes, tags = [], revie
                     </div>
                     <div className={style.footer__review}>
                         <span className={style.date}>{data}</span>
-                        {
-                            likes && <LikeButton likes={likes}/>
-                        }
+                        <LikeButton likes={likes}/>
                     </div>
                 </div>
-                {/* {
-                    reviewProduct && 
-                    <div className={style.review__right_block}>
-                        
-                    </div>
-                } */}
-            </div>
-            <div className={style.review__footer__block}>
-                {
-                    tags.map((item, index) => (
-                        <Tage key={index} text={item}/>
-                    ))
-                }
             </div>
         </div>
      );

@@ -5,7 +5,7 @@ const LikeButton = ({likes}) => {
   
     return ( 
         <div className={style.likes__review}>
-            <img src="/assets/like.svg" alt="" />
+            <img src="/assets/like.svg" alt="Icon like" />
             <p>{likes}</p>
         </div>
      );

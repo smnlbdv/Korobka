@@ -13,6 +13,7 @@ import InputProfile from "../../components/inputProfile/inputProfile.jsx";
 import style from "./profile.module.scss";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 import ProfileOrderItem from "../../components/profileOrderItem/profileOrderItem.jsx";
+import ButtonReview from "../../components/buttonReview/buttonReview.jsx";
 
 const Profile = () => {
   const {
@@ -459,11 +460,7 @@ const Profile = () => {
                         </div>
                       </div>
                     </Link>
-                    <button className={style.button__review}>
-                      <Link to={`/product/${item.productId._id}/review`}>
-                        Оставить отзыв
-                      </Link>
-                    </button>
+                    <ButtonReview id={item.productId._id}/>
                   </div>
             ))}
           </Modal>

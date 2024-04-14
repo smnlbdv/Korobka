@@ -228,22 +228,4 @@
     flex-direction: column;
 }
 
-.button__review {
-    width: max-content;
-    border: 0;
-    background-color:rgb(5, 12, 218);
-    margin-left: auto;
-    color: #FFF;
-    border-radius: 10px;
-
-    a {
-        display: block;
-        padding: 8px 30px;
-        color: white;
-
-        &:hover {
-            color: white;
-        }
-    }
-}
 
