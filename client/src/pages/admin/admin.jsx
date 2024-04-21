@@ -23,7 +23,6 @@ const Admin = () => {
     const [apis, contextHolder] = notification.useNotification();
     const [modal, contextHolderEmail] = Modal.useModal();
 
-
     useEffect(() => {
       fetchData();
       getAllProduct();
@@ -131,7 +130,7 @@ const Admin = () => {
          }}>
         <Routes>
           <Route
-              path="/"
+              path="/*"
               element={
                 <Suspense fallback={<Loading />}>
                   <HomePageAdmin/>

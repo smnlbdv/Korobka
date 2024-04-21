@@ -6,7 +6,7 @@ import style from './review.module.scss'
 import '../../libs/ant.css'
 import LikeButton from '../likeButton/likeButton.jsx';
 
-const Review = ({img, name, lastName, text, data, stars, likes }) => {
+const Review = ({img, name, lastName, text, data, stars, likes, hidden = false }) => {
 
     return ( 
         <div className={style.slide_item}>
@@ -26,7 +26,10 @@ const Review = ({img, name, lastName, text, data, stars, likes }) => {
                     </div>
                     <div className={style.footer__review}>
                         <span className={style.date}>{data}</span>
-                        <LikeButton likes={likes}/>
+                        {
+                            hidden && 
+                            <LikeButton likes={likes}/>
+                        }
                     </div>
                 </div>
             </div>

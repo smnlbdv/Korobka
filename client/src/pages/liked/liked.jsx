@@ -24,9 +24,11 @@ const Liked = () => {
         const favoriteList = document.querySelector(`.${style.favorite_items}`);
         if(favoriteList) {
             if (favoriteItem.length < 4) {
-                console.log("ok");
                 favoriteList.style.justifyContent = "flex-start";
                 favoriteList.style.gridTemplateColumns = "repeat(auto-fit, minmax(235px, 260px))";
+            }
+            if (favoriteItem.length == 0) {
+                favoriteList.style.justifyContent = "center";
             }
         }
     }, [favoriteItem])

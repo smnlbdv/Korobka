@@ -13,7 +13,7 @@ productRoute.get('/all', async (req, res) => {
     const page = parseInt(req.query._page) || 1;
     const limit = parseInt(req.query._limit) || 12;
     const searchQuery = req.query._search;
-    const categoryId = req.query._category;
+    const categoryId = req.query._category || "65d90e58227ee6433a601d3b";
     const minPrice = parseInt(req.query.minPrice) || 0;
     const maxPrice = parseInt(req.query.maxPrice) || Number.MAX_SAFE_INTEGER;
 

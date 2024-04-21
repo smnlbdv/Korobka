@@ -9,43 +9,8 @@ import { AdminContext } from "../../context/adminContext.js";
 
 
 const AdminProductItem = ({_id, img, title, price, preText }) => {
-    
+
     const {deleteProductDB} = useContext(AdminContext);
-
-    // const clickBtnAdd = async () => {
-    //     addCart(_id)
-    //     const product = cart.find(obj => obj._id === _id);
-    //     if(!product) {
-    //         setCountProduct(1)
-    //         setIsAdded(true)
-    //     } else {
-    //         setCountProduct(product.count + 1)
-    //         setIsAdded(true)
-    //     }
-    // }
-  
-    // const addProduct = () => {
-    //     if(countProduct >= 200) {
-    //         setCountProduct(countProduct)
-    //     } else {
-    //         const resultIncrease = increaseCartItem(_id)
-    //         if(resultIncrease) { 
-    //             setCountProduct(countProduct + 1)
-    //         }
-    //     }
-    // }
-
-    // const subtractProduct = () => {
-    //     if(countProduct <= 1) {
-    //         unmountItem(_id)
-    //         setIsAdded(false)
-    //     } else {
-    //         const resultDeCrease = decreaseCartItem(_id)
-    //         if(resultDeCrease) { 
-    //             setCountProduct(countProduct - 1)
-    //         }
-    //     }
-    // }
 
     return (
         <div className={style.new_box}>

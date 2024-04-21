@@ -5,6 +5,9 @@ import bcrypt from 'bcryptjs'
 import jwtToken from 'jsonwebtoken'
 import verifyToken from '../validation/verifyToken.js'
 import { registerValidation, loginValidation } from './../validation/auth.js'
+import iconv from 'iconv-lite'
+import path from 'path'
+import crypto from 'crypto'
 
 import Product from '../models/Product.js'
 
@@ -13,46 +16,42 @@ const storage = multer.diskStorage({
       cb(null, "public/product");
     },
     filename: function (req, file, cb) {
-      cb(null, file.originalname);
-    },
+      crypto.pseudoRandomBytes(16, function (err, raw) {
+          const encodedFilename = iconv.encode(raw.toString('hex') + Date.now() + path.extname(file.originalname), 'win1251');
+          const filename = encodedFilename.toString();
+          cb(null, filename);
+          slider.push(`http://localhost:5000/product/${filename}`);
+      });
+  }
 });
+
+const slider = [];
   
 const upload = multer({ storage: storage });
-  
+
 const adminRoute = Router();
   
 adminRoute.post('/add', verifyToken, upload.any(), async (req, res) => {
   try {
-    let img;
-    const slider = [];
 
-    req.files.forEach((file, index) => {
-        if (index === 0) {
-            img = `http://localhost:5000/product/${file.originalname}`;
-        } else {
-            slider.push(file.originalname);
-        }
-    });
+    const box = {
+      img: slider[0],
+      slider: slider.slice(1),
+      ...req.body
+    }
 
-    const newProduct = new Product({
-          img,
-          slider,
-          ...req.body
-    });
+    const newBox = new Product(box);
+    newBox.save();
 
-    console.log(newProdcut);
-
-    const newProdcut = await newProduct.save();
-    
-    // res.status(202).json({
-    //     message: "Товар успешно добавлен",
-    //     newProdcut
-    // })
+    res.status(202).json({
+        message: "Товар успешно добавлен"
+    })
 
   } catch (error) {
-    // res.status(500).json({
-    //   message: "Не удалось добавить товар. Пожалуйста, попробуйте еще раз."
-    // });
+    console.log(error);
+    res.status(500).json({
+      message: "Не удалось добавить товар. Пожалуйста, попробуйте еще раз."
+    });
   }
 });
 

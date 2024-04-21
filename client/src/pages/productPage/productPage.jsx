@@ -52,6 +52,7 @@ const ProductPage = () => {
                 stars={item.stars}
                 likes={item.likes}
                 reviewProduct={true}
+                hidden = {true}
               />
             ))
           ) : (

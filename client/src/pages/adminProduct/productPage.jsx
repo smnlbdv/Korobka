@@ -1,11 +1,12 @@
-import { useState, useContext } from "react";
-import { Tabs } from "antd";
+import { useState, useContext, useEffect } from "react";
+import { Tabs, Select } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 
 import style from "./productPage.module.scss";
 import api from "../../api/api.js";
+import './ant.css'
 
 import AdminProductItem from "../../components/adminProductItem/adminProductItem.jsx";
 import InputProfile from "../../components/inputProfile/inputProfile.jsx";
@@ -17,10 +18,12 @@ const ProductPage = () => {
   const [pathImage, setPathImage] = useState('');
   const [selectedSlider, setSelectedSlider] = useState([]);
   const [pathSlider, setPathSlider] = useState([]);
+  const [categoryInput, setCategoryInput] = useState([]);
+  const [options, setOptions] = useState([]);
   const navigate = useNavigate();
 
-  const { countDown, openNotification, allProduct, setAllProduct } = useContext(AdminContext);
-  const {logout} = useContext(AuthContext);
+  const { countDown, openNotification, allProduct, setAllProduct, contextHolder, contextHolderEmail} = useContext(AdminContext);
+  const {logout, categories} = useContext(AuthContext);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -33,6 +36,25 @@ const ProductPage = () => {
     };
 
     reader.readAsDataURL(file);
+  };
+
+  useEffect(() => {
+    const items = categories.map(obj => ({ value: obj.value }));
+    setOptions(items);
+  }, [categories])
+
+  const handleChange = (value) => {
+
+    // if (formikProduct.errors.selectedOptions) {
+    //   formikProduct.setValues({ selectedOptions: "true" });
+    // } 
+
+    // const labels = value.map(item => {
+    //   const foundItem = categories.find(option => option.value === item);
+    //   return foundItem ? foundItem._id : null;
+    // });
+
+    // setCategoryInput(...labels)
   };
 
   const handleSliderImage = (e) => {
@@ -62,19 +84,17 @@ const ProductPage = () => {
       title: "",
       text: "",
       price: "",
-      category: "",
       preText: "",
       pageDesc: "",
+      selectedOptions: ""
     },
     validationSchema: Yup.object({
       title: Yup.string().required(
         'Поле "Название продукта" обязательно для заполнения'
       ),
+      selectedOptions: Yup.string().required('Это поле обязательно для выбора'),
       text: Yup.string().required('Поле "Текст" обязательно для заполнения'),
       price: Yup.number().required('Поле "Цена" обязательно для заполнения'),
-      category: Yup.string().required(
-        'Поле "Категория" обязательно для заполнения'
-      ),
       preText: Yup.string().required(
         'Поле "Краткое описание" обязательно для заполнения'
       ),
@@ -82,6 +102,7 @@ const ProductPage = () => {
         'Поле "Описание страницы" обязательно для заполнения'
       ),
     }),
+
     onSubmit: async (item, { resetForm }) => {
 
       if(selectedImage.length == 0 && selectedSlider.length < 4) {
@@ -90,11 +111,13 @@ const ProductPage = () => {
         countDown('error', 'Выберите пожалуйста основное фото товара')
       } else if(selectedSlider.length < 4) {
         countDown('error', `Выберите еще ${4 - selectedSlider.length} фото для слайдера`)
-      } else {
+      } else if(categoryInput.length == 0) {
 
         const formData = new FormData();
         formData.append("image", pathImage);
-        
+
+        formData.append("category", categoryInput)
+
         pathSlider.forEach(image => {
           formData.append("sliderImages", image, image.name);
         });
@@ -105,31 +128,32 @@ const ProductPage = () => {
 
         try {
           const token = JSON.parse(localStorage.getItem('userData')) || '';
-          console.log(formData);
-          // await api.post("/api/admin/add", formData, {
-          //   headers: {
-          //     'Authorization': `${token.token}`,
-          //     'Content-Type': 'multipart/form-data',
-          //   }})
-          //   .then((response) => {
-          //     if(response.status === 202) {
-          //       resetForm();
-          //       setSelectedImage('')
-          //       setSelectedSlider([])
-          //       setPathImage('')
-          //       setPathSlider([])
-          //       setAllProduct((prev) => [...prev, response.data.newProduct])
-          //       openNotification('bottomRight', 'Товар успешно добавлен БД');
-          //     }
-          //   })
-          //   .catch((response) => 
-          //     {
-          //       if(response.response.status == 401) {
-          //         logout()
-          //         navigate("/api/auth/login");
-          //       }
-          //     }
-            // );
+
+          await api.post("/api/admin/add", formData, {
+            headers: {
+              'Authorization': `${token.token}`,
+              'Content-Type': 'multipart/form-data',
+            }})
+            .then((response) => {
+              if(response.status === 202) {
+                resetForm();
+                setSelectedImage('')
+                setSelectedSlider([])
+                setPathImage('')
+                setPathSlider([])
+                setCategoryInput([])
+                setAllProduct((prev) => [...prev, response.data.newProduct])
+                openNotification('bottomRight', 'Товар успешно добавлен БД');
+              }
+            })
+            .catch((response) => 
+              {
+                if(response.response.status == 401) {
+                  logout()
+                  navigate("/api/auth/login");
+                }
+              }
+            );
         } catch (error) {
           console.log("Ошибка", error);
         }
@@ -196,15 +220,14 @@ const ProductPage = () => {
             </div>
             <div className={style.form__block__input}>
               <p>Введите категорию товара:</p>
-              <InputProfile
-                id="category"
-                name="category"
-                typeInput={"text"}
-                value={formikProduct.values.category}
-                onChange={formikProduct.handleChange}
-                placeholder={"На 23 февраля"}
-                errorChange={formikProduct.errors.category && "true"}
-              />
+              <div className={formikProduct.errors.selectedOptions ? style.block__input__error_2 : style.block__select}>
+                <Select
+                  mode="multiple"
+                  placeholder="Мужской бокс"
+                  onChange={handleChange}
+                  options={options}
+                />
+              </div>
             </div>
             <div className={style.form__block__input}>
               <p>Введите текст для карточки товара:</p>
@@ -258,6 +281,8 @@ const ProductPage = () => {
 
   return (
     <div className={style.block__product}>
+      {contextHolder}
+      {contextHolderEmail}
       <Tabs defaultActiveKey="1" items={itemsTabs}></Tabs>
     </div>
   );

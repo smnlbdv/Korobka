@@ -13,6 +13,21 @@
     row-gap: 10px;
 }
 
+.block__select {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.block__input__error_2 {
+    @extend .block__select;
+    border: 2px solid #f60404ee;
+    color: rgba(246, 4, 4, 0.897);
+    background-color: rgb(247, 236, 236);
+    transition: all 300ms;
+}
+
 .main__block_product {
     display: flex;
     column-gap: 30px;
