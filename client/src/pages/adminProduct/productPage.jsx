@@ -45,16 +45,18 @@ const ProductPage = () => {
 
   const handleChange = (value) => {
 
-    // if (formikProduct.errors.selectedOptions) {
-    //   formikProduct.setValues({ selectedOptions: "true" });
-    // } 
+    if(value.length !== 0) {
+      const labels = value.map(item => {
+        const foundItem = categories.find(option => option.value === item);
+        return foundItem ? foundItem._id : null;
+      });
 
-    // const labels = value.map(item => {
-    //   const foundItem = categories.find(option => option.value === item);
-    //   return foundItem ? foundItem._id : null;
-    // });
+      setCategoryInput(labels);
+      formikProduct.setFieldValue("selectedOptions", "true");
+    } else {
+      formikProduct.setFieldValue("selectedOptions", "");
+    }
 
-    // setCategoryInput(...labels)
   };
 
   const handleSliderImage = (e) => {
@@ -105,26 +107,32 @@ const ProductPage = () => {
 
     onSubmit: async (item, { resetForm }) => {
 
+
       if(selectedImage.length == 0 && selectedSlider.length < 4) {
         countDown('error', 'Выберите фото для товара')
       } else if(selectedImage.length == 0) {
         countDown('error', 'Выберите пожалуйста основное фото товара')
       } else if(selectedSlider.length < 4) {
         countDown('error', `Выберите еще ${4 - selectedSlider.length} фото для слайдера`)
-      } else if(categoryInput.length == 0) {
+      } else {
 
         const formData = new FormData();
-        formData.append("image", pathImage);
 
-        formData.append("category", categoryInput)
+        formData.append("image", pathImage);
 
         pathSlider.forEach(image => {
           formData.append("sliderImages", image, image.name);
         });
 
+        categoryInput.forEach(category => {
+          formData.append("category", category)
+        })
+
         Object.keys(item).forEach(key => {
           formData.append(key, item[key]);
         });
+
+        console.log(formData);
 
         try {
           const token = JSON.parse(localStorage.getItem('userData')) || '';
