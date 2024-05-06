@@ -5,7 +5,7 @@ import './ant.css'
 // eslint-disable-next-line react/prop-types
 const PopoverItem = ({obj}) => {
     // eslint-disable-next-line react/prop-types
-    const {_id, img, title, preText, price, count } = obj;
+    const {_id, img, title, preText, price, count = 1 } = obj;
     return ( 
         <div className={style.main__block}>
             <Link to={`/product/${_id}`} key={_id}>

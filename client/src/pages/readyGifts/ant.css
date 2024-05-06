@@ -11,8 +11,13 @@
     background: transparent !important;;
 }
 
+.ant-select-item {
+    font-family: 'Montserrat', sans-serif;
+}
+
 .ant-select-selection-item {
     color: white !important;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .ant-select-arrow {

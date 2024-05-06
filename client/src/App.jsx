@@ -26,6 +26,7 @@ const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
 const Admin = lazy(() => import("./pages/admin/admin.jsx"));
 const OrderPage = lazy(() => import("./pages/orderPage/orderPage.jsx"));
 const ReviewPage = lazy(() => import("./pages/reviewPage/reviewPage.jsx"));
+const ConstructorBox = lazy(() => import("./pages/constructorBox/constructorBox.jsx"));
 
 function App() {
   const [reviewsList, setReviewsList] = useState([])
@@ -47,10 +48,13 @@ function App() {
     if(isLogin) {
       getProfile()
     }
+  }, [isLogin])
+
+  useEffect(() => {
     getNewProduct()
     getBestReviews()
     getCategories()
-  }, [isLogin])
+  }, [])
 
   const calculatePrice = useCallback((cart) => {
     const total = cart.reduce((accumulator, product) => {
@@ -623,6 +627,7 @@ function App() {
               }
             >
               <Route index element={<Main />} />
+              <Route path="constructor" element={<ConstructorBox />} />
               <Route path="ready-gifts/:category" element={<ReadyGifts />} />
               <Route path="contacts" element={<Contacts />} />
               <Route path="about-us" element={<AboutUs />} />
@@ -633,7 +638,6 @@ function App() {
               <Route path="product/:id/review" element={<ReviewPage/>}/>
               <Route path="cart/order" element={<OrderPage/>}/>
           </Route>
-          
           <Route path="/api/auth/*" element={
               <Suspense fallback={<Loading />}>
                 <Auth />

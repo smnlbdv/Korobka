@@ -13,6 +13,7 @@ import FavoriteHeart from "../../components/favoriteHeart/favoriteHeart.jsx";
 import api from "../../api/api.js";
 import Review from "../../components/review/review.jsx";
 import "./ant.css";
+import "./swiper.css"
 import ButtonReview from "../../components/buttonReview/buttonReview.jsx";
 
 const ProductPage = () => {
@@ -196,15 +197,10 @@ const ProductPage = () => {
                   delay: 2500,
                   disableOnInteraction: false,
                 }}
-                on={{
-                  autoplay: () => {
-                    
-                  }
-                }}
                 modules={[Autoplay]}
-                className="mySwiper"
+                className="mySwiper-product"
               >
-                <SwiperSlide className={style.swiper}>
+                <SwiperSlide  className={style.swiper}>
                   <div className={style.product__image_item} id={0}>
                     <img
                       className={style.product__slider_image}

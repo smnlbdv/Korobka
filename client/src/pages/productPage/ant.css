@@ -2,17 +2,3 @@
     font-size: 16px !important;
     font-weight: 500;
 }
-
-.swiper {
-    padding: 0px 10px !important;
-}
-
-.swiper-wrapper {
-    height: 100px !important;
-}
-
-.swiper-slide {
-    display: flex;
-    align-items: center;
-    box-shadow: none !important;
-}

@@ -1,0 +1,13 @@
+.mySwiper-product .swiper {
+    padding: 0px 10px !important;
+}
+
+.mySwiper-product .swiper-wrapper {
+    height: 100px !important;
+}
+
+.mySwiper-product .swiper-slide {
+    display: flex;
+    align-items: center;
+    box-shadow: none !important;
+}

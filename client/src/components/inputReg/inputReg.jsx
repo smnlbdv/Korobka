@@ -4,7 +4,7 @@ import { useState } from "react";
 import style from './inputReg.module.scss'
 
 
-const InputReg = ({img, name, placeholder, type, chek = false, changeHandler}) => {
+const InputReg = ({id, img, name, placeholder, type, chek = false, onChange, value, errorChange}) => {
 
     const [show, setShow] = useState(false)
 
@@ -13,10 +13,10 @@ const InputReg = ({img, name, placeholder, type, chek = false, changeHandler}) =
     }
 
     return ( 
-        <div className={style.input_block}>
+        <div className={errorChange ? style.input__error : style.input_block}>
             <div className={style.main_input_block}>
                 <img className={style.img} src={img} alt="" />
-                <input className={style.input} name={name} type={show ? "text" : type} placeholder={placeholder} onChange={changeHandler} required/>
+                <input className={style.input} name={name} id={id} type={show ? "text" : type} value={value} placeholder={placeholder} onChange={onChange} required/>
             </div>
             {
                 chek && <img  className={style.img_secret} src="/assets/secret.svg" alt="secret" onClick={showPass} />

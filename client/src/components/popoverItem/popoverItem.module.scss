@@ -8,8 +8,8 @@
 }
 
 .popover__image__block {
-    min-width: 80px;
-    height: 80px;
+    min-width: 60px;
+    height: 60px;
 
     img {
         width: 100%;
@@ -24,7 +24,7 @@
 }
 
 .popover__text {
-    font-size: 13px;
+    font-size: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;

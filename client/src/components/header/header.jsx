@@ -15,7 +15,18 @@ const Header = () => {
     const [items, setItems] = useState([])
     const [countFavorite, setCountFavorite] = useState(0)
     const [popoverCart, setPopoverCart] = useState([]);
+    const [popoverLiked, setPopoverLiked] = useState([]);
     const { isLogin, cart, role, userId, categories, favoriteItem } = useContext(AuthContext)
+    const [popoverVisible, setPopoverVisible] = useState(false);
+    const [popoverVisibleTwo, setPopoverVisibleTwo] = useState(false);
+
+    const handleLinkClick = () => {
+        setPopoverVisible(false);
+    };
+
+    const handleLinkClickTwo = () => {
+        setPopoverVisibleTwo(false);
+    };
 
     useEffect(() => {
         var contentCart;
@@ -36,6 +47,26 @@ const Header = () => {
             setPopoverCart(null)
         }
     }, [cart]);
+
+    useEffect(() => {
+        var contentLiked;
+
+        if(favoriteItem.length > 0) {
+            contentLiked = favoriteItem.map((element, index) => (
+                <PopoverItem key={index} obj={element} />
+            ));
+            contentLiked.push(
+                <Link to="liked">
+                    <div className={style.popover__button}>
+                        <p>Перейти в избранное</p>
+                    </div>
+                </Link>
+            );
+            setPopoverLiked(contentLiked);
+        } else {
+            setPopoverLiked(null)
+        }
+    }, [favoriteItem]);
 
     useEffect(() => {
         setCountCart(cart.length)
@@ -75,7 +106,7 @@ const Header = () => {
                 <nav className={style.navigation}>
                     <ul className={style.list__navigation}>
                         <li className={style.list__item}>
-                            <Link to="#">
+                            <Link to="constructor">
                                 <p className={style.list__text}>Собрать</p>
                             </Link>
                         </li>
@@ -102,8 +133,8 @@ const Header = () => {
                         {
                             <ul className={style.user_list}>
                                 
-                                <Popover placement="bottomLeft" content={popoverCart}>
-                                    <Link to="cart">
+                                <Popover placement="bottomRight" content={popoverCart} onOpenChange={(visible) => setPopoverVisibleTwo(visible)} open={popoverVisibleTwo}>
+                                    <Link to="cart" onClick={handleLinkClickTwo}>
                                         <li className={style.list_item}>
                                             <Badge count={countCart}>
                                                 <img src="/assets/bag.svg" alt="bag logo" />
@@ -112,14 +143,16 @@ const Header = () => {
                                         </li>
                                     </Link>
                                 </Popover>
-                                <Link to="liked">
-                                    <li className={style.list_item}>
-                                        <Badge count={countFavorite}>
-                                            <img src="/assets/heart.svg" alt="favorite logo" />
-                                        </Badge>  
-                                        <p>Избранное</p>
-                                    </li>
-                                </Link>
+                                <Popover placement="bottomRight" content={popoverLiked} onOpenChange={(visible) => setPopoverVisible(visible)} open={popoverVisible}>
+                                    <Link to="liked" onClick={handleLinkClick}>
+                                        <li className={style.list_item}>
+                                            <Badge count={countFavorite}>
+                                                <img src="/assets/heart.svg" alt="favorite logo" />
+                                            </Badge>  
+                                            <p>Избранное</p>
+                                        </li>
+                                    </Link>
+                                </Popover>
                                 <Link to="profile">
                                     <li className={style.list_item}>
                                         <img src="/assets/user.svg" alt="user logo" />

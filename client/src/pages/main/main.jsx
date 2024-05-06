@@ -225,7 +225,7 @@ const Main = () => {
           }}
           navigation={true}
           modules={[EffectCoverflow, Navigation]}
-          className="mySwiper"
+          className="mySwiper-main mySwiperMain"
           >
             {
             reviewsList.map((item, index) => (

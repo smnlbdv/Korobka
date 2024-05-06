@@ -1,0 +1,50 @@
+
+.mySwiper-constructor {
+
+    .swiper-pagination-bullets {
+        left: 0px !important;
+    }
+    
+    .swiper-wrapper {
+        padding: 40px 0;
+        width: calc(100% - 70px);
+        margin-left: auto;
+    }
+    
+    .swiper-pagination {
+        width: max-content;
+    }
+    
+    .swiper-pagination-bullet {
+        width: 62px;
+        height: 62px;
+        border-radius: 15px !important;
+        background-image: url(../assets/dropbox.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 45%;
+        margin: 20px 0 !important;
+    }
+    
+    .swiper-pagination-bullet:nth-child(2) {
+        background-image: url(../assets/style.svg);
+    }
+    
+    .swiper-pagination-bullet:nth-child(3) {
+        background-image: url(../assets/shopping-cart.svg);
+    }
+    
+    .swiper-pagination-bullet:nth-child(4) {
+        background-image: url(../assets/book.svg);
+    }
+    
+    .swiper-pagination-bullet:nth-child(5) {
+        background-image: url(../assets/receipt-text.svg);
+    }
+}
+
+
+
+footer {
+    display: none;
+}
