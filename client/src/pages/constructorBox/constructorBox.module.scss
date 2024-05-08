@@ -14,6 +14,17 @@
     overflow: hidden;
 }
 
+.customSlide__list__types {
+    display: grid;
+    grid-template-columns: repeat(4, 210px);
+    grid-template-rows: repeat(auto-fill, 265px);
+    justify-content: center;
+    column-gap: 40px;
+    row-gap: 40px;
+    flex-wrap: wrap;
+    margin-left: 20px;
+}
+
 .customIcon {
     background-color: yellow;
     width: 50px;

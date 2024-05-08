@@ -4,8 +4,9 @@ import bcrypt from 'bcryptjs'
 import jwtToken from 'jsonwebtoken'
 import { registerValidation, loginValidation } from './../validation/auth.js'
 
-import Product from '../models/Product.js'
 import Category from '../models/Category.js'
+import BoxType from '../models/BoxType.js'
+import Product from '../models/Product.js'
 
 const productRoute = Router()
 
@@ -80,5 +81,15 @@ productRoute.get('/:id', async (req, res) => {
         console.log(error.message)
     }
 })
+
+productRoute.get('/box/types', async (req, res) => {
+    try {
+        const products = await BoxType.find();
+        res.status(200).json(products);
+    } catch (error) {
+        console.error('Произошла ошибка:', error);
+        res.status(400).json({ error: error.message });
+    }
+});
 
 export default productRoute

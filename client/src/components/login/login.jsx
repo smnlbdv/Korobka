@@ -27,7 +27,6 @@ const Login = () => {
         .min(5, "Минимальная длина пароля 5 символов"),
     }),
     onSubmit: async (values) => {
-      console.log(values);
       try {
         await api.post("/api/auth/login", values).then((res) => {
           login(res.data.token, res.data.userId, res.data.role);

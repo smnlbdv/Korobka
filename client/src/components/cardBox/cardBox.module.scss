@@ -1,0 +1,54 @@
+.main__type_block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px 35px 20px;
+    border-radius: 10px;
+    background-color: rgb(1, 6, 153);
+}
+
+.main__type_title {
+    text-align: center;
+    font-size: 15px;
+}
+
+.main__type_price {
+    text-transform: uppercase;
+    margin: 30px 0;
+    margin-top: 25px;
+}
+
+.main__type_button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 11px 10px;
+    border-radius: 0px 0px 10px 10px;
+    border: 0;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    background-color: #1ca339;
+    color: white;
+    transition: all 250ms;
+    
+    &:hover {
+        background-color: #20b640;
+        transition: all 250ms;
+    }
+}
+
+.main__type_image {
+    max-width: 130px;
+    height: 130px;
+    margin-bottom: auto;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}

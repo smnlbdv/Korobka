@@ -134,6 +134,25 @@ function App() {
     }
   }
 
+
+  const getTypesBox = async () => {
+    let typesBox
+    try {
+      await api.get('/api/products/box/types')
+        .then(response => {
+          typesBox = response.data
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            console.log(response.response);
+          }
+        })
+        return typesBox
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
+
   const countDown = (type, message) => {
     if(type === 'success') {
       modal.success({
@@ -616,7 +635,8 @@ function App() {
         scrollToTop,
         getCategories,
         checkArray,
-        setCheckArray
+        setCheckArray,
+        getTypesBox
       }}
     >
         <Routes>
