@@ -1,4 +1,10 @@
 
+@mixin hover__box {
+    &:hover {
+        background-color: #c0e862;
+    }
+}
+
 .section_constructor {
     display: flex;
     flex-direction: column;
@@ -50,3 +56,93 @@
     min-height: 100% !important;
     overflow-y: auto !important;
 }
+
+.customSlide2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.three_d_box {
+    position: relative;
+    width: 350px;
+    height: 200px;
+}
+
+.front {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 70%;
+    height: 100%;
+    transform: skew(0deg,  5deg) translateX(-5em);
+    background-color: #cda16f;
+    transition: all 250ms;
+    @include hover__box;
+
+    &:after {
+        content: "";
+        width: 20%;
+        height: 15%;
+        background-color: #c6915a;
+    }
+}
+
+.right {
+    position: absolute;
+    width: 65%;
+    height: 100%;
+    transform: skew(0deg,  -15deg) translateX(10.3em) translateY(1.1em);
+    background-color: #c2925a;
+    transition: all 250ms;
+    @include hover__box;
+}
+
+.top {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 70%;
+    height: 30.44%;
+    transform: translateY(-111.3%) translateX(2.11em) skew(-75deg, 5.0deg) ;
+    background-color: #e6b073;
+    transition: all 250ms;
+
+    &:after {
+        content: "";
+        width: 20%;
+        height: 100%;
+        background-color: #c6915a;
+    }
+
+    &:before {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        content: "";
+        width: 1%;
+        height: 100%;
+        background-color: #94724a;
+    }
+}
+
+// .back {
+//     transform: rotateY(180deg) translateZ(100px);
+//     background-color: lightblue;
+// }
+
+// .left {
+//     position: absolute;
+//     width: 65%;
+//     height: 100%;
+//     transform: skew(0deg,  -15deg) translateX(10.3em) translateY(-100%);
+//     background-color: #c2925a;
+//     transition: all 250ms;
+//     @include hover__box;
+// }
+
+
+// .bottom {
+//     transform: rotateX(-90deg) translateZ(100px);
+//     background-color: lightpink;
+// }

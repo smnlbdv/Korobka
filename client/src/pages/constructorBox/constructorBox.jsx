@@ -1,11 +1,5 @@
 import React, { useContext, useEffect, useRef, useState, Suspense } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Canvas } from '@react-three/fiber';
-import { Environment, OrbitControls } from '@react-three/drei';
-import SimpleBox from '../../../public/SimpleBox.jsx'
-
 import { AuthContext } from "../../context/authContext.js";
 
 import 'swiper/css';
@@ -22,7 +16,7 @@ const ConstructorBox = () => {
 
     const [boxTypes, setBoxTypes] = useState()
     const { getTypesBox } = useContext(AuthContext)
-
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -58,20 +52,15 @@ const ConstructorBox = () => {
                     }
                     </div>
                 </SwiperSlide>
-                <SwiperSlide className={style.customSlide}>
-                    <Canvas>
-                        <ambientLight />
-                        <OrbitControls 
-                            enableZoom={false}
-                            enableRotate={true}
-                            enablePan={false}
-                            minPolarAngle={Math.PI / 4.5}
-                            maxPolarAngle={Math.PI / 1.5}
-                        />
-                        <Suspense fallback={null}>
-                            <SimpleBox />
-                        </Suspense>
-                    </Canvas>
+                <SwiperSlide className={`${style.customSlide} ${style.customSlide2}`}>
+                    <div className={style.three_d_box}>
+                        <div className={style.front}></div>
+                        <div className={style.back}></div>
+                        <div className={style.left}></div>
+                        <div className={style.right}></div>
+                        <div className={style.top}></div>
+                        <div className={style.bottom}></div>
+                    </div>
                 </SwiperSlide>
                 <SwiperSlide className={style.customSlide}>Slide 3</SwiperSlide>
                 <SwiperSlide className={style.customSlide}>Slide 4</SwiperSlide>
