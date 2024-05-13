@@ -201,6 +201,34 @@
     padding-top: 45px;
 }
 
+.liked__product__list {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+}
+
+.mySwiper_cart {
+    width: 100%;
+    padding-top: 70px !important;
+    padding-bottom: 50px !important;
+}
+
+.favorite_items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+    justify-content: space-between;
+    gap: 30px;
+        row-gap: 30px;
+    row-gap: 50px;
+}
+
+.liked__product__title {
+    font-size: 19px;
+    font-weight: 500;
+    border-bottom: 1.5px solid white;
+    padding-bottom: 10px;
+}
+
 .button__check__all {
     display: flex;
     align-items: center;

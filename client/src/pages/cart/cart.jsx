@@ -5,11 +5,18 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 import debounce from "debounce";
 import api from "../../api/api.js";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination } from 'swiper/modules';
 
 import CartItem from "../../components/cartItem/cartItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
+import Product from "../../components/product/product.jsx";
 
 import style from "./cart.module.scss";
+import './cart.scss'
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 const Cart = () => {
   const [sale, setSale] = useState({
@@ -26,8 +33,10 @@ const Cart = () => {
     checkArray,
     setCheckArray,
     setCart,
-    deleteItemCart
+    deleteItemCart,
+    favoriteItem
   } = useContext(AuthContext);
+
   const navigate = useNavigate();
 
   const clickCheck = () => {
@@ -132,7 +141,8 @@ const Cart = () => {
         )}
       </div>
       {cart.length !== 0 ? (
-        <div className={style.cart__main_block}>
+        <>
+          <div className={style.cart__main_block}>
           <div className={style.cart__left_block}>
             <span className={style.cart__span}></span>
             <div className={style.cart__list}>
@@ -203,6 +213,42 @@ const Cart = () => {
             </div>
           </div>
         </div>
+        {
+          favoriteItem.length != 0 &&
+          <div className={style.liked__product__list}>
+            <p className={style.liked__product__title}>Ваше избранное</p>
+            {
+              <div className={style.favorite_items}>
+                <Swiper
+                  autoplay={{
+                    delay: 2500,
+                    disableOnInteraction: false,
+                  }}
+                  slidesPerView={4}
+                  pagination={{
+                    clickable: true,
+                  }}
+                  navigation={false}
+                  modules={[Autoplay, Pagination]}
+                  className={`${style.mySwiper_cart} mySwiper_cart`}
+                >
+                  {
+                    favoriteItem.map((obj, index) => 
+                      <SwiperSlide key={index}>
+                        <Product
+                          favorite={true}
+                          {...obj}
+                        />
+                      </SwiperSlide>
+                    )
+                  }
+                </Swiper>
+              </div>
+            }
+          </div>
+        }
+        </>
+        
       ) : (
         <div className={style.cart__block_null}>
           <div className={style.block__info}>

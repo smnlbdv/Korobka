@@ -25,7 +25,6 @@ const userRoute = Router();
 userRoute.get("/:userId", verifyToken, async (req, res) => {
   const userId = req.params.userId;
   await User.findOne({ _id: userId })
-    .populate("order")
     .populate({
       path: "favorite",
       populate: {
@@ -40,6 +39,9 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
           path: "product",
         },
       },
+    })
+    .populate({
+      path: "email"
     })
     .populate({
       path: "order",

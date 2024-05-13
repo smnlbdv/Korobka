@@ -139,21 +139,6 @@ const ReviewPage = () => {
                 :
                 <div className={style.review__inner__block}>
                     <div className={style.main__block__review}>
-                        <div className={style.product__block__image}>
-                            <div className={style.main__image__product}>
-                                <img src={product.img} alt="" />
-                            </div>
-                            <div className={style.block__slider__images}>
-                                {
-                                    product.slider &&
-                                    product.slider.map((item, index) => (
-                                        <div className={style.item__slider__product} key={index}>
-                                            <img src={item} alt="Slider image" />
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>
                         <form action="" onSubmit={formikReview.handleSubmit}>
                             <div className={style.inner__block__form}>
                                 <textarea

@@ -53,10 +53,10 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
             </div>
             <button className={style.btn__delete_order}>
                 <img
-                className={style.delete_icon}
-                src="/assets/btn-cart-delete.svg"
-                alt=""
-                onClick={clickDeleteOrder}
+                    className={style.delete_icon}
+                    src="/assets/btn-cart-delete.svg"
+                    alt=""
+                    onClick={clickDeleteOrder}
                 />
             </button>
         </div>

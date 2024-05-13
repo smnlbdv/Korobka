@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState, Suspense } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { AuthContext } from "../../context/authContext.js";
 

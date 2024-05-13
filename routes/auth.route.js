@@ -5,6 +5,7 @@ import jwtToken from 'jsonwebtoken'
 import { registerValidation, loginValidation } from './../validation/auth.js'
 
 import User from '../models/User.js'
+import Email from '../models/Email.js'
 import { validationResult } from 'express-validator'
 import generationToken from '../utils/generationJwt.js'
 
@@ -18,23 +19,28 @@ router.post('/registration', registerValidation, async (req, res) => {
         if(!errors.isEmpty()) {
             return res.status(400).json({
                 errors: errors.array(),
-                message: "Не корректные данные при регисрации",
+                message: "Некорректные данные при регистрации",
             })
         }
 
         const { name, email, surname, password} = req.body
 
-        const isUser = await User.findOne({email})
+        const isEmail = await Email.findOne({email})
 
-        if(isUser) {
+        if(isEmail) {
             return res.status(300).json({message: "Такой email уже существует"})
         } else {
 
             const passwordHash = await bcrypt.hash(password, 12)
-
+            
+            const newEmail = new Email({
+                email: email,
+            });
+            newEmail.save()
+        
             const user = new User({
                 name,
-                email,
+                email: newEmail._id,
                 surname,
                 passwordHash: passwordHash
             })
@@ -53,7 +59,7 @@ router.post('/login', loginValidation, async (req, res) => {
         const errors = validationResult(req)
 
         if(!errors.isEmpty()) {
-            return res.status(400).json({
+            return res.status(401).json({
                 errors: errors.array(),
                 message: "Не корректные данные при авторизации",
             })
@@ -61,7 +67,8 @@ router.post('/login', loginValidation, async (req, res) => {
 
         const { email, password } = req.body
 
-        const user = await User.findOne({email})
+        const isEmail = await Email.findOne({email})
+        const user = await User.findOne({email: isEmail._id})
 
         if(!user) {
             return res.status(400).json({message: "Такого email не существует"})
@@ -70,7 +77,7 @@ router.post('/login', loginValidation, async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.passwordHash)
 
         if(!isMatch) {
-            return res.status(400).json({message: "Пароли не совпадают"})
+            return res.status(401).json({message: "Пароли не совпадают"})
         }
 
         const token = generationToken(user.id, user.role)

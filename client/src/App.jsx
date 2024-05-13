@@ -65,6 +65,44 @@ function App() {
     return total;
   }, [cart]);
 
+  
+  const postLogin = async (values) => {
+    try {
+      await api.post("/api/auth/login", values)
+               .then((res) => {
+                  login(res.data.token, res.data.userId, res.data.role);
+                  if (res.status === 200) {
+                    navigate("/");
+                  }
+                })
+                .catch((error) => {
+                  if (error.response.status === 401) {
+                    openNotificationError('bottomRight', error.response.data.message)
+                  }
+                })
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  const postRegistration = async (values) => {
+    try {
+      await api.post("/api/auth/registration", values)
+              .then((res) => {
+                if (res.status === 200) {
+                    navigate("/api/auth/login");
+                }
+              })
+              .catch((error) => {
+                if (error.response.status === 300) {
+                  openNotificationError('bottomRight', error.response.data.message)
+                }
+              })
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   const getProfile = async () => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
@@ -590,8 +628,6 @@ function App() {
     }
 };
 
-  
-
   return (
     <AuthContext.Provider
       value={{
@@ -636,7 +672,9 @@ function App() {
         getCategories,
         checkArray,
         setCheckArray,
-        getTypesBox
+        getTypesBox,
+        postRegistration,
+        postLogin
       }}
     >
         <Routes>

@@ -1,14 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { AuthContext } from "../../context/authContext.js";
 
 import ButtonLogin from "../buttonLogin/buttonLogin.jsx";
 import InputReg from "..//inputReg/inputReg.jsx";
 import style from "./registration.module.scss";
-import api from "../../api/api.js";
 
 const Registration = () => {
-  const nav = useNavigate();
+
+  const { postRegistration, contextHolder } = useContext(AuthContext)
 
   const formikRegistration = useFormik({
     initialValues: {
@@ -34,11 +35,7 @@ const Registration = () => {
     }),
     onSubmit: async (values) => {
         try {
-            await api.post("/api/auth/registration", values).then((res) => {
-            if (res.status === 200) {
-                nav("/api/auth/login");
-            }
-            });
+            postRegistration(values)
         } catch (error) {
             alert(error);
         }
@@ -47,6 +44,7 @@ const Registration = () => {
 
   return (
     <div className={style.wrapper}>
+      {contextHolder}
       <div className={style.block_reg}>
         <h2 className="section__title">Регистарция</h2>
         <form className={style.form} onSubmit={formikRegistration.handleSubmit}>

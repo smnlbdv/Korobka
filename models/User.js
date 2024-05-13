@@ -24,9 +24,10 @@ const shema = new mongoose.Schema({
         required: true,
     },
     email: {
-        type: String,
+        type: Types.ObjectId, 
         required: true,
         unique: true,
+        ref: 'Email'
     },
     passwordHash: {
         type: String,
@@ -43,13 +44,11 @@ const shema = new mongoose.Schema({
     }],
     cart: {
         type: Types.ObjectId,
-        ref: 'Cart',
-        default: '65b937ebbb6114084771a1b9'
+        ref: 'Cart'
     },
     favorite: {
         type: Types.ObjectId,
         ref: 'Favorite',
-        default: '65b937ebbb6114084771a1b9'
     }
 })
 

@@ -1,17 +1,14 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import ButtonLogin from "../buttonLogin/buttonLogin.jsx";
 import InputReg from "../inputReg/inputReg.jsx";
 import style from "./login.module.scss";
-import api from "../../api/api.js";
 import { AuthContext } from "../../context/authContext.js";
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
-  const nav = useNavigate();
+  const { postLogin, contextHolder } = useContext(AuthContext);
 
   const formikLogin = useFormik({
     initialValues: {
@@ -28,12 +25,7 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       try {
-        await api.post("/api/auth/login", values).then((res) => {
-          login(res.data.token, res.data.userId, res.data.role);
-          if (res.status === 200) {
-            nav("/");
-          }
-        });
+        postLogin(values)
       } catch (error) {
         alert(error);
       }
@@ -42,6 +34,7 @@ const Login = () => {
 
   return (
     <div className={style.wrapper}>
+      {contextHolder}
       <div className={style.block_reg}>
         <h2 className="section__title">Вход</h2>
         <form className={style.form} onSubmit={formikLogin.handleSubmit}>

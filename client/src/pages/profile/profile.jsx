@@ -171,7 +171,7 @@ const Profile = () => {
         name: profile.name,
         surname: profile.surname,
         phone: profile.phone,
-        email: profile.email,
+        email: profile.email.email,
       };
       formikPersonal.setValues(newData);
       setInitialData(newData);
@@ -434,7 +434,7 @@ const Profile = () => {
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
-            width={850}
+            width={900}
             footer={null}
           >
             {selectedItems.map((item, index) => (

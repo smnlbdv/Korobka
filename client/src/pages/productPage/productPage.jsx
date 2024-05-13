@@ -188,42 +188,6 @@ const ProductPage = () => {
                 alt="Product image"
               />
             </div>
-            <div className={style.block__slider_item}>
-              <Swiper
-                slidesPerView={4}
-                spaceBetween={25}
-                loop={true}
-                autoplay={{
-                  delay: 2500,
-                  disableOnInteraction: false,
-                }}
-                modules={[Autoplay]}
-                className="mySwiper-product"
-              >
-                <SwiperSlide  className={style.swiper}>
-                  <div className={style.product__image_item} id={0}>
-                    <img
-                      className={style.product__slider_image}
-                      src={selectedProduct.img}
-                      alt="Product image"
-                      onClick={clickOnItem}
-                    />
-                  </div>
-                </SwiperSlide>
-                {sliderProduct.map((item, index) => (
-                  <SwiperSlide className={style.swiper} key={index}>
-                    <div className={style.product__image_item} id={index}>
-                      <img
-                        className={style.product__slider_image}
-                        src={item}
-                        alt="Slider image"
-                        onClick={clickOnItem}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            </div>
           </div>
           <div className={style.functions__card}>
             <div className={style.product__header}>
