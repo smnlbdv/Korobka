@@ -172,7 +172,6 @@ function App() {
     }
   }
 
-
   const getTypesBox = async () => {
     let typesBox
     try {
@@ -561,6 +560,37 @@ function App() {
     return message
   }
 
+  const postCheckOrder = async (orderId) => {
+    let url;
+    const token = JSON.parse(localStorage.getItem('userData')) || '';
+    try {
+      await api.get(`/api/profile/order/${orderId}/check`, {
+          headers: {
+            'Authorization': token.token,
+          }
+        })
+        .then(response => {
+          if(response.status == 200) {
+            url = response.data.url
+          }    
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            logout()
+            navigate("/api/auth/login");
+          }
+      });
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        logout();
+        navigate("/api/auth/login");
+      } else {
+        console.log(error.message);
+      }
+    }
+    return url
+  }
+
   const placeOrder = async (order) => {
     let result;
     let finalCart = checkArray.length !== 0 ? checkArray : cart;
@@ -626,7 +656,7 @@ function App() {
         window.requestAnimationFrame(scrollToTop);
         window.scrollTo(0, c - c / 20);
     }
-};
+  };
 
   return (
     <AuthContext.Provider
@@ -674,7 +704,8 @@ function App() {
         setCheckArray,
         getTypesBox,
         postRegistration,
-        postLogin
+        postLogin,
+        postCheckOrder
       }}
     >
         <Routes>

@@ -13,7 +13,7 @@ import InputProfile from "../../components/inputProfile/inputProfile.jsx";
 import style from "./profile.module.scss";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 import ProfileOrderItem from "../../components/profileOrderItem/profileOrderItem.jsx";
-import ButtonReview from "../../components/buttonReview/buttonReview.jsx";
+import ModalProfileItem from "../../components/modalProdileItem/modalProfileItem.jsx";
 
 const Profile = () => {
   const {
@@ -438,30 +438,7 @@ const Profile = () => {
             footer={null}
           >
             {selectedItems.map((item, index) => (
-                  <div className={style.main__block__modal} key={index}>
-                    <Link to={`/product/${item.productId._id}`}>
-                      <div className={style.modal__block__items}>
-                        <div className={style.modal__block__image}>
-                          <img src={item.productId.img} alt="" />
-                        </div>
-                        <div className={style.modal__block__description}>
-                          <p className={style.modal__item__title}>
-                            {item.productId.title}
-                          </p>
-                          <p className={style.modal__item__description}>
-                            {item.productId.preText}
-                          </p>
-                        </div>
-                        <p className={style.modal__item__quantity}>
-                          Кол-во: {item.quantity}
-                        </p>
-                        <div className={style.modal__item__price}>
-                          Цена: <br></br>{item.productId.price} BYN
-                        </div>
-                      </div>
-                    </Link>
-                    <ButtonReview id={item.productId._id}/>
-                  </div>
+                  <ModalProfileItem key={index} item={item}/>
             ))}
           </Modal>
           {order.length != 0 ? (

@@ -1,17 +1,37 @@
 /* eslint-disable react/prop-types */
-import { useContext } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
+import { Tooltip } from 'antd';
 
 import { AuthContext } from "../../context/authContext.js";
 
 import style from "./profileOrederItem.module.scss";
+import './ant.css'
 
 const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, status, onClick }) => {
-
-    const { deleteOrderItem } = useContext(AuthContext);
+    const [urlCheck, setUrlCheck] = useState("")
+    const urlCheckLink = useRef()
+    const { deleteOrderItem, postCheckOrder } = useContext(AuthContext);
 
     const clickDeleteOrder = () => {
         deleteOrderItem(_id)
     }
+
+    const clickCheckOrder = async (e) => {
+        e.preventDefault();
+        let timeoutId;
+        try {
+            const response = await postCheckOrder(_id);
+            if (response) {
+                setUrlCheck(response)
+                timeoutId = setTimeout(() => {
+                    urlCheckLink.current.click();
+                }, 200)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        return () => clearTimeout(timeoutId);
+    };
 
     const clickItem = () => {
         onClick(_id)
@@ -51,14 +71,28 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
                 <p className={style.price}>{totalAmount} BYN</p>
                 <span className={style.order__item__status}>{status}</span>
             </div>
-            <button className={style.btn__delete_order}>
-                <img
-                    className={style.delete_icon}
-                    src="/assets/btn-cart-delete.svg"
-                    alt=""
-                    onClick={clickDeleteOrder}
-                />
-            </button>
+            <div>
+                <Tooltip placement="right" title={"Удалить"} color={"red"}>
+                    <button className={style.btn__delete_order}>
+                        <img
+                            className={style.delete_icon}
+                            src="/assets/btn-cart-delete.svg"
+                            alt=""
+                            onClick={clickDeleteOrder}
+                        />
+                    </button>
+                </Tooltip>
+                <Tooltip placement="right" title={"Чек"} color={"red"}>
+                    <a className={style.btn__check_order} href={urlCheck} ref={urlCheckLink} target="_blank" rel="noreferrer">
+                        <img
+                            className={style.delete_icon}
+                            src="/assets/btn-cart-check.svg"
+                            alt=""
+                            onClick={clickCheckOrder}
+                        />
+                    </a>
+                </Tooltip>
+            </div>
         </div>
   );
 };

@@ -29,6 +29,7 @@ export default function generateHTML(orderData) {
                 h1 {
                     color: #009688;
                     text-align: center;
+                    margin-bottom: 20px;
                 }
                 .product-item {
                     border: 1px solid #ddd;
@@ -36,16 +37,20 @@ export default function generateHTML(orderData) {
                     padding: 15px;
                     margin-bottom: 20px;
                     background-color: #fff;
+                    display: flex;
+                    align-items: center;
                 }
                 
                 .product-image {
                     max-width: 100px;
                     height: auto;
                     margin-right: 15px;
+                    border-radius: 5px;
                 }
                 
                 .product-description {
-                    margin-bottom: 5px;
+                    margin-bottom: 10px;
+                    font-weight: bold;
                 }
                 
                 .product-quantity,
@@ -66,6 +71,7 @@ export default function generateHTML(orderData) {
                 }
                 .payment-method {
                     text-transform: uppercase;
+                    font-weight: bold;
                 }
             </style>
         </head>
@@ -75,7 +81,7 @@ export default function generateHTML(orderData) {
                 ${itemsList} 
             </div>
             <hr>
-            <p class="total-amount">Общая стоимость: ${orderData.totalAmount}</p>
+            <p class="total-amount">Общая стоимость: ${orderData.totalAmount} BYN</p>
             <p class="order-status">Статус заказа: ${orderData.status}</p>
             <p class="delivery-address">Адрес доставки: ${orderData.address}</p>
             <p class="class="total-amount"">Способ оплаты: ${orderData.wayPay}</p>

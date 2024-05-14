@@ -5,8 +5,8 @@ import multer from "multer";
 import fs from "fs";
 import pdf from 'html-pdf'
 import path from "path";
-import generateHTML from "../template/checkHtml.js";
 
+import pdfGenerate from "../utils/pdfGenerate.js";
 import User from "../models/User.js";
 import Order from "../models/Order.js";
 
@@ -18,6 +18,7 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
+
 
 const upload = multer({ storage: storage });
 const userRoute = Router();
@@ -143,21 +144,6 @@ userRoute.post("/order", verifyToken, async (req, res) => {
     quantity: item.count
   }))
 
-  const publicDir = path.join(process.cwd(), 'public');
-  if (!fs.existsSync(publicDir)) {
-      fs.mkdirSync(publicDir);
-  }
-
-  const pdfDir = path.join(publicDir, 'pdf');
-  if (!fs.existsSync(pdfDir)) {
-      fs.mkdirSync(pdfDir);
-  }
-
-  let urlRes;
-  const outputFilePath = path.join(pdfDir, `output-${userId}.pdf`);
-
-
-
   const order = new Order(newOrder);
   order.save()
     .then(async (savedOrder) => {
@@ -166,16 +152,17 @@ userRoute.post("/order", verifyToken, async (req, res) => {
             if (user) {
                 user.order.push(savedOrder._id.toString());
                 await user.save();
-                const save = await savedOrder.populate('items.productId')
 
-                console.log(save.items.productId);
-                const htmlContent = generateHTML(save);
-                pdf.create(htmlContent, { format: 'Letter' }).toFile(outputFilePath, function(err, response) {
-                    if (err) return console.log(err);
-                    console.log('PDF файл успешно создан и сохранен в папку output!');
-                    urlRes = `http://localhost:5000/pdf/output-${userId}.pdf`
-                    res.status(200).json({ message: 'Заказ оформлен ', success: true, order: save, url: urlRes });
-                });
+                const save = await savedOrder.populate('items.productId')                
+                pdfGenerate(save, order._id)
+                          .then((data) => {
+                            if(data.result) {
+                              res.status(200).json({ message: 'Заказ оформлен', success: true, order: save, url: data.url });
+                            }
+                          })
+                          .catch((error) => {
+                              res.status(400).json({ message: 'Ошибка формирования чека' });
+                          });
             } else {
               res.status(404).json({ message: 'Пользователь не найден' });
             }
@@ -205,6 +192,33 @@ userRoute.delete("/delete-order/:orderId", verifyToken, async (req, res) => {
       res.status(400).json({message: "Ошибка удаления", delete: error.acknowledged });
   }
 })
+
+userRoute.get("/order/:orderId/check", verifyToken, async (req, res) => {
+  const currentDir = process.cwd();
+  const orderId = req.params.orderId;
+  const pdfFilePath = path.join(currentDir, '../public', `check-${orderId}.pdf`);
+
+  try {
+    if (fs.existsSync(pdfFilePath)) {
+      res.status(200).json({ message: "PDF файл уже существует", url: `check-${orderId}.pdf`});
+    } else {
+      const save = await Order.findById(orderId).populate('items.productId')
+      pdfGenerate(save, orderId)
+        .then((data) => {
+          if(data.result) {
+            res.status(200).json({ message: 'Чек сформирован', url: data.url });
+          }
+        })
+        .catch((error) => {
+            res.status(400).json({ message: 'Ошибка формирования чека', url: null});
+        });
+    }
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+    res.status(400).json({ message: "Ошибка при создании PDF файла", success: false });
+  }
+})
+
 
 
 
