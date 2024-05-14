@@ -26,9 +26,7 @@ const storage = multer.diskStorage({
 });
 
 const slider = [];
-  
 const upload = multer({ storage: storage });
-
 const adminRoute = Router();
   
 adminRoute.post('/add', verifyToken, upload.any(), async (req, res) => {

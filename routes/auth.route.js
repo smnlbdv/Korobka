@@ -13,8 +13,8 @@ const router = Router()
 
 router.post('/registration', registerValidation, async (req, res) => {
     try {
-
         const errors = validationResult(req)
+        const { name, email, surname, password} = req.body
 
         if(!errors.isEmpty()) {
             return res.status(400).json({
@@ -23,19 +23,16 @@ router.post('/registration', registerValidation, async (req, res) => {
             })
         }
 
-        const { name, email, surname, password} = req.body
-
         const isEmail = await Email.findOne({email})
 
         if(isEmail) {
             return res.status(300).json({message: "Такой email уже существует"})
         } else {
-
             const passwordHash = await bcrypt.hash(password, 12)
-            
             const newEmail = new Email({
                 email: email,
             });
+
             newEmail.save()
         
             const user = new User({
@@ -44,6 +41,7 @@ router.post('/registration', registerValidation, async (req, res) => {
                 surname,
                 passwordHash: passwordHash
             })
+            
             await user.save()
         }
 

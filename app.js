@@ -1,3 +1,4 @@
+import dotev from 'dotenv'
 import express from 'express'
 import mongoose from 'mongoose'
 import morgan  from 'morgan';
@@ -12,12 +13,15 @@ import userRoute from './routes/userRoute.route.js';
 import reviewsRoute from './routes/reviews.route.js';
 import adminRoute from './routes/admin.route.js';
 import category from './routes/category.route.js';
+import cookieParser from 'cookie-parser';
 
+dotev.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
 app.use(morgan('combined'))
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.urlencoded({extended: false}))
 app.use(express.static('public'))
 app.use(cors())
@@ -36,7 +40,7 @@ app.use('/api/category', category)
 
 async function start() {
     try {
-        await mongoose.connect("mongodb+srv://lbdwsmn:12345@cluster0.1d800tl.mongodb.net/korobka?retryWrites=true&w=majority")
+        await mongoose.connect(process.env.DB_URL)
         .then(() => {
             console.log('Вы подключились к базе')
         })

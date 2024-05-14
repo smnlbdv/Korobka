@@ -19,7 +19,6 @@ const storage = multer.diskStorage({
   },
 });
 
-
 const upload = multer({ storage: storage });
 const userRoute = Router();
 
@@ -218,6 +217,12 @@ userRoute.get("/order/:orderId/check", verifyToken, async (req, res) => {
     res.status(400).json({ message: "Ошибка при создании PDF файла", success: false });
   }
 })
+
+userRoute.post("/logout")
+
+userRoute.get("/activate/:link")
+
+userRoute.get("/refresh")
 
 
 

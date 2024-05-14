@@ -49,7 +49,14 @@ const shema = new mongoose.Schema({
     favorite: {
         type: Types.ObjectId,
         ref: 'Favorite',
-    }
+    },
+    isActivated: {
+        type: Boolean,
+        default: false
+    },
+    activationLink: {
+        type: String,
+    } 
 })
 
 export default mongoose.model('User', shema)
