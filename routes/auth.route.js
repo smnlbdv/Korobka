@@ -2,16 +2,18 @@ import {Router} from 'express'
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import jwtToken from 'jsonwebtoken'
-import { registerValidation, loginValidation } from './../validation/auth.js'
+import * as uuid  from 'uuid';
 
 import User from '../models/User.js'
 import Email from '../models/Email.js'
 import { validationResult } from 'express-validator'
-import generationToken from '../utils/generationJwt.js'
+import { registerValidation, loginValidation } from './../validation/auth.js'
+import { generationToken, saveToken } from '../utils/generationJwt.js'
+import { sendActivationLink } from '../utils/mailer.js'
 
-const router = Router()
+const auth = Router()
 
-router.post('/registration', registerValidation, async (req, res) => {
+auth.post('/registration', registerValidation, async (req, res) => {
     try {
         const errors = validationResult(req)
         const { name, email, surname, password} = req.body
@@ -28,31 +30,43 @@ router.post('/registration', registerValidation, async (req, res) => {
         if(isEmail) {
             return res.status(300).json({message: "Такой email уже существует"})
         } else {
+
             const passwordHash = await bcrypt.hash(password, 12)
-            const newEmail = new Email({
-                email: email,
+            const activationLink = uuid.v4()
+            const newEmail = await Email.create({email: email})
+            const user = await User.create(
+                {
+                    name,
+                    email: newEmail._id,
+                    surname,
+                    passwordHash: passwordHash,
+                    activationLink
+                }
+            )
+
+            sendActivationLink(email, `${process.env.API_URL}/api/profile/activate/${activationLink}`)
+
+            const tokens = generationToken({userId: user._id, email: email, isActivated: user.isActivated})
+            await saveToken(user._id, tokens.refreshToken)
+
+            res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+            res.status(200).json({
+                message: "Пользователь успешно создан",
+                tokens,
+                user: {
+                  id: user._id,
+                  email: email,
+                  isActivated: user.isActivated
+                }
             });
-
-            newEmail.save()
-        
-            const user = new User({
-                name,
-                email: newEmail._id,
-                surname,
-                passwordHash: passwordHash
-            })
-            
-            await user.save()
         }
-
-        res.status(200).json({message: "Пользователь успешно создан"})
 
     } catch (error) {
         console.log(error.message)
     }
 })
 
-router.post('/login', loginValidation, async (req, res) => {
+auth.post('/login', loginValidation, async (req, res) => {
     try {
         const errors = validationResult(req)
 
@@ -91,7 +105,7 @@ router.post('/login', loginValidation, async (req, res) => {
     }
 })
 
-router.get('/admin/:userId', async (req, res) => {
+auth.get('/admin/:userId', async (req, res) => {
     try {
         const response = req.params.userId
         
@@ -112,4 +126,4 @@ router.get('/admin/:userId', async (req, res) => {
 })
 
 
-export default router
+export default auth

@@ -1,6 +1,6 @@
 
 import jwt from 'jsonwebtoken';
-import generationToken from '../utils/generationJwt.js';
+import { generationToken } from '../utils/generationJwt.js';
 import cookieParser from 'cookie-parser';
 
 const verifyToken = (req, res, next) => {

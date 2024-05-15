@@ -1,7 +1,7 @@
 import mongoose, { Types } from 'mongoose'
 
 const shema = new mongoose.Schema({
-    user: {
+    userId: {
         type: Types.ObjectId,
         ref: 'User'
     },

@@ -6,7 +6,7 @@ import jwtToken from 'jsonwebtoken'
 import { validationResult } from 'express-validator'
 
 import verifyToken from '../validation/verifyToken.js'
-import sendEmail from '../utils/mailer.js'
+import { sendEmail } from '../utils/mailer.js'
 import fs from 'fs' 
 import Email from '../models/Email.js'
 

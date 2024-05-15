@@ -44,11 +44,13 @@ const shema = new mongoose.Schema({
     }],
     cart: {
         type: Types.ObjectId,
-        ref: 'Cart'
+        ref: 'Cart',
+        default: null
     },
     favorite: {
         type: Types.ObjectId,
         ref: 'Favorite',
+        default: null
     },
     isActivated: {
         type: Boolean,

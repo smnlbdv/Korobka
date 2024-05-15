@@ -1,30 +1,50 @@
 import nodemailer from 'nodemailer';
+import activationEmailHTML from '../template/email/activationEmail.js'
+import dotev from 'dotenv'
+dotev.config()
 
 const transporter = nodemailer.createTransport({
-    service: 'mail',
-    host: 'smtp.mail.ru',
-    port: 587,
+    service: process.env.SMTP_EMAIL_SERVICE,
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
     auth: {
-        user: 'korobkabelaru@mail.ru',
-        pass: 'TltX8rSVi2(o'
+        user: process.env.SMTP_EMAIL_LOGIN,
+        pass: process.env.SMTP_EMAIL_PASS
     }
 });
 
-const sendEmail = async (email, subject, html) => {
+export async function sendEmail (email, subject, html) {
+    
     const mailOptions = {
-        from: 'korobkabelaru@mail.ru',
+        from: process.env.SMTP_EMAIL_LOGIN,
         to: email,
         subject: subject,
+        text: "",
         html: html
     };
 
     transporter.sendMail(mailOptions, function(err, info) {
         if (err) {
-            return false
+            console.log(err);
         } else {
             return true
         }
     });
 }
 
-export default sendEmail
+export function sendActivationLink (to, link) {
+
+    const mailOptions = {
+        from: process.env.SMTP_EMAIL_LOGIN,
+        to: to,
+        subject: "Активация аккаунта" ,
+        text: '',
+        html: activationEmailHTML(link)
+    };
+
+    transporter.sendMail(mailOptions, function(err, info) {
+        if (err) {
+            console.log(err);
+        }
+    });
+}

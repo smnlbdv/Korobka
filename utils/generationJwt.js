@@ -1,16 +1,26 @@
 import jwtToken from 'jsonwebtoken'
 
-const generationToken = (userId, role) => {
+import TokenModel from '../models/Token.js'
 
-    const jwtSecret = 'ssdjksdlfksjdflkjdflkjdflkjdk'
+export function generationToken (payload) {
 
-    const token = jwtToken.sign(
-        {userId: userId, role: role}, 
-        jwtSecret,
-        {expiresIn: '1h'}
-    )
+    const accessToken = jwtToken.sign(payload, process.env.JWT_ACCESS_SECRET, {expiresIn: '1h'})
+    const refreshToken = jwtToken.sign(payload, process.env.JWT_REFRESH_SECRET, {expiresIn: '30d'})
 
-    return token
+    return { 
+        accessToken,
+        refreshToken
+    }
 }
 
-export default generationToken
+export async function saveToken (userId, refreshToken) {
+    const tokenData = await TokenModel.findOne({ userId: userId })
+
+    if(tokenData) {
+        tokenData.refreshToken = refreshToken;
+        return tokenData.save()
+    } else {
+        const token = await TokenModel.create({ userId: userId, refreshToken: refreshToken})
+        return token
+    }
+}

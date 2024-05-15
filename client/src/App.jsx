@@ -90,6 +90,7 @@ function App() {
       await api.post("/api/auth/registration", values)
               .then((res) => {
                 if (res.status === 200) {
+                    console.log(res.data);
                     navigate("/api/auth/login");
                 }
               })

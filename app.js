@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import morgan  from 'morgan';
 import cors from 'cors'
 import bodyParser from 'body-parser';
-import route from './routes/auth.route.js'
+import auth from './routes/auth.route.js'
 import productRoute from './routes/product.route.js'
 import cartRoute from './routes/cart.route.js'
 import favoriteRoute from './routes/favorite.route.js';
@@ -27,7 +27,7 @@ app.use(express.static('public'))
 app.use(cors())
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
-app.use('/api/auth', route)
+app.use('/api/auth', auth)
 app.use('/api/products', productRoute)
 app.use('/api/cart', cartRoute)
 app.use('/api/favorite', favoriteRoute)
