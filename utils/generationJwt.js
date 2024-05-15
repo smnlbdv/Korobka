@@ -24,3 +24,9 @@ export async function saveToken (userId, refreshToken) {
         return token
     }
 }
+
+export async function removeToken (refreshToken) {
+    const tokenData = await TokenModel.deleteOne({refreshToken: refreshToken})
+    return tokenData
+}
+

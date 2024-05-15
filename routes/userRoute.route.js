@@ -5,10 +5,15 @@ import multer from "multer";
 import fs from "fs";
 import pdf from 'html-pdf'
 import path from "path";
+import dotev from 'dotenv'
+dotev.config()
+import ApiErorr from "../exceptions/apiError.js";
 
 import pdfGenerate from "../utils/pdfGenerate.js";
 import User from "../models/User.js";
 import Order from "../models/Order.js";
+import Token from "../models/Token.js";
+import { removeToken } from '../utils/generationJwt.js'
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -218,11 +223,61 @@ userRoute.get("/order/:orderId/check", verifyToken, async (req, res) => {
   }
 })
 
-userRoute.post("/logout")
+// userRoute.post("/logout", async (req, res) => {
+//   try {
+//     const { refreshToken } = req.cookies;
+//     console.log(refreshToken);
+//     // const token = await removeToken(refreshToken)
+//     // res.clearCookie("refreshToken")
+//     // res.status(200).json({message: "Вы разлогинились", token: token});
+//   } catch (error) {
+//     console.error('Произошла ошибка:', error);
+//     res.status(400).json({ message: "Ошибка при разлогировании" });
+//   }
+// })
 
-userRoute.get("/activate/:link")
+userRoute.get("/activate/:link", async (req, res) => {
+  try {
+    const link = req.params.link;
+    const user = await User.findOne({activationLink: link});
 
-userRoute.get("/refresh")
+    if(!user) {
+      res.status(400).json({ message: "Некорректная ссылка активации" })
+    }
+
+    user.isActivated = true;
+    user.activationLink = null;
+    await user.save();
+
+    res.status(200).json({ message: "Аккаунт успешно загеристрирован" }).redirect(process.env.CLIENT_URL);
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+    res.status(400).json({ message: "Ошибка при активации" });
+  }
+})
+
+// userRoute.get("/refresh", async (req, res) => {
+//   const { refreshToken } = req.cookies;
+
+//   if(!refreshToken) {
+//     throw ApiErorr.UnauthorizedError()
+//   }
+
+
+
+
+
+//   res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+//   // res.status(200).json({
+//   //     message: "Пользователь успешно создан",
+//   //     tokens,
+//   //     user: {
+//   //       id: user._id,
+//   //       email: email,
+//   //       isActivated: user.isActivated
+//   //     }
+//   // });
+// })
 
 
 

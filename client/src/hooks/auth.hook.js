@@ -15,7 +15,7 @@ export const useAuth = () => {
     const logout = () => {
         setToken(null)
         setUserId(null)
-        setRole(0)
+        setRole(null)
         localStorage.removeItem('userData')
     }
 

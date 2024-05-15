@@ -4,7 +4,6 @@ import { generationToken } from '../utils/generationJwt.js';
 import cookieParser from 'cookie-parser';
 
 const verifyToken = (req, res, next) => {
-  
   const token = req.headers.authorization;
 
   if (!token) {
@@ -12,7 +11,7 @@ const verifyToken = (req, res, next) => {
   }
 
   try {
-    const decodedToken = jwt.verify(token, 'ssdjksdlfksjdflkjdflkjdflkjdk');
+    const decodedToken = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
     const currentTime = Math.round(new Date().getTime() / 1000);
 
     if (decodedToken.exp <= currentTime) {

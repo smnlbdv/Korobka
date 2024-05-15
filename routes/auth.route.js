@@ -3,6 +3,8 @@ import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import jwtToken from 'jsonwebtoken'
 import * as uuid  from 'uuid';
+import dotev from 'dotenv'
+dotev.config()
 
 import User from '../models/User.js'
 import Email from '../models/Email.js'
@@ -92,13 +94,20 @@ auth.post('/login', loginValidation, async (req, res) => {
             return res.status(401).json({message: "Пароли не совпадают"})
         }
 
-        const token = generationToken(user.id, user.role)
+        const tokens = generationToken({userId: user._id, email: email, isActivated: user.isActivated, role: user.role})
+        await saveToken(user._id, tokens.refreshToken)
 
-        res.json({
-            token,
-            userId: user.id,
-            role: user.role
-        })
+        res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+        res.status(200).json({
+            message: "Авторизация прошла успешно",
+            tokens,
+            user: {
+                id: user._id,
+                email: email,
+                isActivated: user.isActivated,
+                role: user.role
+            }
+        });
 
     } catch (error) {
         console.log(error)

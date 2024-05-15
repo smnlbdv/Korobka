@@ -70,7 +70,7 @@ function App() {
     try {
       await api.post("/api/auth/login", values)
                .then((res) => {
-                  login(res.data.token, res.data.userId, res.data.role);
+                  login(res.data.tokens.accessToken, res.data.user.id, res.data.user.role);
                   if (res.status === 200) {
                     navigate("/");
                   }
@@ -90,7 +90,6 @@ function App() {
       await api.post("/api/auth/registration", values)
               .then((res) => {
                 if (res.status === 200) {
-                    console.log(res.data);
                     navigate("/api/auth/login");
                 }
               })
