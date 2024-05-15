@@ -38,17 +38,17 @@ function App() {
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
-  const { login, logout, token, userId, role, setRole } = useAuth();
+  const { login, logout, token, userId, role } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const [checkArray, setCheckArray] = useState([]);
   const navigate = useNavigate();
   const isLogin = !!token;
 
   useEffect(() => {
-    if(isLogin) {
+    if(localStorage.getItem("token")) {
       getProfile()
     }
-  }, [isLogin])
+  }, [])
 
   useEffect(() => {
     getNewProduct()
@@ -79,6 +79,9 @@ function App() {
                   if (error.response.status === 401) {
                     openNotificationError('bottomRight', error.response.data.message)
                   }
+                  if (error.response.status === 400) {
+                    navigate("/api/auth/registration");
+                  }
                 })
     } catch (error) {
       console.log(error.message);
@@ -90,7 +93,7 @@ function App() {
       await api.post("/api/auth/registration", values)
               .then((res) => {
                 if (res.status === 200) {
-                    navigate("/api/auth/login");
+                  navigate("/api/auth/login");
                 }
               })
               .catch((error) => {
@@ -245,12 +248,8 @@ function App() {
   }
 
   const addCart = async (objId) => {
-    const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.post(`/api/cart/add/${objId}`, {userId}, {
-        headers: {
-          'Authorization': `${token.token}`,
-        }})
+      await api.post(`/api/cart/add/${objId}`, {userId})
         .then(response => {
           if(response.data.count > 1) {
             const cartItemIndex = cart.findIndex(item => item._id === response.data.product._id);

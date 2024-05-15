@@ -82,6 +82,11 @@ auth.post('/login', loginValidation, async (req, res) => {
         const { email, password } = req.body
 
         const isEmail = await Email.findOne({email})
+
+        if(!isEmail) {
+            return res.status(400).json({message: "Такой почты не существует"})
+        }
+
         const user = await User.findOne({email: isEmail._id})
 
         if(!user) {
@@ -98,6 +103,7 @@ auth.post('/login', loginValidation, async (req, res) => {
         await saveToken(user._id, tokens.refreshToken)
 
         res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+        
         res.status(200).json({
             message: "Авторизация прошла успешно",
             tokens,

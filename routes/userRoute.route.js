@@ -14,6 +14,7 @@ import User from "../models/User.js";
 import Order from "../models/Order.js";
 import Token from "../models/Token.js";
 import { removeToken } from '../utils/generationJwt.js'
+import { generationToken, saveToken } from '../utils/generationJwt.js'
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -236,7 +237,7 @@ userRoute.get("/order/:orderId/check", verifyToken, async (req, res) => {
 //   }
 // })
 
-userRoute.get("/activate/:link", async (req, res) => {
+userRoute.get("/activate/:link", verifyToken, async (req, res) => {
   try {
     const link = req.params.link;
     const user = await User.findOne({activationLink: link});
@@ -256,30 +257,43 @@ userRoute.get("/activate/:link", async (req, res) => {
   }
 })
 
-// userRoute.get("/refresh", async (req, res) => {
-//   const { refreshToken } = req.cookies;
+userRoute.get("/refresh_token", async (req, res) => {
+  try {
+    const { refresh_token } = req.body;
 
-//   if(!refreshToken) {
-//     throw ApiErorr.UnauthorizedError()
-//   }
+    if(!refresh_token) {
+      throw ApiErorr.UnauthorizedError()
+    }
 
+    const userData = jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET)
+    const tokenData = await Token.findOne({refreshToken: refresh_token})
 
+    if(!userData || !tokenData) {
+      throw ApiErorr.UnauthorizedError(userData._id)
+    }
 
+    const user = await User.findById(userData.userId)
 
+    const tokens = generationToken({userId: user._id, email: email, isActivated: user.isActivated, role: user.role})
+    await saveToken(user._id, tokens.refreshToken)
 
-//   res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
-//   // res.status(200).json({
-//   //     message: "Пользователь успешно создан",
-//   //     tokens,
-//   //     user: {
-//   //       id: user._id,
-//   //       email: email,
-//   //       isActivated: user.isActivated
-//   //     }
-//   // });
-// })
+    res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+    
+    res.status(200).json({
+        message: "Авторизация прошла успешно",
+        tokens,
+        user: {
+            id: user._id,
+            email: email,
+            isActivated: user.isActivated,
+            role: user.role
+        }
+    });
 
-
-
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+    res.status(400).json({ message: "Ошибка при активации" });
+  }
+})
 
 export default userRoute;
