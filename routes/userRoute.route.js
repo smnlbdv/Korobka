@@ -3,18 +3,16 @@ import bcrypt from "bcryptjs";
 import verifyToken from "../validation/verifyToken.js";
 import multer from "multer";
 import fs from "fs";
-import pdf from 'html-pdf'
 import path from "path";
+import jwt from 'jsonwebtoken';
+import { generationToken, saveToken } from '../utils/generationJwt.js'
 import dotev from 'dotenv'
 dotev.config()
-import ApiErorr from "../exceptions/apiError.js";
 
 import pdfGenerate from "../utils/pdfGenerate.js";
 import User from "../models/User.js";
 import Order from "../models/Order.js";
 import Token from "../models/Token.js";
-import { removeToken } from '../utils/generationJwt.js'
-import { generationToken, saveToken } from '../utils/generationJwt.js'
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -61,7 +59,7 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
     .catch((error) => console.log(error));
 });
 
-userRoute.patch( "/upload-image", verifyToken, upload.single("image"), async (req, res) => {
+userRoute.patch("/upload-image", verifyToken, upload.single("image"), async (req, res) => {
     try {
       const userId = req.userId;
       const url = `http://localhost:5000/avatar/${req.file.originalname}`;
@@ -257,34 +255,29 @@ userRoute.get("/activate/:link", verifyToken, async (req, res) => {
   }
 })
 
-userRoute.get("/refresh_token", async (req, res) => {
+userRoute.get("/token/refresh", async (req, res) => {
   try {
-    const { refresh_token } = req.body;
-
-    if(!refresh_token) {
-      throw ApiErorr.UnauthorizedError()
-    }
+    const refresh_token = req.cookies.refreshToken
 
     const userData = jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET)
     const tokenData = await Token.findOne({refreshToken: refresh_token})
 
     if(!userData || !tokenData) {
-      throw ApiErorr.UnauthorizedError(userData._id)
+      res.status(401).json({ message: "Не авторизованный пользователь"})
     }
 
-    const user = await User.findById(userData.userId)
+    const user = await User.findById(userData.userId).populate("email")
 
-    const tokens = generationToken({userId: user._id, email: email, isActivated: user.isActivated, role: user.role})
+    const tokens = generationToken({userId: user._id, email: user.email.email, isActivated: user.isActivated, role: user.role})
     await saveToken(user._id, tokens.refreshToken)
 
     res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
-    
     res.status(200).json({
         message: "Авторизация прошла успешно",
-        tokens,
+        accessToken: tokens.accessToken,
         user: {
             id: user._id,
-            email: email,
+            email: user.email,
             isActivated: user.isActivated,
             role: user.role
         }
@@ -292,7 +285,7 @@ userRoute.get("/refresh_token", async (req, res) => {
 
   } catch (error) {
     console.error('Произошла ошибка:', error);
-    res.status(400).json({ message: "Ошибка при активации" });
+    res.status(401).json({ message: "Ошибка авторизации" });
   }
 })
 

@@ -45,9 +45,9 @@ function App() {
   const isLogin = !!token;
 
   useEffect(() => {
-    if(localStorage.getItem("token")) {
-      getProfile()
-    }
+    // if(localStorage.getItem("token")) {
+    //   getProfile()
+    // }
   }, [])
 
   useEffect(() => {
@@ -70,17 +70,14 @@ function App() {
     try {
       await api.post("/api/auth/login", values)
                .then((res) => {
-                  login(res.data.tokens.accessToken, res.data.user.id, res.data.user.role);
+                  login(res.data.accessToken, res.data.id, res.data.role);
                   if (res.status === 200) {
                     navigate("/");
                   }
                 })
                 .catch((error) => {
-                  if (error.response.status === 401) {
-                    openNotificationError('bottomRight', error.response.data.message)
-                  }
                   if (error.response.status === 400) {
-                    navigate("/api/auth/registration");
+                    openNotificationError('bottomRight', error.response.data.message)
                   }
                 })
     } catch (error) {
@@ -265,10 +262,11 @@ function App() {
           }          
         })
         .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
+          console.log(response);
+          // if(response.response.status == 401) {
+          //   logout()
+          //   navigate("/api/auth/login");
+          // }
       });
     } catch (error) {
       console.log(error.message)

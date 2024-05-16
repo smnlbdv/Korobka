@@ -21,25 +21,22 @@ api.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
-api.interceptors.response.use((response) => {
+api.interceptors.response.use(
+  (response) => {
     return response;
   },
   async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response.status === 401) {
-      
-      const refreshToken = document.cookie.replace(/(?:(?:^|.*;s*)refreshToken*\=s*([^;]*).*$)|^.*$/, "$1");
-
-      if (refreshToken) {
-        const refreshedToken = await api.post('/api/profile/refresh_token', { refresh_token: refreshToken });
-        localStorage.setItem('token', refreshedToken.data.tokens.accessToken);
-        originalRequest.headers.Authorization = `${refreshedToken.data.tokens.accessToken}`;  
-        return api(originalRequest);
+    if (error.response.status === 401 && error.config && !error.config._isRetry) {
+      error.config._isRetry = true;
+      try {
+        const response = await api.get('/api/profile/token/refresh');
+        localStorage.setItem('token', response.data.accessToken);
+        return api.request(error.config);
+      } catch (err) {
+        return Promise.reject(err);
       }
     }
-
-    return Promise.reject(error);
+    throw error;
   }
 );
 

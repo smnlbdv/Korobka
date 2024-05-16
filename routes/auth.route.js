@@ -47,20 +47,7 @@ auth.post('/registration', registerValidation, async (req, res) => {
             )
 
             sendActivationLink(email, `${process.env.API_URL}/api/profile/activate/${activationLink}`)
-
-            const tokens = generationToken({userId: user._id, email: email, isActivated: user.isActivated})
-            await saveToken(user._id, tokens.refreshToken)
-
-            res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
-            res.status(200).json({
-                message: "Пользователь успешно создан",
-                tokens,
-                user: {
-                  id: user._id,
-                  email: email,
-                  isActivated: user.isActivated
-                }
-            });
+            res.status(200).json({message: "Пользователь успешно создан"});
         }
 
     } catch (error) {
@@ -71,48 +58,37 @@ auth.post('/registration', registerValidation, async (req, res) => {
 auth.post('/login', loginValidation, async (req, res) => {
     try {
         const errors = validationResult(req)
-
         if(!errors.isEmpty()) {
-            return res.status(401).json({
+            return res.status(400).json({
                 errors: errors.array(),
                 message: "Не корректные данные при авторизации",
             })
         }
 
         const { email, password } = req.body
-
         const isEmail = await Email.findOne({email})
 
         if(!isEmail) {
-            return res.status(400).json({message: "Такой почты не существует"})
-        }
-
-        const user = await User.findOne({email: isEmail._id})
-
-        if(!user) {
             return res.status(400).json({message: "Такого email не существует"})
         }
 
+        const user = await User.findOne({email: isEmail._id})
         const isMatch = await bcrypt.compare(password, user.passwordHash)
 
         if(!isMatch) {
-            return res.status(401).json({message: "Пароли не совпадают"})
+            return res.status(400).json({message: "Ошибка авторизации"})
         }
 
         const tokens = generationToken({userId: user._id, email: email, isActivated: user.isActivated, role: user.role})
         await saveToken(user._id, tokens.refreshToken)
 
-        res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+        res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
         
         res.status(200).json({
             message: "Авторизация прошла успешно",
-            tokens,
-            user: {
-                id: user._id,
-                email: email,
-                isActivated: user.isActivated,
-                role: user.role
-            }
+            accessToken: tokens.accessToken,
+            id: user._id, 
+            role: user.role
         });
 
     } catch (error) {

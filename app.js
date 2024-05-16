@@ -14,7 +14,6 @@ import reviewsRoute from './routes/reviews.route.js';
 import adminRoute from './routes/admin.route.js';
 import category from './routes/category.route.js';
 import cookieParser from 'cookie-parser';
-import erroeMiddleware from './middleware/errorMiddleware.js'
 
 dotev.config()
 const app = express()
@@ -40,7 +39,6 @@ app.use('/api/profile', userRoute)
 app.use('/api/reviews', reviewsRoute)
 app.use('/api/admin', adminRoute)
 app.use('/api/category', category)
-app.use(erroeMiddleware)
 
 async function start() {
     try {
