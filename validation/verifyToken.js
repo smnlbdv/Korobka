@@ -1,27 +1,31 @@
 
 import jwt from 'jsonwebtoken';
-import { generationToken } from '../utils/generationJwt.js';
-import cookieParser from 'cookie-parser';
+import dotev from 'dotenv'
+dotev.config()
 
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
-
+  
   if (!token) {
-    return res.status(401).json({ message: 'Не авторизован'});
+    return res.status(422).json({ message: 'Не авторизован', redirectTo: "/api/auth/login" });
   }
 
   try {
-    const decodedToken = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-    const currentTime = Math.round(new Date().getTime() / 1000);
+    const decodedToken = jwt.decode(token);
 
     if (decodedToken.exp <= currentTime) {
       return res.status(401).json({ message: 'Время токена истекло' });
-    } else {
-      req.userId = decodedToken.userId
+    }
+
+    const verifiedToken = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    
+    if (!verifiedToken) {
+      req.userId = verifiedToken.userId;
       next();
     }
+
   } catch (error) {
-    return res.status(401).json({ message: 'Неверный токен авторизации' });
+    return res.status(422).json({ message: 'Не авторизован', redirectTo: "/api/auth/login" });
   }
   
 };

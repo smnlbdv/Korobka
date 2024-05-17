@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 const api = axios.create({
   withCredentials: true,
   baseURL: "http://localhost:5000",
@@ -33,10 +32,26 @@ api.interceptors.response.use(
         localStorage.setItem('token', response.data.accessToken);
         return api.request(error.config);
       } catch (err) {
-        return Promise.reject(err);
+        if (err.response && err.response.status === 401) {
+          const redirectUrl = error.response.data.redirectTo;
+          if (redirectUrl) {
+            window.location.replace(redirectUrl);
+            return Promise.reject(error);
+          }
+        }
+        return Promise.reject(error);
       }
     }
-    throw error;
+
+    if (error.response.status === 422 && error.config && !error.config._isRetry) {
+      error.config._isRetry = true;
+      const redirectUrl = error.response.data.redirectTo;
+      if (redirectUrl) {
+        window.location.replace(redirectUrl);
+        return Promise.reject(error);
+      }
+    }
+    return Promise.reject(error);
   }
 );
 

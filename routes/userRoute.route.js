@@ -5,14 +5,16 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 import jwt from 'jsonwebtoken';
-import { generationToken, saveToken } from '../utils/generationJwt.js'
+import { generationToken, saveToken, removeToken } from '../utils/generationJwt.js'
 import dotev from 'dotenv'
+import cookieParser from "cookie-parser";
 dotev.config()
 
 import pdfGenerate from "../utils/pdfGenerate.js";
 import User from "../models/User.js";
 import Order from "../models/Order.js";
 import Token from "../models/Token.js";
+import { log } from "console";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -222,18 +224,21 @@ userRoute.get("/order/:orderId/check", verifyToken, async (req, res) => {
   }
 })
 
-// userRoute.post("/logout", async (req, res) => {
-//   try {
-//     const { refreshToken } = req.cookies;
-//     console.log(refreshToken);
-//     // const token = await removeToken(refreshToken)
-//     // res.clearCookie("refreshToken")
-//     // res.status(200).json({message: "Вы разлогинились", token: token});
-//   } catch (error) {
-//     console.error('Произошла ошибка:', error);
-//     res.status(400).json({ message: "Ошибка при разлогировании" });
-//   }
-// })
+userRoute.post("/token/logout", async (req, res) => {
+  try {
+    const { refreshToken } = req.cookies;
+
+    if(!refreshToken) {
+      res.status(200).clearCookie("refreshToken").json("Вы успешно разлогинились");
+    }
+
+    await removeToken(refreshToken)
+    res.status(200).clearCookie("refreshToken").json("Вы успешно разлогинились");
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+    res.status(400).json({ message: "Ошибка при разлогировании" });
+  }
+})
 
 userRoute.get("/activate/:link", verifyToken, async (req, res) => {
   try {
@@ -257,36 +262,46 @@ userRoute.get("/activate/:link", verifyToken, async (req, res) => {
 
 userRoute.get("/token/refresh", async (req, res) => {
   try {
-    const refresh_token = req.cookies.refreshToken
+    const refresh_token = req.cookies.refreshToken;
+    const currentTime = Math.round(new Date().getTime() / 1000);
 
-    const userData = jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET)
-    const tokenData = await Token.findOne({refreshToken: refresh_token})
-
-    if(!userData || !tokenData) {
-      res.status(401).json({ message: "Не авторизованный пользователь"})
+    if(!refresh_token) {
+      return res.status(401).json({ message: "Не авторизованный пользователь", redirectTo: "/api/auth/login" });
     }
 
-    const user = await User.findById(userData.userId).populate("email")
+    const userData = jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET);
+    const tokenData = await Token.findOne({refreshToken: refresh_token });
 
-    const tokens = generationToken({userId: user._id, email: user.email.email, isActivated: user.isActivated, role: user.role})
-    await saveToken(user._id, tokens.refreshToken)
+    if(!userData || !tokenData) {
+      return res.status(401).json({ message: "Не авторизованный пользователь", redirectTo: "/api/auth/login" });
+    }
 
-    res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
-    res.status(200).json({
-        message: "Авторизация прошла успешно",
-        accessToken: tokens.accessToken,
-        user: {
-            id: user._id,
-            email: user.email,
-            isActivated: user.isActivated,
-            role: user.role
-        }
-    });
+    try {
+      if (userData.exp <= currentTime) {
+        return res.status(401).json({ message: "Ошибка токена", redirectTo: "/api/auth/login" });
+      }
+      const user = await User.findById(userData.userId).populate("email");
+      const tokens = generationToken({userId: user._id, email: user.email.email, isActivated: user.isActivated, role: user.role});
+      await saveToken(user._id, tokens.refreshToken);
 
+      res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true });
+      res.status(200).json({
+          message: "Авторизация прошла успешно",
+          accessToken: tokens.accessToken,
+          user: {
+              id: user._id,
+              email: user.email,
+              isActivated: user.isActivated,
+              role: user.role
+          }
+      });
+    } catch (error) {
+      res.status(401).json({ message: "Недействительный токен обновления", redirectTo: "/api/auth/registration" });
+    }
   } catch (error) {
     console.error('Произошла ошибка:', error);
-    res.status(401).json({ message: "Ошибка авторизации" });
+    res.status(401).json({ message: "Не зарегистрированный пользователь", redirectTo: "/api/auth/registration" });
   }
-})
+});
 
 export default userRoute;

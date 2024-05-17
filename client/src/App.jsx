@@ -38,21 +38,19 @@ function App() {
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
-  const { login, logout, token, userId, role } = useAuth();
+  const { login, logout, token, userId, role, checkAuth } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const [checkArray, setCheckArray] = useState([]);
   const navigate = useNavigate();
   const isLogin = !!token;
 
   useEffect(() => {
-    // if(localStorage.getItem("token")) {
-    //   getProfile()
-    // }
-  }, [])
-
-  useEffect(() => {
-    getNewProduct()
-    getBestReviews()
+    if(localStorage.getItem("token")) {
+      // getProfile()
+    }
+    checkAuth()
+    // getNewProduct()
+    // getBestReviews()
     getCategories()
   }, [])
 
@@ -104,12 +102,8 @@ function App() {
   }
 
   const getProfile = async () => {
-    const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.get(`/api/profile/${userId}`, {
-        headers: {
-            'Authorization': `${token.token}`,
-        }})
+      await api.get(`/api/profile/${userId}`)
         .then(response => {
 
           const fieldsToExclude = ['cart', 'older', 'favorite'];
@@ -121,7 +115,6 @@ function App() {
           }
 
           setProfile({...userObject})
-          setRole(userObject.role)
 
           if(response.data.cart && cart.length == 0) {
             const newCart = [...response.data.cart.items]
@@ -143,7 +136,7 @@ function App() {
 
         })
         .catch(response => {
-          if(response.response.status == 401) {
+          if(response.status == 401) {
             logout()
             navigate("/api/auth/login");
           }
@@ -161,10 +154,10 @@ function App() {
           setCategories([...response.data.categories]);
         })
         .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
+          // if(response.response.status === 401) {
+          //   logout()
+          //   navigate("/api/auth/login");
+          // }
         })
         
     } catch (error) {
@@ -262,14 +255,12 @@ function App() {
           }          
         })
         .catch(response => {
-          console.log(response);
-          // if(response.response.status == 401) {
-          //   logout()
-          //   navigate("/api/auth/login");
-          // }
+          if (response.response && response.response.status === 401) {
+            logout();
+          }
       });
     } catch (error) {
-      console.log(error.message)
+      console.log(error)
     }
   };
 

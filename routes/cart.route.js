@@ -9,7 +9,8 @@ const cartRoute = Router()
 
 cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
     try {
-        const { userId } = req.body
+        const { userId } = req
+
         const itemId = req.params.itemId
         const cartItem = await CartItem.findOne({owner: userId})
 
@@ -31,7 +32,7 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
 
                 const product = addedItem.product;
                 const count = addedItem.quantity;
-                res.status(201).json({ product, count });
+                res.status(200).json({ product, count });
 
             } else {
 
@@ -48,7 +49,7 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
 
                     const product = addedItem.product;
                     const count = addedItem.quantity;
-                    res.status(201).json({ product, count });
+                    res.status(200).json({ product, count });
 
                 } else {
                     const newItem = {
@@ -66,7 +67,7 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
 
                     const product = addedItem.product;
                     const count = addedItem.quantity;
-                    res.status(201).json({ product, count });
+                    res.status(200).json({ product, count });
                 }
             }
         } else {
@@ -82,7 +83,7 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
 
             const product = newCartItem[0].items[0].product;
             const count = newCartItem[0].items[0].quantity
-            res.status(201).json({product, count})
+            res.status(200).json({product, count})
         }
 
     } catch (error) {

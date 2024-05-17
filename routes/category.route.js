@@ -19,7 +19,7 @@ category.get('/all', async (req, res) => {
     })
   } catch (error) {
     res.status(500).json({
-      message: "Не удалось добавить достать категории"
+      message: "Не удалось доcтать категории"
     });
   }
 });

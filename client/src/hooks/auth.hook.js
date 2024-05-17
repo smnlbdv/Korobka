@@ -1,4 +1,7 @@
 import {useState, useEffect, useCallback} from 'react'
+import axios from 'axios'
+import api from '../api/api.js'
+const API_URL = "http://localhost:5000"
 
 export const useAuth = () => {
     const [isAuth, setIsAuth] = useState(null)
@@ -6,28 +9,41 @@ export const useAuth = () => {
     const [role, setRole] = useState(0)
 
     const login = useCallback((jwtToken, id, role) => {
-        setIsAuth(jwtToken)
+        setIsAuth(true)
         setUserId(id)
         setRole(role)
         localStorage.setItem("token", jwtToken)
     }, [])
 
-    const logout = () => {
-        setIsAuth(null)
+    const logout = async () => {
+        setIsAuth(false)
         setUserId(null)
         setRole(null)
         localStorage.removeItem("token")
+        await api.post(`${API_URL}/api/profile/token/logout`, {withCredentials: true})
     }
 
-    // useEffect(() => {
-    //     if(localStorage.getItem('token')) {
-    //         const data = JSON.parse(localStorage.getItem('token'));
-    //         login(data.token, data.userId, data.role)
-    //     } else {
-    //         logout()
-    //     }
+    const checkAuth = async () => {
+        if(localStorage.getItem("token")) {
+            try {
+                const response = await axios.get(`${API_URL}/api/profile/token/refresh`, { withCredentials: true });
+                if (response.status === 200) {
+                    setIsAuth(true);
+                    setUserId(response.data.user.id);
+                    setRole(response.data.user.role);
+                    localStorage.setItem("token", response.data.accessToken);
+                }
+            } catch (error) {
+                logout();
+            }
+        } else {
+            logout();
+        }
+    }
 
-    // }, [login])  
+    useEffect(() => {
+        checkAuth()
+    }, [login])
 
-    return {login, logout, isAuth, userId, role}
+    return {login, isAuth, userId, role, logout, checkAuth}
 }
