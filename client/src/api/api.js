@@ -27,31 +27,18 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response.status === 401 && error.config && !error.config._isRetry) {
       error.config._isRetry = true;
-      try {
-        const response = await api.get('/api/profile/token/refresh');
-        localStorage.setItem('token', response.data.accessToken);
-        return api.request(error.config);
-      } catch (err) {
-        if (err.response && err.response.status === 401) {
-          const redirectUrl = error.response.data.redirectTo;
-          if (redirectUrl) {
-            window.location.replace(redirectUrl);
-            return Promise.reject(error);
-          }
-        }
-        return Promise.reject(error);
-      }
+      await api.get('/api/profile/token/refresh') 
     }
 
     if (error.response.status === 422 && error.config && !error.config._isRetry) {
       error.config._isRetry = true;
+      localStorage.clear();
       const redirectUrl = error.response.data.redirectTo;
       if (redirectUrl) {
         window.location.replace(redirectUrl);
         return Promise.reject(error);
       }
     }
-    return Promise.reject(error);
   }
 );
 

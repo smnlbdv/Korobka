@@ -10,7 +10,7 @@ import User from '../models/User.js'
 import Email from '../models/Email.js'
 import { validationResult } from 'express-validator'
 import { registerValidation, loginValidation } from './../validation/auth.js'
-import { generationToken, saveToken } from '../utils/generationJwt.js'
+import { generationToken } from '../utils/generationJwt.js'
 import { sendActivationLink } from '../utils/mailer.js'
 
 const auth = Router()
@@ -30,13 +30,13 @@ auth.post('/registration', registerValidation, async (req, res) => {
         const isEmail = await Email.findOne({email})
 
         if(isEmail) {
-            return res.status(300).json({message: "Такой email уже существует"})
+            return res.status(400).json({message: "Такой email уже существует"})
         } else {
 
             const passwordHash = await bcrypt.hash(password, 12)
             const activationLink = uuid.v4()
             const newEmail = await Email.create({email: email})
-            const user = await User.create(
+            await User.create(
                 {
                     name,
                     email: newEmail._id,
@@ -79,15 +79,14 @@ auth.post('/login', loginValidation, async (req, res) => {
             return res.status(400).json({message: "Ошибка авторизации"})
         }
 
-        const tokens = generationToken({userId: user._id, email: email, isActivated: user.isActivated, role: user.role})
-        await saveToken(user._id, tokens.refreshToken)
+        const tokens = generationToken({id: user._id, email: email, role: user.role})
 
         res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
+        res.cookie("accessToken", tokens.accessToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
         
         res.status(200).json({
-            message: "Авторизация прошла успешно",
-            accessToken: tokens.accessToken,
             id: user._id, 
+            email: email,
             role: user.role
         });
 

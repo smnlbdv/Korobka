@@ -38,19 +38,18 @@ function App() {
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
-  const { login, logout, token, userId, role, checkAuth } = useAuth();
+  const { login, userId, role } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const [checkArray, setCheckArray] = useState([]);
   const navigate = useNavigate();
-  const isLogin = !!token;
 
   useEffect(() => {
-    if(localStorage.getItem("token")) {
+    if(localStorage.getItem("user")) {
       // getProfile()
     }
-    checkAuth()
-    // getNewProduct()
-    // getBestReviews()
+    // checkAuth()
+    getNewProduct()
+    getBestReviews()
     getCategories()
   }, [])
 
@@ -63,12 +62,11 @@ function App() {
     return total;
   }, [cart]);
 
-  
   const postLogin = async (values) => {
     try {
       await api.post("/api/auth/login", values)
-               .then((res) => {
-                  login(res.data.accessToken, res.data.id, res.data.role);
+               .then((res) => { 
+                  login(res.data.id, res.data.email, res.data.role);
                   if (res.status === 200) {
                     navigate("/");
                   }
@@ -92,7 +90,7 @@ function App() {
                 }
               })
               .catch((error) => {
-                if (error.response.status === 300) {
+                if (error.response.status === 400) {
                   openNotificationError('bottomRight', error.response.data.message)
                 }
               })
@@ -152,12 +150,6 @@ function App() {
       await api.get('/api/category/all')
         .then(response => {
           setCategories([...response.data.categories]);
-        })
-        .catch(response => {
-          // if(response.response.status === 401) {
-          //   logout()
-          //   navigate("/api/auth/login");
-          // }
         })
         
     } catch (error) {
@@ -255,9 +247,9 @@ function App() {
           }          
         })
         .catch(response => {
-          if (response.response && response.response.status === 401) {
-            logout();
-          }
+          // if (response.response && response.response.status === 401) {
+          //   logout();
+          // }
       });
     } catch (error) {
       console.log(error)
@@ -285,10 +277,10 @@ function App() {
           return response.data.increase
         })
         .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
+          // if(response.response.status == 401) {
+          //   logout()
+          //   navigate("/api/auth/login");
+          // }
       });
     } catch (error) {
       console.log(error.message)
@@ -650,10 +642,7 @@ function App() {
     <AuthContext.Provider
       value={{
         login,
-        logout,
-        token,
         userId,
-        isLogin,
         role,
         addCart,
         cart,

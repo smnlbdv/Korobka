@@ -13,20 +13,4 @@ export function generationToken (payload) {
     }
 }
 
-export async function saveToken (userId, refreshToken) {
-    const tokenData = await TokenModel.findOne({ userId: userId })
-
-    if(tokenData) {
-        tokenData.refreshToken = refreshToken;
-        return tokenData.save()
-    } else {
-        const token = await TokenModel.create({ userId: userId, refreshToken: refreshToken})
-        return token
-    }
-}
-
-export async function removeToken (refreshToken) {
-    const tokenData = await TokenModel.deleteOne({refreshToken: refreshToken})
-    return tokenData
-}
 

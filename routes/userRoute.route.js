@@ -5,7 +5,7 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 import jwt from 'jsonwebtoken';
-import { generationToken, saveToken, removeToken } from '../utils/generationJwt.js'
+import { generationToken } from '../utils/generationJwt.js'
 import dotev from 'dotenv'
 import cookieParser from "cookie-parser";
 dotev.config()
@@ -224,22 +224,6 @@ userRoute.get("/order/:orderId/check", verifyToken, async (req, res) => {
   }
 })
 
-userRoute.post("/token/logout", async (req, res) => {
-  try {
-    const { refreshToken } = req.cookies;
-
-    if(!refreshToken) {
-      res.status(200).clearCookie("refreshToken").json("Вы успешно разлогинились");
-    }
-
-    await removeToken(refreshToken)
-    res.status(200).clearCookie("refreshToken").json("Вы успешно разлогинились");
-  } catch (error) {
-    console.error('Произошла ошибка:', error);
-    res.status(400).json({ message: "Ошибка при разлогировании" });
-  }
-})
-
 userRoute.get("/activate/:link", verifyToken, async (req, res) => {
   try {
     const link = req.params.link;
@@ -263,44 +247,33 @@ userRoute.get("/activate/:link", verifyToken, async (req, res) => {
 userRoute.get("/token/refresh", async (req, res) => {
   try {
     const refresh_token = req.cookies.refreshToken;
-    const currentTime = Math.round(new Date().getTime() / 1000);
 
-    if(!refresh_token) {
-      return res.status(401).json({ message: "Не авторизованный пользователь", redirectTo: "/api/auth/login" });
-    }
-
-    const userData = jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET);
-    const tokenData = await Token.findOne({refreshToken: refresh_token });
-
-    if(!userData || !tokenData) {
+    if (!refresh_token) {
       return res.status(401).json({ message: "Не авторизованный пользователь", redirectTo: "/api/auth/login" });
     }
 
     try {
-      if (userData.exp <= currentTime) {
-        return res.status(401).json({ message: "Ошибка токена", redirectTo: "/api/auth/login" });
-      }
-      const user = await User.findById(userData.userId).populate("email");
-      const tokens = generationToken({userId: user._id, email: user.email.email, isActivated: user.isActivated, role: user.role});
-      await saveToken(user._id, tokens.refreshToken);
+      const userData = jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET);
+      const user = await User.findById(userData.id).populate("email");
 
-      res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true });
+      const tokens = generationToken({id: user._id, email: user.email.email, role: user.role})
+
+      res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
+      res.cookie("accessToken", tokens.accessToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
+      
       res.status(200).json({
-          message: "Авторизация прошла успешно",
-          accessToken: tokens.accessToken,
-          user: {
-              id: user._id,
-              email: user.email,
-              isActivated: user.isActivated,
-              role: user.role
-          }
+          id: user._id, 
+          email: user.email.email,
+          role: user.role
       });
+
     } catch (error) {
-      res.status(401).json({ message: "Недействительный токен обновления", redirectTo: "/api/auth/registration" });
+      res.cookie("refreshToken", "", { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true });
+      res.cookie("accessToken", "", { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true });
+      return res.status(422).json({ message: 'Ошибка при проверке refresh токена', redirectTo: "/api/auth/login" });
     }
   } catch (error) {
-    console.error('Произошла ошибка:', error);
-    res.status(401).json({ message: "Не зарегистрированный пользователь", redirectTo: "/api/auth/registration" });
+    return res.status(500).json({ message: 'Что-то пошло не так' });
   }
 });
 
