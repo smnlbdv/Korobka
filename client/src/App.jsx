@@ -75,7 +75,7 @@ function App() {
                   }
                 })
                 .catch((error) => {
-                  if (error.response.status === 400) {
+                  if (error.status === 400) {
                     openNotificationError('bottomRight', error.response.data.message)
                   }
                 })

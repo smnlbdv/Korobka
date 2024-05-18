@@ -175,5 +175,24 @@
     position: relative;
 }
 
+.user__link_ok {
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: white;
+    margin-bottom: 5px;
+    width: max-content;
+    background-color: rgb(75, 166, 0);
+}
+
+.user__link_err {
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    background-color: rgb(252, 68, 68);
+    color: white;
+    margin-bottom: 5px;
+    width: max-content;
+}
 
 

@@ -395,10 +395,15 @@ const Profile = () => {
               <img src={avatarUser} alt="" />
             </div>
             <div>
+              {
+                profile.isActivated ?
+                <p className={style.user__link_ok}>Подтвержден</p>
+                :
+                <p className={style.user__link_err}>Не подтвержден</p>
+              }
               <p className={style.fullname__name}>
                 {profile.name + " " + profile.surname}
               </p>
-              <p className={style.user__status}>{profile.status}</p>
             </div>
             <input
               ref={inputFileRef}

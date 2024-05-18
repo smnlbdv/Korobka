@@ -5,10 +5,6 @@ const shema = new mongoose.Schema({
         type: String,
         default: 'http://localhost:5000/avatar/default-avatar.svg'
     },
-    status: {
-        type: String,
-        default: 'Начинающий покупатель'
-    },
     role: {
         type: Number,
         default: 0

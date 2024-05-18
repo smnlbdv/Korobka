@@ -222,7 +222,7 @@ userRoute.get("/order/:orderId/check", verifyToken, async (req, res) => {
   }
 })
 
-userRoute.get("/activate/:link", verifyToken, async (req, res) => {
+userRoute.get("/activate/:link", async (req, res) => {
   try {
     const link = req.params.link;
     const user = await User.findOne({activationLink: link});
