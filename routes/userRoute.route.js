@@ -13,8 +13,6 @@ dotev.config()
 import pdfGenerate from "../utils/pdfGenerate.js";
 import User from "../models/User.js";
 import Order from "../models/Order.js";
-import Token from "../models/Token.js";
-import { log } from "console";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Suspense, lazy, useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate, Outlet } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
 import { useAuth } from "./hooks/auth.hook.js";
 import { notification, Modal } from 'antd';
@@ -38,20 +38,23 @@ function App() {
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
-  const { login, userId, role } = useAuth();
+  const { login, userId, role, checkAuth, logout, isAuth } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const [checkArray, setCheckArray] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(localStorage.getItem("user")) {
-      // getProfile()
-    }
-    // checkAuth()
     getNewProduct()
     getBestReviews()
     getCategories()
   }, [])
+
+
+  useEffect(() => {
+    if(userId){
+      getProfile()
+    }
+  }, [userId])
 
   const calculatePrice = useCallback((cart) => {
     const total = cart.reduce((accumulator, product) => {
@@ -103,7 +106,7 @@ function App() {
     try {
       await api.get(`/api/profile/${userId}`)
         .then(response => {
-
+          console.log(response.data);
           const fieldsToExclude = ['cart', 'older', 'favorite'];
           const userObject = Object.assign({}, response.data);
           for (const field of fieldsToExclude) {
@@ -134,10 +137,7 @@ function App() {
 
         })
         .catch(response => {
-          if(response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
+          console.log(response.message);
         })
         
     } catch (error) {
@@ -638,6 +638,17 @@ function App() {
     }
   };
 
+  const checkLocalUser = () => {
+    const user = localStorage.getItem("user");
+    return !!user && !!JSON.parse(user)?.id;
+}
+
+  const PrivateRoute = ({isAllowed}) => {
+    return (
+      isAllowed ? <Outlet/> : <Navigate to={"/api/auth/login"}/>
+    )
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -662,6 +673,7 @@ function App() {
         sendEmailData,
         uploadAvatar,
         getProfile,
+        isAuth,
         profile,
         setProfile,
         updateProfileUser,
@@ -697,12 +709,16 @@ function App() {
               <Route path="ready-gifts/:category" element={<ReadyGifts />} />
               <Route path="contacts" element={<Contacts />} />
               <Route path="about-us" element={<AboutUs />} />
-              <Route path="cart" element={<Cart />}></Route>
-              <Route path="liked" element={<Liked />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="product/:id/" element={<ProductPage/>}/>
-              <Route path="product/:id/review" element={<ReviewPage/>}/>
-              <Route path="cart/order" element={<OrderPage/>}/>
+
+              <Route element={<PrivateRoute isAllowed={checkLocalUser()} />}>
+                <Route path="cart" element={<Cart />}/>
+                <Route path="liked" element={<Liked />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="product/:id/" element={<ProductPage/>}/>
+                <Route path="product/:id/review" element={<ReviewPage/>}/>
+                <Route path="cart/order" element={<OrderPage/>}/>
+              </Route>
+
           </Route>
           <Route path="/api/auth/*" element={
               <Suspense fallback={<Loading />}>
