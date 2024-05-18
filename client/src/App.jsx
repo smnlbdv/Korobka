@@ -38,7 +38,7 @@ function App() {
   const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
-  const { login, userId, role, checkAuth, logout, isAuth } = useAuth();
+  const { login, userId, role, logout, isAuth } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const [checkArray, setCheckArray] = useState([]);
   const navigate = useNavigate();
@@ -665,6 +665,7 @@ function App() {
         contextHolder,
         contextHolderEmail,
         newBoxList,
+        logout,
         unmountItem,
         favoriteItem,
         addProductFavorite,

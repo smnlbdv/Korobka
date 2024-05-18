@@ -79,14 +79,13 @@ auth.post('/login', loginValidation, async (req, res) => {
             return res.status(400).json({message: "Ошибка авторизации"})
         }
 
-        const tokens = generationToken({id: user._id, email: email, role: user.role})
+        const tokens = generationToken({id: user._id, role: user.role})
 
         res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
         res.cookie("accessToken", tokens.accessToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
         
         res.status(200).json({
             id: user._id, 
-            email: email,
             role: user.role
         });
 

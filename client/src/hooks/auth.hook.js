@@ -8,11 +8,11 @@ export const useAuth = () => {
     const [userId, setUserId] = useState(null)
     const [role, setRole] = useState(0)
 
-    const login = (id, email, role) => {
+    const login = (id, role) => {
         setIsAuth(true)
         setUserId(id)
         setRole(role)
-        localStorage.setItem('user', JSON.stringify({ id: id, email: email, role: role }));
+        localStorage.setItem('user', JSON.stringify({ id: id, role: role }));
     }
 
     const logout = useCallback(() => {
@@ -27,7 +27,7 @@ export const useAuth = () => {
             try {
                 const response = await axios.get(`${API_URL}/api/profile/token/refresh`, { withCredentials: true });
                 if (response.status === 200) {
-                    login(response.data.id, response.data.email, response.data.role)
+                    login(response.data.id, response.data.role)
                 }
             } catch (error) {
                 logout()
@@ -42,5 +42,5 @@ export const useAuth = () => {
     }, [])
 
 
-    return { isAuth, userId, role, login, checkAuth}
+    return { isAuth, logout, userId, role, login }
 }

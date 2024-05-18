@@ -373,8 +373,8 @@ const Profile = () => {
   };
 
   const logoutUser = () => {
-    setProfile("");
     logout();
+    setProfile(null);
     navigate("/");
   };
 
