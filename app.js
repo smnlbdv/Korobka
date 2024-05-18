@@ -14,11 +14,13 @@ import reviewsRoute from './routes/reviews.route.js';
 import adminRoute from './routes/admin.route.js';
 import category from './routes/category.route.js';
 import cookieParser from 'cookie-parser';
+import { limiter } from './utils/limiter.js';
 
 dotev.config()
 const app = express()
 const PORT = process.env.PORT || 5000
-
+    
+app.use(limiter)
 app.use(morgan('combined'))
 app.use(express.json())
 app.use(cookieParser())
