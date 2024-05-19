@@ -30,7 +30,7 @@ auth.post('/registration', registerValidation, async (req, res) => {
         const isEmail = await Email.findOne({email})
 
         if(isEmail) {
-            return res.status(400).json({message: "Такой email уже существует"})
+            return res.status(402).json({message: "Такой email уже существует"})
         } else {
 
             const passwordHash = await bcrypt.hash(password, 12)
@@ -72,21 +72,22 @@ auth.post('/login', loginValidation, async (req, res) => {
             return res.status(400).json({message: "Такого email не существует"})
         }
 
-        const user = await User.findOne({email: isEmail._id})
+        const user = await User.findOne({email: isEmail._id}).populate('role').exec();
+
         const isMatch = await bcrypt.compare(password, user.passwordHash)
 
         if(!isMatch) {
             return res.status(400).json({message: "Ошибка авторизации"})
         }
 
-        const tokens = generationToken({id: user._id, role: user.role})
+        const tokens = generationToken({id: user._id, role: user.role.role})
 
         res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
         res.cookie("accessToken", tokens.accessToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
         
         res.status(200).json({
             id: user._id, 
-            role: user.role
+            role: user.role.role
         });
 
     } catch (error) {

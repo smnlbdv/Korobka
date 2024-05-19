@@ -9,16 +9,6 @@ const api = axios.create({
   }
 });
 
-api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = token;
-  }
-  return config;
-
-}, error => {
-  return Promise.reject(error);
-});
 
 api.interceptors.response.use(
   (response) => {
@@ -27,17 +17,16 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response.status === 401 && error.config && !error.config._isRetry) {
       error.config._isRetry = true;
-      await api.get('/api/profile/token/refresh') 
-    }
-
-    if (error.response.status === 422 && error.config && !error.config._isRetry) {
+      await api.get('/api/profile/token/refresh');
+    } else if (error.response.status === 422 && error.config && !error.config._isRetry) {
       error.config._isRetry = true;
       localStorage.clear();
       const redirectUrl = error.response.data.redirectTo;
       if (redirectUrl) {
         window.location.replace(redirectUrl);
-        return Promise.reject(error);
       }
+    } else {
+      return Promise.reject(error);
     }
   }
 );

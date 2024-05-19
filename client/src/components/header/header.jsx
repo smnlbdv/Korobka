@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState} from 'react';
+import { useContext, useEffect, useRef, useState} from 'react';
 import { Link  } from 'react-router-dom';
 import { Dropdown, Badge, Popover } from 'antd';
 import { useAuth } from "../../hooks/auth.hook.js";
@@ -21,6 +21,7 @@ const Header = () => {
     const { userId, role, isAuth } = useAuth();
     const [popoverVisible, setPopoverVisible] = useState(false);
     const [popoverVisibleTwo, setPopoverVisibleTwo] = useState(false);
+    const linkHeader = useRef()
 
     const handleLinkClick = () => {
         setPopoverVisible(false);
@@ -86,7 +87,7 @@ const Header = () => {
     useEffect(() => {
         setItems(categories.map((item, index) => ({
             label: (
-                <Link to={`ready-gifts/${item.key}`} onClick={(event) => getIdLink(event)}>
+                <Link to={`ready-gifts/${item.key}`} ref={linkHeader} onClick={(event) => getIdLink(event)}>
                   {item.value}
                 </Link>
             ),

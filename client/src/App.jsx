@@ -35,9 +35,9 @@ function App() {
   const [cart, setCart] = useState([]);
   const [categories,setCategories] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
-  const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
+  const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const { login, userId, role, logout, isAuth } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const [checkArray, setCheckArray] = useState([]);
@@ -56,49 +56,44 @@ function App() {
     }
   }, [userId])
 
-  const calculatePrice = useCallback((cart) => {
+  const calculatePrice = (cart) => {
     const total = cart.reduce((accumulator, product) => {
       const subtotal = product.count * product.price;
       return accumulator + subtotal;
     }, 0);
-    setCartTotalPrice(total);
+    setCartTotalPrice(total)
     return total;
-  }, [cart]);
+  }
+
 
   const postLogin = async (values) => {
-    try {
-      await api.post("/api/auth/login", values)
-               .then((res) => { 
+    await api.post("/api/auth/login", values)
+              .then((res) => { 
                   login(res.data.id, res.data.email, res.data.role);
                   if (res.status === 200) {
-                    navigate("/");
+                      navigate("/");
                   }
-                })
-                .catch((error) => {
-                  if (error.status === 400) {
-                    openNotificationError('bottomRight', error.response.data.message)
-                  }
-                })
-    } catch (error) {
-      console.log(error.message);
-    }
+              })
+              .catch((error) => {
+                if (error.response.status === 402) {
+                  openNotificationError('bottomRight', error.response.data.message)
+                }
+              })
   }
 
   const postRegistration = async (values) => {
     try {
-      await api.post("/api/auth/registration", values)
-              .then((res) => {
-                if (res.status === 200) {
-                  navigate("/api/auth/login");
-                }
-              })
-              .catch((error) => {
-                if (error.response.status === 400) {
-                  openNotificationError('bottomRight', error.response.data.message)
-                }
-              })
+      const response = await api.post("/api/auth/registration", values);
+
+      if (response.status === 200) {
+          navigate("/api/auth/login");
+      }
     } catch (error) {
-      console.log(error.message);
+        if (error.response && error.response.status === 400 && error.response.data.message) {
+            openNotificationError('bottomRight', error.response.data.message);
+        } else {
+            console.error("Error occurred during registration:", error);
+        }
     }
   }
 
@@ -106,7 +101,6 @@ function App() {
     try {
       await api.get(`/api/profile/${userId}`)
         .then(response => {
-          console.log(response.data);
           const fieldsToExclude = ['cart', 'older', 'favorite'];
           const userObject = Object.assign({}, response.data);
           for (const field of fieldsToExclude) {
@@ -256,7 +250,7 @@ function App() {
     }
   };
 
-  const increaseCartItem = async (id, cartCheck) => {
+  const increaseCartItem = async (id) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post(`/api/cart/increase/`, {id: id}, {
@@ -267,7 +261,7 @@ function App() {
           const index = cart.findIndex(item => item._id === id);
           if(index !== -1) {
             cart[index]['count'] += 1
-            if(cartCheck) {
+            if(checkArray.length !== 0) {
               calculatePrice(checkArray)
               return response.data.increase
             }
@@ -287,7 +281,7 @@ function App() {
     }
   }
 
-  const decreaseCartItem = async (id, cartCheck) => {
+  const decreaseCartItem = async (id) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
       await api.post(`/api/cart/decrease/`, {id: id}, {
@@ -298,7 +292,7 @@ function App() {
           const index = cart.findIndex(item => item._id === id);
           if(index !== -1) {
             cart[index]['count'] -= 1
-            if(cartCheck) {
+            if(checkArray.length !== 0) {
               calculatePrice(checkArray)
               return response.data.increase
             }
@@ -661,7 +655,6 @@ function App() {
         deleteItemCart,
         increaseCartItem,
         decreaseCartItem,
-        cartTotalPrice,
         contextHolder,
         contextHolderEmail,
         newBoxList,
@@ -674,11 +667,13 @@ function App() {
         sendEmailData,
         uploadAvatar,
         getProfile,
+        setCartTotalPrice,
         isAuth,
         profile,
         setProfile,
         updateProfileUser,
         order,
+        cartTotalPrice,
         updatePassUser,
         reviewsList,
         getBestReviews,

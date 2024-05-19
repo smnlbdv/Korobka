@@ -16,6 +16,8 @@ import category from './routes/category.route.js';
 import cookieParser from 'cookie-parser';
 import { limiter } from './utils/limiter.js';
 
+import Role from './models/Role.js';
+
 dotev.config()
 const app = express()
 const PORT = process.env.PORT || 5000
