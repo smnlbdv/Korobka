@@ -4,8 +4,8 @@ import api from '../api/api.js'
 const API_URL = "http://localhost:5000"
 
 export const useAuth = () => {
-    const [isAuth, setIsAuth] = useState(null)
-    const [userId, setUserId] = useState(null)
+    const [isAuth, setIsAuth] = useState(false)
+    const [userId, setUserId] = useState(false)
     const [role, setRole] = useState(0)
 
     const login = (id, role) => {
@@ -15,12 +15,12 @@ export const useAuth = () => {
         localStorage.setItem('user', JSON.stringify({ id: id, role: role }));
     }
 
-    const logout = useCallback(() => {
+    const logout = () => {
         setIsAuth(false)
         setUserId(null)
         setRole(null)
         localStorage.clear();
-    }, [])
+    }
 
     const checkAuth = async () => {
         if(localStorage.getItem('user')) {
@@ -37,9 +37,10 @@ export const useAuth = () => {
         }
     }
 
+
     useEffect(() => {
         checkAuth()
-    }, [])
+    }, [login])
 
     return { isAuth, logout, userId, role, login }
 }

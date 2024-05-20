@@ -163,15 +163,15 @@ const Profile = () => {
       getProfile();
     }
     scrollToTop();
-  }, []);
+  }, [getProfile, profile.length, scrollToTop]);
 
   useEffect(() => {
-    if (profile.length != 0) {
+    if (profile.length !== 0 && profile.email) {
       const newData = {
         name: profile.name,
         surname: profile.surname,
         phone: profile.phone,
-        email: profile.email.email || " ",
+        email: profile.email.email,
       };
       formikPersonal.setValues(newData);
       setInitialData(newData);

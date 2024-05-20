@@ -67,8 +67,7 @@ function App() {
 
 
   const postLogin = async (values) => {
-    try {
-      await api.post("/api/auth/login", values)
+    await api.post("/api/auth/login", values)
                .then((res) => { 
                   console.log(res.data);
                   login(res.data.id, res.data.role);
@@ -77,11 +76,9 @@ function App() {
                   }
               })
               .catch((error) => {
-                if (error.response.status === 402) {
-                  openNotificationError('bottomRight', error.response.data.message)
-                }
+                openNotificationError('bottomRight', error.response.data.message)
               })
-  }
+}
 
   const postRegistration = async (values) => {
     try {
@@ -650,6 +647,7 @@ function App() {
     <AuthContext.Provider
       value={{
         login,
+        logout,
         userId,
         role,
         addCart,
@@ -661,7 +659,6 @@ function App() {
         contextHolder,
         contextHolderEmail,
         newBoxList,
-        logout,
         unmountItem,
         favoriteItem,
         addProductFavorite,
