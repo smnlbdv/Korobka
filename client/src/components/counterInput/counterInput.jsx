@@ -2,19 +2,34 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
 
 import style from './counterInput.module.scss'
+import { CartContext } from "../../context/cartContext.js";
 
 // eslint-disable-next-line react/prop-types
-const CounterInput = ({ counts, setCounts, _id }) => {
+const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
     const [input, setInput] = useState(false);
-    const { increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext);
+    const { increaseCartItem, decreaseCartItem, unmountItem, cart} = useContext(AuthContext);
+    const { calculatePrice, checkArray  } = useContext(CartContext);
 
     const subtractProduct = async () => {
       if (counts <= 1) {
         unmountItem(_id);
       } else {
-        const resultDeCrease = decreaseCartItem(_id);
-        if (resultDeCrease) {
-          setCounts(counts - 1);
+        if (!cartCheck && checkArray.length === 0) {
+          const resultIncrease = increaseCartItem(_id);
+          if (resultIncrease) {
+            setCounts(counts - 1);
+            let countsNew = counts - 1
+            calculatePrice(cart, countsNew);
+          }
+        } else if (checkArray.some(item => item._id === _id)) {
+          const resultIncrease = increaseCartItem(_id);
+          if (resultIncrease) {
+            setCounts(counts - 1);
+            let countsNew = counts - 1
+            calculatePrice(checkArray, countsNew);
+          }
+        } else {
+          return
         }
       }
     };
@@ -39,9 +54,22 @@ const CounterInput = ({ counts, setCounts, _id }) => {
       if (counts >= 200) {
         setCounts(counts);
       } else {
-        const resultIncrease = increaseCartItem(_id);
-        if (resultIncrease) {
-          setCounts(counts + 1);
+        if (!cartCheck && checkArray.length === 0) {
+          const resultIncrease = increaseCartItem(_id);
+          if (resultIncrease) {
+            setCounts(counts + 1);
+            let countsNew = counts + 1
+            calculatePrice(cart, countsNew);
+          }
+        } else if (checkArray.some(item => item._id === _id)) {
+          const resultIncrease = increaseCartItem(_id);
+          if (resultIncrease) {
+            setCounts(counts + 1);
+            let countsNew = counts + 1
+            calculatePrice(checkArray, countsNew);
+          }
+        } else {
+          return
         }
       }
     };

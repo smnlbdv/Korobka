@@ -37,10 +37,8 @@ function App() {
   const [favoriteItem, setFavoriteItem] = useState([]);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
-  const [cartTotalPrice, setCartTotalPrice] = useState(0);
   const { login, userId, role, logout, isAuth } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
-  const [checkArray, setCheckArray] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,15 +53,6 @@ function App() {
       getProfile()
     }
   }, [userId])
-
-  const calculatePrice = (cart) => {
-    const total = cart.reduce((accumulator, product) => {
-      const subtotal = product.count * product.price;
-      return accumulator + subtotal;
-    }, 0);
-    setCartTotalPrice(total)
-    return total;
-  }
 
 
   const postLogin = async (values) => {
@@ -251,30 +240,18 @@ function App() {
   };
 
   const increaseCartItem = async (id) => {
-    const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.post(`/api/cart/increase/`, {id: id}, {
-        headers: {
-          'Authorization': `${token.token}`,
-        }})
+      await api.post(`/api/cart/increase/`, {id: id})
         .then(response => {
           const index = cart.findIndex(item => item._id === id);
           if(index !== -1) {
             cart[index]['count'] += 1
-            if(checkArray.length !== 0) {
-              calculatePrice(checkArray)
-              return response.data.increase
-            }
-            calculatePrice(cart)
           }
           openNotification('bottomRight', 'Товар успешно добавлен в корзину')
           return response.data.increase
         })
         .catch(response => {
-          // if(response.response.status == 401) {
-          //   logout()
-          //   navigate("/api/auth/login");
-          // }
+          console.log(response);
       });
     } catch (error) {
       console.log(error.message)
@@ -292,11 +269,6 @@ function App() {
           const index = cart.findIndex(item => item._id === id);
           if(index !== -1) {
             cart[index]['count'] -= 1
-            if(checkArray.length !== 0) {
-              calculatePrice(checkArray)
-              return response.data.increase
-            }
-            calculatePrice(cart)
           }
           return response.data.increase
         })
@@ -312,18 +284,14 @@ function App() {
   }
 
   const deleteItemCart = async (productId, order = false) => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.delete(`/api/cart/delete/${productId}`, {
-        headers: {
-            'Authorization': `${data.token}`,
-        },
-      })
+      await api.delete(`/api/cart/delete/${productId}`)
         .then(response => {
           if(response.data.delete === true) {
             setCart((cart) =>
-              cart.filter((item) => item._id != productId)
+              cart.filter((item) => item._id !== productId)
             );
+            // подумать над тем, чтобы не очищал checkArray
             order && openNotificationError('bottomRight', "Товар удален из корзины")
           }
         })
@@ -567,10 +535,10 @@ function App() {
 
   const placeOrder = async (order) => {
     let result;
-    let finalCart = checkArray.length !== 0 ? checkArray : cart;
+    // let finalCart = checkArray.length !== 0 ? checkArray : cart;
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.post(`/api/profile/order`, {order: order, cart: finalCart, totalAmount: calculatePrice(finalCart) }, {
+      await api.post(`/api/profile/order`, {order: order, cart: "", totalAmount: "" }, {
         headers: {
             'Authorization': `${data.token}`,
         }})
@@ -667,17 +635,14 @@ function App() {
         sendEmailData,
         uploadAvatar,
         getProfile,
-        setCartTotalPrice,
         isAuth,
         profile,
         setProfile,
         updateProfileUser,
         order,
-        cartTotalPrice,
         updatePassUser,
         reviewsList,
         getBestReviews,
-        calculatePrice,
         adminFetch,
         categories,
         placeOrder,
@@ -685,8 +650,6 @@ function App() {
         deleteOrderItem,
         scrollToTop,
         getCategories,
-        checkArray,
-        setCheckArray,
         getTypesBox,
         postRegistration,
         postLogin,

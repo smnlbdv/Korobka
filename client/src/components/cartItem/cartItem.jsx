@@ -6,11 +6,11 @@ import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
 import { Link  } from 'react-router-dom';
 
-const CartItem = ({ _id, img, title, preText, price, count }) => {
+const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, checkArray }) => {
   const [counts, setCounts] = useState(count);
   const [cartCheck, setCartCheck] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const { cart,  deleteItemCart, deleteProductFavorite, addProductFavorite, favoriteItem, setCheckArray, checkArray } = useContext(AuthContext);
+  const { cart,  deleteItemCart, deleteProductFavorite, addProductFavorite, favoriteItem } = useContext(AuthContext);
 
   const cartCheckClick = () => {
     if (!cartCheck) {
@@ -24,18 +24,18 @@ const CartItem = ({ _id, img, title, preText, price, count }) => {
   };
 
   const clickDeleteButton = () => {
-    deleteItemCart(_id);
+    deleteItemCart(_id)
   };
 
   useEffect(() => {
     const isExist = favoriteItem.some((product) => product._id == _id);
     setIsFavorite(isExist)
-  }, [_id, favoriteItem, favoriteItem.length])
+  }, [_id, favoriteItem])
 
   useEffect(() => {
     const isExisting = checkArray.some(item => item._id === _id);
     isExisting ? setCartCheck(true) : setCartCheck(false)
-  }, [])
+  }, [_id, checkArray])
 
 
   const clickHeart = useCallback(() => {
@@ -59,6 +59,7 @@ const CartItem = ({ _id, img, title, preText, price, count }) => {
       <CounterInput
         counts={counts}
         setCounts={setCounts}
+        cartCheck={cartCheck}
         _id={_id}
       />
       <p className={style.price}>{price} BYN</p>
