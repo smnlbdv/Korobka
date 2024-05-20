@@ -5,7 +5,7 @@ dotev.config()
 
 const verifyToken = (req, res, next) => {
   const token = req.cookies.accessToken;
-  
+
   if (!token) {
     return res.status(422).json({ message: 'Не авторизован', redirectTo: "/api/auth/login" });
   }
@@ -15,7 +15,7 @@ const verifyToken = (req, res, next) => {
     req.userId = verifiedToken.id;
     next();
   } catch (error) { 
-    return res.status(401).json({ message: 'Время токена истекло' });
+    return res.status(401).json({ message: 'Ошибка токена' });
   }
   
 };

@@ -57,17 +57,17 @@ const Product = ({_id, img, title, price, preText, loading = true }) => {
                 (
                     <ContentLoader 
                         speed={2}
-                        width={260}
-                        height={370}
-                        viewBox="0 0 260 370"
+                        width={250}
+                        height={350}
+                        viewBox="0 0 250 350"
                         backgroundColor="#fdfdfd20"
                         foregroundColor="#ffffff10"
                     >
-                        <rect x="20" y="0" rx="10" ry="10" width="220" height="140" /> 
-                        <rect x="42" y="152" rx="5" ry="5" width="177" height="25" /> 
-                        <rect x="20" y="188" rx="5" ry="5" width="220" height="84" /> 
-                        <rect x="20" y="283" rx="5" ry="5" width="125" height="23" /> 
-                        <rect x="0" y="324" rx="10" ry="10" width="260" height="46" />
+                        <rect x="35" y="0" rx="10" ry="10" width="190" height="120" /> 
+                        <rect x="50" y="142" rx="5" ry="5" width="160" height="25" /> 
+                        <rect x="25" y="180" rx="5" ry="5" width="205" height="64" /> 
+                        <rect x="25" y="255" rx="5" ry="5" width="125" height="23" /> 
+                        <rect x="0" y="292" rx="10" ry="10" width="250" height="46" />
                     </ContentLoader>
                 )
                 :

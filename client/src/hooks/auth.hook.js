@@ -41,6 +41,5 @@ export const useAuth = () => {
         checkAuth()
     }, [])
 
-
     return { isAuth, logout, userId, role, login }
 }

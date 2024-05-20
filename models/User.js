@@ -6,8 +6,9 @@ const shema = new mongoose.Schema({
         default: 'http://localhost:5000/avatar/default-avatar.svg'
     },
     role: {
-        type: Number,
-        default: 0
+        type: Types.ObjectId,
+        default: "664a259b42c1f7dd7863fe93",
+        ref: 'Role',
     },
     name: {
         type: String,

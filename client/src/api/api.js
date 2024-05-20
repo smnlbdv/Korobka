@@ -10,10 +10,13 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
+  const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+  const token = cookies.find(cookie => cookie.startsWith('accessToken='));
+  
   if (token) {
     config.headers.Authorization = token;
   }
+
   return config;
 
 }, error => {
@@ -27,7 +30,8 @@ api.interceptors.response.use(
   async (error) => {
     if (error.response.status === 401 && error.config && !error.config._isRetry) {
       error.config._isRetry = true;
-      await api.get('/api/profile/token/refresh') 
+      await api.get('/api/profile/token/refresh')
+      return api(error.config);
     }
 
     if (error.response.status === 422 && error.config && !error.config._isRetry) {
@@ -36,7 +40,6 @@ api.interceptors.response.use(
       const redirectUrl = error.response.data.redirectTo;
       if (redirectUrl) {
         window.location.replace(redirectUrl);
-        return Promise.reject(error);
       }
     }
   }

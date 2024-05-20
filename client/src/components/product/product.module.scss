@@ -16,8 +16,9 @@
 }
 
 .new_box_loader {
-    @extend .new_box;
-    width: 260px;
+    display: flex;
+    justify-content: center;
+    // max-width: 250px;
     background-color: transparent;
 
     svg {

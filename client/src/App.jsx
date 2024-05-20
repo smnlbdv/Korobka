@@ -69,7 +69,8 @@ function App() {
     try {
       await api.post("/api/auth/login", values)
                .then((res) => { 
-                  login(res.data.id, res.data.email, res.data.role);
+                  console.log(res.data);
+                  login(res.data.id, res.data.role);
                   if (res.status === 200) {
                     navigate("/");
                   }
@@ -106,7 +107,7 @@ function App() {
     try {
       await api.get(`/api/profile/${userId}`)
         .then(response => {
-          console.log(response.data);
+          console.log(response)
           const fieldsToExclude = ['cart', 'older', 'favorite'];
           const userObject = Object.assign({}, response.data);
           for (const field of fieldsToExclude) {

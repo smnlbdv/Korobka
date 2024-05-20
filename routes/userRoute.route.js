@@ -252,16 +252,16 @@ userRoute.get("/token/refresh", async (req, res) => {
 
     try {
       const userData = jwt.verify(refresh_token, process.env.JWT_REFRESH_SECRET);
-      const user = await User.findById(userData.id).populate("email");
+      const user = await User.findById(userData.id).populate("role");
 
-      const tokens = generationToken({id: user._id, role: user.role})
+      const tokens = generationToken({id: user._id, role: user.role.role})
 
-      res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
-      res.cookie("accessToken", tokens.accessToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
+      res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true})
+      res.cookie("accessToken", tokens.accessToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true})
       
       res.status(200).json({
           id: user._id, 
-          role: user.role
+          role: user.role.role
       });
 
     } catch (error) {

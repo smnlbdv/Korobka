@@ -171,13 +171,13 @@ const Profile = () => {
         name: profile.name,
         surname: profile.surname,
         phone: profile.phone,
-        email: profile.email.email,
+        email: profile.email.email || " ",
       };
       formikPersonal.setValues(newData);
       setInitialData(newData);
       setAvatarUser(profile.avatarUser);
     }
-  }, [profile]);
+  }, []);
 
   const itemsTabs = [
     {
