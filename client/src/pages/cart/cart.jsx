@@ -27,8 +27,8 @@ const Cart = () => {
   const {
     cart,
     calculatePrice,
-    cartTotalPrice,
     scrollToTop,
+    cartTotalPrice,
     logout,
     checkArray,
     setCheckArray,
@@ -99,12 +99,12 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    if (checkArray.length != 0) {
-      calculatePrice(checkArray);
+    if(checkArray.length !== 0) {
+      calculatePrice(checkArray)
     } else {
-      calculatePrice(cart);
+      calculatePrice(cart)
     }
-  }, [calculatePrice, cart, checkArray]);
+  }, []);
 
   useEffect(() => {
     scrollToTop();
@@ -134,7 +134,7 @@ const Cart = () => {
             <p>Выбрать все</p>
           </div>
         )}
-        {checkArray.length !== 0 && (
+        {(checkArray.length !== 0 && cart.length !== 0) && (
           <p className={style.button__delete__hidden} onClick={deleteChecket}>
             Удалить выбранное
           </p>
@@ -150,8 +150,6 @@ const Cart = () => {
                 <CartItem
                   key={index}
                   {...obj}
-                  checkArray={checkArray}
-                  setCheckArray={setCheckArray}
                 />
               ))}
             </div>

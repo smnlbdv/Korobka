@@ -41,6 +41,8 @@ api.interceptors.response.use(
       if (redirectUrl) {
         window.location.replace(redirectUrl);
       }
+    } else {
+      return Promise.reject(error);
     }
   }
 );

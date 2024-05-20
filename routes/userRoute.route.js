@@ -53,6 +53,7 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
           path: "items.productId"
       }
     })
+    .populate("role")
     .then((item) => {
       res.status(201).json(item);
     })

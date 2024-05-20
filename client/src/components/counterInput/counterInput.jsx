@@ -1,18 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
 
 import style from './counterInput.module.scss'
 
 // eslint-disable-next-line react/prop-types
-const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
+const CounterInput = ({ counts, setCounts, _id }) => {
     const [input, setInput] = useState(false);
-    const { increaseCartItem, decreaseCartItem, unmountItem, checkArray } = useContext(AuthContext);
+    const { increaseCartItem, decreaseCartItem, unmountItem } = useContext(AuthContext);
 
     const subtractProduct = async () => {
       if (counts <= 1) {
         unmountItem(_id);
       } else {
-        const resultDeCrease = decreaseCartItem(_id, cartCheck);
+        const resultDeCrease = decreaseCartItem(_id);
         if (resultDeCrease) {
           setCounts(counts - 1);
         }
@@ -36,16 +36,12 @@ const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
     };
 
     const addProduct = async () => {
-      if(checkArray.length !== 0 && cartCheck === false) {
-        return
+      if (counts >= 200) {
+        setCounts(counts);
       } else {
-        if (counts >= 200) {
-          setCounts(counts);
-        } else {
-          const resultIncrease = increaseCartItem(_id, cartCheck);
-          if (resultIncrease) {
-            setCounts(counts + 1);
-          }
+        const resultIncrease = increaseCartItem(_id);
+        if (resultIncrease) {
+          setCounts(counts + 1);
         }
       }
     };

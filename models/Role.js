@@ -7,5 +7,4 @@ const shema = new mongoose.Schema({
     }
 })
 
-
 export default mongoose.model('Role', shema)

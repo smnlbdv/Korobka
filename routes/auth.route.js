@@ -31,7 +31,7 @@ auth.post('/registration', registerValidation, async (req, res) => {
         const isEmail = await Email.findOne({email})
 
         if(isEmail) {
-            return res.status(400).json({message: "Такой email уже существует"})
+            return res.status(402).json({message: "Такой email уже существует"})
         } else {
 
             const passwordHash = await bcrypt.hash(password, 12)
