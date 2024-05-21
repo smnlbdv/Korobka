@@ -8,7 +8,7 @@ import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './product.module.scss'
 
 
-const Product = ({_id, img, title, price, preText, loading = true }) => {
+const Product = ({_id, img, title, price, preText, loading = true, favorite }) => {
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
 
@@ -108,7 +108,7 @@ const Product = ({_id, img, title, price, preText, loading = true }) => {
                                     <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
                                 }
                             </div>
-                            <FavoriteHeart _id={_id}/> 
+                            <FavoriteHeart _id={_id} favorite={favorite}/> 
                         </div>
                     </>
                 )

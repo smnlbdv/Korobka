@@ -40,8 +40,8 @@
 
 .favorite_items {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
-    justify-content: space-between;
+    grid-template-columns: repeat(4, minmax(235px, 1fr));
+    justify-content: flex-start;
     gap: 30px;
     row-gap: 50px;
     margin-top: 70px;

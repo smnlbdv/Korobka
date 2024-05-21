@@ -13,7 +13,6 @@
     background-image: url('/assets/bg-main-img.png');
     background-repeat: no-repeat;
     background-size:contain;
-    background-position: center;
 }
 
 
@@ -37,7 +36,7 @@
 }
 
 .product__image_active {
-    height: 80%;
+    height: 90%;
     object-fit: cover;
 }
 

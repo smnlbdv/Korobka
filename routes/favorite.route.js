@@ -9,31 +9,31 @@ import verifyToken from '../validation/verifyToken.js'
 
 const favoriteRoute = Router()
 
-favoriteRoute.post('/add/:itemId', verifyToken, async (req, res) => {
+favoriteRoute.post('/add/:productId', verifyToken, async (req, res) => {
     try {
-        const { userId } = req.body
-        const itemId = req.params.itemId
+        const userId = req.userId
+        const productId = req.params.productId
 
         const favoritetItem = await Favorite.findOne({owner: userId})
 
         if(favoritetItem) {
             if (favoritetItem.items.length === 0) {
 
-                await Favorite.updateMany({ owner: userId, items: [itemId] });
+                await Favorite.updateMany({ owner: userId, items: [productId] });
                 const newFavoriteItem = await Favorite.find({ owner: userId })
                                                 .populate('items');
 
                 res.status(201).json({product: newFavoriteItem[0].items[0], message: 'Товар успешно добавлен в закладки'})
 
             } else {
-                await Favorite.updateMany({ owner: userId }, { $push: { items: itemId } });
-                const newFavoriteItem = await Favorite.find({ owner: userId, items: itemId })
+                await Favorite.updateMany({ owner: userId }, { $push: { items: productId } });
+                const newFavoriteItem = await Favorite.find({ owner: userId, items: productId })
                                                 .populate('items');
                 const newItem = newFavoriteItem[0].items.reverse()
                 res.status(201).json({product: newItem[0], message: 'Товар успешно добавлен в закладки'})
             }
         } else {
-            await Favorite.create({ owner: userId, items: [itemId] });
+            await Favorite.create({ owner: userId, items: [productId] });
             const newFavoriteItem = await Favorite.find({ owner: userId })
                                             .populate('items');
             

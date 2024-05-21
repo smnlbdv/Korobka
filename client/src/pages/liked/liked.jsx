@@ -12,26 +12,12 @@ import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import style from './liked.module.scss'
 
 
-const Liked = () => {
-    const { favoriteItem, contextHolder, scrollToTop, deleteProductFavorite } = useContext(AuthContext)
+const Liked = ({favoriteItem}) => {
+    const { contextHolder, scrollToTop, deleteProductFavorite } = useContext(AuthContext)
 
     useEffect(() => {
         scrollToTop();
     }, [])
-
-
-    useEffect(() => {
-        const favoriteList = document.querySelector(`.${style.favorite_items}`);
-        if(favoriteList) {
-            if (favoriteItem.length < 4) {
-                favoriteList.style.justifyContent = "flex-start";
-                favoriteList.style.gridTemplateColumns = "repeat(auto-fit, minmax(235px, 260px))";
-            }
-            if (favoriteItem.length == 0) {
-                favoriteList.style.justifyContent = "center";
-            }
-        }
-    }, [favoriteItem])
 
     const clearFavorite = () => {
         favoriteItem.forEach(element => {
@@ -41,7 +27,7 @@ const Liked = () => {
 
     return ( 
         <section className={`${style.section_cart} wrapper`}>
-        {contextHolder}
+            {contextHolder}
             <ul className="bread-crumbs">
                 <Link to="/">
                 <li>Главная</li>

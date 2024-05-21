@@ -22,8 +22,8 @@ const ProductPage = () => {
   const [hiddenButton, setHiddenButton] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [productReviews, setProductReviews] = useState([]);
-  const [sliderProduct, setSliderProduct] = useState([]);
   const { id } = useParams();
+  const [isFavorite, setIsFavorite] = useState(false);
   const { cart, logout, contextHolder, favoriteItem, scrollToTop, order } = useContext(AuthContext);
   const mainImage = useRef();
   const navigate = useNavigate();
@@ -67,29 +67,15 @@ const ProductPage = () => {
   ];
 
   const fetchData = async () => {
-    const token = JSON.parse(localStorage.getItem("userData")) || "";
     try {
-      await api
-        .get(`/api/products/${id}`, {
-          headers: {
-            Authorization: `${token.token}`,
-          },
-        })
+      await api.get(`/api/products/${id}`)
         .then((response) => {
           if (response.status == 200) {
             setSelectedProduct(...response.data);
-            const copiedData = [...response.data[0].slider];
-            setSliderProduct(copiedData);
           }
         })
         .catch((response) => {
-          if (response.response.status == 400) {
-            console.log(response);
-          }
-          if (response.response.status == 401) {
-            logout();
-            navigate("/api/auth/login");
-          }
+          console.log(response.message);
         });
     } catch (error) {
       console.log(error.message);
@@ -104,26 +90,6 @@ const ProductPage = () => {
         }
       });
     }
-  };
-
-  const clickOnItem = (e) => {
-    const itemSlider = document.querySelectorAll(
-      `.${style.product__image_item}`
-    );
-
-    itemSlider.forEach((element, index) => {
-      if (index === 0) {
-        element.classList.add(style.slider__item_active);
-      }
-    });
-
-    itemSlider.forEach((element) => {
-      element.classList.remove(style.slider__item_active);
-    });
-
-    const parentElement = e.target.parentNode;
-    parentElement.classList.add(style.slider__item_active);
-    mainImage.current.src = e.target.src;
   };
 
   const fetchReviewsProduct = async () => {
@@ -160,19 +126,22 @@ const ProductPage = () => {
     }
   };
 
-  useEffect(() => {
 
+  useEffect(() => {
+    scrollToTop();
     fetchData();
     fetchReviewsProduct();
     getCountProduct();
-    scrollToTop();
-
     const result = order.some(orderItem => 
       orderItem.items.some(item => item.productId._id === id)
     );
     setHiddenButton(result)
+  }, []);
 
-  }, [favoriteItem, id]);
+  useEffect(() => {
+    const isExist = favoriteItem.some((product) => product._id == id);
+    setIsFavorite(isExist)
+  }, [])
 
   return (
     <section className={style.main__block_product}>
@@ -182,12 +151,12 @@ const ProductPage = () => {
           <div className={style.product__image}>
             <div className={style.product__image_main}>
               <img
-                className={style.product__image_active}
-                ref={mainImage}
-                src={selectedProduct.img}
-                alt="Product image"
-              />
-            </div>
+                  className={style.product__image_active}
+                  ref={mainImage}
+                  src={selectedProduct.img}
+                  alt="Product image"
+                />
+              </div>
           </div>
           <div className={style.functions__card}>
             <div className={style.product__header}>
@@ -200,7 +169,7 @@ const ProductPage = () => {
                 </p>
               </div>
               <div className={style.header__right_block}>
-                <FavoriteHeart _id={id} />
+                <FavoriteHeart _id={id} favorite={isFavorite}/>
               </div>
             </div>
             <p className={style.instock__product}>

@@ -231,9 +231,7 @@ function App() {
           }          
         })
         .catch(response => {
-          // if (response.response && response.response.status === 401) {
-          //   logout();
-          // }
+          console.log(response.message);
       });
     } catch (error) {
       console.log(error)
@@ -309,12 +307,8 @@ function App() {
   }
 
   const addProductFavorite = async (objId) => {
-    const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.post(`/api/favorite/add/${objId}`, {userId}, {
-        headers: {
-          'Authorization': `${token.token}`,
-        }})
+      await api.post(`/api/favorite/add/${objId}`)
         .then(response => {
           setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
           openNotification('bottomRight', response.data.message)
@@ -673,9 +667,9 @@ function App() {
 
               <Route element={<PrivateRoute isAllowed={checkLocalUser()} />}>
                 <Route path="cart" element={<Cart />}/>
-                <Route path="liked" element={<Liked />} />
+                <Route path="liked" element={<Liked favoriteItem={favoriteItem}/>} />
                 <Route path="profile" element={<Profile />} />
-                <Route path="product/:id/" element={<ProductPage/>}/>
+                <Route path="product/:id" element={<ProductPage/>}/>
                 <Route path="product/:id/review" element={<ReviewPage/>}/>
                 <Route path="cart/order" element={<OrderPage/>}/>
               </Route>
