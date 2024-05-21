@@ -37,7 +37,6 @@ const Cart = () => {
   const [cartTotalPrice, setCartTotalPrice] = useState(0)
   const navigate = useNavigate();
 
-  
   const calculatePrice = (cart, countArray) => {
     let total = cart.reduce((accumulator, product) => {
       const subtotal = countArray * product.price;
@@ -54,6 +53,7 @@ const Cart = () => {
     setCartTotalPrice(total)
   }
 
+
   // const clickCheck = () => {
   //   if (!cartCheckAll) {
   //     setCartCheckAll(true);
@@ -65,12 +65,22 @@ const Cart = () => {
   // };
 
   useEffect(() => {
-    if(checkArray.length !== 0) {
+    const storedCheckArray = JSON.parse(localStorage.getItem('checkArray'));
+    setCheckArray(storedCheckArray)
+    if(storedCheckArray && storedCheckArray.length !== 0) {
+      calculatePriceArray(storedCheckArray)
+    } else {
+      calculatePriceArray(cart)
+    }
+  }, [cart]) 
+
+  useEffect(() => {
+    if(checkArray && checkArray.length !== 0) {
       calculatePriceArray(checkArray)
     } else {
       calculatePriceArray(cart)
     }
-  }, [cart, checkArray, cart.length, checkArray.length]);
+  }, [cart, checkArray]);
 
   useEffect(() => {
     scrollToTop();
@@ -79,17 +89,11 @@ const Cart = () => {
 
   const delayedSearch = debounce(async (search) => {
     if(search.trim() !== '') {
-        const token = JSON.parse(localStorage.getItem("userData")) || "";
         try {
         await api
             .post(
             `/api/cart/promo`,
             { promoCode: search },
-            {
-                headers: {
-                Authorization: `${token.token}`,
-                },
-            }
             )
             .then((response) => {
             if (response.status === 200) {
@@ -122,7 +126,9 @@ const Cart = () => {
     checkArray.forEach((element) => {
       deleteItemCart(element._id);
       setCart(cart.filter((item) => item._id !== element._id));
-      setCheckArray(checkArray.filter((item) => item._id !== element._id));
+      const updatedCheckArray = checkArray.filter((item) => item._id !== element._id)
+      setCheckArray(updatedCheckArray);
+      localStorage.setItem('checkArray', JSON.stringify(updatedCheckArray));
     });
   };
 
@@ -152,7 +158,7 @@ const Cart = () => {
               <p>Выбрать все</p>
             </div>
           )}
-          {(checkArray.length !== 0 && cart.length !== 0) && (
+          {(checkArray && checkArray.length !== 0 && cart.length !== 0) && (
             <p className={style.button__delete__hidden} onClick={deleteChecket}>
               Удалить выбранное
             </p>
@@ -164,9 +170,9 @@ const Cart = () => {
             <div className={style.cart__left_block}>
               <span className={style.cart__span}></span>
               <div className={style.cart__list}>
-                {cart.map((obj, index) => (
+                {cart.map((obj) => (
                   <CartItem
-                    key={index}
+                    key={obj._id}
                     calculatePrice={calculatePrice}
                     setCheckArray={setCheckArray}
                     checkArray={checkArray}
@@ -181,7 +187,7 @@ const Cart = () => {
                 <div className={style.info__item}>
                   <p>Кол-во:</p>
                   <p>
-                    {checkArray.length !== 0 ? checkArray.length : cart.length}{" "}
+                    {checkArray && checkArray.length !== 0 ? checkArray.length : cart.length}{" "}
                     шт.
                   </p>
                 </div>

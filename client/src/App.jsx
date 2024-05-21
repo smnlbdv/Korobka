@@ -288,10 +288,7 @@ function App() {
       await api.delete(`/api/cart/delete/${productId}`)
         .then(response => {
           if(response.data.delete === true) {
-            setCart((cart) =>
-              cart.filter((item) => item._id !== productId)
-            );
-            // подумать над тем, чтобы не очищал checkArray
+            setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
             order && openNotificationError('bottomRight', "Товар удален из корзины")
           }
         })

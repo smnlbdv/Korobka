@@ -14,12 +14,18 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
 
   const cartCheckClick = () => {
     if (!cartCheck) {
-        setCartCheck(true);
         const foundItem = cart.find(item => item._id === _id);
-        setCheckArray(prevArray => [...prevArray, foundItem]);
+        setCheckArray((prev) => [...prev, foundItem]);
+        setCartCheck(true);
+        const storedCheckArray = JSON.parse(localStorage.getItem('checkArray')) || [];
+        storedCheckArray.push(foundItem);
+        localStorage.setItem('checkArray', JSON.stringify(storedCheckArray));
     } else {
+        const storedCheckArray = JSON.parse(localStorage.getItem('checkArray'));
+        const updatedArray = storedCheckArray.filter(item => item._id !== _id);
         setCartCheck(false);
-        setCheckArray(prevArray => prevArray.filter(item => item._id !== _id));
+        setCheckArray(updatedArray);
+        localStorage.setItem('checkArray', JSON.stringify(updatedArray));
     }
   };
 
@@ -32,19 +38,22 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
     setIsFavorite(isExist)
   }, [_id, favoriteItem])
 
+
   useEffect(() => {
-    const isExisting = checkArray.some(item => item._id === _id);
-    isExisting ? setCartCheck(true) : setCartCheck(false)
-  }, [_id, checkArray])
+    if(Array.isArray(checkArray) && checkArray.length !== 0) {
+        const isExisting = checkArray.some(item => item._id === _id);
+        isExisting ? setCartCheck(true) : setCartCheck(false);
+    }
+  }, []);
 
 
-  const clickHeart = useCallback(() => {
+  const clickHeart = () => {
     if(isFavorite) {
         deleteProductFavorite(_id);
     } else {
         addProductFavorite(_id);
     }
-  }, [isFavorite, _id, deleteProductFavorite, addProductFavorite]);
+  };
 
   return (
     <div className={`${style.cart__item_block} ${cartCheck && style.cart__item_active}`}>

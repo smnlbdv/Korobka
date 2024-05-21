@@ -8,7 +8,7 @@ const Footer = () => {
                     <img className="header__image" src="/assets/logo.svg" alt="logo" />
                     <span>Коробка</span>
                 </div>
-                <p className={style.footer_text}>2023 © Все права защищены</p>
+                <p className={style.footer_text}>2024 © Все права защищены</p>
                 <div className={style.contact}>
                     <a href="https://twitter.com/?lang=en" target="blank">
                         <img src="/assets/twitter.svg" alt="" />
