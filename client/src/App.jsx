@@ -290,6 +290,10 @@ function App() {
           if(response.data.delete === true) {
             setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
             order && openNotificationError('bottomRight', "Товар удален из корзины")
+
+            const existingCart = JSON.parse(localStorage.getItem('checkArray'));
+            const updatedCart = existingCart.filter(item => item._id !== productId);
+            localStorage.setItem('checkArray', JSON.stringify(updatedCart));
           }
         })
         .catch(response => {

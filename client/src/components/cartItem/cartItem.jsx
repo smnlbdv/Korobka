@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState, useContext, useCallback } from "react";
+import { useEffect, useState, useContext, useCallback, memo } from "react";
 import { AuthContext } from "../../context/authContext.js";
 
 import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
 import { Link  } from 'react-router-dom';
 
-const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, checkArray }) => {
+const CartItem =  memo(function CartItem({ _id, img, title, preText, price, count, setCheckArray, checkArray }){
   const [counts, setCounts] = useState(count);
   const [cartCheck, setCartCheck] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -15,7 +15,13 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
   const cartCheckClick = () => {
     if (!cartCheck) {
         const foundItem = cart.find(item => item._id === _id);
-        setCheckArray((prev) => [...prev, foundItem]);
+        setCheckArray((prev) => {
+            if (prev === null) {
+                return [foundItem];
+            } else {
+                return [...prev, foundItem];
+            }
+        });
         setCartCheck(true);
         const storedCheckArray = JSON.parse(localStorage.getItem('checkArray')) || [];
         storedCheckArray.push(foundItem);
@@ -44,7 +50,7 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
         const isExisting = checkArray.some(item => item._id === _id);
         isExisting ? setCartCheck(true) : setCartCheck(false);
     }
-  }, []);
+  }, [_id, checkArray]);
 
 
   const clickHeart = () => {
@@ -85,6 +91,6 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
       </button>
     </div>
   );
-};
+});
 
 export default CartItem;

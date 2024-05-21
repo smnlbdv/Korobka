@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useMemo, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
@@ -19,7 +19,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const Cart = () => {
+const Cart = memo(function Cart() {
   const [sale, setSale] = useState({
     active: false,
     percentage: 0,
@@ -36,6 +36,12 @@ const Cart = () => {
   } = useContext(AuthContext);
   const [cartTotalPrice, setCartTotalPrice] = useState(0)
   const navigate = useNavigate();
+
+  const totalPrice = useMemo(() => {
+    return sale !== 0
+        ? cartTotalPrice - cartTotalPrice * (sale.percentage / 100)
+        : cartTotalPrice;
+}, [cartTotalPrice, sale]);
 
   const calculatePrice = (cart, countArray) => {
     let total = cart.reduce((accumulator, product) => {
@@ -90,31 +96,27 @@ const Cart = () => {
   const delayedSearch = debounce(async (search) => {
     if(search.trim() !== '') {
         try {
-        await api
-            .post(
-            `/api/cart/promo`,
-            { promoCode: search },
-            )
+        await api.post(`/api/cart/promo`, { promoCode: search })
             .then((response) => {
-            if (response.status === 200) {
-                setSale({
-                active: response.data.active,
-                percentage: response.data.percentage,
-                });
-            }
-            })
+              if (response.status === 200) {
+                  setSale({
+                  active: response.data.active,
+                  percentage: response.data.percentage,
+                  });
+              }
+              })
             .catch((response) => {
-            if (response.response.status === 401) {
-                logout();
-                navigate("/api/auth/login");
-            }
-            if (response.response.status === 404) {
-                setSale({
-                active: response.response.data.active,
-                percentage: 0,
-                });
+              if (response.response.status === 401) {
+                  logout();
+                  navigate("/api/auth/login");
+              }
+              if (response.response.status === 404) {
+                  setSale({
+                  active: response.response.data.active,
+                  percentage: 0,
+                  });
 
-            }
+              }
             });
         } catch (error) {
           console.log(error.message);
@@ -225,11 +227,7 @@ const Cart = () => {
                 <div className={style.pay_item}>
                   <p>Итог к оплате: </p>
                   <p className={style.totalPrice}>
-                    {" "}
-                    {sale !== 0
-                      ? cartTotalPrice + cartTotalPrice * (sale.percentage / 100)
-                      : cartTotalPrice}{" "}
-                    BYN
+                      {totalPrice} BYN
                   </p>
                 </div>
                 <Link to="order">
@@ -288,6 +286,6 @@ const Cart = () => {
       </section>
     </CartContext.Provider>
   );
-};
+});
 
 export default Cart;
