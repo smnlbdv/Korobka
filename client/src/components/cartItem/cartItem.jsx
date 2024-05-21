@@ -60,7 +60,7 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
       const isExisting = checkArray.some(item => item._id === _id);
       isExisting ? setCartCheck(true) : setCartCheck(false);
   }
-  }, [cartCheckAll])
+  }, [_id, cartCheckAll, checkArray])
 
   const clickHeart = () => {
     if(isFavorite) {

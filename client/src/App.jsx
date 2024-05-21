@@ -45,6 +45,7 @@ function App() {
     getNewProduct()
     getBestReviews()
     getCategories()
+    localStorage.setItem('checkArray', JSON.stringify([]));
   }, [])
 
 

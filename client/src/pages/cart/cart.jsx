@@ -61,7 +61,7 @@ const Cart = () => {
 
 
   const clickCheck = () => {
-    if (!cartCheckAll && checkArray.length === 0) {
+    if (!cartCheckAll) {
       setCartCheckAll(true);
       setCheckArray([...cart]);
       localStorage.setItem('checkArray', JSON.stringify(cart));
@@ -73,8 +73,10 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    clickCheck()
-  }, [])
+    if(checkArray && checkArray.length !== cart.length) {
+      setCartCheckAll(false);
+    }
+  },[checkArray])
 
   useEffect(() => {
     const storedCheckArray = JSON.parse(localStorage.getItem('checkArray'));
@@ -97,7 +99,6 @@ const Cart = () => {
   useEffect(() => {
     scrollToTop();
   }, [scrollToTop]);
-
 
   const delayedSearch = debounce(async (search) => {
     if(search.trim() !== '') {
@@ -157,7 +158,7 @@ const Cart = () => {
               <img
                 className={style.check__image}
                 src={
-                  cartCheckAll && cart.length === checkArray.length
+                  cartCheckAll || checkArray && cart.length === checkArray.length
                     ? "/assets/cart-check-active.svg"
                     : "/assets/cart-check.svg"
                 }
