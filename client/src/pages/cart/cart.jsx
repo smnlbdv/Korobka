@@ -19,7 +19,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const Cart = memo(function Cart() {
+const Cart = () => {
   const [sale, setSale] = useState({
     active: false,
     percentage: 0,
@@ -60,15 +60,21 @@ const Cart = memo(function Cart() {
   }
 
 
-  // const clickCheck = () => {
-  //   if (!cartCheckAll) {
-  //     setCartCheckAll(true);
-  //     setCheckArray([...cart]);
-  //   } else {
-  //     setCartCheckAll(false);
-  //     setCheckArray([]);
-  //   }
-  // };
+  const clickCheck = () => {
+    if (!cartCheckAll && checkArray.length === 0) {
+      setCartCheckAll(true);
+      setCheckArray([...cart]);
+      localStorage.setItem('checkArray', JSON.stringify(cart));
+    } else {
+      setCartCheckAll(false);
+      setCheckArray([]);
+      localStorage.setItem('checkArray', JSON.stringify([]));
+    }
+  };
+
+  useEffect(() => {
+    clickCheck()
+  }, [])
 
   useEffect(() => {
     const storedCheckArray = JSON.parse(localStorage.getItem('checkArray'));
@@ -136,7 +142,7 @@ const Cart = memo(function Cart() {
 
 
   return (
-    <CartContext.Provider value={{ calculatePrice, checkArray }}>
+    <CartContext.Provider value={{ calculatePrice, checkArray, cartCheckAll }}>
       <section className={`${style.section_cart} wrapper`}>
         <ul className="bread-crumbs">
           <Link to="/">
@@ -147,7 +153,7 @@ const Cart = memo(function Cart() {
         <div className={style.cart__header__button}>
           <h2 className={`${style.section_title} section__title`}>Корзина</h2>
           {cart.length !== 0 && (
-            <div className={style.button__check__all} >
+            <div className={style.button__check__all} onClick={clickCheck}>
               <img
                 className={style.check__image}
                 src={
@@ -286,6 +292,6 @@ const Cart = memo(function Cart() {
       </section>
     </CartContext.Provider>
   );
-});
+};
 
 export default Cart;

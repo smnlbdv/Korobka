@@ -35,11 +35,12 @@ const Header = () => {
         var contentCart;
 
         if(cart.length > 0) {
+            let index = cart.length + 1
             contentCart = cart.map((element, index) => (
                 <PopoverItem key={index} obj={element} />
             ));
             contentCart.push(
-                <Link to="cart">
+                <Link to="cart" key={index}>
                     <div className={style.popover__button}>
                         <p>Перейти в корзину</p>
                     </div>
@@ -55,11 +56,12 @@ const Header = () => {
         var contentLiked;
 
         if(favoriteItem.length > 0) {
+            let index = favoriteItem.length + 1
             contentLiked = favoriteItem.map((element, index) => (
                 <PopoverItem key={index} obj={element} />
             ));
             contentLiked.push(
-                <Link to="liked">
+                <Link to="liked" key={index}>
                     <div className={style.popover__button}>
                         <p>Перейти в избранное</p>
                     </div>

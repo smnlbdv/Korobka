@@ -5,12 +5,15 @@ import { AuthContext } from "../../context/authContext.js";
 import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
 import { Link  } from 'react-router-dom';
+import { CartContext } from "../../context/cartContext.js";
 
-const CartItem =  memo(function CartItem({ _id, img, title, preText, price, count, setCheckArray, checkArray }){
+const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, checkArray }) => {
   const [counts, setCounts] = useState(count);
   const [cartCheck, setCartCheck] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [initialRender, setInitialRender] = useState(true);
   const { cart,  deleteItemCart, deleteProductFavorite, addProductFavorite, favoriteItem } = useContext(AuthContext);
+  const { cartCheckAll } = useContext(CartContext);
 
   const cartCheckClick = () => {
     if (!cartCheck) {
@@ -52,6 +55,12 @@ const CartItem =  memo(function CartItem({ _id, img, title, preText, price, coun
     }
   }, [_id, checkArray]);
 
+  useEffect(() => {
+    if(Array.isArray(checkArray) && checkArray.length === 0) {
+      const isExisting = checkArray.some(item => item._id === _id);
+      isExisting ? setCartCheck(true) : setCartCheck(false);
+  }
+  }, [cartCheckAll])
 
   const clickHeart = () => {
     if(isFavorite) {
@@ -91,6 +100,6 @@ const CartItem =  memo(function CartItem({ _id, img, title, preText, price, coun
       </button>
     </div>
   );
-});
+};
 
 export default CartItem;
