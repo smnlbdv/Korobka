@@ -18,8 +18,10 @@ import './cart.scss'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { useSelector } from "react-redux";
 
 const Cart = () => {
+  const favoriteItem = useSelector(state => state.liked.liked)
   const [sale, setSale] = useState({
     active: false,
     percentage: 0,
@@ -31,8 +33,7 @@ const Cart = () => {
     scrollToTop,
     logout,
     setCart,
-    deleteItemCart,
-    favoriteItem
+    deleteItemCart
   } = useContext(AuthContext);
   const [cartTotalPrice, setCartTotalPrice] = useState(0)
   const navigate = useNavigate();

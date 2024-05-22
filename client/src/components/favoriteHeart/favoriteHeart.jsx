@@ -14,7 +14,7 @@ const FavoriteHeart = ({_id, favorite = false}) => {
     useEffect(() => {
         const isExist = favoriteItem.some((product) => product._id === _id);
         setIsFavorite(isExist)
-    }, [_id])
+    }, [_id, favoriteItem])
 
     const clickHeart = () => {
         if(isFavorite) {
