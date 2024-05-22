@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState} from 'react';
 import { Link  } from 'react-router-dom';
 import { Dropdown, Badge, Popover } from 'antd';
 import { useAuth } from "../../hooks/auth.hook.js";
+import { useSelector } from 'react-redux';
 
 import style from './header.module.scss'
 import './header.scss'
@@ -17,11 +18,12 @@ const Header = () => {
     const [countFavorite, setCountFavorite] = useState(0)
     const [popoverCart, setPopoverCart] = useState([]);
     const [popoverLiked, setPopoverLiked] = useState([]);
-    const { cart, categories, favoriteItem } = useContext(AuthContext)
+    const { cart, categories } = useContext(AuthContext)
     const { userId, role, isAuth } = useAuth();
     const [popoverVisible, setPopoverVisible] = useState(false);
     const [popoverVisibleTwo, setPopoverVisibleTwo] = useState(false);
     const linkHeader = useRef()
+    const favoriteItem = useSelector(state => state.liked.liked)
 
     const handleLinkClick = () => {
         setPopoverVisible(false);

@@ -1,8 +1,6 @@
-import { useContext, useEffect, useCallback, useState, useRef } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs } from "antd";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from 'swiper/modules';
 
 import "swiper/css";
 import style from "./productPage.module.scss";
@@ -125,7 +123,6 @@ const ProductPage = () => {
       console.log(error.message);
     }
   };
-
 
   useEffect(() => {
     scrollToTop();

@@ -6,6 +6,8 @@ import { AuthContext } from "./context/authContext.js";
 import { useAuth } from "./hooks/auth.hook.js";
 import { notification, Modal } from 'antd';
 import './libs/ant.css'
+import { useDispatch } from "react-redux";
+import { addProductFavorite } from "./store/likedClice.js";
 
 import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
@@ -40,6 +42,7 @@ function App() {
   const { login, userId, role, logout, isAuth } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getNewProduct()
@@ -47,7 +50,6 @@ function App() {
     getCategories()
     localStorage.setItem('checkArray', JSON.stringify([]));
   }, [])
-
 
   useEffect(() => {
     if(userId){
@@ -90,7 +92,6 @@ function App() {
     try {
       await api.get(`/api/profile/${userId}`)
         .then(response => {
-          console.log(response)
           const fieldsToExclude = ['cart', 'older', 'favorite'];
           const userObject = Object.assign({}, response.data);
           for (const field of fieldsToExclude) {
@@ -112,7 +113,9 @@ function App() {
 
           if(response.data.favorite && favoriteItem.length == 0) {
             const newFavorite = [...response.data.favorite.items]
-            setFavoriteItem(newFavorite)
+            newFavorite.forEach(element => {
+              dispatch(addProductFavorite(element))
+            });
           }
 
           if(response.data.order && order.length == 0) {
@@ -306,50 +309,50 @@ function App() {
     }
   }
 
-  const addProductFavorite = async (objId) => {
-    try {
-      await api.post(`/api/favorite/add/${objId}`)
-        .then(response => {
-          setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
-          openNotification('bottomRight', response.data.message)
-        })
-        .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
-      });
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
+  // const addProductFavorite = async (objId) => {
+  //   try {
+  //     await api.post(`/api/favorite/add/${objId}`)
+  //       .then(response => {
+  //         setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
+  //         openNotification('bottomRight', response.data.message)
+  //       })
+  //       .catch(response => {
+  //         if(response.response.status == 401) {
+  //           logout()
+  //           navigate("/api/auth/login");
+  //         }
+  //     });
+  //   } catch (error) {
+  //     console.log(error.message)
+  //   }
+  // }
 
-  const deleteProductFavorite = async (productId) => {
-    const token = JSON.parse(localStorage.getItem('userData')) || '';
-      try {
-        await api.delete(`/api/favorite/delete/${productId}`, {
-          headers: {
-            'Authorization': `${token.token}`,
-          }
-        })
-          .then(response => {
-            if(response.data.delete === true) {
-              setFavoriteItem((cart) =>
-                cart.filter((item) => item._id !== productId)
-              );  
-            }
-          })
-          .catch(response => {
-            if(response.response.status == 401) {
-              logout()
-              navigate("/api/auth/login");
-            }
-        }); 
-      }
-      catch (error) {
-        console.log(error.message)
-      }
-  }
+  // const deleteProductFavorite = async (productId) => {
+  //   const token = JSON.parse(localStorage.getItem('userData')) || '';
+  //     try {
+  //       await api.delete(`/api/favorite/delete/${productId}`, {
+  //         headers: {
+  //           'Authorization': `${token.token}`,
+  //         }
+  //       })
+  //         .then(response => {
+  //           if(response.data.delete === true) {
+  //             setFavoriteItem((cart) =>
+  //               cart.filter((item) => item._id !== productId)
+  //             );  
+  //           }
+  //         })
+  //         .catch(response => {
+  //           if(response.response.status == 401) {
+  //             logout()
+  //             navigate("/api/auth/login");
+  //           }
+  //       }); 
+  //     }
+  //     catch (error) {
+  //       console.log(error.message)
+  //     }
+  // }
 
   const sendEmailData = async (email) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
@@ -625,9 +628,7 @@ function App() {
         newBoxList,
         unmountItem,
         favoriteItem,
-        addProductFavorite,
         setFavoriteItem,
-        deleteProductFavorite,
         sendEmailData,
         uploadAvatar,
         getProfile,

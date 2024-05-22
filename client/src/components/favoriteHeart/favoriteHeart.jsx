@@ -1,25 +1,27 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
+import { addProductFavorite, addProductFavoriteAsync, delProductFavoriteAsync } from "../../store/likedClice.js";
+import { useSelector, useDispatch } from "react-redux";
 
 import style from './favoriteHeart.module.scss'
 
 // eslint-disable-next-line react/prop-types
 const FavoriteHeart = ({_id, favorite = false}) => {
-
     const [isFavorite, setIsFavorite] = useState(favorite);
-    const { addProductFavorite, deleteProductFavorite, favoriteItem } = useContext(AuthContext)
+    const favoriteItem = useSelector(state => state.liked.liked)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const isExist = favoriteItem.some((product) => product._id === _id);
         setIsFavorite(isExist)
-    }, [_id, favoriteItem])
+    }, [_id])
 
     const clickHeart = () => {
         if(isFavorite) {
-            deleteProductFavorite(_id)
+            dispatch(delProductFavoriteAsync(_id))
             setIsFavorite(false)
         } else {
-            addProductFavorite(_id) 
+            dispatch(addProductFavoriteAsync(_id))
             setIsFavorite(true)
         }
     }

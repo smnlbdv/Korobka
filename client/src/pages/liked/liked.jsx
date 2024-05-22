@@ -10,10 +10,13 @@ import Product from "../../components/product/product.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 
 import style from './liked.module.scss'
+import { useDispatch, useSelector } from "react-redux";
+import { delProductFavoriteAsync } from "../../store/likedClice.js";
 
-
-const Liked = ({favoriteItem}) => {
-    const { contextHolder, scrollToTop, deleteProductFavorite } = useContext(AuthContext)
+const Liked = () => {
+    const { contextHolder, scrollToTop } = useContext(AuthContext)
+    const favoriteItem = useSelector(state => state.liked.liked)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         scrollToTop();
@@ -21,7 +24,7 @@ const Liked = ({favoriteItem}) => {
 
     const clearFavorite = () => {
         favoriteItem.forEach(element => {
-            deleteProductFavorite(element._id)
+            dispatch(delProductFavoriteAsync(element._id))
         });
     }
 

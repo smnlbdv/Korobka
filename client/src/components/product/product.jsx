@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
 import ContentLoader from "react-content-loader"
 import { Link  } from 'react-router-dom';
@@ -11,7 +11,6 @@ import style from './product.module.scss'
 const Product = ({_id, img, title, price, preText, loading = true, favorite }) => {
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
-
     const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem  } = useContext(AuthContext)
 
     const clickBtnAdd = async () => {
