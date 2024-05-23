@@ -49,9 +49,11 @@ const Profile = () => {
       }
     })
   };
+
   const handleOk = () => {
     setIsModalOpen(false);
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -381,6 +383,7 @@ const Profile = () => {
   return (
     <section className={`${style.section_profile} wrapper`}>
       {contextHolder}
+      <div className={style.bg_profile}></div>
       <ul className="bread-crumbs">
         <Link to="/">
           <li>Главная</li>

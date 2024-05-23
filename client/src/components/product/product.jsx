@@ -3,18 +3,21 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
 import ContentLoader from "react-content-loader"
 import { Link  } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { addProductCartAsync, increaseCartItemAsync } from "../../store/cartSlice.js";
 
 import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './product.module.scss'
 
-
 const Product = ({_id, img, title, price, preText, loading = true, favorite }) => {
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
-    const { cart, addCart, increaseCartItem, decreaseCartItem, unmountItem  } = useContext(AuthContext)
+    const { decreaseCartItem, unmountItem  } = useContext(AuthContext)
+    const dispatch = useDispatch()
+    const cart = useSelector(state => state.cart.cart)
 
     const clickBtnAdd = async () => {
-        addCart(_id)
+        dispatch(addProductCartAsync(_id))
         const product = cart.find(obj => obj._id === _id);
         if(!product) {
             setCountProduct(1)
@@ -29,10 +32,12 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite }) =
         if(countProduct >= 200) {
             setCountProduct(countProduct)
         } else {
-            const resultIncrease = increaseCartItem(_id)
-            if(resultIncrease) { 
-                setCountProduct(countProduct + 1)
-            }
+            dispatch(increaseCartItemAsync(_id))
+                    .then(result => {
+                        if(result.payload.increase) { 
+                            setCountProduct(countProduct + 1)
+                        }
+                    })
         }
     }
 

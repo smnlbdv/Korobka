@@ -6,8 +6,9 @@ import { AuthContext } from "./context/authContext.js";
 import { useAuth } from "./hooks/auth.hook.js";
 import { notification, Modal } from 'antd';
 import './libs/ant.css'
-import { useDispatch } from "react-redux";
-import { addProductFavorite } from "./store/likedClice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addProductFavorite } from "./store/likedSlice.js";
+import { addProductCart } from "./store/cartSlice.js";
 
 import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
@@ -34,7 +35,6 @@ function App() {
   const [reviewsList, setReviewsList] = useState([])
   const [profile, setProfile] = useState({});
   const [order, setOrder] = useState([]);
-  const [cart, setCart] = useState([]);
   const [categories,setCategories] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
   const [newBoxList, setNewBoxList] = useState([]);
@@ -43,6 +43,7 @@ function App() {
   const [apis, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.cart)
 
   useEffect(() => {
     getNewProduct()
@@ -57,6 +58,13 @@ function App() {
     }
   }, [userId])
 
+  const calculatePrice = (cart, countArray = null) => {
+    let total = cart.reduce((accumulator, product) => {
+      const subtotal = (countArray !== null) ? countArray * product.price : product.count * product.price;
+      return accumulator + subtotal;
+    }, 0);
+    return total
+  }
 
   const postLogin = async (values) => {
     await api.post("/api/auth/login", values)
@@ -92,27 +100,22 @@ function App() {
     try {
       await api.get(`/api/profile/${userId}`)
         .then(response => {
-          const fieldsToExclude = ['cart', 'older', 'favorite'];
-          const userObject = Object.assign({}, response.data);
-          for (const field of fieldsToExclude) {
-            if (Object.prototype.hasOwnProperty.call(userObject, field)) {
-              delete userObject[field];
-            }
-          }
+          console.log(response.data);
+          setProfile({...response.data.user})
 
-          setProfile({...userObject})
-
-          if(response.data.cart && cart.length == 0) {
-            const newCart = [...response.data.cart.items]
+          if(response.data.cart && cart.length === 0) {
+            const newCart = [...response.data.cart]
             const newCartItem = newCart.map(item => ({
               ...item.product,
               count: item.quantity,
             }));
-            setCart(newCartItem);
+            newCartItem.forEach(element => {
+              dispatch(addProductCart(element))
+            });
           }
 
           if(response.data.favorite && favoriteItem.length == 0) {
-            const newFavorite = [...response.data.favorite.items]
+            const newFavorite = [...response.data.favorite]
             newFavorite.forEach(element => {
               dispatch(addProductFavorite(element))
             });
@@ -216,50 +219,6 @@ function App() {
     deleteItemCart(id)
   }
 
-  const addCart = async (objId) => {
-    try {
-      await api.post(`/api/cart/add/${objId}`, {userId})
-        .then(response => {
-          if(response.data.count > 1) {
-            const cartItemIndex = cart.findIndex(item => item._id === response.data.product._id);
-            cart[cartItemIndex].count = response.data.count;
-            openNotification('bottomRight', 'Товар успешно добавлен в корзину');
-          } else {
-            const product = {
-              ...response.data.product,
-              count: response.data.count,
-            };
-            setCart(prevCart => [...prevCart, product]);
-            openNotification('bottomRight', 'Товар успешно добавлен в корзину');
-          }          
-        })
-        .catch(response => {
-          console.log(response.message);
-      });
-    } catch (error) {
-      console.log(error)
-    }
-  };
-
-  const increaseCartItem = async (id) => {
-    try {
-      await api.post(`/api/cart/increase/`, {id: id})
-        .then(response => {
-          const index = cart.findIndex(item => item._id === id);
-          if(index !== -1) {
-            cart[index]['count'] += 1
-          }
-          openNotification('bottomRight', 'Товар успешно добавлен в корзину')
-          return response.data.increase
-        })
-        .catch(response => {
-          console.log(response);
-      });
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
-
   const decreaseCartItem = async (id) => {
     const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
@@ -285,82 +244,9 @@ function App() {
     }
   }
 
-  const deleteItemCart = async (productId, order = false) => {
-    try {
-      await api.delete(`/api/cart/delete/${productId}`)
-        .then(response => {
-          if(response.data.delete === true) {
-            setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
-            order && openNotificationError('bottomRight', "Товар удален из корзины")
-
-            const existingCart = JSON.parse(localStorage.getItem('checkArray'));
-            const updatedCart = existingCart.filter(item => item._id !== productId);
-            localStorage.setItem('checkArray', JSON.stringify(updatedCart));
-          }
-        })
-        .catch(response => {
-          if(response.response.status == 401) {
-              logout()
-              navigate("/api/auth/login");
-          }
-        })
-    } catch (error) {
-      console.log("Ошибка", error);
-    }
-  }
-
-  // const addProductFavorite = async (objId) => {
-  //   try {
-  //     await api.post(`/api/favorite/add/${objId}`)
-  //       .then(response => {
-  //         setFavoriteItem((prevFavorite) => [...prevFavorite, response.data.product]);
-  //         openNotification('bottomRight', response.data.message)
-  //       })
-  //       .catch(response => {
-  //         if(response.response.status == 401) {
-  //           logout()
-  //           navigate("/api/auth/login");
-  //         }
-  //     });
-  //   } catch (error) {
-  //     console.log(error.message)
-  //   }
-  // }
-
-  // const deleteProductFavorite = async (productId) => {
-  //   const token = JSON.parse(localStorage.getItem('userData')) || '';
-  //     try {
-  //       await api.delete(`/api/favorite/delete/${productId}`, {
-  //         headers: {
-  //           'Authorization': `${token.token}`,
-  //         }
-  //       })
-  //         .then(response => {
-  //           if(response.data.delete === true) {
-  //             setFavoriteItem((cart) =>
-  //               cart.filter((item) => item._id !== productId)
-  //             );  
-  //           }
-  //         })
-  //         .catch(response => {
-  //           if(response.response.status == 401) {
-  //             logout()
-  //             navigate("/api/auth/login");
-  //           }
-  //       }); 
-  //     }
-  //     catch (error) {
-  //       console.log(error.message)
-  //     }
-  // }
-
   const sendEmailData = async (email) => {
-    const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.post('/api/email/send', {email: email}, {
-        headers: {
-          'Authorization': `${token.token}`,
-        }})
+      await api.post('/api/email/send', {email: email})
         .then(response => {
           if(response.status == 202) {
             countDown('success', response.data.message)
@@ -534,13 +420,10 @@ function App() {
 
   const placeOrder = async (order) => {
     let result;
-    // let finalCart = checkArray.length !== 0 ? checkArray : cart;
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
+    const checkArray = JSON.parse(localStorage.getItem('checkArray'));
+    let finalCart = checkArray.length !== 0 ? checkArray : cart;
     try {
-      await api.post(`/api/profile/order`, {order: order, cart: "", totalAmount: "" }, {
-        headers: {
-            'Authorization': `${data.token}`,
-        }})
+      await api.post(`/api/profile/order`, {order: order, cart: finalCart, totalAmount: calculatePrice(finalCart) })
         .then(response => {
           if(response.status == 200 && response.data.success === true) {
             result = {
@@ -553,10 +436,7 @@ function App() {
           }
         })
         .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
+          console.log(response.message);
       });
     } catch (error) {
       console.log(error.message)
@@ -617,11 +497,6 @@ function App() {
         logout,
         userId,
         role,
-        addCart,
-        cart,
-        setCart,
-        deleteItemCart,
-        increaseCartItem,
         decreaseCartItem,
         contextHolder,
         contextHolderEmail,
@@ -632,6 +507,7 @@ function App() {
         sendEmailData,
         uploadAvatar,
         getProfile,
+        calculatePrice,
         isAuth,
         profile,
         setProfile,

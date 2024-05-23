@@ -1,17 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useContext, useEffect} from "react";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
-
-import api from '../../api/api.js'
 
 import Product from "../../components/product/product.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 
 import style from './liked.module.scss'
 import { useDispatch, useSelector } from "react-redux";
-import { delProductFavoriteAsync } from "../../store/likedClice.js";
+import { delProductFavoriteAsync } from "../../store/likedSlice.js";
 
 const Liked = () => {
     const { contextHolder, scrollToTop } = useContext(AuthContext)

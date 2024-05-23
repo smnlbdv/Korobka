@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Radio } from 'antd';
+import { deleteCartItemAsync } from "../../store/cartSlice.js";
 
 import * as Yup from "yup";
 import style from './orderPage.module.scss'
@@ -11,13 +12,22 @@ import InputProfile from "../../components/inputProfile/inputProfile";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate";
 import OrderItem from "../../components/orderItem/orderItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
+import { useDispatch, useSelector } from "react-redux";
 // eslint-disable-next-line react/prop-types
 
 const OrderPage = () => {
 
     const [successStatus, setSuccessStatus] = useState(false)
     const [url, setUrl] = useState('#')
-    const { profile, cart, placeOrder, contextHolder, deleteItemCart, downloadCheck, checkArray, setCart, setCheckArray } = useContext(AuthContext);
+    const { profile, placeOrder, contextHolder, downloadCheck, setCart } = useContext(AuthContext);
+    const [checkArray, setCheckArray] = useState([])
+    const cart = useSelector(state => state.cart.cart)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        const storedData = JSON.parse(localStorage.getItem('checkArray'));
+        setCheckArray(storedData)
+    }, [])
 
     const formikOrder = useFormik({
         initialValues: {
@@ -48,13 +58,13 @@ const OrderPage = () => {
 
             if(checkArray.length > 0) {
                 checkArray.forEach((element) => {
-                    deleteItemCart(element._id);
+                    dispatch(deleteCartItemAsync(element._id));
                     setCart(cart.filter((item) => item._id !== element._id));
                 });
                 setCheckArray([]);
             } else {
                 cart.map((item) => {
-                    deleteItemCart(item._id);
+                    dispatch(deleteCartItemAsync(item._id));
                 });
             }
         },
@@ -65,7 +75,7 @@ const OrderPage = () => {
             formikOrder.setValues({
               name: profile.name,
               lastname: profile.surname,
-              email: profile.email.email,
+              email: profile.email?.email || " ",
               phone: profile.phone,
             })
         }

@@ -54,8 +54,29 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
       }
     })
     .populate("role")
-    .then((item) => {
-      res.status(201).json(item);
+    .then((response) => {
+      const favoriteItems = response.favorite?.items || [];
+      const cartItems = response.cart?.items || [];
+      const userEmail = response.email;
+      const userOrderItems = response.order;
+
+      const userData = {
+          favorite: favoriteItems,
+          cart: cartItems,
+          user: {
+            email: userEmail,
+            _id: response._id,
+            avatarUser: response.avatarUser,
+            role: response.role.role,
+            name: response.name,
+            surname: response.surname,
+            phone: response.phone,
+            isActivated: response.isActivated,
+            activationLink: response.activationLink
+          },
+          order: userOrderItems,
+      };
+      res.status(201).json(userData);
     })
     .catch((error) => console.log(error));
 });

@@ -11,7 +11,6 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
   const [counts, setCounts] = useState(count);
   const [cartCheck, setCartCheck] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [initialRender, setInitialRender] = useState(true);
   const { cart,  deleteItemCart, deleteProductFavorite, addProductFavorite, favoriteItem } = useContext(AuthContext);
   const { cartCheckAll } = useContext(CartContext);
 

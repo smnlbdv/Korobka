@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Navigation} from 'swiper/modules';
 import { useFormik } from 'formik';
+import { Link } from "react-router-dom";
 import * as Yup from 'yup';
 
 import ButtonCreate from "../../components/buttonCreate/buttonCreate";
@@ -18,11 +19,6 @@ import { AuthContext } from "../../context/authContext";
 
 const stepsItem = [
   {
-    img: "./assets/step-1.png",
-    title: "Выбрать подарок",
-    text: "Выберете товар среди более 1 тыс. товаров",
-  },
-  {
     img: "./assets/step-2.png",
     title: "Выбрать коробку",
     text: "На выбор даны 3 вида коробок",
@@ -33,10 +29,15 @@ const stepsItem = [
     text: "Можете изменить цвет и стиль коробки",
   },
   {
+    img: "./assets/step-1.png",
+    title: "Выбрать подарок",
+    text: "Выберете товар среди более 1 тыс. товаров",
+  },
+  {
     img: "./assets/step-4.png",
     title: "Добавьте открытку",
     text: "Добавьте милую открытку",
-  },
+  }
 ];
 
 const answersWhy = [
@@ -136,7 +137,9 @@ const Main = () => {
                   </div>
                   <p>подарок</p>
                 </div>
-                <ButtonCreate text={"Собрать"} />
+                <Link to="constructor">
+                  <ButtonCreate text={"Собрать"} />
+                </Link>
               </div>
               <div className={style.right_block}>
                 <img
@@ -159,7 +162,9 @@ const Main = () => {
                 />
               ))}
             </div>
-            <ButtonCreate text={"Собрать"} />
+            <Link to="constructor">
+              <ButtonCreate text={"Собрать"} />
+            </Link>
           </section>
           <section className={style.why_us}>
             <h2 className={`${style.section__title} section__title`}>Почему мы?</h2>
@@ -185,7 +190,9 @@ const Main = () => {
                 стильной сумочке или браслете, который она сможет носить на любом
                 мероприятии?
               </p>
-              <ButtonCreate text={"Собрать"} />
+              <Link to="constructor">
+                <ButtonCreate text={"Собрать"} />
+              </Link>
             </div>
             <div className={style.block_woman}>
               <img

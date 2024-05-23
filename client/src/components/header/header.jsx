@@ -18,12 +18,13 @@ const Header = () => {
     const [countFavorite, setCountFavorite] = useState(0)
     const [popoverCart, setPopoverCart] = useState([]);
     const [popoverLiked, setPopoverLiked] = useState([]);
-    const { cart, categories } = useContext(AuthContext)
+    const { categories } = useContext(AuthContext)
     const { userId, role, isAuth } = useAuth();
     const [popoverVisible, setPopoverVisible] = useState(false);
     const [popoverVisibleTwo, setPopoverVisibleTwo] = useState(false);
     const linkHeader = useRef()
     const favoriteItem = useSelector(state => state.liked.liked)
+    const cart = useSelector(state => state.cart.cart)
 
     const handleLinkClick = () => {
         setPopoverVisible(false);

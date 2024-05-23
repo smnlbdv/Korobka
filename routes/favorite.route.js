@@ -13,7 +13,6 @@ favoriteRoute.post('/add/:productId', verifyToken, async (req, res) => {
     try {
         const userId = req.userId
         const productId = req.params.productId
-
         const favoritetItem = await Favorite.findOne({owner: userId})
 
         if(favoritetItem) {
@@ -21,24 +20,28 @@ favoriteRoute.post('/add/:productId', verifyToken, async (req, res) => {
 
                 await Favorite.updateMany({ owner: userId, items: [productId] });
                 const newFavoriteItem = await Favorite.find({ owner: userId })
-                                                .populate('items');
+                                                      .populate('items');
+                const {_id, img, title, preText, price} = newFavoriteItem[0].items[0]
 
-                res.status(201).json({product: newFavoriteItem[0].items[0], message: 'Товар успешно добавлен в закладки'})
+                res.status(201).json({product: {_id, img, title, preText, price}, message: 'Товар успешно добавлен в закладки'})
 
             } else {
                 await Favorite.updateMany({ owner: userId }, { $push: { items: productId } });
                 const newFavoriteItem = await Favorite.find({ owner: userId, items: productId })
-                                                .populate('items');
+                                                      .populate('items');
                 const newItem = newFavoriteItem[0].items.reverse()
-                res.status(201).json({product: newItem[0], message: 'Товар успешно добавлен в закладки'})
+                const {_id, img, title, preText, price} = newItem[0]
+
+                res.status(201).json({product: {_id, img, title, preText, price}, message: 'Товар успешно добавлен в закладки'})
             }
         } else {
             await Favorite.create({ owner: userId, items: [productId] });
             const newFavoriteItem = await Favorite.find({ owner: userId })
-                                            .populate('items');
-            
+                                                  .populate('items');
+            const {_id, img, title, preText, price} = newFavoriteItem[0].items[0]
+
             await User.findByIdAndUpdate({_id: userId}, {favorite: newFavoriteItem[0]._id})
-            res.status(201).json({product: newFavoriteItem[0].items[0], message: 'Товар успешно добавлен в закладки'})
+            res.status(201).json({product: {_id, img, title, preText, price}, message: 'Товар успешно добавлен в закладки'})
         }
 
     } catch (error) {

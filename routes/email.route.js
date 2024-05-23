@@ -9,12 +9,13 @@ import verifyToken from '../validation/verifyToken.js'
 import { sendEmail } from '../utils/mailer.js'
 import fs from 'fs' 
 import Email from '../models/Email.js'
+import Subscription from '../models/Subscription.js';
 
 const emailRoute = Router()
 
 emailRoute.post('/send', async (req, res) => {
     try {
-        const resultEmailSend = await Email.findOne({email: req.body.email})
+        const resultEmailSend = await Subscription.findOne({email: req.body.email})
         if(resultEmailSend) {
             res.status(400).json({
                 message: "Подписка уже оформлена"
@@ -24,12 +25,19 @@ emailRoute.post('/send', async (req, res) => {
             const html = fs.readFileSync('template/email/email.html', 'utf8');
             const resultEmail = sendEmail(req.body.email, subject, html); 
             if(resultEmail) {
-                await Email.insertMany({email: req.body.email})
-                            .then (() => {
-                                res.status(202).json({
-                                    message: "Теперь вы будете получать самые интересные предложения первыми. Подтверждение отправлено на указанный e-mail."
-                                })
-                            })
+                const newSubscription = new Subscription({ email: req.body.email });
+                await newSubscription.save()
+                    .then(() => {
+                        res.status(202).json({
+                            message: "Теперь вы будете получать самые интересные предложения первыми. Подтверждение отправлено на указанный e-mail."
+                        });
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        res.status(500).json({
+                            message: "Что-то пошло не так, попробуйте позже."
+                        });
+                    });
             } else {
                 res.status(400).json({
                     message: "Указаны неверные данные"

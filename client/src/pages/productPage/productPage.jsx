@@ -13,6 +13,7 @@ import Review from "../../components/review/review.jsx";
 import "./ant.css";
 import "./swiper.css"
 import ButtonReview from "../../components/buttonReview/buttonReview.jsx";
+import { useSelector } from "react-redux";
 
 const ProductPage = () => {
   const [counts, setCounts] = useState(0);
@@ -22,9 +23,10 @@ const ProductPage = () => {
   const [productReviews, setProductReviews] = useState([]);
   const { id } = useParams();
   const [isFavorite, setIsFavorite] = useState(false);
-  const { cart, logout, contextHolder, favoriteItem, scrollToTop, order } = useContext(AuthContext);
+  const { logout, contextHolder, favoriteItem, scrollToTop, order } = useContext(AuthContext);
   const mainImage = useRef();
   const navigate = useNavigate();
+  const cart = useSelector(state => state.cart.cart)
 
   const itemsTabs = [
     {

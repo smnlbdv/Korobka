@@ -8,6 +8,7 @@ import api from "../../api/api.js";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { CartContext } from "../../context/cartContext.js";
+import { useSelector } from "react-redux";
 
 import CartItem from "../../components/cartItem/cartItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
@@ -18,7 +19,6 @@ import './cart.scss'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { useSelector } from "react-redux";
 
 const Cart = () => {
   const favoriteItem = useSelector(state => state.liked.liked)
@@ -28,38 +28,16 @@ const Cart = () => {
   });
   const [cartCheckAll, setCartCheckAll] = useState(false);
   const [checkArray, setCheckArray] = useState([]);
-  const {
-    cart,
-    scrollToTop,
-    logout,
-    setCart,
-    deleteItemCart
-  } = useContext(AuthContext);
+  const { scrollToTop, logout, setCart, deleteItemCart, calculatePrice } = useContext(AuthContext);
   const [cartTotalPrice, setCartTotalPrice] = useState(0)
   const navigate = useNavigate();
+  const cart = useSelector(state => state.cart.cart)
 
   const totalPrice = useMemo(() => {
     return sale !== 0
         ? cartTotalPrice - cartTotalPrice * (sale.percentage / 100)
         : cartTotalPrice;
-}, [cartTotalPrice, sale]);
-
-  const calculatePrice = (cart, countArray) => {
-    let total = cart.reduce((accumulator, product) => {
-      const subtotal = countArray * product.price;
-      return accumulator + subtotal;
-    }, 0);
-    setCartTotalPrice(total)
-  }
-
-  const calculatePriceArray = (cart) => {
-    let total = cart.reduce((accumulator, product) => {
-      const subtotal = product.count * product.price;
-      return accumulator + subtotal;
-    }, 0);
-    setCartTotalPrice(total)
-  }
-
+  }, [cartTotalPrice, sale]);
 
   const clickCheck = () => {
     if (!cartCheckAll) {
@@ -83,17 +61,17 @@ const Cart = () => {
     const storedCheckArray = JSON.parse(localStorage.getItem('checkArray'));
     setCheckArray(storedCheckArray)
     if(storedCheckArray && storedCheckArray.length !== 0) {
-      calculatePriceArray(storedCheckArray)
+      calculatePrice(storedCheckArray)
     } else {
-      calculatePriceArray(cart)
+      calculatePrice(cart)
     }
   }, [cart]) 
 
   useEffect(() => {
     if(checkArray && checkArray.length !== 0) {
-      calculatePriceArray(checkArray)
+      calculatePrice(checkArray)
     } else {
-      calculatePriceArray(cart)
+      calculatePrice(cart)
     }
   }, [cart, checkArray]);
 
