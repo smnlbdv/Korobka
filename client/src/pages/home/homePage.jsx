@@ -11,7 +11,7 @@ import Loading from "../../components/loading/loading.jsx";
 const HomePage = () => {
 
     const [scrollTop, setScroolTop] = useState(false)
-    const { scrollToTop } = useContext(AuthContext);
+    const { scrollToTop, contextHolder } = useContext(AuthContext);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -36,10 +36,13 @@ const HomePage = () => {
                     <Outlet/>
                 </Suspense>
                 {
+                    <>
+                    {contextHolder}
                     <button href="#" className={`${style.back_to_top} ${scrollTop && style.back_to_top_active}`} onClick={() => scrollToTop()}>
                         <img src="/assets/arrow-up.svg" alt="Arrow up" />
                         <p>Наверх</p>
                     </button>
+                    </>
                 }
             <Footer/>
         </>

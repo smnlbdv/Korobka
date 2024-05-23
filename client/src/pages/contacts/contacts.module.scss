@@ -22,6 +22,12 @@
 
 .item_block_contacts {
     max-width: 480px;
+    user-select:text;
+    -webkit-touch-callout: text;
+    -webkit-user-select: text; 
+    -khtml-user-select: text; 
+    -moz-user-select: text; 
+    -ms-user-select: text; 
 }
 
 .title_contact {
@@ -29,10 +35,22 @@
     font-style: normal;
     font-weight: 700; 
     margin-bottom: 10px;
+    user-select:text;
+    -webkit-touch-callout: text;
+    -webkit-user-select: text; 
+    -khtml-user-select: text; 
+    -moz-user-select: text; 
+    -ms-user-select: text; 
 }
 
 .text_contact {
     font-size: 14px;
     font-weight: 400; 
     margin-bottom: 5px;
+    user-select:text;
+    -webkit-touch-callout: text;
+    -webkit-user-select: text; 
+    -khtml-user-select: text; 
+    -moz-user-select: text; 
+    -ms-user-select: text; 
 }

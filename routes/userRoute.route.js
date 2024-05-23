@@ -256,8 +256,8 @@ userRoute.get("/activate/:link", async (req, res) => {
     user.isActivated = true;
     user.activationLink = null;
     await user.save();
-
-    res.status(200).json({ message: "Аккаунт успешно загеристрирован" }).redirect(process.env.CLIENT_URL);
+  
+    res.redirect(process.env.CLIENT_URL + '?message=Аккаунт активирован');
   } catch (error) {
     console.error('Произошла ошибка:', error);
     res.status(400).json({ message: "Ошибка при активации" });

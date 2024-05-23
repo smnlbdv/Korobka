@@ -36,7 +36,7 @@ const AboutUs = () => {
           </p>
         </div>
         <div className={style.block__about_img}>
-          <img src="./assets/about-us.jpg" alt="" />
+          <img src="./assets/about-us.jpg" alt="Team" />
         </div>
       </div>
     </section>

@@ -22,7 +22,7 @@ dotev.config()
 const app = express()
 const PORT = process.env.PORT || 5000
     
-app.use(limiter)
+// app.use(limiter)
 app.use(morgan('combined'))
 app.use(express.json())
 app.use(cookieParser())

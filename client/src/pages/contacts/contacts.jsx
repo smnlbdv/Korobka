@@ -24,19 +24,19 @@ const Contacts = () => {
         <div className={style.item_block_contacts}>
           <h3 className={style.title_contact}>Фактический адрес</h3>
           <p className={style.text_contact}>
-          660041, Россия, г. Красноярск, ул. Академика Киренского, д.89.
+          660041, Беларусь, г. Минск, ул. Зыбицкая, д.89.
           </p>
         </div>
         <div className={style.item_block_contacts}>
           <h3 className={style.title_contact}>Почтовый адрес</h3>
           <p className={style.text_contact}>
-          660130, Красноярский край, г. Красноярск а/я 20493
+          660130, Минский район, г. Минск а/я 20493
           </p>
         </div>
         <div className={style.item_block_contacts}>
           <h3 className={style.title_contact}>Реквизиты организации</h3>
           <p className={style.text_contact}>
-            Общество с ограниченной ответственностью «Наш Двор Сибирь»
+            Общество с ограниченной ответственностью «Коробка»
           </p>
           <p className={style.text_contact}>
             ИНН/КПП: 2463108622/246301001
@@ -46,17 +46,19 @@ const Contacts = () => {
           </p>
         </div>
         <div className={style.item_block_contacts}>
-          <h3 className={style.title_contact}>Адрес производства</h3>
+          <h3 className={style.title_contact}>Круглосуточная служба поддержки</h3>
           <p className={style.text_contact}>
-            623100, Свердловская обл., г.Первоуральск, Северо-восточная часть
-            8-го квартала городских лесов МО «г.Первоуральск».
+              <a href="mailto:help@korobka.ru">
+                help@korobka.by
+              </a>
           </p>
         </div>
         <div className={style.item_block_contacts}>
-          <h3 className={style.title_contact}>Адрес производства</h3>
+          <h3 className={style.title_contact}>Связи с инвесторами</h3>
           <p className={style.text_contact}>
-            623100, Свердловская обл., г.Первоуральск, Северо-восточная часть
-            8-го квартала городских лесов МО «г.Первоуральск».
+            Лебедев Семён, <br />
+            Директор по связям с инвесторами <br />
+            ir@korobka.by
           </p>
         </div>
       </div>
