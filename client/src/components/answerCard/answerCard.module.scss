@@ -17,7 +17,7 @@
     align-items: center;
     flex-direction: column;
     transition: all 200ms;
-
+    
     .block_text {
         display: flex;
         justify-content: center;
@@ -25,8 +25,11 @@
         justify-content: center;
         opacity: 0;
         height: 0;
+        max-height: 0;
+        overflow: hidden;
         transition: all 300ms;
     }
+
     .answer_title {
         font-size: 20px;
         font-style: normal;
@@ -44,13 +47,16 @@
         line-height: 110%;
         transition: all 200ms;
     }
+
     .image_block {
         width: 80px;
         height: 80px;
         transition: all 200ms;
         z-index: 3;
-        cursor: pointer;    
+        cursor: pointer;  
+        transition-delay: 0.3s;  
     }
+
     .answer_image {
         width: 100%;
         height: 100%;
@@ -58,9 +64,17 @@
     }
 }
 
+.answer_text_wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    justify-content: center;
+    height: max-content;
+    max-height: max-content;
+}
+
 .open {
     width: 275px;
-    transition: all 200ms;
     color: rgb(59, 59, 59);
     transition: all 300ms;
 
@@ -73,9 +87,26 @@
     .block_text {
         opacity: 1;
         height: 110px;
+        max-height: 110px;
         transition: all 300ms;
         transition-delay: 0.3s;
+        overflow: hidden;
     }
-
 }
+
+
+
+.answer_text_wrapper.openTwo{
+    height: 110px;
+    max-height: 110px;
+    transition: all 250ms;
+}
+
+.answer_text_wrapper.closedTwo {
+    height: 0px;
+    max-height: 0px;
+    transition: all 250ms;
+}
+
+
 
