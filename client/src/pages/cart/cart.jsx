@@ -264,7 +264,7 @@ const Cart = () => {
               <p className={style.title}>Корзина пуста</p>
               <div className={style.btn_block}>
                 <ButtonNull title={"В каталог"} path={"/ready-gifts/all"} />
-                <ButtonNull title={"Собрать"} path={"/"} />
+                <ButtonNull title={"Собрать"} path={"/constructor"} />
               </div>
             </div>
           </div>
