@@ -4,7 +4,7 @@ import { useState } from "react";
 import style from './inputReg.module.scss'
 
 
-const InputReg = ({id, img, name, placeholder, type, chek = false, onChange, value, errorChange}) => {
+const InputReg = ({id, img, name, placeholder, onChange, type, chek = false, value = "", errorChange}) => {
 
     const [show, setShow] = useState(false)
 

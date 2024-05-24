@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import style from './buttonLogin.module.scss'
 
-const ButtonLogin = ({title, submitInfo}) => {
+const ButtonLogin = ({title}) => {
     return ( 
-        <input className={style.btn_login} type="submit" value={title} onClick={submitInfo}/>
+        <input className={style.btn_login} type="submit" value={title}/>
      );
 }
  

@@ -115,5 +115,27 @@ auth.get('/admin/:userId', async (req, res) => {
     }
 })
 
+auth.get('/forgot/:userId', async (req, res) => {
+    try {
+        const response = req.params.userId
+        
+        await User.findOne({_id: response})
+                  .then((user) => {
+                    if(user.role == 1) {
+                        res.status(200).json({message: true})
+                    } else {
+                        res.status(400).json({message: "Вы не админ"})
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error)
+                  })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+
+
 
 export default auth
