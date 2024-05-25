@@ -136,22 +136,19 @@ const Profile = () => {
     onSubmit: (values) => {
       if (!compareObjects(initialData, values)) {
         const formData = {
-          ...values,
-          status: profile.status,
-          avatarUser: profile.avatarUser,
+          ...values
         };
 
-        const isRighData = JSON.stringify(profile) === JSON.stringify(formData);
-
-        if (!isRighData) {
-          const changedItems = Object.keys(profile).reduce((result, key) => {
+        const commonKeys = Object.keys(profile).filter(key => Object.prototype.hasOwnProperty.call(formData, key));
+    
+        const diffValues = commonKeys.reduce((result, key) => {
             if (profile[key] !== formData[key]) {
-              result[key] = formData[key];
+                result[key] = formData[key];
             }
             return result;
-          }, {});
-          updateProfileUser(changedItems);
-        }
+        }, {});
+
+        updateProfileUser(diffValues)
       }
     },
   });
@@ -165,7 +162,7 @@ const Profile = () => {
       getProfile();
     }
     scrollToTop();
-  }, [getProfile, profile.length, scrollToTop]);
+  }, [getProfile]);
 
   useEffect(() => {
     if (profile.length !== 0 && profile.email) {
@@ -173,13 +170,13 @@ const Profile = () => {
         name: profile.name,
         surname: profile.surname,
         phone: profile.phone,
-        email: profile.email.email,
+        email: profile.email,
       };
       formikPersonal.setValues(newData);
       setInitialData(newData);
       setAvatarUser(profile.avatarUser);
     }
-  }, []);
+  }, [profile]);
 
   const itemsTabs = [
     {
@@ -395,7 +392,7 @@ const Profile = () => {
         <div className={style.block__user}>
           <div className={style.header__block}>
             <div className={style.update__image__block}>
-              <img src={avatarUser} alt="" />
+              <img src={"http://localhost:5000/avatar/" + avatarUser} alt="" />
             </div>
             <div>
               {

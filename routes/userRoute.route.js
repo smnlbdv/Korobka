@@ -13,13 +13,16 @@ dotev.config()
 import pdfGenerate from "../utils/pdfGenerate.js";
 import User from "../models/User.js";
 import Order from "../models/Order.js";
+import Email from "../models/Email.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/avatar");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    const userId = req.userId;
+    const fileName = userId + '-' + file.originalname;
+    cb(null, fileName);
   },
 });
 
@@ -57,7 +60,7 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
     .then((response) => {
       const favoriteItems = response.favorite?.items || [];
       const cartItems = response.cart?.items || [];
-      const userEmail = response.email;
+      const userEmail = response.email.email || " ";
       const userOrderItems = response.order;
 
       const userData = {
@@ -84,22 +87,36 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
 userRoute.patch("/upload-image", verifyToken, upload.single("image"), async (req, res) => {
     try {
       const userId = req.userId;
-      const url = `http://localhost:5000/avatar/${req.file.originalname}`;
+      const url = req.file.filename;
 
-      await User.findByIdAndUpdate(
-        { _id: userId },
-        { avatarUser: url },
-        { new: true }
-      )
-        .then(() => {
-          res.status(201).json({
-            message: "Фото успешно сохранено",
-            url: url,
-          });
-        })
-        .catch((error) =>
-          res.status(400).json({ message: "Ошибка сохранения данных" })
-        );
+      const user = await User.findById(userId);
+
+      if (user) {
+        if (user.avatarUser) {
+          const avatarPath = `public/avatar/${user.avatarUser}`;
+          if (fs.existsSync(avatarPath)) {
+            fs.unlinkSync(avatarPath);
+          }
+        }
+
+        await User.findByIdAndUpdate(
+          { _id: userId },
+          { avatarUser: url },
+          { new: true }
+        )
+          .then(() => {
+            res.status(201).json({
+              message: "Фото успешно сохранено",
+              url: url,
+            });
+          })
+          .catch((error) =>
+            res.status(400).json({ message: "Ошибка сохранения данных" })
+          );
+
+      } else {
+        res.status(404).json({ message: "Пользователь не найден" });
+      }
     } catch (error) {
       res.status(400).json({ error: error });
     }
@@ -110,6 +127,24 @@ userRoute.patch("/update", verifyToken, async (req, res) => {
   try {
     const userId = req.userId;
     const body = req.body;
+
+    if(body.email) {
+      const user = await User.findById(userId);
+
+      if(!user) {
+        return res.status(400).json({ message: "Ошибка сохранения данных" })
+      }
+
+      const emailUser = await Email.findById(user.email);
+
+      if(!emailUser) {
+        return res.status(400).json({ message: "Ошибка сохранения данных" })
+      }
+
+      emailUser.email = body.email
+      await emailUser.save()
+      delete body.email
+    }
 
     await User.updateOne({ _id: userId }, body, { new: true })
             .then(() => {
@@ -278,8 +313,8 @@ userRoute.get("/token/refresh", async (req, res) => {
 
       const tokens = generationToken({id: user._id, role: user.role.role})
 
-      res.cookie("refreshToken", tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true})
-      res.cookie("accessToken", tokens.accessToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true})
+      res.cookie("refreshToken", tokens.refreshToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true})
+      res.cookie("accessToken", tokens.accessToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true})
       
       res.status(200).json({
           id: user._id, 

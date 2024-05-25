@@ -58,6 +58,10 @@
     font-style: normal;
     font-weight: 500;
     line-height: normal; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    width: 145px;
 }
 .user__status {
     white-space: nowrap;

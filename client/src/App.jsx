@@ -12,6 +12,7 @@ import { addProductCart } from "./store/cartSlice.js";
 
 import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
+import ResetPassword from "./components/resetPassword/resetPassword.jsx";
 
 const HomePage = lazy(() => import("./pages/home/homePage.jsx"));
 const Auth = lazy(() => import("./pages/auth/auth.jsx"));
@@ -80,7 +81,6 @@ function App() {
   const postLogin = async (values) => {
     await api.post("/api/auth/login", values)
                .then((res) => { 
-                  console.log(res.data);
                   login(res.data.id, res.data.role);
                   if (res.status === 200) {
                       navigate("/");
@@ -111,7 +111,6 @@ function App() {
     try {
       await api.get(`/api/profile/${userId}`)
         .then(response => {
-          console.log(response.data);
           setProfile({...response.data.user})
 
           if(response.data.cart && cart.length === 0) {
@@ -248,6 +247,49 @@ function App() {
           if(response.response.status == 401) {
             logout()
             navigate("/api/auth/login");
+          }
+      });
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  const postResetPassword = async (values) => {
+    try {
+      await api.post('/api/auth/reset-password-request', {email: values.email})
+        .then(response => {
+          if(response.status == 201) {
+            openNotification('bottomRight', response.data.message);
+            setTimeout(() => {
+              navigate("/api/auth/login")
+            }, 1000)
+          } 
+        })
+        .catch(response => {
+          if(response.response.status == 400) {
+            openNotificationError('bottomRight', response.response.data.message);
+          }
+      });
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  const postTwoPassword = async (values, token) => {
+    console.log(values, token);
+    try {
+      await api.post(`/api/auth/reset-password/${token}`, {password: values.password})
+        .then(response => {
+          if(response.status == 201) {
+            openNotification('bottomRight', response.data.message);
+            setTimeout(() => {
+              navigate("/api/auth/login")
+            }, 1000)
+          } 
+        })
+        .catch(response => {
+          if(response.response.status == 400) {
+            openNotificationError('bottomRight', response.response.data.message);
           }
       });
     } catch (error) {
@@ -516,6 +558,7 @@ function App() {
         favoriteItem,
         setFavoriteItem,
         sendEmailData,
+        postResetPassword,
         uploadAvatar,
         getProfile,
         calculatePrice,
@@ -527,6 +570,7 @@ function App() {
         updatePassUser,
         reviewsList,
         getBestReviews,
+        postTwoPassword,
         adminFetch,
         categories,
         placeOrder,
@@ -571,6 +615,7 @@ function App() {
             <Route path="registration" element={<Registration />} />
             <Route path="login" element={<Login />} />
             <Route path="forgot" element={<Forgot />} />
+            <Route path="reset-password/:token" element={<ResetPassword />} />
             <Route path="admin/:userId/*" element={<Admin />} />
           </Route>
         </Routes>

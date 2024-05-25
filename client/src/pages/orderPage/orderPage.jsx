@@ -75,7 +75,7 @@ const OrderPage = () => {
             formikOrder.setValues({
               name: profile.name,
               lastname: profile.surname,
-              email: profile.email?.email || " ",
+              email: profile.email,
               phone: profile.phone,
             })
         }

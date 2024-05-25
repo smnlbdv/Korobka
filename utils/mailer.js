@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import activationEmailHTML from '../template/email/activationEmail.js'
 import dotev from 'dotenv'
+import resetPassEmailHTML from '../template/email/resetPassEmail.js';
 dotev.config()
 
 const transporter = nodemailer.createTransport({
@@ -40,6 +41,23 @@ export function sendActivationLink (to, link) {
         subject: "Активация аккаунта" ,
         text: '',
         html: activationEmailHTML(link)
+    };
+
+    transporter.sendMail(mailOptions, function(err, info) {
+        if (err) {
+            console.log(err);
+        }
+    });
+}
+
+export function sendResetPassLink (to, link) {
+
+    const mailOptions = {
+        from: process.env.SMTP_EMAIL_LOGIN,
+        to: to,
+        subject: "Сброс пароля" ,
+        text: '',
+        html: resetPassEmailHTML(link)
     };
 
     transporter.sendMail(mailOptions, function(err, info) {
