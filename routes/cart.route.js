@@ -156,6 +156,25 @@ cartRoute.post('/decrease', verifyToken, async (req, res) => {
     }
 })
 
+cartRoute.post('/update-item', verifyToken, async (req, res) => {
+    try {
+        const productId = req.body.id;
+        const productCount = req.body.count
+        const userId = req.userId
+
+        console.log(productId, productCount, userId);
+
+        await CartItem.updateOne(
+            { owner: userId, 'items.product': productId},
+            { $set: { 'items.$.quantity': productCount } },
+            { new: true })
+            .then((response) => res.status(200).json({update: response.acknowledged}))
+            .catch((error) => res.status(400).json({update: error.acknowledged}))
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
+})
+
 cartRoute.post('/promo', verifyToken, async (req, res) => {
     try {
         const promoCode = req.body.promoCode;

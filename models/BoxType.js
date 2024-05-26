@@ -16,4 +16,4 @@ const shema = new mongoose.Schema({
 })
 
 
-export default mongoose.model('BoxType', shema)
+export default mongoose.model('Box_type', shema)

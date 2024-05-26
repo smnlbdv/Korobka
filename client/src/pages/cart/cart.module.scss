@@ -3,14 +3,23 @@
     flex-direction: column;
     flex: 1;
     width: 100%;
-    background-image: url('./assets/bg-main-img.png');
-    background-repeat: no-repeat;
-    background-size:contain;
-    background-position: center;
+    position: relative;
 }
 
 .section_title {
     text-align: left !important;
+}
+
+.bg_cart {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-image: url('./assets/bg-main-img.png');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
 }
 
 .cart__main_block {

@@ -43,6 +43,35 @@ export const deleteCartItemAsync = createAsyncThunk(
   }
 );
 
+export const decreaseCartItemAsync = createAsyncThunk(
+  'cart/decreaseProductCartAsync',
+  async (id) => {
+    try {
+      const response = await api.post(`/api/cart/decrease/`, {id: id})
+      return {
+        increase: response.data.increase,
+        _id: id
+      };
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+);
+
+export const updateCountItemAsync = createAsyncThunk(
+  'cart/updateCountItemAsync',
+  async (obj) => {
+    try {
+      await api.post(`/api/cart/update-item`, {id: obj._id, count: obj.count})
+      return {
+        _id: obj._id,
+        count: obj.count
+      };
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+);
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -60,15 +89,12 @@ const cartSlice = createSlice({
                  if(action.payload.count > 1) {
                     const cartItemIndex = state.cart.findIndex(item => item._id === action.payload._id);
                     state.cart[cartItemIndex].count = action.payload.count;
-                    // openNotification('bottomRight', 'Товар успешно добавлен в корзину');
                   } else {
                     const product = {
                       ...action.payload,
                       count: action.payload.count,
                     };
                     state.cart.push(product)
-                    // setCart(prevCart => [...prevCart, product]);
-                    // openNotification('bottomRight', 'Товар успешно добавлен в корзину');
                   }   
             })
         builder
@@ -77,16 +103,30 @@ const cartSlice = createSlice({
                 if(index !== -1) {
                     state.cart[index]['count'] = state.cart[index]['count'] + 1
                 }
-                // openNotification('bottomRight', 'Товар успешно добавлен в корзину')
+            });
+        builder
+            .addCase(decreaseCartItemAsync.fulfilled, (state, action) => {
+                const index = state.cart.findIndex(item => item._id === action.payload._id);
+                if(index !== -1) {
+                  state.cart[index]['count'] -= 1
+                }
+            });
+        builder
+            .addCase(updateCountItemAsync.fulfilled, (state, action) => {
+                const index = state.cart.findIndex(item => item._id === action.payload._id);
+                if(index !== -1) {
+                  state.cart[index]['count'] = action.payload.count
+                }
             });
         builder
           .addCase(deleteCartItemAsync.fulfilled, (state, action) => {
             if(action.payload.delete === true) {
               state.cart = state.cart.filter(item => item._id !== action.payload._id);
-              // openNotificationError('bottomRight', "Товар удален из корзины")
               const existingCart = JSON.parse(localStorage.getItem('checkArray'));
-              const updatedCart = existingCart.filter(item => item._id !== action.payload._id);
-              localStorage.setItem('checkArray', JSON.stringify(updatedCart));
+              if(existingCart.length !== 0) {
+                const updatedCart = existingCart.filter(item => item._id !== action.payload._id);
+                localStorage.setItem('checkArray', JSON.stringify(updatedCart));
+              }
             }
           });
     }

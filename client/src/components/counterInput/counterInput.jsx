@@ -1,44 +1,63 @@
 import { useContext, useState } from "react";
+import debounce from "debounce";
 import { AuthContext } from "../../context/authContext.js";
 
 import style from './counterInput.module.scss'
 import { CartContext } from "../../context/cartContext.js";
+import { useDispatch, useSelector } from "react-redux";
+import { decreaseCartItemAsync, deleteCartItemAsync, increaseCartItemAsync, updateCountItemAsync } from "../../store/cartSlice.js";
 
 // eslint-disable-next-line react/prop-types
 const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
     const [input, setInput] = useState(false);
-    const { increaseCartItem, decreaseCartItem, unmountItem, cart} = useContext(AuthContext);
+    const { openNotification } = useContext(AuthContext);
     const { calculatePrice, checkArray  } = useContext(CartContext);
+    const cart = useSelector(state => state.cart.cart)
+    const dispatch = useDispatch()
 
     const subtractProduct = async () => {
       if (counts <= 1) {
-        unmountItem(_id);
+        dispatch(deleteCartItemAsync(_id))
+                .then(() => {
+                  openNotification("bottomright", "Товар удален из корзины")
+                })
       } else {
-        if (!cartCheck && checkArray.length === 0) {
-          const resultIncrease = decreaseCartItem(_id);
-          if (resultIncrease) {
-            setCounts(counts - 1);
-            let countsNew = counts - 1
-            calculatePrice(cart, countsNew);
-          }
-        } else if (checkArray.some(item => item._id === _id)) {
-          const resultIncrease = decreaseCartItem(_id);
-          if (resultIncrease) {
-            setCounts(counts - 1);
-            let countsNew = counts - 1
-            calculatePrice(checkArray, countsNew);
-          }
-        } else {
-          return
+        const resultIncrease = dispatch(decreaseCartItemAsync(_id));
+        if (resultIncrease) {
+          setCounts(counts - 1);
+          // let countsNew = counts - 1
+          // calculatePrice(cart, countsNew);
         }
+        // if (!cartCheck && checkArray.length === 0) {
+        //   const resultIncrease = decreaseCartItem(_id);
+        //   if (resultIncrease) {
+        //     setCounts(counts - 1);
+        //     let countsNew = counts - 1
+        //     calculatePrice(cart, countsNew);
+        //   }
+        // } else if (checkArray.some(item => item._id === _id)) {
+        //   const resultIncrease = decreaseCartItem(_id);
+        //   if (resultIncrease) {
+        //     setCounts(counts - 1);
+        //     let countsNew = counts - 1
+        //     calculatePrice(checkArray, countsNew);
+        //   }
+        // } else {
+        //   return
+        // }
       }
     };
+
+    const debouncedHandleChange = debounce((_id, count) => {
+      dispatch(updateCountItemAsync({_id, count}));
+    }, 1000);
 
     const handleChange = (e) => {
       if (e.target.value > 200) {
         setCounts(200);
       } else {
         setCounts(Number(e.target.value));
+        debouncedHandleChange(_id, Number(e.target.value));
       }
     };
 
@@ -54,25 +73,32 @@ const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
       if (counts >= 200) {
         setCounts(counts);
       } else {
-        if (!cartCheck && checkArray.length === 0) {
-          const resultIncrease = increaseCartItem(_id);
-          if (resultIncrease) {
+        const resultIncrease = dispatch(increaseCartItemAsync(_id));
+        if (resultIncrease) {
             setCounts(counts + 1);
-            let countsNew = counts + 1
-            calculatePrice(cart, countsNew);
-          }
-        } else if (checkArray.some(item => item._id === _id)) {
-          const resultIncrease = increaseCartItem(_id);
-          if (resultIncrease) {
-            setCounts(counts + 1);
-            let countsNew = counts + 1
-            calculatePrice(checkArray, countsNew);
-          }
-        } else {
-          return
+            // let countsNew = counts + 1
+            // calculatePrice(cart, countsNew);
         }
+        // if (!cartCheck && checkArray.length === 0) {
+        //   const resultIncrease = increaseCartItem(_id);
+        //   if (resultIncrease) {
+        //     setCounts(counts + 1);
+        //     let countsNew = counts + 1
+        //     calculatePrice(cart, countsNew);
+        //   }
+        // } else if (checkArray.some(item => item._id === _id)) {
+        //   const resultIncrease = increaseCartItem(_id);
+        //   if (resultIncrease) {
+        //     setCounts(counts + 1);
+        //     let countsNew = counts + 1
+        //     calculatePrice(checkArray, countsNew);
+        //   }
+        // } else {
+        //   return
+        // }
       }
     };
+
     return ( 
         <div className={style.counter__block}>
             <button className={style.btn_counter} onClick={subtractProduct}>

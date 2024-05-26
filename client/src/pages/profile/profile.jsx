@@ -147,7 +147,6 @@ const Profile = () => {
             }
             return result;
         }, {});
-
         updateProfileUser(diffValues)
       }
     },

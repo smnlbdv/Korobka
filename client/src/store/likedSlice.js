@@ -3,9 +3,9 @@ import api from "../api/api";
 
 export const addProductFavoriteAsync = createAsyncThunk(
     'liked/addProductFavorite',
-    async (objId) => {
+    async (id) => {
       try {
-        const response = await api.post(`/api/favorite/add/${objId}`);
+        const response = await api.post(`/api/favorite/add/${id}`);
         return response.data.product;
       } catch (error) {
         console.log(error.message);
@@ -15,12 +15,12 @@ export const addProductFavoriteAsync = createAsyncThunk(
 
 export const delProductFavoriteAsync = createAsyncThunk(
     'liked/delProductFavorite',
-    async (objId) => {
+    async (id) => {
       try {
-        await api.delete(`/api/favorite/delete/${objId}`);
+        await api.delete(`/api/favorite/delete/${id}`);
         return {
             delete: true,
-            _id: objId
+            _id: id
         };
       } catch (error) {
         console.log(error.message);

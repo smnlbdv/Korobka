@@ -22,8 +22,9 @@ const shema = new mongoose.Schema({
         required: true
     },
     status: {
-        type: String,
-        default: 'Новый'
+        type: Types.ObjectId,
+        default: "665330eb7deaa84b374c0988",
+        ref: 'Order_status'
     },
     address: {
         type: String,

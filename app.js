@@ -17,6 +17,8 @@ import cookieParser from 'cookie-parser';
 import { limiter } from './utils/limiter.js';
 
 import Role from './models/Role.js';
+import OrderStatus from './models/OrderStatus.js';
+import BoxType from './models/BoxType.js';
 
 dotev.config()
 const app = express()
@@ -43,6 +45,7 @@ app.use('/api/profile', userRoute)
 app.use('/api/reviews', reviewsRoute)
 app.use('/api/admin', adminRoute)
 app.use('/api/category', category)
+
 
 async function start() {
     try {

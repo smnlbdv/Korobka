@@ -12,12 +12,16 @@ import style from './product.module.scss'
 const Product = ({_id, img, title, price, preText, loading = true, favorite }) => {
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
-    const { decreaseCartItem, unmountItem  } = useContext(AuthContext)
+    const { decreaseCartItem, unmountItem, openNotification } = useContext(AuthContext)
     const dispatch = useDispatch()
     const cart = useSelector(state => state.cart.cart)
 
     const clickBtnAdd = async () => {
         dispatch(addProductCartAsync(_id))
+                .then(() => {
+                    openNotification('bottomRight', 'Товар успешно добавлен в корзину');
+                })
+
         const product = cart.find(obj => obj._id === _id);
         if(!product) {
             setCountProduct(1)
@@ -36,6 +40,7 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite }) =
                     .then(result => {
                         if(result.payload.increase) { 
                             setCountProduct(countProduct + 1)
+                            openNotification('bottomRight', 'Количетсво товара увеличено');
                         }
                     })
         }

@@ -1,18 +1,23 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useContext, useCallback, memo } from "react";
 import { AuthContext } from "../../context/authContext.js";
+import { Link  } from 'react-router-dom';
+import { CartContext } from "../../context/cartContext.js";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCartItemAsync } from "../../store/cartSlice.js";
 
 import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
-import { Link  } from 'react-router-dom';
-import { CartContext } from "../../context/cartContext.js";
+import { addProductFavoriteAsync, delProductFavoriteAsync } from "../../store/likedSlice.js";
 
-const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, checkArray }) => {
+const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, checkArray, checkItem }) => {
   const [counts, setCounts] = useState(count);
   const [cartCheck, setCartCheck] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const { cart,  deleteItemCart, deleteProductFavorite, addProductFavorite, favoriteItem } = useContext(AuthContext);
+  const [isFavorite, setIsFavorite] = useState(checkItem);
+  const { cart, openNotification } = useContext(AuthContext);
   const { cartCheckAll } = useContext(CartContext);
+  const dispatch = useDispatch()
+  const favoriteItem = useSelector(state => state.liked.liked)
 
   const cartCheckClick = () => {
     if (!cartCheck) {
@@ -38,34 +43,39 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
   };
 
   const clickDeleteButton = () => {
-    deleteItemCart(_id)
+    dispatch(deleteCartItemAsync(_id))
+            .then(() => {
+              openNotification('bottomRight', "Товар удален из корзины")
+            })
   };
 
-  useEffect(() => {
-    const isExist = favoriteItem.some((product) => product._id == _id);
-    setIsFavorite(isExist)
-  }, [_id, favoriteItem])
+  // useEffect(() => {
+  //   if(Array.isArray(checkArray) && checkArray.length !== 0) {
+  //       const isExisting = checkArray.some(item => item._id === _id);
+  //       isExisting ? setCartCheck(true) : setCartCheck(false);
+  //   }
+  // }, [_id, checkArray]);
 
-
-  useEffect(() => {
-    if(Array.isArray(checkArray) && checkArray.length !== 0) {
-        const isExisting = checkArray.some(item => item._id === _id);
-        isExisting ? setCartCheck(true) : setCartCheck(false);
-    }
-  }, [_id, checkArray]);
-
-  useEffect(() => {
-    if(Array.isArray(checkArray) && checkArray.length === 0) {
-      const isExisting = checkArray.some(item => item._id === _id);
-      isExisting ? setCartCheck(true) : setCartCheck(false);
-  }
-  }, [_id, cartCheckAll, checkArray])
+  // useEffect(() => {
+  //   if(Array.isArray(checkArray) && checkArray.length === 0) {
+  //     const isExisting = checkArray.some(item => item._id === _id);
+  //     isExisting ? setCartCheck(true) : setCartCheck(false);
+  // }
+  // }, [_id, cartCheckAll, checkArray])
 
   const clickHeart = () => {
     if(isFavorite) {
-        deleteProductFavorite(_id);
+      setIsFavorite(false)
+      dispatch(delProductFavoriteAsync(_id))
+              .then(() => {
+                openNotification('bottomRight', "Товар удален из избранного")
+              })
     } else {
-        addProductFavorite(_id);
+      setIsFavorite(true)
+      dispatch(addProductFavoriteAsync(_id))
+              .then(() => {
+                openNotification('bottomRight', "Товар добавлен в избранное")
+              })
     }
   };
 

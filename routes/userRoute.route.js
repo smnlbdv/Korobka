@@ -14,6 +14,7 @@ import pdfGenerate from "../utils/pdfGenerate.js";
 import User from "../models/User.js";
 import Order from "../models/Order.js";
 import Email from "../models/Email.js";
+import Subscription from "../models/Subscription.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -129,16 +130,24 @@ userRoute.patch("/update", verifyToken, async (req, res) => {
     const body = req.body;
 
     if(body.email) {
-      const user = await User.findById(userId);
+      const user = await User.findById(userId).populate("email");
+
+      console.log(user);
 
       if(!user) {
         return res.status(400).json({ message: "Ошибка сохранения данных" })
       }
 
-      const emailUser = await Email.findById(user.email);
+      const emailUser = await Email.findById(user.email._id);
+      const subscriptionUser = await Subscription.findOne({email: user.email.email})
 
       if(!emailUser) {
         return res.status(400).json({ message: "Ошибка сохранения данных" })
+      }
+
+      if(subscriptionUser) {
+        subscriptionUser.email = body.email
+        await subscriptionUser.save()
       }
 
       emailUser.email = body.email

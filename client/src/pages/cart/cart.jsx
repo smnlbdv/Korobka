@@ -51,6 +51,10 @@ const Cart = () => {
     }
   };
 
+  const checkItem = (id) => {
+    return favoriteItem.some((product) => product._id == id);
+  }
+
   useEffect(() => {
     if(checkArray && checkArray.length !== cart.length) {
       setCartCheckAll(false);
@@ -124,6 +128,7 @@ const Cart = () => {
   return (
     <CartContext.Provider value={{ calculatePrice, checkArray, cartCheckAll }}>
       <section className={`${style.section_cart} wrapper`}>
+        <div className={style.bg_cart}></div>
         <ul className="bread-crumbs">
           <Link to="/">
             <li>Главная</li>
@@ -164,6 +169,7 @@ const Cart = () => {
                     calculatePrice={calculatePrice}
                     setCheckArray={setCheckArray}
                     checkArray={checkArray}
+                    checkItem={checkItem(obj._id)}
                     {...obj}
                   />
                 ))}

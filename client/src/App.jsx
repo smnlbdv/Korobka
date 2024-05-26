@@ -51,7 +51,6 @@ function App() {
     getNewProduct()
     getBestReviews()
     getCategories()
-    localStorage.setItem('checkArray', JSON.stringify([]));
   }, [])
 
   useEffect(() => {
@@ -221,38 +220,6 @@ function App() {
       duration: 1.5,
     });
   };
-
-  const unmountItem = (id) => {
-    setCart((prev) =>
-      prev.filter((item) => item._id != id)
-    );
-    deleteItemCart(id)
-  }
-
-  const decreaseCartItem = async (id) => {
-    const token = JSON.parse(localStorage.getItem('userData')) || '';
-    try {
-      await api.post(`/api/cart/decrease/`, {id: id}, {
-        headers: {
-          'Authorization': `${token.token}`,
-        }})
-        .then(response => {
-          const index = cart.findIndex(item => item._id === id);
-          if(index !== -1) {
-            cart[index]['count'] -= 1
-          }
-          return response.data.increase
-        })
-        .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
-      });
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
 
   const postResetPassword = async (values) => {
     try {
@@ -550,11 +517,9 @@ function App() {
         logout,
         userId,
         role,
-        decreaseCartItem,
         contextHolder,
         contextHolderEmail,
         newBoxList,
-        unmountItem,
         favoriteItem,
         setFavoriteItem,
         sendEmailData,
@@ -562,6 +527,8 @@ function App() {
         uploadAvatar,
         getProfile,
         calculatePrice,
+        openNotification,
+        openNotificationError,
         isAuth,
         profile,
         setProfile,
