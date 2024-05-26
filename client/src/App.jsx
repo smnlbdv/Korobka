@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Suspense, lazy, useState, useEffect, useCallback } from "react";
+import { Suspense, lazy, useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useNavigate, Navigate, Outlet } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
@@ -35,6 +35,7 @@ const ConstructorBox = lazy(() => import("./pages/constructorBox/constructorBox.
 function App() {
   const [reviewsList, setReviewsList] = useState([])
   const [profile, setProfile] = useState({});
+  const [pay, setPay] = useState([])
   const [order, setOrder] = useState([]);
   const [categories,setCategories] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
@@ -52,6 +53,7 @@ function App() {
     getNewProduct()
     getBestReviews()
     getCategories()
+    getWayPay()
   }, [])
 
   useEffect(() => {
@@ -385,6 +387,20 @@ function App() {
     }
   }
 
+  
+  const getWayPay = async () => {
+    try {
+      await api.get('/api/way-pay/all')
+                .then(response => {
+                  setPay(response.data)
+                })
+                .catch(error => alert(error.message))
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
+  
+
   const adminFetch = async () => {
     let message;
     try {
@@ -533,6 +549,7 @@ function App() {
         updatePassUser,
         reviewsList,
         getBestReviews,
+        pay,
         postTwoPassword,
         adminFetch,
         categories,
@@ -541,6 +558,7 @@ function App() {
         deleteOrderItem,
         scrollToTop,
         getCategories,
+        getWayPay,
         getTypesBox,
         postRegistration,
         postLogin,

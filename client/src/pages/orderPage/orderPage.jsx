@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Radio } from 'antd';
 import { deleteCartItemAsync } from "../../store/cartSlice.js";
+import { useDispatch, useSelector } from "react-redux";
 
 import * as Yup from "yup";
 import style from './orderPage.module.scss'
@@ -12,22 +13,17 @@ import InputProfile from "../../components/inputProfile/inputProfile";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate";
 import OrderItem from "../../components/orderItem/orderItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
-import { useDispatch, useSelector } from "react-redux";
-// eslint-disable-next-line react/prop-types
+import ItemPay from "../../components/itemPay/itemPay.jsx";
+
 
 const OrderPage = () => {
 
     const [successStatus, setSuccessStatus] = useState(false)
     const [url, setUrl] = useState('#')
-    const { profile, placeOrder, contextHolder, downloadCheck, setCart } = useContext(AuthContext);
-    const [checkArray, setCheckArray] = useState([])
+    const { profile, placeOrder, contextHolder, downloadCheck, scrollToTop, setCart, getWayPay, pay } = useContext(AuthContext);
     const cart = useSelector(state => state.cart.cart)
+    const checkArray = useSelector(state => state.cart.checkArray)
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        const storedData = JSON.parse(localStorage.getItem('checkArray'));
-        setCheckArray(storedData)
-    }, [])
 
     const formikOrder = useFormik({
         initialValues: {
@@ -52,21 +48,21 @@ const OrderPage = () => {
             .required("Обязательное поле"),
         }),
         onSubmit: async (values) => {
-            const resultOrder = await placeOrder(values)
-            setSuccessStatus(resultOrder.result)
-            setUrl(resultOrder.url);
+            console.log(values);
+            // const resultOrder = await placeOrder(values)
+            // setSuccessStatus(resultOrder.result)
+            // setUrl(resultOrder.url);
 
-            if(checkArray.length > 0) {
-                checkArray.forEach((element) => {
-                    dispatch(deleteCartItemAsync(element._id));
-                    setCart(cart.filter((item) => item._id !== element._id));
-                });
-                setCheckArray([]);
-            } else {
-                cart.map((item) => {
-                    dispatch(deleteCartItemAsync(item._id));
-                });
-            }
+            // if(checkArray.length > 0) {
+            //     checkArray.forEach((element) => {
+            //         dispatch(deleteCartItemAsync(element._id));
+            //         setCart(cart.filter((item) => item._id !== element._id));
+            //     });
+            // } else {
+            //     cart.map((item) => {
+            //         dispatch(deleteCartItemAsync(item._id));
+            //     });
+            // }
         },
       });
     
@@ -82,12 +78,13 @@ const OrderPage = () => {
     }, [profile])
 
     useEffect(() => {
-        window.scrollTo(0, 0);
+        scrollToTop()
     }, []);
 
     return ( 
         <section className={`${style.section_cart} wrapper`}>
             {contextHolder}
+            <div className={style.bg_order}></div>
             <ul className="bread-crumbs">
                 <Link to="/">
                     <li>Главная</li>
@@ -178,21 +175,13 @@ const OrderPage = () => {
                                     <p className={style.input__title}>Выберите способ оплаты *</p>
                                     <div className={style.block__pay}>
                                         <Radio.Group id="wayPay" name="wayPay" onChange={formikOrder.handleChange} defaultValue={undefined}>
-                                            <Radio value={"visa"}>
-                                                <div className={style.block__pay__image}>
-                                                    <img className={style.pay__image} src="../assets/visa.svg" alt="Visa" />
-                                                </div>
-                                            </Radio>
-                                            <Radio value={"mastercard"}>
-                                                <div className={style.block__pay__image}>
-                                                    <img className={style.pay__image} src="../assets/mastercard.svg" alt="Mastercard" />
-                                                </div>
-                                            </Radio>
-                                            <Radio value={"verve"}>
-                                                <div className={style.block__pay__image}>
-                                                    <img className={style.pay__image} src="../assets/verve.svg" alt="Verve" />
-                                                </div>
-                                            </Radio>
+                                            {
+                                                pay.map((obj, index) => (
+                                                    <Radio key={index} value={obj._id}>
+                                                        <ItemPay image={obj.image} alt={obj.name} />
+                                                    </Radio>
+                                                ))
+                                            }
                                         </Radio.Group>
                                     </div>
                                 </div>

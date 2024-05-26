@@ -1,11 +1,4 @@
 import {Router} from 'express'
-import multer from 'multer'
-import mongoose from 'mongoose'
-import bcrypt from 'bcryptjs'
-import jwtToken from 'jsonwebtoken'
-import verifyToken from '../validation/verifyToken.js'
-import { registerValidation, loginValidation } from './../validation/auth.js'
-
 import Category from '../models/Category.js'
 
   
