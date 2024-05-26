@@ -2,43 +2,28 @@
 import { useEffect, useState, useContext, useCallback, memo } from "react";
 import { AuthContext } from "../../context/authContext.js";
 import { Link  } from 'react-router-dom';
-import { CartContext } from "../../context/cartContext.js";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCartItemAsync } from "../../store/cartSlice.js";
+import { addCheckArray, removeCheckArray } from "../../store/cartSlice.js";
 
 import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
 import { addProductFavoriteAsync, delProductFavoriteAsync } from "../../store/likedSlice.js";
 
-const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, checkArray, checkItem }) => {
+const CartItem = ({ _id, img, title, preText, price, count, checkItem, checkArrayItem }) => {
   const [counts, setCounts] = useState(count);
-  const [cartCheck, setCartCheck] = useState(false);
+  const [cartCheck, setCartCheck] = useState(checkArrayItem);
   const [isFavorite, setIsFavorite] = useState(checkItem);
-  const { cart, openNotification } = useContext(AuthContext);
-  const { cartCheckAll } = useContext(CartContext);
+  const { openNotification } = useContext(AuthContext);
   const dispatch = useDispatch()
-  const favoriteItem = useSelector(state => state.liked.liked)
 
   const cartCheckClick = () => {
     if (!cartCheck) {
-        const foundItem = cart.find(item => item._id === _id);
-        setCheckArray((prev) => {
-            if (prev === null) {
-                return [foundItem];
-            } else {
-                return [...prev, foundItem];
-            }
-        });
         setCartCheck(true);
-        const storedCheckArray = JSON.parse(localStorage.getItem('checkArray')) || [];
-        storedCheckArray.push(foundItem);
-        localStorage.setItem('checkArray', JSON.stringify(storedCheckArray));
+        dispatch(addCheckArray(_id))
     } else {
-        const storedCheckArray = JSON.parse(localStorage.getItem('checkArray'));
-        const updatedArray = storedCheckArray.filter(item => item._id !== _id);
         setCartCheck(false);
-        setCheckArray(updatedArray);
-        localStorage.setItem('checkArray', JSON.stringify(updatedArray));
+        dispatch(removeCheckArray(_id))
     }
   };
 
@@ -49,19 +34,6 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
             })
   };
 
-  // useEffect(() => {
-  //   if(Array.isArray(checkArray) && checkArray.length !== 0) {
-  //       const isExisting = checkArray.some(item => item._id === _id);
-  //       isExisting ? setCartCheck(true) : setCartCheck(false);
-  //   }
-  // }, [_id, checkArray]);
-
-  // useEffect(() => {
-  //   if(Array.isArray(checkArray) && checkArray.length === 0) {
-  //     const isExisting = checkArray.some(item => item._id === _id);
-  //     isExisting ? setCartCheck(true) : setCartCheck(false);
-  // }
-  // }, [_id, cartCheckAll, checkArray])
 
   const clickHeart = () => {
     if(isFavorite) {
@@ -92,7 +64,6 @@ const CartItem = ({ _id, img, title, preText, price, count, setCheckArray, check
       <CounterInput
         counts={counts}
         setCounts={setCounts}
-        cartCheck={cartCheck}
         _id={_id}
       />
       <p className={style.price}>{price} BYN</p>

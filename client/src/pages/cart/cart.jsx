@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useContext, useEffect, useMemo, memo } from "react";
+import { useState, useContext, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
@@ -7,8 +7,8 @@ import debounce from "debounce";
 import api from "../../api/api.js";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
-import { CartContext } from "../../context/cartContext.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addCheckArray, removeCheckArray, checkScroll, deleteCartItemAsync, calculatePrice, calculatePriceCheck } from "../../store/cartSlice.js";
 
 import CartItem from "../../components/cartItem/cartItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
@@ -20,18 +20,17 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-const Cart = () => {
+const Cart = ({checkItemCart}) => {
   const favoriteItem = useSelector(state => state.liked.liked)
-  const [sale, setSale] = useState({
-    active: false,
-    percentage: 0,
-  });
-  const [cartCheckAll, setCartCheckAll] = useState(false);
-  const [checkArray, setCheckArray] = useState([]);
-  const { scrollToTop, logout, setCart, deleteItemCart, calculatePrice } = useContext(AuthContext);
-  const [cartTotalPrice, setCartTotalPrice] = useState(0)
+  const [sale, setSale] = useState({ active: false, percentage: 0,});
+  const [cartCheckAll, setCartCheckAll] = useState(checkItemCart);
+  const { scrollToTop, logout } = useContext(AuthContext);
+  const cartTotalPrice = useSelector(state => state.cart.cartPrice)
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const cart = useSelector(state => state.cart.cart)
+  const checkArray = useSelector(state => state.cart.checkArray)
+  // const scroll = useSelector(state => state.cart.scroll)
 
   const totalPrice = useMemo(() => {
     return sale !== 0
@@ -42,46 +41,42 @@ const Cart = () => {
   const clickCheck = () => {
     if (!cartCheckAll) {
       setCartCheckAll(true);
-      setCheckArray([...cart]);
-      localStorage.setItem('checkArray', JSON.stringify(cart));
+      cart.forEach((item) => {
+        if (!checkArray.includes(item._id)) {
+          dispatch(addCheckArray(item._id));
+        }
+      });
     } else {
       setCartCheckAll(false);
-      setCheckArray([]);
-      localStorage.setItem('checkArray', JSON.stringify([]));
+      cart.forEach((item) => {
+        dispatch(removeCheckArray(item._id))
+      })
     }
   };
 
   const checkItem = (id) => {
-    return favoriteItem.some((product) => product._id == id);
+    return favoriteItem.some((product) => product._id === id);
+  }
+
+  const checkArrayItem = (id) => {
+    return checkArray.some((product) => product === id);
   }
 
   useEffect(() => {
-    if(checkArray && checkArray.length !== cart.length) {
-      setCartCheckAll(false);
-    }
-  },[checkArray])
-
-  useEffect(() => {
-    const storedCheckArray = JSON.parse(localStorage.getItem('checkArray'));
-    setCheckArray(storedCheckArray)
-    if(storedCheckArray && storedCheckArray.length !== 0) {
-      calculatePrice(storedCheckArray)
-    } else {
-      calculatePrice(cart)
-    }
-  }, [cart]) 
-
-  useEffect(() => {
     if(checkArray && checkArray.length !== 0) {
-      calculatePrice(checkArray)
+      dispatch(calculatePriceCheck())
     } else {
-      calculatePrice(cart)
+      dispatch(calculatePrice())
     }
-  }, [cart, checkArray]);
+  }, [checkArray, cart]);
 
-  useEffect(() => {
-    scrollToTop();
-  }, [scrollToTop]);
+  // useEffect(() => {
+  //   if(!scroll) {
+  //      scrollToTop();
+  //      dispatch(checkScroll(true))
+  //   }
+  // }, []); 
+  //под вопросом, нужно решить еще
 
   const delayedSearch = debounce(async (search) => {
     if(search.trim() !== '') {
@@ -116,17 +111,13 @@ const Cart = () => {
 
   const deleteChecket = () => {
     checkArray.forEach((element) => {
-      deleteItemCart(element._id);
-      setCart(cart.filter((item) => item._id !== element._id));
-      const updatedCheckArray = checkArray.filter((item) => item._id !== element._id)
-      setCheckArray(updatedCheckArray);
-      localStorage.setItem('checkArray', JSON.stringify(updatedCheckArray));
+      dispatch(deleteCartItemAsync(element))
+      dispatch(removeCheckArray(element._id))
     });
   };
 
 
   return (
-    <CartContext.Provider value={{ calculatePrice, checkArray, cartCheckAll }}>
       <section className={`${style.section_cart} wrapper`}>
         <div className={style.bg_cart}></div>
         <ul className="bread-crumbs">
@@ -142,7 +133,7 @@ const Cart = () => {
               <img
                 className={style.check__image}
                 src={
-                  cartCheckAll || checkArray && cart.length === checkArray.length
+                  cartCheckAll
                     ? "/assets/cart-check-active.svg"
                     : "/assets/cart-check.svg"
                 }
@@ -167,9 +158,9 @@ const Cart = () => {
                   <CartItem
                     key={obj._id}
                     calculatePrice={calculatePrice}
-                    setCheckArray={setCheckArray}
                     checkArray={checkArray}
                     checkItem={checkItem(obj._id)}
+                    checkArrayItem = {checkArrayItem(obj._id)}
                     {...obj}
                   />
                 ))}
@@ -181,7 +172,7 @@ const Cart = () => {
                 <div className={style.info__item}>
                   <p>Кол-во:</p>
                   <p>
-                    {checkArray && checkArray.length !== 0 ? checkArray.length : cart.length}{" "}
+                    {checkArray.length !== 0 ? checkArray.length : cart.length}{" "}
                     шт.
                   </p>
                 </div>
@@ -276,7 +267,6 @@ const Cart = () => {
           </div>
         )}
       </section>
-    </CartContext.Provider>
   );
 };
 

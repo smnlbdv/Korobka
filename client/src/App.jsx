@@ -8,7 +8,7 @@ import { notification, Modal } from 'antd';
 import './libs/ant.css'
 import { useDispatch, useSelector } from "react-redux";
 import { addProductFavorite } from "./store/likedSlice.js";
-import { addProductCart } from "./store/cartSlice.js";
+import { addProductCart, calculatePrice } from "./store/cartSlice.js";
 
 import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
@@ -46,6 +46,7 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.cart)
+  const checkArray = useSelector(state => state.cart.checkArray)
 
   useEffect(() => {
     getNewProduct()
@@ -69,12 +70,8 @@ function App() {
     }
   }, [messageShown])
 
-  const calculatePrice = (cart, countArray = null) => {
-    let total = cart.reduce((accumulator, product) => {
-      const subtotal = (countArray !== null) ? countArray * product.price : product.count * product.price;
-      return accumulator + subtotal;
-    }, 0);
-    return total
+  const checkItemCart = () => {
+    return checkArray && cart.length === checkArray.length
   }
 
   const postLogin = async (values) => {
@@ -526,7 +523,6 @@ function App() {
         postResetPassword,
         uploadAvatar,
         getProfile,
-        calculatePrice,
         openNotification,
         openNotificationError,
         isAuth,
@@ -565,7 +561,7 @@ function App() {
               <Route path="about-us" element={<AboutUs />} />
 
               <Route element={<PrivateRoute isAllowed={checkLocalUser()} />}>
-                <Route path="cart" element={<Cart />}/>
+                <Route path="cart" element={<Cart checkItemCart={checkItemCart()}/>}/>
                 <Route path="liked" element={<Liked favoriteItem={favoriteItem}/>} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="product/:id" element={<ProductPage/>}/>

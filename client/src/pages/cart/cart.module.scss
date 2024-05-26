@@ -208,10 +208,12 @@
 }
 
 .cart__header__button {
+    position: relative;
     display: flex;
     align-items: center;
     column-gap: 35px;
     padding-top: 45px;
+    z-index: 100;
 }
 
 .liked__product__list {

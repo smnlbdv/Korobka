@@ -3,16 +3,13 @@ import debounce from "debounce";
 import { AuthContext } from "../../context/authContext.js";
 
 import style from './counterInput.module.scss'
-import { CartContext } from "../../context/cartContext.js";
 import { useDispatch, useSelector } from "react-redux";
 import { decreaseCartItemAsync, deleteCartItemAsync, increaseCartItemAsync, updateCountItemAsync } from "../../store/cartSlice.js";
 
 // eslint-disable-next-line react/prop-types
-const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
+const CounterInput = ({ counts, setCounts, _id }) => {
     const [input, setInput] = useState(false);
     const { openNotification } = useContext(AuthContext);
-    const { calculatePrice, checkArray  } = useContext(CartContext);
-    const cart = useSelector(state => state.cart.cart)
     const dispatch = useDispatch()
 
     const subtractProduct = async () => {
@@ -25,26 +22,7 @@ const CounterInput = ({ counts, setCounts, _id, cartCheck }) => {
         const resultIncrease = dispatch(decreaseCartItemAsync(_id));
         if (resultIncrease) {
           setCounts(counts - 1);
-          // let countsNew = counts - 1
-          // calculatePrice(cart, countsNew);
         }
-        // if (!cartCheck && checkArray.length === 0) {
-        //   const resultIncrease = decreaseCartItem(_id);
-        //   if (resultIncrease) {
-        //     setCounts(counts - 1);
-        //     let countsNew = counts - 1
-        //     calculatePrice(cart, countsNew);
-        //   }
-        // } else if (checkArray.some(item => item._id === _id)) {
-        //   const resultIncrease = decreaseCartItem(_id);
-        //   if (resultIncrease) {
-        //     setCounts(counts - 1);
-        //     let countsNew = counts - 1
-        //     calculatePrice(checkArray, countsNew);
-        //   }
-        // } else {
-        //   return
-        // }
       }
     };
 

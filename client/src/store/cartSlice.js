@@ -76,11 +76,36 @@ export const updateCountItemAsync = createAsyncThunk(
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
-        cart: []
+        cart: [],
+        checkArray: [],
+        cartPrice: 0
+        // scroll: false
     },
     reducers: {
         addProductCart (state, action) {
             state.cart.push(action.payload)
+        },
+        addCheckArray (state, action) {
+          state.checkArray.push(action.payload)
+        },
+        removeCheckArray (state, action) {
+          state.checkArray = state.checkArray.filter(item => item !== action.payload);
+        },
+        checkScroll (state, action) {
+          state.scroll = action.payload;
+        },
+        calculatePrice (state, action) {
+          state.cartPrice = state.cart.reduce((accumulator, product) => {
+            const subtotal =  product.count * product.price;
+            return accumulator + subtotal;
+          }, 0);
+        },
+        calculatePriceCheck (state, action) {
+          let productsInCart = state.cart.filter(item => state.checkArray.includes(item._id));
+          state.cartPrice = productsInCart.reduce((accumulator, product) => {
+            const subtotal =  product.count * product.price;
+            return accumulator + subtotal;
+          }, 0);
         }
     },
     extraReducers: builder => {
@@ -122,15 +147,14 @@ const cartSlice = createSlice({
           .addCase(deleteCartItemAsync.fulfilled, (state, action) => {
             if(action.payload.delete === true) {
               state.cart = state.cart.filter(item => item._id !== action.payload._id);
-              const existingCart = JSON.parse(localStorage.getItem('checkArray'));
-              if(existingCart.length !== 0) {
-                const updatedCart = existingCart.filter(item => item._id !== action.payload._id);
-                localStorage.setItem('checkArray', JSON.stringify(updatedCart));
+
+              if(state.checkArray.some((product) => product === action.payload._id)) {
+                state.checkArray = state.checkArray.filter(item => item !== action.payload._id);
               }
             }
           });
     }
 })
 
-export const {addProductCart} = cartSlice.actions
+export const {addProductCart, addCheckArray, removeCheckArray, checkScroll, calculatePrice, calculatePriceCheck} = cartSlice.actions
 export default cartSlice.reducer
