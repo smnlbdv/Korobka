@@ -31,8 +31,8 @@ const shema = new mongoose.Schema({
         required: true
     },
     wayPay: {
-        type: String,
-        required: true
+        type: Types.ObjectId,
+        ref: 'Way_pay'
     },
     createdOrder: {
         type: Date,

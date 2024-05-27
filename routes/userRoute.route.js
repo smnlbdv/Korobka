@@ -16,6 +16,8 @@ import User from "../models/User.js";
 import Order from "../models/Order.js";
 import Email from "../models/Email.js";
 import Subscription from "../models/Subscription.js";
+import WayPay from "../models/WayPay.js";
+import OrderStatus from "../models/OrderStatus.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -55,10 +57,12 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
     })
     .populate({
       path: "order",
-      populate: {
-          path: "items.productId"
-      }
-    })
+      populate: [
+          { path: "items.productId" }, 
+          { path: "wayPay" }, 
+          { path: "status" }
+      ]
+    }) 
     .populate("role")
     .then((response) => {
       const favoriteItems = response.favorite?.items || [];
@@ -134,8 +138,6 @@ userRoute.patch("/update", verifyToken, async (req, res) => {
     if(body.email) {
       const user = await User.findById(userId).populate("email");
 
-      console.log(user);
-
       if(!user) {
         return res.status(400).json({ message: "Ошибка сохранения данных" })
       }
@@ -203,8 +205,6 @@ userRoute.post("/order", verifyToken, async (req, res) => {
   const userId = req.userId;
   const body = req.body;
 
-  console.log(body);
-
   let newOrder = {
     owner: userId,
     totalAmount: body.totalAmount,
@@ -226,11 +226,15 @@ userRoute.post("/order", verifyToken, async (req, res) => {
                 user.order.push(savedOrder._id.toString());
                 await user.save();
 
-                const save = await savedOrder.populate('items.productId')                
-                pdfGenerate(save, order._id)
+                const populatedOrder = await Order.findById(savedOrder._id)
+                    .populate('items.productId')
+                    .populate('status')
+                    .populate('wayPay');
+        
+                pdfGenerate(populatedOrder, order._id)
                           .then((data) => {
                             if(data.result) {
-                              res.status(200).json({ message: 'Заказ оформлен', success: true, order: save, url: data.url });
+                              res.status(200).json({ message: 'Заказ оформлен', success: true, order: populatedOrder, url: data.url });
                             }
                           })
                           .catch((error) => {
@@ -244,6 +248,7 @@ userRoute.post("/order", verifyToken, async (req, res) => {
         }
     })
     .catch(err => {
+      console.log(err);
         res.status(500).json({ message: 'Произошла ошибка при сохранении заказа', error: err });
     });
   
@@ -345,7 +350,6 @@ userRoute.get("/token/refresh", async (req, res) => {
 });
 
 userRoute.post("/pay/checkout", async (req, res) => {
-  console.log(req.body);
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],

@@ -1,19 +1,26 @@
 /* eslint-disable react/prop-types */
-import { useContext, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Tooltip } from 'antd';
 
 import { AuthContext } from "../../context/authContext.js";
 
 import style from "./profileOrederItem.module.scss";
 import './ant.css'
+import { useDispatch } from "react-redux";
+import { deleteOrderItemAsync } from "../../store/profileSlice.js";
 
 const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, status, onClick }) => {
     const [urlCheck, setUrlCheck] = useState("")
     const urlCheckLink = useRef()
-    const { deleteOrderItem, postCheckOrder } = useContext(AuthContext);
+    const [widthMultiplier, setWidthMultiplier] = useState()
+    const { postCheckOrder, openNotification } = useContext(AuthContext);
+    const dispatch = useDispatch()
 
     const clickDeleteOrder = () => {
-        deleteOrderItem(_id)
+        dispatch(deleteOrderItemAsync(_id))
+                .then((response) => {
+                    openNotification('bottomRight', response.payload.message)
+                })
     }
 
     const clickCheckOrder = async (e) => {
@@ -37,7 +44,9 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
         onClick(_id)
     }
 
-    const widthMultiplier = groupImage.length > 3 ? 200 : 55 * groupImage.length;
+    useEffect(() => {
+        setWidthMultiplier(groupImage.length > 3 ? 200 : 55 * groupImage.length);
+    }, [])
 
     return (
         <div className={style.order__item_block}>
@@ -65,11 +74,11 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
                 </div>
                 <div className={style.list__info__order}>
                     <p><b>Адрес:</b> {address}</p>
-                    <p><b>Способ оплаты:</b> {wayPay}</p>
+                    <p><b>Способ оплаты:</b> <br />{wayPay.name}</p>
                 </div>
                 <p className={style.count__product}>Кол-во: {groupImage.length}</p>
                 <p className={style.price}>{totalAmount} BYN</p>
-                <span className={style.order__item__status}>{status}</span>
+                <span className={style.order__item__status}>{status.name}</span>
             </div>
             <div>
                 <Tooltip placement="right" title={"Удалить"} color={"red"}>

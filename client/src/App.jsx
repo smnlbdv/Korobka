@@ -9,8 +9,7 @@ import './libs/ant.css'
 import { useDispatch, useSelector } from "react-redux";
 import { addProductFavorite } from "./store/likedSlice.js";
 import { addProductCart } from "./store/cartSlice.js";
-import { addInfoProfile } from "./store/profileSlice.js";
-import { v4 as uuidv4 } from 'uuid';
+import { addInfoProfile, addProductProfile } from "./store/profileSlice.js";
 
 import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
@@ -37,7 +36,6 @@ const ConstructorBox = lazy(() => import("./pages/constructorBox/constructorBox.
 function App() {
   const [reviewsList, setReviewsList] = useState([])
   const [pay, setPay] = useState([])
-  const [order, setOrder] = useState([]);
   const [categories,setCategories] = useState([]);
   const [favoriteItem, setFavoriteItem] = useState([]);
   const [newBoxList, setNewBoxList] = useState([]);
@@ -50,6 +48,7 @@ function App() {
   const cart = useSelector(state => state.cart.cart)
   const checkArray = useSelector(state => state.cart.checkArray)
   const orderArray = useSelector(state => state.cart.order)
+  const order = useSelector(state => state.profile.order)
 
   useEffect(() => {
     getNewProduct()
@@ -119,7 +118,7 @@ function App() {
       await api.get(`/api/profile/${userId}`)
         .then(response => {
           
-          dispatch(addInfoProfile({...response.data.user}))
+          dispatch(addInfoProfile(response.data.user))
 
           if(response.data.cart && cart.length === 0) {
             const newCart = [...response.data.cart]
@@ -139,8 +138,10 @@ function App() {
             });
           }
 
-          if(response.data.order && order.length == 0) {
-            setOrder([...response.data.order])
+          if(response.data.order.length !== 0 && order.length == 0) {
+            response.data.order.forEach(element => {
+              dispatch(addProductProfile(element))
+            })
           }
 
         })
@@ -322,44 +323,10 @@ function App() {
     return url
   }
 
-  const updateProfileUser = async (changedData) => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
-    try {
-      await api.patch("/api/profile/update", changedData, {
-        headers: {
-            'Authorization': `${data.token}`,
-        }})
-        .then(response => {
-            if(response.status == 200) {
-              openNotification('bottomRight', response.data.message)
-            }
-        })
-        .catch(response => {
-          if(response.response.status == 400) {
-            openNotificationError('bottomRight', response.response.data.message)
-          }
-          if(response.response.status == 409) {
-            openNotificationError('bottomRight', response.response.data.message)
-          }
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
-        })
-        
-    } catch (error) {
-      console.log("Ошибка", error);
-    }
-  }
-
   const updatePassUser = async (passData) => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
     let resultPass;
     try {
-      await api.patch(`/api/profile/${data.userId}/password`, passData, {
-        headers: {
-            'Authorization': `${data.token}`,
-        }})
+      await api.patch(`/api/profile/${userId}/password`, passData)
         .then(response => {
           if(response.status == 201){ 
             openNotification('bottomRight', response.data.message)
@@ -409,8 +376,7 @@ function App() {
     }
   }
   
-  const orderCheckout = async (order) => {
-    console.log(order);
+  const orderCheckout = async (order, values) => {
     const items = order.map(item => ({
       id: item._id, 
       count: item.count,
@@ -421,6 +387,9 @@ function App() {
       await api.post('/api/profile/pay/checkout', {
         items: items})
                 .then(response => {
+                  localStorage.setItem('initialValues', JSON.stringify(values))
+                  localStorage.setItem('order', JSON.stringify(order))
+
                   window.location = response.data.url
                 })
                 .catch(error => alert(error.message))
@@ -479,57 +448,6 @@ function App() {
     return url
   }
 
-  const placeOrder = async (order) => {
-    let result;
-    try {
-      await api.post(`/api/profile/order`, {order: order, cart: orderArray, totalAmount: calculatePrice(orderArray)})
-        .then(response => {
-          if(response.status == 200 && response.data.success === true) {
-            result = {
-              result: response.data.success,
-              message: response.data.message,
-              url: response.data.url
-            }
-            setOrder((prev) => [...prev, response.data.order])
-            openNotification('bottomRight', response.data.message)
-          }
-        })
-        .catch(response => {
-          console.log(response.message);
-      });
-    } catch (error) {
-      console.log(error.message)
-    }
-    return result
-  }
-
-  const deleteOrderItem = async(orderId) => {
-    const data = JSON.parse(localStorage.getItem('userData')) || '';
-    try {
-      await api.delete(`/api/profile/delete-order/${orderId}`, {
-        headers: {
-            'Authorization': `${data.token}`,
-        }
-      })
-        .then(response => {
-          if(response.status === 200 && response.data.success === true) {
-            openNotificationError('bottomRight', response.data.message)
-            setOrder((cart) =>
-                cart.filter((item) => item._id !== orderId)
-            );  
-          } 
-        })
-        .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
-      });
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
-
   const scrollToTop = () => {
     const c = document.documentElement.scrollTop || document.body.scrollTop;
     if (c > 0) {
@@ -569,8 +487,6 @@ function App() {
         openNotification,
         openNotificationError,
         isAuth,
-        updateProfileUser,
-        order,
         updatePassUser,
         reviewsList,
         getBestReviews,
@@ -578,14 +494,12 @@ function App() {
         postTwoPassword,
         adminFetch,
         categories,
-        placeOrder,
-        setOrder,
-        deleteOrderItem,
         scrollToTop,
         getCategories,
         getWayPay,
         getTypesBox,
         postRegistration,
+        calculatePrice,
         postLogin,
         postCheckOrder
       }}

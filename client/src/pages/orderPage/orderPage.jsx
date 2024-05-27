@@ -1,9 +1,10 @@
 import { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Radio } from 'antd';
 import { deleteCartItemAsync, orderPushItems } from "../../store/cartSlice.js";
+import { addProductProfile } from "../../store/profileSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as Yup from "yup";
@@ -13,31 +14,46 @@ import InputProfile from "../../components/inputProfile/inputProfile";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate";
 import OrderItem from "../../components/orderItem/orderItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
+import { placeOrderAsync } from "../../store/profileSlice.js";
 
 const OrderPage = () => {
     const [url, setUrl] = useState('#')
-    const { placeOrder, contextHolder, downloadCheck, scrollToTop, setCart, pay, orderCheckout } = useContext(AuthContext);
+    const { contextHolder, downloadCheck, scrollToTop, pay, orderCheckout, calculatePrice, openNotification, openNotificationError } = useContext(AuthContext);
     const cart = useSelector(state => state.cart.cart)
     const checkArray = useSelector(state => state.cart.checkArray)
     const profile = useSelector(state => state.profile.profile)
     const orderArray = useSelector(state => state.cart.order)
     const dispatch = useDispatch()
+    const navigate = useNavigate();
 
-    const postOrderItems = async (values) => {
-        const response = await placeOrder(values)
-
-        if(response) {
-            setUrl(response.url);
-            dispatch(orderPushItems([]))
-            if(checkArray.length > 0) {
-                checkArray.forEach((element) => {
-                    dispatch(deleteCartItemAsync(element._id));
-                    setCart(cart.filter((item) => item._id !== element._id));
-                });
-            } else {
-                cart.map((item) => {
-                    dispatch(deleteCartItemAsync(item._id));
-                });
+    const postOrderItems = async (order = orderArray,  values) => {
+        
+        if(values) {
+            
+            const price = calculatePrice(order)
+    
+            if(price) {
+                dispatch(placeOrderAsync({values, order, price}))
+                    .then((response) => {
+                        setUrl(response.payload.url);
+    
+                        dispatch(addProductProfile(response.payload.order))
+                        dispatch(orderPushItems([]))
+    
+                        if(checkArray.length > 0) {
+                            checkArray.forEach((element) => {
+                                dispatch(deleteCartItemAsync(element._id));
+                            });
+                        } else {
+                            cart.map((item) => {
+                                dispatch(deleteCartItemAsync(item._id));
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        openNotificationError("bottomRight", "Ошибка оформления заказа");
+                        navigate("/cart");
+                    })
             }
         }
     }
@@ -64,18 +80,21 @@ const OrderPage = () => {
             )
             .required("Обязательное поле"),
         }),
-        onSubmit: async (values) => {
-            
-            if(values.wayPay === "Картой") {
-                orderCheckout(orderArray)
+        onSubmit: async (values, {resetForm}) => {
+
+            const way = pay.find(item => item._id === values.wayPay)
+            if(way) {
+                orderCheckout(orderArray, values)
             } else {
                 postOrderItems(values)
+                resetForm()
             }
         },
     });
     
     useEffect(() => {
-        if (profile.length != 0) {
+        scrollToTop()
+        if (profile.length !== 0) {
             formikOrder.setValues({
               name: profile.name,
               lastname: profile.surname,
@@ -86,14 +105,14 @@ const OrderPage = () => {
     }, [])
 
     useEffect(() => {
-        scrollToTop()
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentSuccess = urlParams.get('payment_success');
 
-        // const urlParams = new URLSearchParams(window.location.search);
-        // const paymentSuccess = urlParams.get('payment_success');
-
-        // if (paymentSuccess === 'true') {
-        //     postOrderItems(formikOrder.initialValues)
-        // }
+        if (paymentSuccess === 'true') {
+            postOrderItems(JSON.parse(localStorage.getItem('order')), JSON.parse(localStorage.getItem('initialValues')))
+            localStorage.removeItem('initialValues')
+            localStorage.removeItem('order')
+        }
     }, []);
 
     return ( 
@@ -111,7 +130,7 @@ const OrderPage = () => {
             </ul>
             <h2 className={`${style.section_title} section__title`}>Оформление заказа</h2>
             {
-                !successStatus ?
+                orderArray.length !== 0 ?
                 <div className={style.block__orders}>
                     <div className={style.block__form}>
                         <form

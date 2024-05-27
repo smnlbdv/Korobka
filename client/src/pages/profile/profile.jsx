@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Tabs, Modal } from "antd";
 import * as Yup from "yup";
+import { updateInfoProfileAsync } from "../../store/profileSlice.js";
 
 import "./ant.css";
 
@@ -14,24 +15,23 @@ import style from "./profile.module.scss";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 import ProfileOrderItem from "../../components/profileOrderItem/profileOrderItem.jsx";
 import ModalProfileItem from "../../components/modalProdileItem/modalProfileItem.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Profile = () => {
   const {
     uploadAvatar,
     getProfile,
     logout,
-    updateProfileUser,
     contextHolder,
-    order,
     updatePassUser,
+    openNotification,
+    openNotificationError,
     scrollToTop,
   } = useContext(AuthContext);
   const inputFileRef = useRef(null);
   const inputNewPass = useRef(null);
   const inputPrePass = useRef(null);
   const inputDoublePass = useRef(null);
-  const [avatarUser, setAvatarUser] = useState("");
   const [initialData, setInitialData] = useState({});
   const [typeInputPass, setTypeInputPass] = useState("password");
   const [titleHiddenButton, setTitleHiddenButton] = useState(true);
@@ -39,6 +39,8 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const profile = useSelector(state => state.profile.profile)
+  const order = useSelector(state => state.profile.order)
+  const dispath = useDispatch()
 
   const showModal = (_id) => {
     setIsModalOpen(true);
@@ -81,17 +83,20 @@ const Profile = () => {
         .min(5, "Длинна меньше 5 символов")
         .oneOf([Yup.ref("password"), null], "Пароли не совпадают"),
     }),
-    onSubmit: async (values, { setFieldError }) => {
+    onSubmit: (values, { setFieldError, resetForm }) => {
       if (
         values.prepassword != 0 &&
         values.password != 0 &&
         values.confirmPassword != 0
       ) {
-        await updatePassUser(values).then((response) => {
-          if (!response) {
-            setFieldError("prepassword", "Неверный пароль");
-          }
-        });
+        updatePassUser(values)
+          .then((response) => {
+            if (!response) {
+              setFieldError("prepassword", "Неверный пароль");
+            } else {
+              resetForm();
+            }
+          });
       } else {
         if (!values.prepassword) {
           setFieldError("prepassword", "Введите значение");
@@ -135,6 +140,7 @@ const Profile = () => {
     }),
     onSubmit: (values) => {
       if (!compareObjects(initialData, values)) {
+        
         const formData = {
           ...values
         };
@@ -147,7 +153,14 @@ const Profile = () => {
             }
             return result;
         }, {});
-        updateProfileUser(diffValues)
+
+        dispath(updateInfoProfileAsync(diffValues))
+              .then(() => {
+                openNotification("bottomRight", "Данные успешно измененны")
+              })
+              .catch(() => {
+                openNotificationError("bottomRight", "Ошибка сохранения данных")
+              })
       }
     },
   });
@@ -157,14 +170,13 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    if (profile.length == 0) {
+    scrollToTop();
+
+    if (profile.length === 0) {
       getProfile();
     }
-    scrollToTop();
-  }, [getProfile]);
 
-  useEffect(() => {
-    if (profile.length !== 0 && profile.email) {
+    if (profile.length !== 0) {
       const newData = {
         name: profile.name,
         surname: profile.surname,
@@ -173,9 +185,8 @@ const Profile = () => {
       };
       formikPersonal.setValues(newData);
       setInitialData(newData);
-      setAvatarUser(profile.avatarUser);
     }
-  }, [profile]);
+  }, []);
 
   const itemsTabs = [
     {
@@ -391,7 +402,7 @@ const Profile = () => {
         <div className={style.block__user}>
           <div className={style.header__block}>
             <div className={style.update__image__block}>
-              <img src={"http://localhost:5000/avatar/" + avatarUser} alt="Avatar" />
+              <img src={profile.avatarUser} alt="Avatar" />
             </div>
             <div>
               {
@@ -445,11 +456,11 @@ const Profile = () => {
                   <ModalProfileItem key={index} item={item}/>
             ))}
           </Modal>
-          {order.length != 0 ? (
+          {order.length !== 0 ? (
             <div className={style.block__orders}>
-              {order.map((obj, index) => (
+              {order.map((obj) => (
                 <ProfileOrderItem
-                  key={index}
+                  key={obj._id}
                   favorite={true}
                   groupImage={obj.items}
                   {...obj}

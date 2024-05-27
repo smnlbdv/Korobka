@@ -82,9 +82,9 @@ export default function generateHTML(orderData) {
             </div>
             <hr>
             <p class="total-amount">Общая стоимость: ${orderData.totalAmount} BYN</p>
-            <p class="order-status">Статус заказа: ${orderData.status}</p>
+            <p class="order-status">Статус заказа: ${orderData.status.name}</p>
             <p class="delivery-address">Адрес доставки: ${orderData.address}</p>
-            <p class="class="total-amount"">Способ оплаты: ${orderData.wayPay}</p>
+            <p class="class="total-amount"">Способ оплаты: ${orderData.wayPay.name}</p>
         </body>
         </html>`
     )
