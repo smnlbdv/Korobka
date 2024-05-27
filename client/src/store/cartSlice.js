@@ -78,7 +78,8 @@ const cartSlice = createSlice({
     initialState: {
         cart: [],
         checkArray: [],
-        cartPrice: 0
+        cartPrice: 0,
+        order: []
         // scroll: false
     },
     reducers: {
@@ -106,7 +107,11 @@ const cartSlice = createSlice({
             const subtotal =  product.count * product.price;
             return accumulator + subtotal;
           }, 0);
-        }
+        },
+        orderPushItems (state, action) {
+          state.order = []
+          state.order.push(...action.payload);
+        },
     },
     extraReducers: builder => {
         builder
@@ -156,5 +161,5 @@ const cartSlice = createSlice({
     }
 })
 
-export const {addProductCart, addCheckArray, removeCheckArray, checkScroll, calculatePrice, calculatePriceCheck} = cartSlice.actions
+export const {addProductCart, addCheckArray, removeCheckArray, checkScroll, calculatePrice, calculatePriceCheck, orderPushItems} = cartSlice.actions
 export default cartSlice.reducer

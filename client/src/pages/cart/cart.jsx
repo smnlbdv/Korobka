@@ -8,7 +8,7 @@ import api from "../../api/api.js";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { useDispatch, useSelector } from "react-redux";
-import { addCheckArray, removeCheckArray, checkScroll, deleteCartItemAsync, calculatePrice, calculatePriceCheck } from "../../store/cartSlice.js";
+import { addCheckArray, removeCheckArray, checkScroll, deleteCartItemAsync, calculatePrice, calculatePriceCheck, orderPushItems} from "../../store/cartSlice.js";
 
 import CartItem from "../../components/cartItem/cartItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
@@ -60,6 +60,21 @@ const Cart = ({checkItemCart}) => {
 
   const checkArrayItem = (id) => {
     return checkArray.some((product) => product === id);
+  }
+
+  const clickToOrderButton = () => {
+    let foundItem = []
+    if(checkArray.length !== 0) {
+      checkArray.forEach(checkItem => {
+        const newfoundItem = cart.find(cartItem => cartItem._id === checkItem);
+        if (newfoundItem) {
+          foundItem.push(newfoundItem);
+      }
+      });
+      dispatch(orderPushItems(foundItem));
+    } else {
+      dispatch(orderPushItems(cart))
+    }
   }
 
   useEffect(() => {
@@ -214,7 +229,7 @@ const Cart = ({checkItemCart}) => {
                   </p>
                 </div>
                 <Link to="order">
-                  <button className={style.btn_checkout}>Оформить</button>
+                  <button className={style.btn_checkout} onClick={clickToOrderButton}>Оформить</button>
                 </Link>
               </div>
             </div>

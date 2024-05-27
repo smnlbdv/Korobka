@@ -84,7 +84,7 @@
 
 .required__title {
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 30px;
 }
 
 .input__title {
@@ -92,55 +92,8 @@
     margin-bottom: 10px;
 }
 
-.inner__block__success {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: max-content;
-    margin-top: 100px;
-}
 
-.block__successStatus {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
-
-.block__successStatus__image {
-    width: 150px;
-}
-
-.block__successStatus__text {
-    font-size: 18px;
-    margin-bottom: 20px;
-}
-
-.button__check {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100px;
-    height: 40px;
-    font-size: 14px;
-    background-color: rgb(63, 53, 248);
-    border-radius: 8px;
+.way_pay {
     color: white;
-    font-weight: 500;
-    border: 0;
-    padding: 12px 20px;
-    transition: all 300ms;
-    cursor: pointer;
-
-    &:hover {
-        background-color: rgb(48, 37, 245);
-        transition: all 300ms;
-    }
-}
-
-.block__buttons {
-    display: flex;
-    column-gap: 10px;
+    font-family: 'Montserrat', sans-serif !important;
 }

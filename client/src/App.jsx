@@ -8,7 +8,9 @@ import { notification, Modal } from 'antd';
 import './libs/ant.css'
 import { useDispatch, useSelector } from "react-redux";
 import { addProductFavorite } from "./store/likedSlice.js";
-import { addProductCart, calculatePrice } from "./store/cartSlice.js";
+import { addProductCart } from "./store/cartSlice.js";
+import { addInfoProfile } from "./store/profileSlice.js";
+import { v4 as uuidv4 } from 'uuid';
 
 import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
@@ -34,7 +36,6 @@ const ConstructorBox = lazy(() => import("./pages/constructorBox/constructorBox.
 
 function App() {
   const [reviewsList, setReviewsList] = useState([])
-  const [profile, setProfile] = useState({});
   const [pay, setPay] = useState([])
   const [order, setOrder] = useState([]);
   const [categories,setCategories] = useState([]);
@@ -48,6 +49,7 @@ function App() {
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.cart)
   const checkArray = useSelector(state => state.cart.checkArray)
+  const orderArray = useSelector(state => state.cart.order)
 
   useEffect(() => {
     getNewProduct()
@@ -71,6 +73,13 @@ function App() {
       setMessageShown(true);
     }
   }, [messageShown])
+
+  const calculatePrice = (cart) => {
+    return cart.reduce((accumulator, product) => {
+      const subtotal =  product.count * product.price;
+      return accumulator + subtotal;
+    }, 0);
+  }
 
   const checkItemCart = () => {
     return checkArray && cart.length === checkArray.length
@@ -109,7 +118,8 @@ function App() {
     try {
       await api.get(`/api/profile/${userId}`)
         .then(response => {
-          setProfile({...response.data.user})
+          
+          dispatch(addInfoProfile({...response.data.user}))
 
           if(response.data.cart && cart.length === 0) {
             const newCart = [...response.data.cart]
@@ -387,7 +397,6 @@ function App() {
     }
   }
 
-  
   const getWayPay = async () => {
     try {
       await api.get('/api/way-pay/all')
@@ -400,6 +409,25 @@ function App() {
     }
   }
   
+  const orderCheckout = async (order) => {
+    console.log(order);
+    const items = order.map(item => ({
+      id: item._id, 
+      count: item.count,
+      price: item.price,
+      name: item.title
+    }));
+    try {
+      await api.post('/api/profile/pay/checkout', {
+        items: items})
+                .then(response => {
+                  window.location = response.data.url
+                })
+                .catch(error => alert(error.message))
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
 
   const adminFetch = async () => {
     let message;
@@ -453,15 +481,13 @@ function App() {
 
   const placeOrder = async (order) => {
     let result;
-    const checkArray = JSON.parse(localStorage.getItem('checkArray'));
-    let finalCart = checkArray.length !== 0 ? checkArray : cart;
     try {
-      await api.post(`/api/profile/order`, {order: order, cart: finalCart, totalAmount: calculatePrice(finalCart) })
+      await api.post(`/api/profile/order`, {order: order, cart: orderArray, totalAmount: calculatePrice(orderArray)})
         .then(response => {
           if(response.status == 200 && response.data.success === true) {
             result = {
               result: response.data.success,
-              message: response.data.messagee,
+              message: response.data.message,
               url: response.data.url
             }
             setOrder((prev) => [...prev, response.data.order])
@@ -533,6 +559,7 @@ function App() {
         contextHolder,
         contextHolderEmail,
         newBoxList,
+        orderCheckout,
         favoriteItem,
         setFavoriteItem,
         sendEmailData,
@@ -542,8 +569,6 @@ function App() {
         openNotification,
         openNotificationError,
         isAuth,
-        profile,
-        setProfile,
         updateProfileUser,
         order,
         updatePassUser,

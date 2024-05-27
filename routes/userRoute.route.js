@@ -2,13 +2,14 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 import verifyToken from "../validation/verifyToken.js";
 import multer from "multer";
+dotev.config()
 import fs from "fs";
 import path from "path";
 import jwt from 'jsonwebtoken';
 import { generationToken } from '../utils/generationJwt.js'
 import dotev from 'dotenv'
 import cookieParser from "cookie-parser";
-dotev.config()
+import stripePackage from 'stripe';
 
 import pdfGenerate from "../utils/pdfGenerate.js";
 import User from "../models/User.js";
@@ -29,6 +30,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 const userRoute = Router();
+const stripe = stripePackage(process.env.SECRET_STRIPE_KEY);
 
 userRoute.get("/:userId", verifyToken, async (req, res) => {
   const userId = req.params.userId;
@@ -201,6 +203,8 @@ userRoute.post("/order", verifyToken, async (req, res) => {
   const userId = req.userId;
   const body = req.body;
 
+  console.log(body);
+
   let newOrder = {
     owner: userId,
     totalAmount: body.totalAmount,
@@ -339,5 +343,35 @@ userRoute.get("/token/refresh", async (req, res) => {
     return res.status(500).json({ message: 'Что-то пошло не так' });
   }
 });
+
+userRoute.post("/pay/checkout", async (req, res) => {
+  console.log(req.body);
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      line_items: req.body.items.map(item => {
+        return {
+          price_data: {
+            currency: "byn",
+            product_data: {
+              name: item.name,
+            },
+            unit_amount: (item.price)*100,
+          },
+          quantity: item.count
+        }
+      }),
+      success_url: "http://localhost:5173/cart/order?payment_success=true",
+      cancel_url: "http://localhost:5173/cart/order",
+    })
+
+    res.json({
+      url: session.url
+    })
+  } catch (error) {
+    res.status(500).json({error: error.message})
+  }
+})
 
 export default userRoute;

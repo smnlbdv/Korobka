@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Radio } from 'antd';
-import { deleteCartItemAsync } from "../../store/cartSlice.js";
+import { deleteCartItemAsync, orderPushItems } from "../../store/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as Yup from "yup";
@@ -13,17 +13,34 @@ import InputProfile from "../../components/inputProfile/inputProfile";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate";
 import OrderItem from "../../components/orderItem/orderItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
-import ItemPay from "../../components/itemPay/itemPay.jsx";
-
 
 const OrderPage = () => {
-
-    const [successStatus, setSuccessStatus] = useState(false)
     const [url, setUrl] = useState('#')
-    const { profile, placeOrder, contextHolder, downloadCheck, scrollToTop, setCart, getWayPay, pay } = useContext(AuthContext);
+    const { placeOrder, contextHolder, downloadCheck, scrollToTop, setCart, pay, orderCheckout } = useContext(AuthContext);
     const cart = useSelector(state => state.cart.cart)
     const checkArray = useSelector(state => state.cart.checkArray)
+    const profile = useSelector(state => state.profile.profile)
+    const orderArray = useSelector(state => state.cart.order)
     const dispatch = useDispatch()
+
+    const postOrderItems = async (values) => {
+        const response = await placeOrder(values)
+
+        if(response) {
+            setUrl(response.url);
+            dispatch(orderPushItems([]))
+            if(checkArray.length > 0) {
+                checkArray.forEach((element) => {
+                    dispatch(deleteCartItemAsync(element._id));
+                    setCart(cart.filter((item) => item._id !== element._id));
+                });
+            } else {
+                cart.map((item) => {
+                    dispatch(deleteCartItemAsync(item._id));
+                });
+            }
+        }
+    }
 
     const formikOrder = useFormik({
         initialValues: {
@@ -48,23 +65,14 @@ const OrderPage = () => {
             .required("Обязательное поле"),
         }),
         onSubmit: async (values) => {
-            console.log(values);
-            // const resultOrder = await placeOrder(values)
-            // setSuccessStatus(resultOrder.result)
-            // setUrl(resultOrder.url);
-
-            // if(checkArray.length > 0) {
-            //     checkArray.forEach((element) => {
-            //         dispatch(deleteCartItemAsync(element._id));
-            //         setCart(cart.filter((item) => item._id !== element._id));
-            //     });
-            // } else {
-            //     cart.map((item) => {
-            //         dispatch(deleteCartItemAsync(item._id));
-            //     });
-            // }
+            
+            if(values.wayPay === "Картой") {
+                orderCheckout(orderArray)
+            } else {
+                postOrderItems(values)
+            }
         },
-      });
+    });
     
     useEffect(() => {
         if (profile.length != 0) {
@@ -75,10 +83,17 @@ const OrderPage = () => {
               phone: profile.phone,
             })
         }
-    }, [profile])
+    }, [])
 
     useEffect(() => {
         scrollToTop()
+
+        // const urlParams = new URLSearchParams(window.location.search);
+        // const paymentSuccess = urlParams.get('payment_success');
+
+        // if (paymentSuccess === 'true') {
+        //     postOrderItems(formikOrder.initialValues)
+        // }
     }, []);
 
     return ( 
@@ -89,7 +104,7 @@ const OrderPage = () => {
                 <Link to="/">
                     <li>Главная</li>
                 </Link>
-                <Link to="/">
+                <Link to="/cart">
                     <li>Корзина</li>
                 </Link>
                 <li>Оформление заказа</li>
@@ -178,7 +193,7 @@ const OrderPage = () => {
                                             {
                                                 pay.map((obj, index) => (
                                                     <Radio key={index} value={obj._id}>
-                                                        <ItemPay image={obj.image} alt={obj.name} />
+                                                        <p className={style.way_pay}>{obj.name}</p>
                                                     </Radio>
                                                 ))
                                             }
@@ -193,20 +208,11 @@ const OrderPage = () => {
                         </form>
                     </div>
                     <div className={style.block__order__items}>
-                        {checkArray.length !== 0 ? (
-                            checkArray.map((obj, index) => 
-                                <OrderItem
-                                    key={index}
-                                    {...obj}
-                                />
-                            )
-                        ) : (
-                            cart.map((obj, index) => 
-                                <OrderItem
-                                    key={index}
-                                    {...obj}
-                                />
-                            )
+                        {orderArray && orderArray.map((obj, index) => 
+                            <OrderItem
+                                key={index}
+                                {...obj}
+                            />
                         )}
                     </div>
                 </div>

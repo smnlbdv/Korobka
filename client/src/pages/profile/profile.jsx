@@ -14,12 +14,11 @@ import style from "./profile.module.scss";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 import ProfileOrderItem from "../../components/profileOrderItem/profileOrderItem.jsx";
 import ModalProfileItem from "../../components/modalProdileItem/modalProfileItem.jsx";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
   const {
     uploadAvatar,
-    profile,
-    setProfile,
     getProfile,
     logout,
     updateProfileUser,
@@ -39,6 +38,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const profile = useSelector(state => state.profile.profile)
 
   const showModal = (_id) => {
     setIsModalOpen(true);
@@ -391,7 +391,7 @@ const Profile = () => {
         <div className={style.block__user}>
           <div className={style.header__block}>
             <div className={style.update__image__block}>
-              <img src={"http://localhost:5000/avatar/" + avatarUser} alt="" />
+              <img src={"http://localhost:5000/avatar/" + avatarUser} alt="Avatar" />
             </div>
             <div>
               {
