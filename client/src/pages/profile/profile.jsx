@@ -13,7 +13,7 @@ import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import InputProfile from "../../components/inputProfile/inputProfile.jsx";
 import style from "./profile.module.scss";
 import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
-import ProfileOrderItem from "../../components/profileOrderItem/profileOrderItem.jsx";
+import ProfileOrdersBlock from "../../components/profileOrderBlock/profileOrderBlock.jsx";
 import ModalProfileItem from "../../components/modalProdileItem/modalProfileItem.jsx";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -117,10 +117,10 @@ const Profile = () => {
 
   const formikPersonal = useFormik({
     initialValues: {
-      name: "",
-      surname: "",
-      phone: "",
-      email: "",
+      name: profile.name || "",
+      surname: profile.surname || "",
+      phone: profile.phone || "",
+      email: profile.email || "",
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -172,23 +172,21 @@ const Profile = () => {
   useEffect(() => {
     if (profile.length === 0) {
       getProfile();
-    }
-
-    if (profile.length !== 0) {
+    } else {
       const newData = {
         name: profile.name,
         surname: profile.surname,
         phone: profile.phone,
         email: profile.email,
       };
-      formikPersonal.setValues(newData);
-      setInitialData(newData);
+      setInitialData(newData); 
+      // проверить на изменение
     }
   }, []);
 
-  useEffect(() => {
-    scrollToTop();
-  }, [])
+  // useEffect(() => {
+  //   scrollToTop();
+  // }, [])
 
   const itemsTabs = [
     {
@@ -459,16 +457,7 @@ const Profile = () => {
             ))}
           </Modal>
           {order.length !== 0 ? (
-            <div className={style.block__orders}>
-              {order.map((obj) => (
-                <ProfileOrderItem
-                  key={obj._id}
-                  groupImage={obj.items}
-                  {...obj}
-                  onClick={showModal}
-                />
-              ))}
-            </div>
+            <ProfileOrdersBlock showModal={showModal} />
           ) : (
             <div className={style.profile__block_null}>
               <div className={style.block__info}>
