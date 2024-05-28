@@ -73,6 +73,18 @@ export const updateCountItemAsync = createAsyncThunk(
   }
 );
 
+// export const fullDeleteCartItemAsync = createAsyncThunk(
+//   'cart/fullDeleteCartItemAsync',
+//   async () => {
+//     try {
+//       const response = await api.delete(`/api/cart/full-delete`)
+//       return response.data
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+//   }
+// );
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
@@ -111,7 +123,7 @@ const cartSlice = createSlice({
         orderPushItems (state, action) {
           state.order = []
           state.order.push(...action.payload);
-        },
+        } 
     },
     extraReducers: builder => {
         builder
@@ -158,6 +170,13 @@ const cartSlice = createSlice({
               }
             }
           });
+
+        // builder
+        //   .addCase(fullDeleteCartItemAsync.fulfilled, (state, action) => {
+        //     if(action.payload.delete === true) {
+        //       state.cart = []
+        //     }
+        //   });
     }
 })
 

@@ -4,6 +4,7 @@ import User from '../models/User.js'
 import CartItem from '../models/Cart.js'
 import verifyToken from '../validation/verifyToken.js'
 import Discount from '../models/Discount.js'
+import Cart from '../models/Cart.js'
 
 const cartRoute = Router()
 
@@ -162,8 +163,6 @@ cartRoute.post('/update-item', verifyToken, async (req, res) => {
         const productCount = req.body.count
         const userId = req.userId
 
-        console.log(productId, productCount, userId);
-
         await CartItem.updateOne(
             { owner: userId, 'items.product': productId},
             { $set: { 'items.$.quantity': productCount } },
@@ -184,6 +183,19 @@ cartRoute.post('/promo', verifyToken, async (req, res) => {
         } else {
             res.status(404).json({ message: 'Скидка не найдена.', active: 2});
         }
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
+})
+
+cartRoute.delete('/full-delete', verifyToken, async (req, res) => {
+    try {
+        const userId = req.userId
+        const cartUser = await Cart.findOne({ owner: userId });
+        cartUser.items = []
+        cartUser.save()
+                .then(() => res.status(200).json({delete: true}))
+                .catch(() => res.status(400).json({delete: false}))
     } catch (error) {
         res.status(400).json({error: error.message})
     }

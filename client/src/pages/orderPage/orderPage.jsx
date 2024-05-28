@@ -26,10 +26,9 @@ const OrderPage = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
-    const postOrderItems = async (order = orderArray,  values) => {
-        
+    const postOrderItems = async (order,  values) => {
+
         if(values) {
-            
             const price = calculatePrice(order)
     
             if(price) {
@@ -41,11 +40,11 @@ const OrderPage = () => {
                         dispatch(orderPushItems([]))
     
                         if(checkArray.length > 0) {
-                            checkArray.forEach((element) => {
-                                dispatch(deleteCartItemAsync(element._id));
+                            order.forEach((item) => {
+                                dispatch(deleteCartItemAsync(item._id));
                             });
                         } else {
-                            cart.map((item) => {
+                            order.map((item) => {
                                 dispatch(deleteCartItemAsync(item._id));
                             });
                         }
@@ -83,10 +82,11 @@ const OrderPage = () => {
         onSubmit: async (values, {resetForm}) => {
 
             const way = pay.find(item => item._id === values.wayPay)
-            if(way) {
+
+            if(way.name === "Картой") {
                 orderCheckout(orderArray, values)
             } else {
-                postOrderItems(values)
+                postOrderItems(orderArray, values)
                 resetForm()
             }
         },
@@ -109,9 +109,16 @@ const OrderPage = () => {
         const paymentSuccess = urlParams.get('payment_success');
 
         if (paymentSuccess === 'true') {
-            postOrderItems(JSON.parse(localStorage.getItem('order')), JSON.parse(localStorage.getItem('initialValues')))
+            const order = JSON.parse(localStorage.getItem('order'))
+            const initialValues = JSON.parse(localStorage.getItem('initialValues'))
+
+            if (cart && cart.length >= 0 && checkArray && checkArray.length >= 0) {
+                postOrderItems(order, initialValues);
+            }
+
             localStorage.removeItem('initialValues')
             localStorage.removeItem('order')
+
         }
     }, []);
 
