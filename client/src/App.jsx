@@ -49,6 +49,7 @@ function App() {
   const checkArray = useSelector(state => state.cart.checkArray)
   const orderArray = useSelector(state => state.cart.order)
   const order = useSelector(state => state.profile.order)
+  const profile = useSelector(state => state.profile.profile)
 
   useEffect(() => {
     getNewProduct()

@@ -46,7 +46,7 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
 
     useEffect(() => {
         setWidthMultiplier(groupImage.length > 3 ? 200 : 55 * groupImage.length);
-    }, [])
+    }, [groupImage.length])
 
     return (
         <div className={style.order__item_block}>

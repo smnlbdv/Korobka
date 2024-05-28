@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Tabs, Modal } from "antd";
 import * as Yup from "yup";
-import { updateInfoProfileAsync } from "../../store/profileSlice.js";
+import { addInfoProfile, updateInfoProfileAsync } from "../../store/profileSlice.js";
 
 import "./ant.css";
 
@@ -40,7 +40,7 @@ const Profile = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const profile = useSelector(state => state.profile.profile)
   const order = useSelector(state => state.profile.order)
-  const dispath = useDispatch()
+  const dispatch = useDispatch()
 
   const showModal = (_id) => {
     setIsModalOpen(true);
@@ -154,7 +154,7 @@ const Profile = () => {
             return result;
         }, {});
 
-        dispath(updateInfoProfileAsync(diffValues))
+        dispatch(updateInfoProfileAsync(diffValues))
               .then(() => {
                 openNotification("bottomRight", "Данные успешно измененны")
               })
@@ -170,8 +170,6 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    scrollToTop();
-
     if (profile.length === 0) {
       getProfile();
     }
@@ -187,6 +185,10 @@ const Profile = () => {
       setInitialData(newData);
     }
   }, []);
+
+  useEffect(() => {
+    scrollToTop();
+  }, [])
 
   const itemsTabs = [
     {
@@ -375,7 +377,7 @@ const Profile = () => {
       const formData = new FormData();
       const file = e.target.files[0];
       formData.append("image", file);
-      await uploadAvatar(formData).then((response) => setAvatarUser(response));
+      await uploadAvatar(formData).then((response) => dispatch(updateInfoProfileAsync({avatarUser: response})));
     } catch (error) {
       console.log(error);
     }
@@ -383,7 +385,7 @@ const Profile = () => {
 
   const logoutUser = () => {
     logout();
-    setProfile(null);
+    dispatch(addInfoProfile({}))
     navigate("/");
   };
 
@@ -452,8 +454,8 @@ const Profile = () => {
             width={900}
             footer={null}
           >
-            {selectedItems.map((item, index) => (
-                  <ModalProfileItem key={index} item={item}/>
+            {selectedItems.map((item) => (
+                  <ModalProfileItem key={item._id} item={item}/>
             ))}
           </Modal>
           {order.length !== 0 ? (
@@ -461,7 +463,6 @@ const Profile = () => {
               {order.map((obj) => (
                 <ProfileOrderItem
                   key={obj._id}
-                  favorite={true}
                   groupImage={obj.items}
                   {...obj}
                   onClick={showModal}

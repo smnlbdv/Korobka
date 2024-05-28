@@ -16,10 +16,10 @@ export const useAuth = () => {
     }
 
     const logout = () => {
+        localStorage.removeItem("user");
         setIsAuth(false)
         setUserId(null)
         setRole(null)
-        localStorage.clear();
     }
 
     const checkAuth = async () => {

@@ -94,7 +94,7 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
 userRoute.patch("/upload-image", verifyToken, upload.single("image"), async (req, res) => {
     try {
       const userId = req.userId;
-      const url = req.file.filename;
+      const url = process.env.API_URL + "/avatar/" + req.file.filename;
 
       const user = await User.findById(userId);
 
