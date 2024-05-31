@@ -46,6 +46,7 @@ const ProductPage = () => {
           {productReviews.length !== 0 ? (
             productReviews.map((item, index) => (
               <Review
+                id = {item._id}
                 key={index}
                 img={item.owner.avatarUser}
                 name={item.owner.name}
@@ -126,9 +127,6 @@ const ProductPage = () => {
     const result = order.some(orderItem => 
       orderItem.items.some(item => item.productId._id === id)
     );
-
-    console.log(order);
-    console.log(result);
 
     setHiddenButton(result)
 

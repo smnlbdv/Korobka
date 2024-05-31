@@ -134,4 +134,31 @@ reviewsRoute.post('/create/new-review', verifyToken, upload.array('image'), asyn
     }
 })
 
+reviewsRoute.post('/like-review/:reviewId', verifyToken, async (req, res) => {
+    const userId = req.userId;
+    const reviewId = req.params.reviewId
+    
+    try {
+        
+        const review = await Review.findById(reviewId);
+
+        if(review.likes.includes(userId)) {
+                let length = review.likes.length
+                review.likes = review.likes.filter(id => id.toString() !== userId);
+                await review.save();
+                return res.status(200).json({liked: false, like: review.likes.length, message: 'Успешно убрана оценка "Нравится"'})
+        }
+
+        review.likes.push(userId);
+        await review.save();
+
+        return res.status(200).json({liked: true, like: review.likes.length, message: 'Успешно поставлена оценка "Нравится"'})
+
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({message: "Ошибка"})
+    }
+})
+
 export default reviewsRoute

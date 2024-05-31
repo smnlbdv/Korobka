@@ -2,12 +2,19 @@ import { useEffect, useState } from 'react';
 import { Rate } from 'antd';
 import style from './review.module.scss'
 import Rating from '@mui/material/Rating'
+import { useAuth } from "../../hooks/auth.hook.js";
 
 import '../../libs/ant.css'
 import LikeButton from '../likeButton/likeButton.jsx';
 
 // eslint-disable-next-line react/prop-types
-const Review = ({img, name, lastName, text, data, stars, likes, hidden = false }) => {
+const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden = false }) => {
+
+    const [countLikes, setCountLikes] = useState(0)
+
+    useEffect(() => {
+        setCountLikes(likes.length)
+    }, [])
 
     return ( 
         <div className={style.slide_item}>
@@ -28,7 +35,7 @@ const Review = ({img, name, lastName, text, data, stars, likes, hidden = false }
                         <span className={style.date}>{data}</span>
                         {
                             hidden && 
-                            <LikeButton likes={likes}/>
+                            <LikeButton id={id} countLikes={countLikes} setCountLikes={setCountLikes} likes={likes}/>
                         }
                     </div>
             </div>
