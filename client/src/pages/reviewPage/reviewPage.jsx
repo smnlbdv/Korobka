@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { Link  } from 'react-router-dom';
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
+import Rating from '@mui/material/Rating'
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -14,13 +15,13 @@ import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 
 const ReviewPage = () => {
 
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(5);
     const [hover, setHover] = useState(null);
     const [hiddenBlock, setHiddenBlock] = useState(false);
     const [countImage, setCountImage] = useState(0);
     const [totalStars, setTotalStars] = useState(5);
-    const [product, setProduct] = useState([]);
     const [sliderImage, setSliderImage] = useState([]);
+    const [productTitle, setProductTitle] = useState([]);
     const { id } = useParams();
     const { userId, logout } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ const ReviewPage = () => {
             try {
                 await api.get(`/api/products/${id}`)
                           .then(response => {
-                            setProduct(...response.data);
+                            setProductTitle(response.data[0].title);
                           })
                           .catch(error => alert(error.message))
               } catch (error) {
@@ -39,6 +40,8 @@ const ReviewPage = () => {
         }
         fetchData()
     }, [])
+
+    
 
     function previewImage(event) {
         const blockList = document.querySelector(`.${style.block__list__image}`)
@@ -120,13 +123,13 @@ const ReviewPage = () => {
 
     return ( 
         <section className={`${style.section_review} wrapper`}>
+            <div className={style.bg_review}></div>
             <ul className="bread-crumbs">
                 <Link to="/">
                     <li>Главная</li>
                 </Link>
                 <li>Отзыв</li>
             </ul>
-            <h2 className={`${style.section_title} section__title`}>Отзыв к товару: {product.title} </h2>
             {
                 hiddenBlock ?
                 <div className={style.hidden__block}>
@@ -138,76 +141,62 @@ const ReviewPage = () => {
                 </div>
                 :
                 <div className={style.review__inner__block}>
-                    <div className={style.main__block__review}>
-                        <form action="" onSubmit={formikReview.handleSubmit}>
-                            <div className={style.inner__block__form}>
-                                <textarea
-                                    className={style.input__text}
-                                    id="text"
-                                    name="text"
-                                    value={formikReview.values.text}
-                                    placeholder="Напишите немного о товаре"
-                                    onChange={formikReview.handleChange}
-                                    maxLength={180}
-                                ></textarea>
-                                <div className={style.block__lower}>
-                                        {formikReview.errors.text && (
-                                            <p className={style.error__message}>
-                                                {formikReview.errors.text}
-                                            </p>
-                                        )}
-                                        <p className={style.count__letters}>{formikReview.values.text.length} / 180</p>
+                    <div className={style.left__block}>
+                        <h2 className={`${style.section_title} section__title`}>Отзыв к товару: {productTitle} </h2>
+                        <div className={style.main__block__review}>
+                            <form onSubmit={formikReview.handleSubmit}>
+                                <div className={style.inner__block__form}>
+                                    <textarea
+                                        className={style.input__text}
+                                        id="text"
+                                        name="text"
+                                        value={formikReview.values.text}
+                                        placeholder="Напишите немного о товаре"
+                                        onChange={formikReview.handleChange}
+                                        maxLength={180}
+                                    ></textarea>
+                                    <div className={style.block__lower}>
+                                            {formikReview.errors.text && (
+                                                <p className={style.error__message}>
+                                                    {formikReview.errors.text}
+                                                </p>
+                                            )}
+                                            <p className={style.count__letters}>{formikReview.values.text.length} / 180</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={style.main__block__stars}>
-                                <p>Оцените товар: </p>
-                                <div className={style.block__stars}>
-                                {[...Array(totalStars)].map((star, index) => {
-                                    const currentRating = index + 1;
-                                    return (
-                                        <label key={index}>
-                                            <input
-                                                type="radio"
-                                                name="rating"
-                                                value={currentRating}
-                                                onChange={() => setRating(currentRating)}
-                                            />
-                                            <span
-                                                className={style.star}
-                                                style={{
-                                                        backgroundImage: `url(${currentRating <= (hover || rating) ? '../../assets/star-review-active.svg' : '../../assets/star-review.svg'})`
-                                                    }}
-                                                onMouseEnter={() => setHover(currentRating)}
-                                                onMouseLeave={() => setHover(null)}
-                                            >
-                                            </span>
-                                        </label>
-                                    );
-                                })}
-                            </div>
-                            </div>
-                            <ButtonCreate
-                                text={"Сохранить"}
-                                type={"submit"}
-                                disabled={Object.keys(formikReview.errors).length > 0 }
-                            />
-                        </form>
+                                <div className={style.main__block__stars}>
+                                    <p>Оцените товар: </p>
+                                    <Rating
+                                        name="simple-controlled"
+                                        value={rating}
+                                        onChange={(event, newValue) => {
+                                            setRating(newValue);
+                                        }}
+                                        />
+                                </div>
+                                <ButtonCreate
+                                    text={"Сохранить"}
+                                    type={"submit"}
+                                    disabled={Object.keys(formikReview.errors).length > 0 }
+                                />
+                            </form>
+                        </div>
                     </div>
                     <div className={style.block__select__image}>
-                    <div className={style.block__review__right}>
-                        <div className={style.header__list__image}>
-                            <p className={style.block__select__title}>Прикрепите фото </p>
-                            <p className={countImage == 5 && style.icon__image__full}>Выбрано: {countImage}/5</p>
-                        </div>
-                        <div className={style.block__list__image}>
-                            <div className={style.item__select}>
-                                <label htmlFor="image"></label>
-                                <input type="file" name="image" accept="image/*" id="image" onChange={(event) => previewImage(event)}  disabled={countImage == 5 && true} />
-                                <div className={`${style.item__select__image} ${style.icon__image}`}>
-                                    <img src="/assets/gallery-add.svg" alt="Icon clip"/>
+                        <div className={style.block__review__right}>
+                            <div className={style.header__list__image}>
+                                <p className={style.block__select__title}>Прикрепите фото </p>
+                                <p className={countImage == 5 && style.icon__image__full}>Выбрано: {countImage}/5</p>
+                            </div>
+                            <div className={style.block__list__image}>
+                                <div className={style.item__select}>
+                                    <label htmlFor="image"></label>
+                                    <input type="file" name="image" accept="image/*" id="image" onChange={(event) => previewImage(event)}  disabled={countImage == 5 && true} />
+                                    <div className={`${style.item__select__image} ${style.icon__image}`}>
+                                        <img src="/assets/gallery-add.svg" alt="Icon clip"/>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -44,6 +44,7 @@
     font-style: normal;
     font-weight: 400; 
     margin-top: 10px;
+    height: 100%;
     white-space: pre-line;
 }
 
@@ -59,14 +60,6 @@
     height: 20px;
 }
 
-.review__left_block {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    row-gap: 5px;
-    max-width: 100%;
-}
-
 .review__right_block {  
     display: flex;
     flex-wrap: wrap;
@@ -80,7 +73,7 @@
     align-items: justify-content;
     justify-content: space-between;
     column-gap: 20px;
-    margin-top: 9px;
+    margin-bottom: auto;
 }
 
 .review__footer__block {
@@ -92,6 +85,8 @@
 
 .review__header__block {
     display: flex;
-    column-gap: 20px;
-    align-items: center;
+    height: 100%;
+    flex-direction: column;
+    row-gap: 5px;
+    max-width: 100%;
 }

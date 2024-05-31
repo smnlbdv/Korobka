@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs } from "antd";
+import { Faker } from "@faker-js/faker";
 
 import "swiper/css";
 import style from "./productPage.module.scss";
@@ -16,17 +17,18 @@ import ButtonReview from "../../components/buttonReview/buttonReview.jsx";
 import { useSelector } from "react-redux";
 
 const ProductPage = () => {
-  const [counts, setCounts] = useState(0);
+  const [counterCart, setCounterCart] = useState(0);
   const [isCounter, setIsCounter] = useState(false);
   const [hiddenButton, setHiddenButton] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [productReviews, setProductReviews] = useState([]);
   const { id } = useParams();
   const [isFavorite, setIsFavorite] = useState(false);
-  const { logout, contextHolder, favoriteItem, scrollToTop, order } = useContext(AuthContext);
+  const { logout, contextHolder, favoriteItem, scrollToTop } = useContext(AuthContext);
   const mainImage = useRef();
   const navigate = useNavigate();
   const cart = useSelector(state => state.cart.cart)
+  const order = useSelector(state => state.profile.order)
 
   const itemsTabs = [
     {
@@ -86,7 +88,7 @@ const ProductPage = () => {
     if (cart.length != 0) {
       cart.forEach((product, index) => {
         if (product._id === id) {
-          setCounts(cart[index].count);
+          setCounterCart(cart[index].count);
         }
       });
     }
@@ -98,17 +100,6 @@ const ProductPage = () => {
         .get(`/api/reviews/${id}`, {})
         .then((response) => {
           if (response.status == 200) {
-            const newArray = response.data;
-            newArray.forEach((element, index) => {
-              if (element.owner == null) {
-                newArray[index].owner = {
-                  avatarUser: "http://localhost:5000/avatar/default-avatar.png",
-                  name: "Василий",
-                  surname: "Иванкович",
-                };
-              }
-            });
-
             setProductReviews(response.data);
           }
         })
@@ -131,10 +122,16 @@ const ProductPage = () => {
     fetchData();
     fetchReviewsProduct();
     getCountProduct();
+
     const result = order.some(orderItem => 
       orderItem.items.some(item => item.productId._id === id)
     );
+
+    console.log(order);
+    console.log(result);
+
     setHiddenButton(result)
+
   }, []);
 
   useEffect(() => {
@@ -175,14 +172,17 @@ const ProductPage = () => {
               В наличии: <span>Есть</span>
             </p>
             <p className={style.text__product}>{selectedProduct.pageDesc}</p>
-            <p className={style.quantity__product}>В корзине:{`  ${counts}`}</p>
+            <p className={style.quantity__product}>В корзине:{`  ${counterCart}`}</p>
 
             <div className={style.button__add__cart}>
               <ButtonCreate
                 text={"Добавить"}
                 isCounter={isCounter}
                 setIsCounter={setIsCounter}
+                setCounterCart = {setCounterCart}
+                counterCart = {counterCart}
                 getCountProduct={getCountProduct}
+                button = {true}
                 _id={id}
               />
               {

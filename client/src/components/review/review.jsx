@@ -1,24 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Rate } from 'antd';
-/* eslint-disable react/prop-types */
 import style from './review.module.scss'
+import Rating from '@mui/material/Rating'
 
 import '../../libs/ant.css'
 import LikeButton from '../likeButton/likeButton.jsx';
 
+// eslint-disable-next-line react/prop-types
 const Review = ({img, name, lastName, text, data, stars, likes, hidden = false }) => {
 
     return ( 
         <div className={style.slide_item}>
             <div className={style.review__header__block}>
-                <div className={style.review__left_block}>
                     <div className={style.slide_header}>
                         <div className={style.logo}>
                             <img className={style.image} src={img} alt="" />
                             <p className={style.first_last}>{name} {lastName}</p>
                         </div>
                         <div className={style.static} >
-                            <Rate disabled defaultValue={stars}/>
+                            <Rating name="read-only" value={stars} readOnly />
                         </div>
                     </div>
                     <div className={style.text}>
@@ -31,7 +31,6 @@ const Review = ({img, name, lastName, text, data, stars, likes, hidden = false }
                             <LikeButton likes={likes}/>
                         }
                     </div>
-                </div>
             </div>
         </div>
      );

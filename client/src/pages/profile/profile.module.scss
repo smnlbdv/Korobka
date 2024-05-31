@@ -12,7 +12,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    min-height: 100vh;
+    height: calc(100vh - 70px);
+    max-height: 100vh;
     z-index: -1;
     background-image: url('./assets/bg-main-img.png');
     background-repeat: no-repeat;

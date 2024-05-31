@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 import ContentLoader from "react-content-loader"
 import { Link  } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { addProductCartAsync, increaseCartItemAsync } from "../../store/cartSlice.js";
+import { addProductCartAsync, decreaseCartItemAsync, deleteCartItemAsync, increaseCartItemAsync } from "../../store/cartSlice.js";
 
 import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './product.module.scss'
@@ -12,7 +12,7 @@ import style from './product.module.scss'
 const Product = ({_id, img, title, price, preText, loading = true, favorite }) => {
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
-    const { decreaseCartItem, unmountItem, openNotification } = useContext(AuthContext)
+    const { openNotification } = useContext(AuthContext)
     const dispatch = useDispatch()
     const cart = useSelector(state => state.cart.cart)
 
@@ -40,7 +40,7 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite }) =
                     .then(result => {
                         if(result.payload.increase) { 
                             setCountProduct(countProduct + 1)
-                            openNotification('bottomRight', 'Количетсво товара увеличено');
+                            openNotification('bottomRight', 'Количество товара увеличено');
                         }
                     })
         }
@@ -48,13 +48,15 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite }) =
 
     const subtractProduct = () => {
         if(countProduct <= 1) {
-            unmountItem(_id)
-            setIsAdded(false)
+            dispatch(deleteCartItemAsync(_id))
+                    .then(() => {
+                        setIsAdded(false)
+                    })
         } else {
-            const resultDeCrease = decreaseCartItem(_id)
-            if(resultDeCrease) { 
-                setCountProduct(countProduct - 1)
-            }
+            dispatch(decreaseCartItemAsync(_id))
+                    .then(() => {
+                        setCountProduct(countProduct - 1)
+                    })
         }
     }
 

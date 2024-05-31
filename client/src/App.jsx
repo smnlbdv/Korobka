@@ -15,23 +15,26 @@ import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
 import ResetPassword from "./components/resetPassword/resetPassword.jsx";
 
-const HomePage = lazy(() => import("./pages/home/homePage.jsx"));
-const Auth = lazy(() => import("./pages/auth/auth.jsx"));
-const Main = lazy(() => import("./pages/main/main.jsx"));
-const ReadyGifts = lazy(() => import("./pages/readyGifts/readyGifts.jsx"));
-const Registration = lazy(() => import("./components/registration/registration.jsx"));
-const Login = lazy(() => import("./components/login/login.jsx"));
-const Contacts = lazy(() => import("./pages/contacts/contacts.jsx"));
-const AboutUs = lazy(() => import("./pages/aboutUs/aboutUs.jsx"));
-const Liked = lazy(() => import("./pages/liked/liked.jsx"));
-const Profile = lazy(() => import("./pages/profile/profile.jsx"));
-const ProductPage= lazy(() => import("./pages/productPage/productPage.jsx"));
-const Cart= lazy(() => import("./pages/cart/cart.jsx"));
-const Forgot = lazy(() => import("./components/forgot/forgot.jsx"));
-const Admin = lazy(() => import("./pages/admin/admin.jsx"));
-const OrderPage = lazy(() => import("./pages/orderPage/orderPage.jsx"));
-const ReviewPage = lazy(() => import("./pages/reviewPage/reviewPage.jsx"));
-const ConstructorBox = lazy(() => import("./pages/constructorBox/constructorBox.jsx"));
+const delayedImport = (component, delay) => new Promise(resolve => setTimeout(() => resolve(component), delay));
+const lazyWithDelay = (importFunction, delay) => lazy(() => delayedImport(importFunction(), delay));
+
+const HomePage = lazyWithDelay(() => import("./pages/home/homePage.jsx"), 800);
+const Auth = lazyWithDelay(() => import("./pages/auth/auth.jsx"), 800);
+const Main = lazyWithDelay(() => import("./pages/main/main.jsx"), 800);
+const ReadyGifts = lazyWithDelay(() => import("./pages/readyGifts/readyGifts.jsx"), 800);
+const Registration = lazyWithDelay(() => import("./components/registration/registration.jsx"), 800);
+const Login = lazyWithDelay(() => import("./components/login/login.jsx"), 800);
+const Contacts = lazyWithDelay(() => import("./pages/contacts/contacts.jsx"), 800);
+const AboutUs = lazyWithDelay(() => import("./pages/aboutUs/aboutUs.jsx"), 800);
+const Liked = lazyWithDelay(() => import("./pages/liked/liked.jsx"), 800);
+const Profile = lazyWithDelay(() => import("./pages/profile/profile.jsx"), 800);
+const ProductPage = lazyWithDelay(() => import("./pages/productPage/productPage.jsx"), 800);
+const Cart = lazyWithDelay(() => import("./pages/cart/cart.jsx"), 800);
+const Forgot = lazyWithDelay(() => import("./components/forgot/forgot.jsx"), 800);
+const Admin = lazyWithDelay(() => import("./pages/admin/admin.jsx"), 800);
+const OrderPage = lazyWithDelay(() => import("./pages/orderPage/orderPage.jsx"), 800);
+const ReviewPage = lazyWithDelay(() => import("./pages/reviewPage/reviewPage.jsx"), 800);
+const ConstructorBox = lazyWithDelay(() => import("./pages/constructorBox/constructorBox.jsx"), 800);
 
 function App() {
   const [reviewsList, setReviewsList] = useState([])
@@ -522,10 +525,11 @@ function App() {
                 <Route path="cart" element={<Cart checkItemCart={checkItemCart()}/>}/>
                 <Route path="liked" element={<Liked favoriteItem={favoriteItem}/>} />
                 <Route path="profile" element={<Profile />} />
-                <Route path="product/:id" element={<ProductPage/>}/>
                 <Route path="product/:id/review" element={<ReviewPage/>}/>
                 <Route path="cart/order" element={<OrderPage/>}/>
               </Route>
+                
+              <Route path="product/:id" element={<ProductPage/>}/>
 
           </Route>
           <Route path="/api/auth/*" element={

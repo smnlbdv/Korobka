@@ -28,6 +28,7 @@ const Liked = () => {
     return ( 
         <section className={`${style.section_cart} wrapper`}>
             {contextHolder}
+            <div className={style.bg_liked}></div>
             <ul className="bread-crumbs">
                 <Link to="/">
                 <li>Главная</li>

@@ -6,6 +6,7 @@ import style from "./contacts.module.scss";
 const Contacts = () => {
   return (
     <section className={`${style.section_contacts} wrapper`}>
+      <div className={style.bg_contacts}></div>
       <ul className="bread-crumbs">
         <Link to="/">
           <li>Главная</li>

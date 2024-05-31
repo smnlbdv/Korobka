@@ -69,7 +69,7 @@ reviewsRoute.get('/best', async (req, res) => {
         const randomPage = Math.floor(Math.random() * 30) + 1;
         const response = await axios.get(
             `https://api.pexels.com/v1/search?query=live+${gender}&per_page=10&page=${randomPage}`,
-            { headers: { Authorization: '8wZxab7bkvBHaNHetprV0BRf8TEYqBkAdBNpxHI7yNIkwrP6Czit7AB5'  } }
+            { headers: { Authorization: process.env.AUTH_PIXELS  } }
           );
         const photos = response.data.photos;
         const arrPhotos = []
@@ -101,7 +101,10 @@ reviewsRoute.get('/best', async (req, res) => {
 reviewsRoute.get('/:id', async (req, res) => {
     try {
         const reviewsProduct = await Review.find({product: req.params.id}).populate('owner comments');
-        const modifiedData = modifiedReaviews(reviewsProduct)
+
+        const filteredReviews = reviewsProduct.filter(review => review.owner !== null);
+
+        const modifiedData = modifiedReaviews(filteredReviews)
 
         res.status(200).json(modifiedData);
 
