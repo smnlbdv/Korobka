@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Radio } from 'antd';
-import { deleteCartItemAsync, orderPushItems } from "../../store/cartSlice.js";
+import { deleteCartItemAsync, orderPushItems, setPromoAsync} from "../../store/cartSlice.js";
 import { addProductProfile } from "../../store/profileSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,10 +23,11 @@ const OrderPage = () => {
     const checkArray = useSelector(state => state.cart.checkArray)
     const profile = useSelector(state => state.profile.profile)
     const orderArray = useSelector(state => state.cart.order)
+    const promo = useSelector(state => state.cart.promo)
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
-    const postOrderItems = async (order,  values) => {
+    const postOrderItems = async (order, values, promo) => {
 
         if(values) {
             const price = calculatePrice(order)
@@ -35,9 +36,14 @@ const OrderPage = () => {
                 dispatch(placeOrderAsync({values, order, price}))
                     .then((response) => {
                         setUrl(response.payload.url);
-    
+
+                        if(promo.percentage !== 1) {
+                            dispatch(setPromoAsync(promo.id))
+                        }
+
                         dispatch(addProductProfile(response.payload.order))
                         dispatch(orderPushItems([]))
+                        
     
                         if(checkArray.length > 0) {
                             order.forEach((item) => {
@@ -84,7 +90,7 @@ const OrderPage = () => {
             const way = pay.find(item => item._id === values.wayPay)
 
             if(way.name === "Картой") {
-                orderCheckout(orderArray, values)
+                orderCheckout(orderArray, values, promo)
             } else {
                 postOrderItems(orderArray, values)
                 resetForm()
@@ -111,13 +117,16 @@ const OrderPage = () => {
         if (paymentSuccess === 'true') {
             const order = JSON.parse(localStorage.getItem('order'))
             const initialValues = JSON.parse(localStorage.getItem('initialValues'))
+            const promo = JSON.parse(localStorage.getItem('promo'))
 
             if (cart && cart.length >= 0 && checkArray && checkArray.length >= 0) {
-                postOrderItems(order, initialValues);
+                postOrderItems(order, initialValues, promo);
             }
 
             localStorage.removeItem('initialValues')
             localStorage.removeItem('order')
+            localStorage.removeItem('promo')
+
 
         }
     }, []);

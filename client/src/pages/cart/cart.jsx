@@ -8,7 +8,7 @@ import api from "../../api/api.js";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { useDispatch, useSelector } from "react-redux";
-import { addCheckArray, removeCheckArray, checkScroll, deleteCartItemAsync, calculatePrice, calculatePriceCheck, orderPushItems} from "../../store/cartSlice.js";
+import { addCheckArray, removeCheckArray, checkScroll, deleteCartItemAsync, calculatePrice, calculatePriceCheck, orderPushItems, setPromo, setTotalPrice} from "../../store/cartSlice.js";
 
 import CartItem from "../../components/cartItem/cartItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
@@ -22,7 +22,7 @@ import 'swiper/css/navigation';
 
 const Cart = ({checkItemCart}) => {
   const favoriteItem = useSelector(state => state.liked.liked)
-  const [sale, setSale] = useState({ active: false, percentage: 0,});
+  const [sale, setSale] = useState({id: null, active: false, percentage: 0,});
   const [cartCheckAll, setCartCheckAll] = useState(checkItemCart);
   const { scrollToTop, logout } = useContext(AuthContext);
   const cartTotalPrice = useSelector(state => state.cart.cartPrice)
@@ -30,13 +30,21 @@ const Cart = ({checkItemCart}) => {
   const dispatch = useDispatch()
   const cart = useSelector(state => state.cart.cart)
   const checkArray = useSelector(state => state.cart.checkArray)
+  const totalPrice = useSelector(state => state.cart.totalPrice)
   // const scroll = useSelector(state => state.cart.scroll)
 
-  const totalPrice = useMemo(() => {
-    return sale !== 0
-        ? cartTotalPrice - cartTotalPrice * (sale.percentage / 100)
-        : cartTotalPrice;
-  }, [cartTotalPrice, sale]);
+  useEffect(() => {
+    const result = sale.active === true
+      ? cartTotalPrice - cartTotalPrice * (sale.percentage / 100)
+      : cartTotalPrice;
+    
+    if(sale.active) {
+      dispatch(setPromo(sale));
+    }
+
+    dispatch(setTotalPrice(result))
+    
+  }, [cartTotalPrice, sale])
 
   const clickCheck = () => {
     if (!cartCheckAll) {
@@ -98,24 +106,20 @@ const Cart = ({checkItemCart}) => {
         try {
         await api.post(`/api/cart/promo`, { promoCode: search })
             .then((response) => {
-              if (response.status === 200) {
+                if (response.status === 200) {
                   setSale({
-                  active: response.data.active,
-                  percentage: response.data.percentage,
+                    id: response.data.id,
+                    active: response.data.active,
+                    percentage: response.data.percentage,
                   });
-              }
+                }
               })
             .catch((response) => {
-              if (response.response.status === 401) {
-                  logout();
-                  navigate("/api/auth/login");
-              }
               if (response.response.status === 404) {
-                  setSale({
+                setSale({
                   active: response.response.data.active,
                   percentage: 0,
-                  });
-
+                });
               }
             });
         } catch (error) {
@@ -202,9 +206,9 @@ const Cart = ({checkItemCart}) => {
               </div>
               <input
                 className={`${style.promo} ${
-                  sale.active == 1
+                  sale.active == true
                     ? style.promo__active__true
-                    : sale.active == 2
+                    : sale.active == false
                     ? style.promo__active__false
                     : ''
                 }`}
@@ -213,7 +217,7 @@ const Cart = ({checkItemCart}) => {
                 onInput={(event) =>  {
                   if(event.target.value.length === 0) {
                     setSale({
-                        active: 0,
+                        active: false,
                         percentage: 0
                     });
                   } else if(event.target.value.length > 0) {

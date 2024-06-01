@@ -53,6 +53,7 @@ function App() {
   const orderArray = useSelector(state => state.cart.order)
   const order = useSelector(state => state.profile.order)
   const profile = useSelector(state => state.profile.profile)
+  const cartPrice = useSelector(state => state.cart.cartPrice)
 
   useEffect(() => {
     getNewProduct()
@@ -380,7 +381,7 @@ function App() {
     }
   }
   
-  const orderCheckout = async (order, values) => {
+  const orderCheckout = async (order, values, promo = {percentage: 1} ) => {
     const items = order.map(item => ({
       id: item._id, 
       count: item.count,
@@ -389,10 +390,11 @@ function App() {
     }));
     try {
       await api.post('/api/profile/pay/checkout', {
-        items: items})
+        items: items, promo: promo.percentage})
                 .then(response => {
                   localStorage.setItem('initialValues', JSON.stringify(values))
                   localStorage.setItem('order', JSON.stringify(order))
+                  localStorage.setItem('promo', JSON.stringify(promo))
 
                   window.location = response.data.url
                 })

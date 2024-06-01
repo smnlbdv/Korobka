@@ -361,7 +361,7 @@ userRoute.post("/pay/checkout", async (req, res) => {
             product_data: {
               name: item.name,
             },
-            unit_amount: (item.price)*100,
+            unit_amount: (item.price - (item.price * (req.body.promo / 100))) * 100,
           },
           quantity: item.count
         }
@@ -374,6 +374,7 @@ userRoute.post("/pay/checkout", async (req, res) => {
       url: session.url
     })
   } catch (error) {
+    console.log(error.message);
     res.status(500).json({error: error.message})
   }
 })

@@ -220,9 +220,21 @@
     margin-top: 5px;
     font-size: 14px;
 
-    span {
+    .instock__product_yes {
         font-weight: 500;
         color: rgb(13, 238, 58);
+        margin-left: 5px;
+    }
+
+    .instock__product_past {
+        font-weight: 500;
+        color: rgb(238, 223, 13);
+        margin-left: 5px;
+    }
+
+    .instock__product_null{
+        font-weight: 500;
+        color: #f71919;
         margin-left: 5px;
     }
 }

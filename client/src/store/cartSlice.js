@@ -73,13 +73,26 @@ export const updateCountItemAsync = createAsyncThunk(
   }
 );
 
+export const setPromoAsync  = createAsyncThunk(
+  'cart/setPromoAsync',
+  async (id) => {
+    try {
+      await api.patch(`/api/cart/promo/${id}`)
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+);
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
         cart: [],
         checkArray: [],
         cartPrice: 0,
-        order: []
+        totalPrice: 0,
+        order: [],
+        promo: {}
         // scroll: false
     },
     reducers: {
@@ -94,6 +107,9 @@ const cartSlice = createSlice({
         },
         checkScroll (state, action) {
           state.scroll = action.payload;
+        },
+        setTotalPrice (state, action) {
+          state.totalPrice = action.payload;
         },
         calculatePrice (state, action) {
           state.cartPrice = state.cart.reduce((accumulator, product) => {
@@ -111,7 +127,10 @@ const cartSlice = createSlice({
         orderPushItems (state, action) {
           state.order = []
           state.order.push(...action.payload);
-        } 
+        },
+        setPromo(state, action) {
+          state.promo = {...action.payload}
+        }
     },
     extraReducers: builder => {
         builder
@@ -158,8 +177,12 @@ const cartSlice = createSlice({
               }
             }
           });
+        builder
+            .addCase(setPromoAsync.fulfilled, (state, action) => {
+                
+            });
     }
 })
 
-export const {addProductCart, addCheckArray, removeCheckArray, checkScroll, calculatePrice, calculatePriceCheck, orderPushItems} = cartSlice.actions
+export const {addProductCart, addCheckArray, removeCheckArray, checkScroll, calculatePrice, calculatePriceCheck, orderPushItems, setPromo, setTotalPrice } = cartSlice.actions
 export default cartSlice.reducer

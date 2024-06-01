@@ -167,7 +167,15 @@ const ProductPage = () => {
               </div>
             </div>
             <p className={style.instock__product}>
-              В наличии: <span>Есть</span>
+              В наличии:
+              {
+                selectedProduct.count >= 50 ?
+                <span className={style.instock__product_yes}>Есть</span>
+              : selectedProduct.count < 50 && selectedProduct.count > 0 ?
+                <span className={style.instock__product_past}>Меньше половины</span>
+              : selectedProduct.count === 0 &&
+                <span className={style.instock__product_null}>Нет в наличии</span>
+              }
             </p>
             <p className={style.text__product}>{selectedProduct.pageDesc}</p>
             <p className={style.quantity__product}>В корзине:{`  ${counterCart}`}</p>

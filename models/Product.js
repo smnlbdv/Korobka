@@ -33,6 +33,10 @@ const shema = new mongoose.Schema({
         ref: 'Category',
         required: true
     }],
+    count: {
+        type: Number,
+        default: 0
+    }
 })
 
 export default mongoose.model('Product', shema)
