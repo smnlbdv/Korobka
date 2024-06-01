@@ -14,7 +14,7 @@
 
 .slide_item_photos {
     @extend .slide_item;
-    padding: 30px 30px 40px 30px;
+    padding: 30px 30px 60px 30px;
 }
 
 .slide_header {
@@ -28,6 +28,21 @@
     width: 100%;
     bottom: 0;
     left: 0;
+    overflow: auto;
+    border-radius: 8px;
+
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 30px;
+        border-radius: 8px 8px 0px 0px;
+        background-color: white;
+        z-index: 1;
+    }
 }
 
 .logo {
@@ -105,21 +120,23 @@
 }
 
 .button__open_galety {
+    position: relative;
     width: 100%;
-    border-radius: 0 0 8px 8px;
+    border: 0;
+    border-radius: 0px 0px 8px 8px;
     padding: 8px;
     background-color: #faa928;
     color: white;
     font-size: 15px;
-    border: 0;
+    z-index: 5;
 }
 
 .list__photos_review {
+    position: relative;
     width: 100%;
     border-radius: 8px 8px 0px 0px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    box-shadow: 0px -5px 5px -5px rgba(0, 0, 0, 0.5);
     flex-wrap: wrap;
     column-gap: 10px;
     row-gap: 15px;

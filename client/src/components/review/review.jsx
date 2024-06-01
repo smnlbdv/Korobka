@@ -3,6 +3,9 @@ import { Rate } from 'antd';
 import style from './review.module.scss'
 import Rating from '@mui/material/Rating'
 import { useAuth } from "../../hooks/auth.hook.js";
+import { Fancybox as NativeFancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
+
 
 import '../../libs/ant.css'
 import LikeButton from '../likeButton/likeButton.jsx';
@@ -12,6 +15,7 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
 
     const [countLikes, setCountLikes] = useState(0)
     const openBlock = useRef()
+    const openBlockFooter = useRef()
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
     const handleOpenGallery = () => {
@@ -20,13 +24,29 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
             openBlock.current.style.padding = "0px";
             openBlock.current.style.maxHeight = 0 + 'px';
             openBlock.current.style.height = 0 + 'px';
+            openBlockFooter.current.style.boxShadow = 'rgba(0, 0, 0, 0) 0px -10px 20px';
         } else {
             setIsGalleryOpen(true)
             openBlock.current.style.padding = "30px 30px 20px 30px";
             openBlock.current.style.maxHeight = openBlock.current.scrollHeight + 'px';
             openBlock.current.style.height = openBlock.current.scrollHeight + 'px';
+            openBlockFooter.current.style.boxShadow = 'rgba(0, 0, 0, 0.21) 0px -10px 20px';
         }
     };
+
+    useEffect(() => {
+        const container = openBlock.current;
+    
+        const delegate = "[data-fancybox]";
+        const options = {};
+    
+        NativeFancybox.bind(container, delegate, options);
+    
+        return () => {
+          NativeFancybox.unbind(container);
+          NativeFancybox.close();
+        };
+    }, []);
 
     useEffect(() => {
         setCountLikes(likes.length)
@@ -57,11 +77,13 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
             </div>
             {
                 slider.length !== 0 &&
-                <div className={style.footer__review__photos}>
+                <div className={style.footer__review__photos} ref={openBlockFooter}>
                     <div className={style.list__photos_review}  ref={openBlock}>
                         {slider.map((photo, index) => (
                             <div className={style.photo__block} key={index}>
-                                <img src={photo} alt={"Photo review"} />
+                                <a data-fancybox="gallery" href={photo}>
+                                    <img src={photo} alt={"Photo review"} />
+                                </a>
                             </div>
                         ))}
                     </div>

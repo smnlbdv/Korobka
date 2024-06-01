@@ -16,12 +16,12 @@
 .mySwiperMain .swiper.swiper-coverflow.swiper-3d.swiper-initialized.swiper-horizontal.swiper-watch-progress.mySwipere {
     height: 800px;
     width: 600px;
-    border-radius: 12px;
+    border-radius: 8px;
 }
 
 .mySwiperMain .swiper-slide-shadow-right.swiper-slide-shadow-coverflow,
 .mySwiperMain .swiper-slide-shadow-left.swiper-slide-shadow-coverflow{
-    border-radius: 12px;
+    border-radius: 8px;
 }
 
 .mySwiperMain .swiper-slide-shadow-right, .swiper-slide-shadow-left {

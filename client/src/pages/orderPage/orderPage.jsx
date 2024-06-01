@@ -37,7 +37,7 @@ const OrderPage = () => {
                     .then((response) => {
                         setUrl(response.payload.url);
 
-                        if(promo.percentage !== 1) {
+                        if(promo && promo.percentage !== 1) {
                             dispatch(setPromoAsync(promo.id))
                         }
 
@@ -55,9 +55,12 @@ const OrderPage = () => {
                             });
                         }
                     })
-                    .catch(() => {
+                    .catch((response) => {
                         openNotificationError("bottomRight", "Ошибка оформления заказа");
-                        navigate("/cart");
+                        
+                        setTimeout(() => {
+                            navigate("/cart");
+                        }, 1000)
                     })
             }
         }
@@ -126,8 +129,6 @@ const OrderPage = () => {
             localStorage.removeItem('initialValues')
             localStorage.removeItem('order')
             localStorage.removeItem('promo')
-
-
         }
     }, []);
 

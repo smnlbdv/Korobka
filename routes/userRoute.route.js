@@ -18,6 +18,7 @@ import Email from "../models/Email.js";
 import Subscription from "../models/Subscription.js";
 import WayPay from "../models/WayPay.js";
 import OrderStatus from "../models/OrderStatus.js";
+import Product from "../models/Product.js"
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -234,6 +235,15 @@ userRoute.post("/order", verifyToken, async (req, res) => {
                 pdfGenerate(populatedOrder, order._id)
                           .then((data) => {
                             if(data.result) {
+                              body.cart.forEach(async (item) => {
+                                const product = await Product.findById(item._id);
+                                if (product.count > 0) {
+                                  product.count -= 1;
+                                  await product.save();
+                                } else {
+                                  res.status(400).json({ message: 'Недостаточно товара', count: 0 });
+                                }
+                              });
                               res.status(200).json({ message: 'Заказ оформлен', success: true, order: populatedOrder, url: data.url });
                             }
                           })
