@@ -229,7 +229,7 @@ const ProductPage = () => {
             </div>
           </div>
         </div>
-        <div className={style.block__information}>
+        <div className={`${style.block__information} tabs`}>
           <Tabs defaultActiveKey="1" items={itemsTabs}></Tabs>
         </div>
       </div>

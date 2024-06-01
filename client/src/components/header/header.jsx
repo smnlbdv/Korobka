@@ -134,7 +134,7 @@ const Header = () => {
                             </Link>
                         </li>
                     </ul>
-                    </nav>
+                </nav>
                 {
                     isAuth ? 
                     <div className={style.user_nav}>

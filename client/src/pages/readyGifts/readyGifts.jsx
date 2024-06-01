@@ -33,9 +33,10 @@ const ReadyGifts = () => {
         setStartCategoryValue(value);
         document.cookie = `id_category=${event.id}; expires= ${new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toUTCString()}; path=/; SameSite=None; Secure;`;
     };
+
     const toggleSlider = () => {
         setShowSlider(!showSlider);
-      };
+    };
 
     const renderItems = () => {
         const itemsToRender = (isLoading ? boxes : [...Array(7)]).map((obj, index) => (
