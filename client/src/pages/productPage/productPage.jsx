@@ -24,11 +24,18 @@ const ProductPage = () => {
   const [productReviews, setProductReviews] = useState([]);
   const { id } = useParams();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const { logout, contextHolder, favoriteItem, scrollToTop } = useContext(AuthContext);
   const mainImage = useRef();
   const navigate = useNavigate();
   const cart = useSelector(state => state.cart.cart)
   const order = useSelector(state => state.profile.order)
+
+  useEffect(() => {
+    if(selectedProduct.count == 0) {
+      setIsDisabled(true)
+    }
+  }, [selectedProduct.count])
 
   const itemsTabs = [
     {
@@ -56,6 +63,7 @@ const ProductPage = () => {
                 stars={item.stars}
                 likes={item.likes}
                 reviewProduct={true}
+                slider={item.slider}
                 hidden = {true}
               />
             ))
@@ -182,6 +190,7 @@ const ProductPage = () => {
 
             <div className={style.button__add__cart}>
               <ButtonCreate
+                disabled={isDisabled}
                 text={"Добавить"}
                 isCounter={isCounter}
                 setIsCounter={setIsCounter}

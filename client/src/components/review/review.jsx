@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Rate } from 'antd';
 import style from './review.module.scss'
 import Rating from '@mui/material/Rating'
@@ -8,16 +8,32 @@ import '../../libs/ant.css'
 import LikeButton from '../likeButton/likeButton.jsx';
 
 // eslint-disable-next-line react/prop-types
-const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden = false }) => {
+const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden = false, slider = [] }) => {
 
     const [countLikes, setCountLikes] = useState(0)
+    const openBlock = useRef()
+    const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+
+    const handleOpenGallery = () => {
+        if(isGalleryOpen) {
+            setIsGalleryOpen(false)
+            openBlock.current.style.padding = "0px";
+            openBlock.current.style.maxHeight = 0 + 'px';
+            openBlock.current.style.height = 0 + 'px';
+        } else {
+            setIsGalleryOpen(true)
+            openBlock.current.style.padding = "30px 30px 20px 30px";
+            openBlock.current.style.maxHeight = openBlock.current.scrollHeight + 'px';
+            openBlock.current.style.height = openBlock.current.scrollHeight + 'px';
+        }
+    };
 
     useEffect(() => {
         setCountLikes(likes.length)
     }, [])
 
     return ( 
-        <div className={style.slide_item}>
+        <div className={slider.length == 0 ? style.slide_item : style.slide_item_photos}>
             <div className={style.review__header__block}>
                     <div className={style.slide_header}>
                         <div className={style.logo}>
@@ -39,6 +55,21 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
                         }
                     </div>
             </div>
+            {
+                slider.length !== 0 &&
+                <div className={style.footer__review__photos}>
+                    <div className={style.list__photos_review}  ref={openBlock}>
+                        {slider.map((photo, index) => (
+                            <div className={style.photo__block} key={index}>
+                                <img src={photo} alt={"Photo review"} />
+                            </div>
+                        ))}
+                    </div>
+                    <button className={style.button__open_galety} onClick={handleOpenGallery}>
+                        {isGalleryOpen ? "Скрыть фото" : `Показать ${slider.length} фото`}
+                    </button>
+                </div>
+            }
         </div>
      );
 }

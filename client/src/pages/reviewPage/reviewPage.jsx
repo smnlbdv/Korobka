@@ -132,11 +132,12 @@ const ReviewPage = () => {
             </ul>
             {
                 hiddenBlock ?
-                <div className={style.hidden__block}>
-                    <div className={style.hidden__block__inner}>
-                        <img src="../../assets/party_popper.png" alt="Popper" />
-                        <p>Отзыв успешно создан</p>
+                <div className={style.hidden__block__inner}>
+                    <img src="../../assets/party_popper.png" alt="Popper" />
+                    <p>Отзыв успешно создан</p>
+                    <div className={style.buttons_block}>
                         <ButtonNull title={"В каталог"} path={'/ready-gifts/all'}/>
+                        <ButtonNull title={"Собрать"} path={'/constructor'}/>
                     </div>
                 </div>
                 :

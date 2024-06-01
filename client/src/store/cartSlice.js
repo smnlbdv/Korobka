@@ -92,7 +92,7 @@ const cartSlice = createSlice({
         cartPrice: 0,
         totalPrice: 0,
         order: [],
-        promo: {}
+        promo: null
         // scroll: false
     },
     reducers: {

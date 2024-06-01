@@ -35,7 +35,7 @@ const shema = new mongoose.Schema({
     }],
     count: {
         type: Number,
-        default: 0
+        default: 100
     }
 })
 

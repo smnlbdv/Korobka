@@ -92,7 +92,7 @@ const OrderPage = () => {
             if(way.name === "Картой") {
                 orderCheckout(orderArray, values, promo)
             } else {
-                postOrderItems(orderArray, values)
+                postOrderItems(orderArray, values, promo)
                 resetForm()
             }
         },

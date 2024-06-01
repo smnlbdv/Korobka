@@ -211,7 +211,9 @@ function App() {
   const getNewProduct = async () => {
     try {
       await api.get('/api/products/new')
-                 .then(response => setNewBoxList(response.data))
+                 .then(response => {
+                  setNewBoxList(response.data)
+                 })
                  .catch(error => alert(error.message))
     } catch (error) {
       console.log("Ошибка", error);

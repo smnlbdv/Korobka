@@ -208,6 +208,7 @@ const Main = () => {
               {newBoxList.map((item, index) => (
                 <Product
                   key={index}
+                  newProduct = {true}
                   {...item}
                 />
               ))}

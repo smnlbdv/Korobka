@@ -9,7 +9,7 @@ import { addProductCartAsync, decreaseCartItemAsync, deleteCartItemAsync, increa
 import FavoriteHeart from "../favoriteHeart/favoriteHeart.jsx";
 import style from './product.module.scss'
 
-const Product = ({_id, img, title, price, preText, loading = true, favorite }) => {
+const Product = ({_id, img, title, price, preText, loading = true, favorite, count, newProduct = false }) => {
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
     const { openNotification } = useContext(AuthContext)
@@ -88,7 +88,7 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite }) =
                             <div className={style.info}>
                                 <div className={style.image_box}>
                                     <img className={style.image} src={img} alt="image new" />
-                                    {/* {newProduct && <img className={style.icon_new_box} src="./assets/icon-new.svg" alt="" />} */}
+                                    {newProduct && <img className={style.icon_new_box} src="./assets/icon-new.svg" alt="" />}
                                 </div>
                                 <div className={style.text_block}>
                                     <h2 className={style.title}>{title}</h2>
@@ -116,7 +116,14 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite }) =
                                         <img className={style.counter__image} src="/assets/product-cart-increase.svg" alt="Increase" onClick={addProduct}/>
                                     </div>  
                                     :
-                                    <button className={style.btn_add} onClick={clickBtnAdd}>В корзину</button>
+                                    <button className={style.btn_add} onClick={count !== 0 && clickBtnAdd}>
+                                        {
+                                            count == 0 ?
+                                            <p>Нет в наличии</p>
+                                            :
+                                            <p>В корзину</p>
+                                        }
+                                    </button>
                                 }
                             </div>
                             <FavoriteHeart _id={_id} favorite={favorite}/> 
