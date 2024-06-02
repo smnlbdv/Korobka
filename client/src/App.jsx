@@ -72,8 +72,9 @@ function App() {
     const message = urlParams.get('message');
   
     if (message) {
-      navigate("/login")
+      navigate("/profile")
     }
+
   }, []);
 
   const calculatePrice = (cart) => {
@@ -200,6 +201,24 @@ function App() {
           }
         })
         return productBox
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
+
+  const getPostCard = async () => {
+    let postCard
+    try {
+      await api.get('/api/constructor/post-card')
+        .then(response => {
+          postCard = response.data
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            console.log(response.response);
+          }
+        })
+        return postCard
     } catch (error) {
       console.log("Ошибка", error);
     }
@@ -512,6 +531,7 @@ function App() {
         openNotification,
         openNotificationError,
         isAuth,
+        getPostCard,
         updatePassUser,
         reviewsList,
         getBestReviews,

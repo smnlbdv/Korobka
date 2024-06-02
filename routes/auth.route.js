@@ -57,6 +57,7 @@ auth.post('/registration', registerValidation, async (req, res) => {
 })
 
 auth.post('/login', loginValidation, async (req, res) => {
+
     try {
         const errors = validationResult(req)
         if(!errors.isEmpty()) {
@@ -89,6 +90,7 @@ auth.post('/login', loginValidation, async (req, res) => {
             id: user._id, 
             role: user.role.role
         });
+
 
     } catch (error) {
         console.log(error)
@@ -136,13 +138,14 @@ auth.post('/reset-password-request', async (req, res) => {
 auth.get('/reset-password/:token', async (req, res) => {
     const { token } = req.params
 
+
     if(!token) {
         return res.redirect(process.env.CLIENT_URL + `/api/auth/login`);
     }
 
     try {
         const verify = jwtToken.verify(token, process.env.JWT_RESET_SECRET)
-        const user = await User.findById(verify.id)
+        const user = await Email.findById(verify.id)
 
         if(!user) {
             return res.status(400).json({message:"Пользователь не найден"})
@@ -158,18 +161,24 @@ auth.post('/reset-password/:token', async (req, res) => {
     const token = req.params.token
     const password = req.body.password
 
+    console.log(token, password)
+
     if(!token) {
         res.redirect(process.env.CLIENT_URL + '/api/auth/login');
     }
     
     try {
         const verify = jwtToken.verify(token, process.env.JWT_RESET_SECRET)
-        const user = await User.findById(verify.id)
+        const email = await Email.findById(verify.id)
     
-        if(!user) {
+        if(!email) {
             return res.status(400).json({message:"Пользователь не найден"})
         }
+
+        const user = await User.findOne({email: email._id})
+
         user.passwordHash = await bcrypt.hash(password, 12)
+        
         await user.save()
 
         res.status(201).json({message:"Пароль успешно обновлен"})

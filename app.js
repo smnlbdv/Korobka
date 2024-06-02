@@ -15,9 +15,8 @@ import adminRoute from './routes/admin.route.js';
 import category from './routes/category.route.js';
 import cookieParser from 'cookie-parser';
 import wayPay from "./routes/wayPay.js"
-import { limiter } from './utils/limiter.js';
-import Product from './models/Product.js';
 import constructorRoute from './routes/constructor.route.js';
+import PostCard from './models/PostCard.js';
 
 dotev.config()
 const app = express()

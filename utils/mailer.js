@@ -21,7 +21,7 @@ export async function sendEmail (email, subject, html) {
         to: email,
         subject: subject,
         text: "",
-        html: html
+        html: `<span style="opacity: 0;">🎉 Спасибо, что подписан на наши новости! Мы очень рады, что вы с нами! 🌟</span> ${html}`
     };
 
     transporter.sendMail(mailOptions, function(err, info) {
@@ -38,9 +38,9 @@ export function sendActivationLink (to, link) {
     const mailOptions = {
         from: process.env.SMTP_EMAIL_LOGIN,
         to: to,
-        subject: "Активация аккаунта" ,
+        subject: "Подтверждение аккаунта",
         text: '',
-        html: activationEmailHTML(link)
+        html: `<span style="opacity: 0;">⚡️Подтвердите свой аккаунт, чтобы получить доступ к новым функциям!⚡️</span> ${activationEmailHTML(link)}`
     };
 
     transporter.sendMail(mailOptions, function(err, info) {
@@ -57,7 +57,7 @@ export function sendResetPassLink (to, link) {
         to: to,
         subject: "Сброс пароля" ,
         text: '',
-        html: resetPassEmailHTML(link)
+        html: `<span style="opacity: 0;">🔐 Нажмите здесь, чтобы сбросить пароль и получить доступ к своему аккаунту! 🔒</span> ${resetPassEmailHTML(link)}`
     };
 
     transporter.sendMail(mailOptions, function(err, info) {

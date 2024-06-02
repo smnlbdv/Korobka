@@ -16,16 +16,19 @@ const ConstructorBox = () => {
 
     const [boxTypes, setBoxTypes] = useState()
     const [product, setProduct] = useState()
-    const { getTypesBox, getProduct } = useContext(AuthContext)
+    const [postCard, setPostCard] = useState()
+    const { getTypesBox, getProduct, getPostCard } = useContext(AuthContext)
     
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const types = await getTypesBox();
                 const productRes = await getProduct()
+                const postCardRes = await getPostCard()
 
                 setProduct(productRes)
                 setBoxTypes(types);
+                setPostCard(postCardRes)
             } catch (error) {
                 console.error('Произошла ошибка:', error);
             }
@@ -75,7 +78,15 @@ const ConstructorBox = () => {
                         }
                     </div>
                 </SwiperSlide>
-                <SwiperSlide className={style.customSlide}>Slide 4</SwiperSlide>
+                <SwiperSlide className={style.customSlide}>
+                    <div className={style.customSlide__list__types}>
+                        {
+                            postCard && postCard.map((item, index) => (
+                                <CardBox key={index} obj={item}/>
+                            ))
+                        }
+                    </div>
+                </SwiperSlide>
                 <SwiperSlide className={style.customSlide}>Slide 5</SwiperSlide>
             </Swiper>
 

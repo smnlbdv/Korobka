@@ -68,7 +68,7 @@ const Login = () => {
               className={style.navigation__link}
               href="http://localhost:5173/api/auth/registration"
             >
-              Зарегистрироватся
+              Зарегистрироваться
             </a>
           </div>
           <div className={style.navigation__item}>

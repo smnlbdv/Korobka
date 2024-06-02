@@ -101,7 +101,7 @@ export default function resetPassEmailHTML(link) {
                           <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
                             <tr>
                               <td style="padding: 20px 0 10px;">
-                                <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 32px; line-height: 43px; color: #333333;" align="center"><strong>ЗАБЫЛИ<br>СВОЙ ПАРОЛЬ?&nbsp;</strong></div>
+                                <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 30px; line-height: 43px; color: #333333;" align="center"><strong>ЗАБЫЛИ<br>СВОЙ ПАРОЛЬ?&nbsp;</strong></div>
                               </td>
                             </tr>
                           </table>

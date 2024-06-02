@@ -101,7 +101,7 @@ export default function activationEmailHTML(link) {
                           <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
                             <tr>
                               <td style="padding: 20px 0 10px;" align="center">
-                                <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 32px; line-height: 43px; color: #333333;" align="center">ДЛЯ ПОДТВЕРЖДЕНИЯ НАЖМИТЕ НА КНОПКУ</div>
+                                <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 30px; line-height: 43px; color: #333333;" align="center">ДЛЯ ПОДТВЕРЖДЕНИЯ НАЖМИТЕ НА КНОПКУ</div>
                               </td>
                             </tr>
                           </table>

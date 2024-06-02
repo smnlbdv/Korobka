@@ -55,7 +55,7 @@
     height: 100% !important;
     min-height: 100% !important;
     overflow-y: auto !important;
-    padding-bottom: 40px !important;
+    padding: 40px 0;
 }
 
 .customSlide2 {
@@ -83,6 +83,15 @@
 
     &:after {
         content: "";
+        width: 20%;
+        height: 15%;
+        background-color: #c6915a;
+    }
+
+    &::before {
+        position: absolute;
+        content: "";
+        bottom: 0;
         width: 20%;
         height: 15%;
         background-color: #c6915a;
