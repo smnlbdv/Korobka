@@ -1,7 +1,6 @@
 import {Router} from 'express'
 import Category from '../models/Category.js'
 
-  
 const category = Router();
   
 category.get('/all', async (req, res) => {

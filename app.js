@@ -5,7 +5,7 @@ import morgan  from 'morgan';
 import cors from 'cors'
 import bodyParser from 'body-parser';
 import auth from './routes/auth.route.js'
-import productRoute from './routes/product.route.js'
+import boxRoute from './routes/product.route.js'
 import cartRoute from './routes/cart.route.js'
 import favoriteRoute from './routes/favorite.route.js';
 import emailRoute from './routes/email.route.js';
@@ -16,6 +16,8 @@ import category from './routes/category.route.js';
 import cookieParser from 'cookie-parser';
 import wayPay from "./routes/wayPay.js"
 import { limiter } from './utils/limiter.js';
+import Product from './models/Product.js';
+import constructorRoute from './routes/constructor.route.js';
 
 dotev.config()
 const app = express()
@@ -34,7 +36,7 @@ app.use(cors({
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use('/api/auth', auth)
-app.use('/api/products', productRoute)
+app.use('/api/products', boxRoute)
 app.use('/api/cart', cartRoute)
 app.use('/api/favorite', favoriteRoute)
 app.use('/api/email', emailRoute)
@@ -43,6 +45,7 @@ app.use('/api/reviews', reviewsRoute)
 app.use('/api/admin', adminRoute)
 app.use('/api/category', category)
 app.use('/api/way-pay', wayPay)
+app.use('/api/constructor', constructorRoute)
 
 
 async function start() {

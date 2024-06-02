@@ -15,12 +15,16 @@ import CardBox from '../../components/cardBox/cardBox.jsx';
 const ConstructorBox = () => {
 
     const [boxTypes, setBoxTypes] = useState()
-    const { getTypesBox } = useContext(AuthContext)
+    const [product, setProduct] = useState()
+    const { getTypesBox, getProduct } = useContext(AuthContext)
     
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const types = await getTypesBox();
+                const productRes = await getProduct()
+
+                setProduct(productRes)
                 setBoxTypes(types);
             } catch (error) {
                 console.error('Произошла ошибка:', error);
@@ -62,7 +66,15 @@ const ConstructorBox = () => {
                         <div className={style.bottom}></div>
                     </div>
                 </SwiperSlide>
-                <SwiperSlide className={style.customSlide}>Slide 3</SwiperSlide>
+                <SwiperSlide className={style.customSlide}>
+                    <div className={style.customSlide__list__types}>
+                        {
+                            product && product.map((item, index) => (
+                                <CardBox key={index} obj={item}/>
+                            ))
+                        }
+                    </div>
+                </SwiperSlide>
                 <SwiperSlide className={style.customSlide}>Slide 4</SwiperSlide>
                 <SwiperSlide className={style.customSlide}>Slide 5</SwiperSlide>
             </Swiper>

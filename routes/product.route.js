@@ -6,11 +6,11 @@ import { registerValidation, loginValidation } from './../validation/auth.js'
 
 import Category from '../models/Category.js'
 import BoxType from '../models/BoxType.js'
-import Product from '../models/Product.js'
+import Box from '../models/Box.js'
 
-const productRoute = Router()
+const boxRoute = Router()
 
-productRoute.get('/all', async (req, res) => {
+boxRoute.get('/all', async (req, res) => {
     const page = parseInt(req.query._page) || 1;
     const limit = parseInt(req.query._limit) || 12;
     const searchQuery = req.query._search;
@@ -46,8 +46,8 @@ productRoute.get('/all', async (req, res) => {
             }
         }
     
-        const totalCount = await Product.find(query).countDocuments();
-        const products = await Product.find(query)
+        const totalCount = await Box.find(query).countDocuments();
+        const products = await Box.find(query)
             .skip((page - 1) * limit)
             .limit(limit);
         res.json({ total: totalCount, products: products });
@@ -56,9 +56,9 @@ productRoute.get('/all', async (req, res) => {
     }
 })
 
-productRoute.get('/new', async (req, res) => {
+boxRoute.get('/new', async (req, res) => {
     try {
-        const newProducts = await Product.find().populate({
+        const newProducts = await Box.find().populate({
             path: 'category',
             match: { key: 'new' }
         }).limit(4).exec();
@@ -68,9 +68,9 @@ productRoute.get('/new', async (req, res) => {
     }
 })
 
-productRoute.get('/:id', async (req, res) => {
+boxRoute.get('/:id', async (req, res) => {
     try {
-        await Product.find({_id: req.params.id})
+        await Box.find({_id: req.params.id})
                      .then((product) => {
                         res.status(200).json(product)
                      })
@@ -82,14 +82,5 @@ productRoute.get('/:id', async (req, res) => {
     }
 })
 
-productRoute.get('/box/types', async (req, res) => {
-    try {
-        const products = await BoxType.find();
-        res.status(200).json(products);
-    } catch (error) {
-        console.error('Произошла ошибка:', error);
-        res.status(400).json({ error: error.message });
-    }
-});
 
-export default productRoute
+export default boxRoute

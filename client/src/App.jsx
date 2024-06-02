@@ -174,7 +174,7 @@ function App() {
   const getTypesBox = async () => {
     let typesBox
     try {
-      await api.get('/api/products/box/types')
+      await api.get('/api/constructor/box/types')
         .then(response => {
           typesBox = response.data
         })
@@ -184,6 +184,24 @@ function App() {
           }
         })
         return typesBox
+    } catch (error) {
+      console.log("Ошибка", error);
+    }
+  }
+
+  const getProduct = async () => {
+    let productBox
+    try {
+      await api.get('/api/constructor/product')
+        .then(response => {
+          productBox = response.data
+        })
+        .catch(response => {
+          if(response.response.status == 401) {
+            console.log(response.response);
+          }
+        })
+        return productBox
     } catch (error) {
       console.log("Ошибка", error);
     }
@@ -487,6 +505,7 @@ function App() {
         newBoxList,
         orderCheckout,
         favoriteItem,
+        getProduct,
         setFavoriteItem,
         sendEmailData,
         postResetPassword,

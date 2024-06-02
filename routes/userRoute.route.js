@@ -18,7 +18,7 @@ import Email from "../models/Email.js";
 import Subscription from "../models/Subscription.js";
 import WayPay from "../models/WayPay.js";
 import OrderStatus from "../models/OrderStatus.js";
-import Product from "../models/Product.js"
+import Box from "../models/Box.js"
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -236,7 +236,7 @@ userRoute.post("/order", verifyToken, async (req, res) => {
                           .then((data) => {
                             if(data.result) {
                               body.cart.forEach(async (item) => {
-                                const product = await Product.findById(item._id);
+                                const product = await Box.findById(item._id);
                                 if (product.count > 0) {
                                   product.count -= 1;
                                   await product.save();

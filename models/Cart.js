@@ -8,7 +8,7 @@ const shema = new mongoose.Schema({
     items: [{
         product: {
             type: Types.ObjectId,
-            ref: 'Product'
+            ref: 'Box'
         },
         quantity: {
             type: Number,

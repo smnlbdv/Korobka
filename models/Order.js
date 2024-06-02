@@ -9,7 +9,7 @@ const shema = new mongoose.Schema({
     items: [{
         productId: {
             type: Types.ObjectId,
-            ref: 'Product',
+            ref: 'Box',
             required: true
         },
         quantity: {

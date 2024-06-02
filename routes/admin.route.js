@@ -9,7 +9,7 @@ import iconv from 'iconv-lite'
 import path from 'path'
 import crypto from 'crypto'
 
-import Product from '../models/Product.js'
+import Box from '../models/Box.js'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -56,7 +56,7 @@ adminRoute.post('/add', verifyToken, upload.any(), async (req, res) => {
 adminRoute.delete('/delete/:id', verifyToken, async (req, res) => {
   try {
     const id = req.params.id;
-    const deleteProduct = await Product.findByIdAndDelete(id)
+    const deleteProduct = await Box.findByIdAndDelete(id)
 
     if(deleteProduct) {
       res.status(202).json({

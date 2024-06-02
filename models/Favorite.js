@@ -7,7 +7,7 @@ const shema = new mongoose.Schema({
     },
     items: [{
         type: Types.ObjectId,
-        ref: 'Product'
+        ref: 'Box'
     }],
 })
 

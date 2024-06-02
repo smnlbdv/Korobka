@@ -8,7 +8,7 @@ const shema = new mongoose.Schema({
     },
     product: {
         type: Types.ObjectId,
-        ref: 'Product',
+        ref: 'Box',
         required: true,
     },
     text: {
