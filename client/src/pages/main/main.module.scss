@@ -247,7 +247,5 @@
 .input_question_error {
     @extend .input_question;
     border: 2px solid #f60404ee;
-    color: rgba(246, 4, 4, 0.897);
-    background-color: rgb(247, 236, 236);
     transition: all 300ms;
 }

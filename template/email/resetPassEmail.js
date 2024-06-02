@@ -3,153 +3,193 @@ export default function resetPassEmailHTML(link) {
 
   return (
       `
-      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-      <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="ru">
+      <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+      <html>
       <head>
-        <meta charset="UTF-8">
-        <meta content="width=device-width, initial-scale=1" name="viewport">
-        <meta name="x-apple-disable-message-reformatting">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta content="telephone=no" name="format-detection">
-        <title>New Template</title><!--[if (mso 16)]>
-          <style type="text/css">
-          a {text-decoration: none;}
-          </style>
-          <![endif]--><!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]--><!--[if gte mso 9]>
-      <xml>
-          <o:OfficeDocumentSettings>
-          <o:AllowPNG></o:AllowPNG>
-          <o:PixelsPerInch>96</o:PixelsPerInch>
-          </o:OfficeDocumentSettings>
-      </xml>
-      <![endif]--><!--[if !mso]><!-- -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i"><!--<![endif]-->
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Забыли пароль?</title>
         <style type="text/css">
-      .rollover:hover .rollover-first {
-        max-height:0px!important;
-        display:none!important;
-        }
-        .rollover:hover .rollover-second {
-        max-height:none!important;
-        display:block!important;
-        }
-        .rollover span {
-        font-size:0px;
-        }
-        u + .body img ~ div div {
-        display:none;
-        }
-        #outlook a {
-        padding:0;
-        }
-        span.MsoHyperlink,
-      span.MsoHyperlinkFollowed {
-        color:inherit;
-        mso-style-priority:99;
-        }
-        a.es-button {
-        mso-style-priority:100!important;
-        text-decoration:none!important;
-        }
-        a[x-apple-data-detectors] {
-        color:inherit!important;
-        text-decoration:none!important;
-        font-size:inherit!important;
-        font-family:inherit!important;
-        font-weight:inherit!important;
-        line-height:inherit!important;
-        }
-        .es-desk-hidden {
-        display:none;
-        float:left;
-        overflow:hidden;
-        width:0;
-        max-height:0;
-        line-height:0;
-        mso-hide:all;
-        }
-        .es-button-border:hover > a.es-button {
-        color:#ffffff!important;
-        }
-      @media only screen and (max-width:600px) {.es-m-p0r { padding-right:0px!important } *[class="gmail-fix"] { display:none!important } p, a { line-height:150%!important } h1, h1 a { line-height:120%!important } h2, h2 a { line-height:120%!important } h3, h3 a { line-height:120%!important } h4, h4 a { line-height:120%!important } h5, h5 a { line-height:120%!important } h6, h6 a { line-height:120%!important } h1 { font-size:36px!important; text-align:left } h2 { font-size:26px!important; text-align:left } h3 { font-size:20px!important; text-align:left } h4 { font-size:24px!important; text-align:left } h5 { font-size:20px!important; text-align:left } h6 { font-size:16px!important; text-align:left } .es-header-body h1 a, .es-content-body h1 a, .es-footer-body h1 a { font-size:36px!important } .es-header-body h2 a, .es-content-body h2 a, .es-footer-body h2 a { font-size:26px!important } .es-header-body h3 a, .es-content-body h3 a, .es-footer-body h3 a { font-size:20px!important } .es-header-body h4 a, .es-content-body h4 a, .es-footer-body h4 a { font-size:24px!important } .es-header-body h5 a, .es-content-body h5 a, .es-footer-body h5 a { font-size:20px!important } .es-header-body h6 a, .es-content-body h6 a, .es-footer-body h6 a { font-size:16px!important } .es-menu td a { font-size:12px!important } .es-header-body p, .es-header-body a { font-size:14px!important } .es-content-body p, .es-content-body a { font-size:16px!important } .es-footer-body p, .es-footer-body a { font-size:14px!important } .es-infoblock p, .es-infoblock a { font-size:12px!important } .es-m-txt-c, .es-m-txt-c h1, .es-m-txt-c h2, .es-m-txt-c h3, .es-m-txt-c h4, .es-m-txt-c h5, .es-m-txt-c h6 { text-align:center!important } .es-m-txt-r, .es-m-txt-r h1, .es-m-txt-r h2, .es-m-txt-r h3, .es-m-txt-r h4, .es-m-txt-r h5, .es-m-txt-r h6 { text-align:right!important } .es-m-txt-j, .es-m-txt-j h1, .es-m-txt-j h2, .es-m-txt-j h3, .es-m-txt-j h4, .es-m-txt-j h5, .es-m-txt-j h6 { text-align:justify!important } .es-m-txt-l, .es-m-txt-l h1, .es-m-txt-l h2, .es-m-txt-l h3, .es-m-txt-l h4, .es-m-txt-l h5, .es-m-txt-l h6 { text-align:left!important } .es-m-txt-r img, .es-m-txt-c img, .es-m-txt-l img { display:inline!important } .es-m-txt-r .rollover:hover .rollover-second, .es-m-txt-c .rollover:hover .rollover-second, .es-m-txt-l .rollover:hover .rollover-second { display:inline!important } .es-m-txt-r .rollover span, .es-m-txt-c .rollover span, .es-m-txt-l .rollover span { line-height:0!important; font-size:0!important } .es-spacer { display:inline-table } a.es-button, button.es-button { font-size:20px!important; line-height:120%!important } a.es-button, button.es-button, .es-button-border { display:inline-block!important } .es-m-fw, .es-m-fw.es-fw, .es-m-fw .es-button { display:block!important } .es-m-il, .es-m-il .es-button, .es-social, .es-social td, .es-menu { display:inline-block!important } .es-adaptive table, .es-left, .es-right { width:100%!important } .es-content table, .es-header table, .es-footer table, .es-content, .es-footer, .es-header { width:100%!important; max-width:600px!important } .adapt-img { width:100%!important; height:auto!important } .es-mobile-hidden, .es-hidden { display:none!important } .es-desk-hidden { width:auto!important; overflow:visible!important; float:none!important; max-height:inherit!important; line-height:inherit!important } tr.es-desk-hidden { display:table-row!important } table.es-desk-hidden { display:table!important } td.es-desk-menu-hidden { display:table-cell!important } .es-menu td { width:1%!important } table.es-table-not-adapt, .esd-block-html table { width:auto!important } .es-social td { padding-bottom:10px } .h-auto { height:auto!important } .es-text-1898, .es-text-1898 p, .es-text-1898 a, .es-text-1898 h1, .es-text-1898 h2, .es-text-1898 h3, .es-text-1898 h4, .es-text-1898 h5, .es-text-1898 h6, .es-text-1898 ul, .es-text-1898 ol, .es-text-1898 li, .es-text-1898 span, .es-text-1898 sup, .es-text-1898 sub, .es-text-1898 u, .es-text-1898 b, .es-text-1898 strong, .es-text-1898 em, .es-text-1898 i { font-size:24px!important } }
-      @media screen and (max-width:384px) {.mail-message-content { width:414px!important } }
+          html {
+            -webkit-text-size-adjust: none;
+            -ms-text-size-adjust: none;
+          }
+        </style>
+        <style em="styles">
+      @media only screen and (max-device-width:660px),only screen and (max-width:660px) {
+          .em-narrow-table {
+              width: 100%!important;
+              max-width: 660px!important;
+              min-width: 320px!important;
+          }
+          .em-mob-wrap.em-mob-wrap-cancel,.noresp-em-mob-wrap.em-mob-wrap-cancel {
+              display: table-cell!important;
+          }
+          .em-mob-width-100perc {
+              width: 100%!important;
+              max-width: 100%!important;
+          }
+          .em-mob-wrap {
+              display: block!important;
+          }
+          .em-mob-width-auto {
+              width: auto!important;
+          }
+          .em-mob-padding_bottom-10 {
+              padding-bottom: 10px!important;
+          }
+          .em-mob-padding_top-20 {
+              padding-top: 20px!important;
+          }
+          .em-mob-padding_right-20 {
+              padding-right: 20px!important;
+          }
+          .em-mob-padding_bottom-20 {
+              padding-bottom: 20px!important;
+          }
+          .em-mob-padding_left-20 {
+              padding-left: 20px!important;
+          }
+          .em-mob-background_color-E5E5E5 {
+              background-color: #e5e5e5!important;
+          }
+      }
       </style>
       </head>
-      <body class="body" style="width:100%;height:100%;padding:0;Margin:0">
-        <div dir="ltr" class="es-wrapper-color" lang="ru" style="background-color:#FAFAFA"><!--[if gte mso 9]>
-            <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
-              <v:fill type="tile" color="#fafafa"></v:fill>
-            </v:background>
-          <![endif]-->
-        <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top;background-color:#FAFAFA">
-          <tr>
-            <td valign="top" style="padding:0;Margin:0">
-            <table cellpadding="0" cellspacing="0" class="es-header" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:100%;table-layout:fixed !important;background-color:transparent;background-repeat:repeat;background-position:center top">
-              <tr>
-                <td align="center" style="padding:0;Margin:0">
-                <table bgcolor="#ffffff" class="es-header-body" align="center" cellpadding="0" cellspacing="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:600px">
-                  <tr>
-                    <td align="left" bgcolor="#00046f" style="Margin:0;padding-top:10px;padding-right:20px;padding-bottom:10px;padding-left:20px;background-color:#00046f">
-                    <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+      <body style="margin: 0; padding: 0; background-color: #F8F8F8;">
+        <span class="preheader" style="display: none !important; visibility: hidden; opacity: 0; color: #F8F8F8; height: 0; width: 0; font-size: 1px;">&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;</span>
+        <!--[if !mso]><!-->
+        <div style="font-size:0px;color:transparent;opacity:0;">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</div>
+        <!--<![endif]-->
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="font-size: 1px; line-height: normal;" bgcolor="#F8F8F8">
+          <tr em="group">
+            <td align="center" bgcolor="#F5F5F5" style="background-color: #f5f5f5; background-repeat: repeat;">
+              <!--[if (gte mso 9)|(IE)]>
+              <table cellpadding="0" cellspacing="0" border="0" width="660"><tr><td>
+              <![endif]-->
+              <table cellpadding="0" cellspacing="0" width="100%" border="0" style="max-width: 660px; min-width: 660px; width: 660px;" class="em-narrow-table">
+                <tr em="block" class="em-structure">
+                  <td align="center" style="padding: 30px 40px;" class="em-mob-padding_top-20 em-mob-padding_right-20 em-mob-padding_bottom-20 em-mob-padding_left-20 em-mob-background_color-E5E5E5">
+                    <table border="0" cellspacing="0" cellpadding="0" class="em-mob-width-100perc">
                       <tr>
-                        <td class="es-m-p0r" valign="top" align="center" style="padding:0;Margin:0;width:560px">
-                        <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                          <tr>
-                            <td align="center" style="padding:0;Margin:0;padding-top:180px;padding-bottom:20px;font-size:0px"><a target="_blank" href="http://localhost:5174/" style="mso-line-height-rule:exactly;text-decoration:underline;color:#666666;font-size:14px"><img src="https://ecaxeci.stripocdn.email/content/guids/CABINET_9f04c7046452cda21b51587491ef8794491be2f5997d317d607ced7da9187c3e/images/group_1000002792.jpg" alt="Logo" style="display:block;font-size:12px;border:0;outline:none;text-decoration:none" width="145" title="Logo"></a></td>
-                          </tr>
-                        </table></td>
+                        <td width="580" class="em-mob-wrap em-mob-wrap-cancel em-mob-width-auto">
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
+                            <tr>
+                              <td align="center">
+                                <img src="https://emcdn.ru/473291/240602_6656_7oLOgza.png" width="120" border="0" alt="" style="display: block; width: 100%; max-width: 120px;"><span class="em-element-resize-img" style="cursor: nwse-resize;"></span><span class="em-element-resize-img" style="cursor: nwse-resize;"></span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
                       </tr>
-                    </table></td>
-                  </tr>
-                </table></td>
-              </tr>
-            </table>
-            <table cellpadding="0" cellspacing="0" class="es-content" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:100%;table-layout:fixed !important">
-              <tr>
-                <td align="center" style="padding:0;Margin:0">
-                <table bgcolor="#ffffff" class="es-content-body" align="center" cellpadding="0" cellspacing="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#FFFFFF;width:600px">
-                  <tr>
-                    <td align="left" bgcolor="#00046f" style="padding:0;Margin:0;padding-right:20px;padding-left:20px;padding-bottom:30px;background-color:#00046f">
-                    <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                    </table>
+                  </td>
+                </tr>
+                <tr em="block" class="em-structure">
+                  <td align="center" style="padding: 30px 40px; background-color: #ffffff; background-repeat: repeat;" class="em-mob-padding_left-20 em-mob-padding_right-20" bgcolor="#fff">
+                    <table border="0" cellspacing="0" cellpadding="0" class="em-mob-width-100perc">
                       <tr>
-                        <td align="center" valign="top" style="padding:0;Margin:0;width:560px">
-                        <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                          <tr>
-                            <td align="center" class="es-m-txt-c es-text-1898" style="padding:0;Margin:0;padding-bottom:10px"><h1 style="Margin:0;font-family:roboto, 'helvetica neue', helvetica, arial, sans-serif;mso-line-height-rule:exactly;letter-spacing:0;font-size:24px;font-style:normal;font-weight:bold;line-height:24px;color:#ffffff">Для сброса пароля перейдите по ссылке</h1></td>
-                          </tr>
-                          <tr>
-                            <td align="center" style="padding:0;Margin:0;padding-bottom:10px;padding-top:30px"><span class="es-button-border" style="border-style:solid;border-color:#2CB543;background:#ef4444;border-width:0px;display:inline-block;border-radius:20px;width:auto"><a href=${link} class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none !important;mso-line-height-rule:exactly;color:#FFFFFF;font-size:13px;padding:10px 30px;display:inline-block;background:#ef4444;border-radius:20px;font-family:roboto, 'helvetica neue', helvetica, arial, sans-serif;font-weight:normal;font-style:normal;line-height:16px;width:auto;text-align:center;letter-spacing:0;mso-padding-alt:0;mso-border-alt:10px solid #ef4444;border-left-width:30px;border-right-width:30px">Сбросить пароль</a></span></td>
-                          </tr>
-                        </table></td>
+                        <td width="580" valign="top" class="em-mob-wrap em-mob-width-100perc">
+
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
+                            <tr>
+                              <td align="center">
+                                <img src="https://emcdn.ru/278815/240412_4213_tAsWRx4.png" width="300" border="0" alt="" style="display: block; width: 100%; max-width: 300px;"><span class="em-element-resize-img" style="cursor: nwse-resize;"></span><div class="em-element-img-change" title="Сменить изображение"><svg viewbox="0 0 20 20" focusable="false" data-icon="bg-colors" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M3.75 17.5C3.41667 17.5 3.125 17.375 2.875 17.125C2.625 16.875 2.5 16.5833 2.5 16.25V3.75C2.5 3.41667 2.625 3.125 2.875 2.875C3.125 2.625 3.41667 2.5 3.75 2.5H16.25C16.5833 2.5 16.875 2.625 17.125 2.875C17.375 3.125 17.5 3.41667 17.5 3.75V16.25C17.5 16.5833 17.375 16.875 17.125 17.125C16.875 17.375 16.5833 17.5 16.25 17.5H3.75ZM3.75 16.25H16.25V3.75H3.75V16.25ZM4.91667 14.2292H15.1042L12.0417 10.1458L9.29167 13.7083L7.35417 11.0625L4.91667 14.2292Z"></path></svg></div><i class="em-element-img-edit"><i class="las la-pen"></i></i><i class="em-element-img-stock"><svg viewbox="0 0 12 12" focusable="false" data-icon="ai" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M4.12726 7.18183H9.6909L7.86364 4.76364L6.44545 6.63637L5.4909 5.49092L4.12726 7.18183ZM0.909082 11.3636C0.659082 11.3636 0.445068 11.2746 0.267041 11.0966C0.0890136 10.9186 0 10.7046 0 10.4546V2.99999H0.909082V10.4546H10.7273V11.3636H0.909082ZM2.72726 9.54546C2.47726 9.54546 2.26325 9.45644 2.08522 9.27842C1.90719 9.10039 1.81818 8.88638 1.81818 8.63638V1.90908C1.81818 1.65908 1.90719 1.44507 2.08522 1.26704C2.26325 1.08901 2.47726 1 2.72726 1H5.81817L6.90908 2.09091H11.0909C11.3409 2.09091 11.5549 2.17992 11.733 2.35795C11.911 2.53598 12 2.74999 12 2.99999V8.63638C12 8.88638 11.911 9.10039 11.733 9.27842C11.5549 9.45644 11.3409 9.54546 11.0909 9.54546H2.72726ZM2.72726 8.63638H11.0909V2.99999H6.53182L5.44091 1.90908H2.72726V8.63638Z"></path></svg></i><i class="em-element-img-changeto"><i class="las la-sync-alt"></i></i><i class="em-element-img-gif"><svg viewbox="0 0 12 12" focusable="false" data-icon="ai" width="1em" height="1em" fill="currentColor" aria-hidden="true">&lt;<path d="M5.68571 8.14286V3H6.79999V8.14286H5.68571ZM0.771429 8.14286C0.54 8.14286 0.353571 8.06786 0.212143 7.91786C0.0707142 7.76786 0 7.58571 0 7.37143V3.77143C0 3.55714 0.0707142 3.375 0.212143 3.225C0.353571 3.075 0.54 3 0.771429 3H3.40001C3.63144 3 3.81786 3.075 3.95929 3.225C4.10072 3.375 4.17144 3.55714 4.17144 3.77143V4.11429H1.11429V7.02857H3.05715V5.57143H4.17144V7.37143C4.17144 7.58571 4.10072 7.76786 3.95929 7.91786C3.81786 8.06786 3.63144 8.14286 3.40001 8.14286H0.771429ZM8.25714 8.14286V3H12V4.11429H9.37142V5.25714H11.1V6.37142H9.37142V8.14286H8.25714Z"></path></svg></i><i class="em-element-img-ai"><svg viewbox="0 0 12 12" focusable="false" data-icon="ai" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M2.45454 11.7273C2.45454 11.7273 2.16994 10.446 1.66154 9.88113C1.15314 9.31625 0 9 0 9C0 9 1.15314 8.68374 1.66154 8.11887C2.16994 7.554 2.45454 6.27273 2.45454 6.27273C2.45454 6.27273 2.73915 7.554 3.24755 8.11887C3.75594 8.68374 4.90909 9 4.90909 9C4.90909 9 3.75594 9.31625 3.24755 9.88113C2.73915 10.446 2.45454 11.7273 2.45454 11.7273Z"></path><path d="M7.63636 9C7.63636 9 7.1304 6.94996 6.22658 6.04614C5.32276 5.14233 3.27273 4.63636 3.27273 4.63636C3.27273 4.63636 5.32276 4.1304 6.22658 3.22657C7.1304 2.32275 7.63636 0.272728 7.63636 0.272728C7.63636 0.272728 8.14233 2.32275 9.04615 3.22657C9.94996 4.1304 12 4.63636 12 4.63636C12 4.63636 9.94996 5.14233 9.04615 6.04614C8.14233 6.94996 7.63636 9 7.63636 9Z"></path><path d="M1.63636 4.09091C1.63636 4.09091 1.44663 3.19402 1.10769 2.7986C0.768758 2.40318 0 2.18182 0 2.18182C0 2.18182 0.768758 1.96046 1.10769 1.56503C1.44663 1.16961 1.63636 0.272728 1.63636 0.272728C1.63636 0.272728 1.8261 1.16961 2.16503 1.56503C2.50397 1.96046 3.27273 2.18182 3.27273 2.18182C3.27273 2.18182 2.50397 2.40318 2.16503 2.7986C1.8261 3.19402 1.63636 4.09091 1.63636 4.09091Z"></path><path d="M10.6364 11.7273C10.6364 11.7273 10.4782 11.0866 10.1958 10.8042C9.91336 10.5218 9.27273 10.3636 9.27273 10.3636C9.27273 10.3636 9.91336 10.2055 10.1958 9.92307C10.4782 9.64064 10.6364 9 10.6364 9C10.6364 9 10.7945 9.64064 11.0769 9.92307C11.3594 10.2055 12 10.3636 12 10.3636C12 10.3636 11.3594 10.5218 11.0769 10.8042C10.7945 11.0866 10.6364 11.7273 10.6364 11.7273Z"></path></svg></i><span class="em-element-resize-img" style="cursor: nwse-resize;"></span><div class="em-element-img-change" title="Сменить изображение"><svg viewbox="0 0 20 20" focusable="false" data-icon="bg-colors" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M3.75 17.5C3.41667 17.5 3.125 17.375 2.875 17.125C2.625 16.875 2.5 16.5833 2.5 16.25V3.75C2.5 3.41667 2.625 3.125 2.875 2.875C3.125 2.625 3.41667 2.5 3.75 2.5H16.25C16.5833 2.5 16.875 2.625 17.125 2.875C17.375 3.125 17.5 3.41667 17.5 3.75V16.25C17.5 16.5833 17.375 16.875 17.125 17.125C16.875 17.375 16.5833 17.5 16.25 17.5H3.75ZM3.75 16.25H16.25V3.75H3.75V16.25ZM4.91667 14.2292H15.1042L12.0417 10.1458L9.29167 13.7083L7.35417 11.0625L4.91667 14.2292Z"></path></svg></div><i class="em-element-img-edit"><i class="las la-pen"></i></i><i class="em-element-img-stock"><svg viewbox="0 0 12 12" focusable="false" data-icon="ai" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M4.12726 7.18183H9.6909L7.86364 4.76364L6.44545 6.63637L5.4909 5.49092L4.12726 7.18183ZM0.909082 11.3636C0.659082 11.3636 0.445068 11.2746 0.267041 11.0966C0.0890136 10.9186 0 10.7046 0 10.4546V2.99999H0.909082V10.4546H10.7273V11.3636H0.909082ZM2.72726 9.54546C2.47726 9.54546 2.26325 9.45644 2.08522 9.27842C1.90719 9.10039 1.81818 8.88638 1.81818 8.63638V1.90908C1.81818 1.65908 1.90719 1.44507 2.08522 1.26704C2.26325 1.08901 2.47726 1 2.72726 1H5.81817L6.90908 2.09091H11.0909C11.3409 2.09091 11.5549 2.17992 11.733 2.35795C11.911 2.53598 12 2.74999 12 2.99999V8.63638C12 8.88638 11.911 9.10039 11.733 9.27842C11.5549 9.45644 11.3409 9.54546 11.0909 9.54546H2.72726ZM2.72726 8.63638H11.0909V2.99999H6.53182L5.44091 1.90908H2.72726V8.63638Z"></path></svg></i><i class="em-element-img-changeto"><i class="las la-sync-alt"></i></i><i class="em-element-img-gif"><svg viewbox="0 0 12 12" focusable="false" data-icon="ai" width="1em" height="1em" fill="currentColor" aria-hidden="true">&lt;<path d="M5.68571 8.14286V3H6.79999V8.14286H5.68571ZM0.771429 8.14286C0.54 8.14286 0.353571 8.06786 0.212143 7.91786C0.0707142 7.76786 0 7.58571 0 7.37143V3.77143C0 3.55714 0.0707142 3.375 0.212143 3.225C0.353571 3.075 0.54 3 0.771429 3H3.40001C3.63144 3 3.81786 3.075 3.95929 3.225C4.10072 3.375 4.17144 3.55714 4.17144 3.77143V4.11429H1.11429V7.02857H3.05715V5.57143H4.17144V7.37143C4.17144 7.58571 4.10072 7.76786 3.95929 7.91786C3.81786 8.06786 3.63144 8.14286 3.40001 8.14286H0.771429ZM8.25714 8.14286V3H12V4.11429H9.37142V5.25714H11.1V6.37142H9.37142V8.14286H8.25714Z"></path></svg></i><i class="em-element-img-ai"><svg viewbox="0 0 12 12" focusable="false" data-icon="ai" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M2.45454 11.7273C2.45454 11.7273 2.16994 10.446 1.66154 9.88113C1.15314 9.31625 0 9 0 9C0 9 1.15314 8.68374 1.66154 8.11887C2.16994 7.554 2.45454 6.27273 2.45454 6.27273C2.45454 6.27273 2.73915 7.554 3.24755 8.11887C3.75594 8.68374 4.90909 9 4.90909 9C4.90909 9 3.75594 9.31625 3.24755 9.88113C2.73915 10.446 2.45454 11.7273 2.45454 11.7273Z"></path><path d="M7.63636 9C7.63636 9 7.1304 6.94996 6.22658 6.04614C5.32276 5.14233 3.27273 4.63636 3.27273 4.63636C3.27273 4.63636 5.32276 4.1304 6.22658 3.22657C7.1304 2.32275 7.63636 0.272728 7.63636 0.272728C7.63636 0.272728 8.14233 2.32275 9.04615 3.22657C9.94996 4.1304 12 4.63636 12 4.63636C12 4.63636 9.94996 5.14233 9.04615 6.04614C8.14233 6.94996 7.63636 9 7.63636 9Z"></path><path d="M1.63636 4.09091C1.63636 4.09091 1.44663 3.19402 1.10769 2.7986C0.768758 2.40318 0 2.18182 0 2.18182C0 2.18182 0.768758 1.96046 1.10769 1.56503C1.44663 1.16961 1.63636 0.272728 1.63636 0.272728C1.63636 0.272728 1.8261 1.16961 2.16503 1.56503C2.50397 1.96046 3.27273 2.18182 3.27273 2.18182C3.27273 2.18182 2.50397 2.40318 2.16503 2.7986C1.8261 3.19402 1.63636 4.09091 1.63636 4.09091Z"></path><path d="M10.6364 11.7273C10.6364 11.7273 10.4782 11.0866 10.1958 10.8042C9.91336 10.5218 9.27273 10.3636 9.27273 10.3636C9.27273 10.3636 9.91336 10.2055 10.1958 9.92307C10.4782 9.64064 10.6364 9 10.6364 9C10.6364 9 10.7945 9.64064 11.0769 9.92307C11.3594 10.2055 12 10.3636 12 10.3636C12 10.3636 11.3594 10.5218 11.0769 10.8042C10.7945 11.0866 10.6364 11.7273 10.6364 11.7273Z"></path></svg></i>
+                              </td>
+                            </tr>
+                          </table>
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
+                            <tr>
+                              <td style="padding: 20px 0 10px;">
+                                <div style="font-family: 'Arial Black', Gadget, sans-serif; font-size: 32px; line-height: 43px; color: #333333;" align="center"><strong>ЗАБЫЛИ<br>СВОЙ ПАРОЛЬ?&nbsp;</strong></div>
+                              </td>
+                            </tr>
+                          </table>
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
+                            <tr>
+                              <td style="padding-bottom: 10px;">
+                                <div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 21px; color: #5a5a5a;" align="center">Не беспокойтесь, мы вам поможем! <br>Давайте установим новый пароль.<br></div>
+                              </td>
+                            </tr>
+                          </table>
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
+                            <tr>
+                              <td style="padding: 20px 0px 10px;" align="center">
+                                <table cellpadding="0" cellspacing="0" border="0" width="250" style="width: 250px;">
+                                  <tr>
+                                    <td align="center" valign="middle" height="50" style="background-color: #f77452; border-radius: 100px; height: 50px;" bgcolor="#F77452">
+                                      <a href="${link}" target="_blank" style="display: block; height: 50px; font-family: 'Arial Black', Gadget, sans-serif; color: #ffffff; font-size: 14px; line-height: 50px; text-decoration: none; white-space: nowrap;">СБРОСИТЬ ПАРОЛЬ</a>
+                                    </td>
+                                  </tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+
+
+                        </td>
                       </tr>
-                    </table></td>
-                  </tr>
-                </table></td>
-              </tr>
-            </table>
-            <table cellpadding="0" cellspacing="0" class="es-content" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:100%;table-layout:fixed !important">
-              <tr>
-                <td class="es-info-area" align="center" style="padding:0;Margin:0">
-                <table class="es-content-body" align="center" cellpadding="0" cellspacing="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:600px" bgcolor="#FFFFFF">
-                  <tr>
-                    <td align="left" bgcolor="#00046f" style="padding:20px;Margin:0;background-color:#00046f">
-                    <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                    </table>
+                  </td>
+                </tr>
+                <tr em="block" class="em-structure">
+                  <td align="center">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom"><tr><td height="20"><div class="em-element-vindent-bg"></div></td></tr></table>
+                  </td>
+                </tr>
+                <tr em="block" class="em-structure">
+                  <td align="center" style="padding: 20px 40px; background-color: #ffffff; background-repeat: repeat;" class="em-mob-padding_left-20 em-mob-padding_right-20" bgcolor="#fff">
+                    <table border="0" cellspacing="0" cellpadding="0" class="em-mob-width-100perc">
                       <tr>
-                        <td align="center" valign="top" style="padding:0;Margin:0;width:560px">
-                        <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                          <tr>
-                            <td align="center" class="es-infoblock" style="padding:0;Margin:0;padding-top:150px"><p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;letter-spacing:0;color:#ffffff;font-size:12px">​</p><p style="Margin:0;mso-line-height-rule:exactly;font-family:roboto, 'helvetica neue', helvetica, arial, sans-serif;line-height:18px;letter-spacing:0;color:#ffffff;font-size:12px">2024 © Все права защищены</p></td>
-                          </tr>
-                        </table></td>
+                        <td width="580" valign="top" class="em-mob-wrap em-mob-width-100perc">
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
+                            <tr>
+                              <td style="padding-right: 0px; padding-bottom: 10px; padding-left: 0px;">
+                                <div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 18px; line-height: 28px; color: #333333;"><strong>Ссылка действительна 2 часа</strong></div>
+                              </td>
+                            </tr>
+                          </table>
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
+                            <tr>
+                              <td style="padding-bottom: 10px;">
+                                <div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 21px; color: #5a5a5a;">Если вы не запрашивали сброс пароля или получили это сообщение <br>по ошибке, не обращайте внимания на это письмо.</div>
+                              </td>
+                            </tr>
+                          </table>
+
+                        </td>
                       </tr>
-                    </table></td>
-                  </tr>
-                </table></td>
-              </tr>
-            </table></td>
+                    </table>
+                  </td>
+                </tr>
+                <tr em="block" class="em-structure">
+                  <td align="center" style="padding: 30px 40px;" class="em-mob-padding_top-20 em-mob-padding_right-20 em-mob-padding_bottom-10 em-mob-padding_left-20">
+                    <table border="0" cellspacing="0" cellpadding="0" class="em-mob-width-100perc">
+                      <tr>
+                        <td width="280" valign="top" class="em-mob-wrap em-mob-width-100perc">
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom">
+                            <tr>
+                              <td style="padding-bottom: 20px;">
+                                <img src="https://emcdn.ru/473291/240602_6656_GTzqeez.png" width="130" border="0" alt="" style="display: inline-block; width: 100%; max-width: 130px;"><span class="em-element-resize-img" style="cursor: nwse-resize;"></span><span class="em-element-resize-img" style="cursor: nwse-resize;"></span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td width="20" class="em-mob-wrap">&nbsp;</td>
+                        <td width="280" valign="top" class="em-mob-wrap em-mob-width-100perc" align="right"><table cellpadding="0" cellspacing="0" border="0" width="100%" em="atom"><tr><td style="padding-bottom: 10px;">
+        <div style="font-family: -apple-system, 'Segoe UI', 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 16px; line-height: 21px; color: #5a5a5a;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; © 2024 Korobka&nbsp;</div>
+      </td></tr></table></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              <!--[if (gte mso 9)|(IE)]>
+              </td></tr></table>
+              <![endif]-->
+            </td>
           </tr>
         </table>
-        </div>
       </body>
       </html>
       `

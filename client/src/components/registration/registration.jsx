@@ -46,7 +46,7 @@ const Registration = () => {
     <div className={style.wrapper}>
       {contextHolder}
       <div className={style.block_reg}>
-        <h2 className="section__title">Регистарция</h2>
+        <h2 className="section__title">Регистрация</h2>
         <form className={style.form} onSubmit={formikRegistration.handleSubmit}>
           <InputReg
             id="name"
@@ -93,6 +93,26 @@ const Registration = () => {
             title={"Зарегистрироваться"}
           />
         </form>
+        <nav className={style.navigation}>
+          <div className={style.navigation__item}>
+            <p className={style.navigation__text}>Есть профиль?</p>
+            <a
+              className={style.navigation__link}
+              href="http://localhost:5173/api/auth/login"
+            >
+              Войти
+            </a>
+          </div>
+          <div className={style.navigation__item}>
+            <p className={style.navigation__text}>Забыли пароль?</p>
+            <a
+              className={style.navigation__link}
+              href="http://localhost:5173/api/auth/forgot"
+            >
+              Сбросить пароль
+            </a>
+          </div>
+        </nav>
       </div>
     </div>
   );

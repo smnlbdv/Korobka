@@ -61,7 +61,7 @@ const Login = () => {
           />
           <ButtonLogin title={"Войти"} />
         </form>
-        <div className={style.navigation}>
+        <nav className={style.navigation}>
           <div className={style.navigation__item}>
             <p className={style.navigation__text}>Нет профиля?</p>
             <a
@@ -80,7 +80,7 @@ const Login = () => {
               Сбросить пароль
             </a>
           </div>
-        </div>
+        </nav>
       </div>
     </div>
   );

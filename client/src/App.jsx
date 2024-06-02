@@ -45,7 +45,6 @@ function App() {
   const [modal, contextHolderEmail] = Modal.useModal();
   const { login, userId, role, logout, isAuth } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
-  const [messageShown, setMessageShown] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.cart)
@@ -71,12 +70,11 @@ function App() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const message = urlParams.get('message');
-
-    if (message && !messageShown) {
-      openNotification('bottomRight', message);
-      setMessageShown(true);
+  
+    if (message) {
+      navigate("/login")
     }
-  }, [messageShown])
+  }, []);
 
   const calculatePrice = (cart) => {
     return cart.reduce((accumulator, product) => {
