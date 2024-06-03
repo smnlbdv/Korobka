@@ -70,20 +70,32 @@
     height: 200px;
 }
 
+
 .front {
     display: flex;
     justify-content: center;
     position: absolute;
     width: 70%;
     height: 100%;
+    left: 0;
+    top: 0;
     transform: skew(0deg,  5deg) translateX(-5em);
     background-color: #cda16f;
     transition: all 250ms;
-    @include hover__box;
+    z-index: 100;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f2ca9c;
+        transition: all 250ms;
+    }
 
     &:after {
+        position: absolute;
+        top: 0;
         content: "";
         width: 20%;
+        z-index: -1;
         height: 15%;
         background-color: #c6915a;
     }
@@ -98,14 +110,51 @@
     }
 }
 
+.front_open {
+    @extend .front;
+    width: 200%;
+    height: 200%;
+    left: -50%;
+    top: -50%;
+    transform: none;
+    z-index: 103;
+
+    &:hover {
+        background-color: #cda16f;
+    }
+}
+
 .right {
     position: absolute;
     width: 65%;
     height: 100%;
+    left: 0;
+    top: 0;
     transform: skew(0deg,  -15deg) translateX(10.3em) translateY(1.1em);
     background-color: #c2925a;
     transition: all 250ms;
-    @include hover__box;
+    z-index: 100;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #f2ca9c;
+        transition: all 250ms;
+    }
+}
+
+.right_open {
+    @extend .right;
+    width: 200%;
+    height: 200%;
+    left: -50%;
+    top: -50%;
+    transform: none;
+    z-index: 103;
+    transition: all 250ms;
+
+    &:hover {
+        background-color: #c2925a;
+    }
 }
 
 .top {
@@ -114,7 +163,7 @@
     justify-content: center;
     width: 70%;
     height: 30.44%;
-    transform: translateY(-111.3%) translateX(2.11em) skew(-75deg, 5.0deg) ;
+    transform: translateY(-111.3%) translateX(2.11em) skew(-75deg, 5.0deg);
     background-color: #e6b073;
     transition: all 250ms;
 
@@ -123,6 +172,7 @@
         width: 20%;
         height: 100%;
         background-color: #c6915a;
+        transition: transform 250ms;
     }
 
     &:before {
@@ -133,6 +183,7 @@
         width: 1%;
         height: 100%;
         background-color: #94724a;
+        transition: transform 250ms;
     }
 }
 

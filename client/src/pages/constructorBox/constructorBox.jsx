@@ -1,6 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { AuthContext } from "../../context/authContext.js";
+import Moveable from "react-moveable";
+import { flushSync } from "react-dom";
+import keycon from "keycon";
+
+keycon.setGlobal();
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -17,8 +22,19 @@ const ConstructorBox = () => {
     const [boxTypes, setBoxTypes] = useState()
     const [product, setProduct] = useState()
     const [postCard, setPostCard] = useState()
+    const [front, setFront] = useState(false)
+    const [right, setRight] = useState(false)
     const { getTypesBox, getProduct, getPostCard } = useContext(AuthContext)
-    
+    const textRef = useRef(null);
+
+    const openFront = () => {
+        setFront(true)
+    }
+
+    const openRight = () => {
+        setRight(true)
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -61,10 +77,36 @@ const ConstructorBox = () => {
                 </SwiperSlide>
                 <SwiperSlide className={`${style.customSlide} ${style.customSlide2}`}>
                     <div className={style.three_d_box}>
-                        <div className={style.front}></div>
+                        <div className={!front ? style.front : style.front_open} onClick={openFront}>
+                            <img src="http://localhost:5000/typesBox/box-cart-box.png" alt="" ref={textRef}/>
+                            <Moveable
+                                target={textRef}
+                                scalable={true}
+                                keepRatio={true}
+                                draggable={true}
+                                snappable={true}
+                                bounds={{left: 0, top: 0, bottom: 0, right: 0, position: "css" }}
+                                onScaleStart={e => {
+                                    e.setFixedDirection([0, 0]);
+                                }}
+                                onDrag={e => {
+                                    e.target.style.transform = e.transform;
+                                }}
+                                onBeforeScale={e => {
+                                    if (keycon.global.shiftKey) {
+                                        e.setFixedDirection([-1, -1]);
+                                    } else {
+                                        e.setFixedDirection([0, 0]);
+                                    }
+                                }}
+                                onScale={e => {
+                                    e.target.style.transform = e.drag.transform;
+                                }}
+                            />
+                        </div>
                         <div className={style.back}></div>
                         <div className={style.left}></div>
-                        <div className={style.right}></div>
+                        <div className={!right ? style.right : style.right_open} onClick={openRight}></div>
                         <div className={style.top}></div>
                         <div className={style.bottom}></div>
                     </div>
