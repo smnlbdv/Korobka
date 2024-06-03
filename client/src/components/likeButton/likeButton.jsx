@@ -14,6 +14,7 @@ const LikeButton = ({id, countLikes, setCountLikes, likes}) => {
 
     useEffect(() => {
         setIsLike(likes.includes(userId))
+        console.log(likes.includes(userId))
     }, [likes, userId])
 
     const likeReview = async () => {

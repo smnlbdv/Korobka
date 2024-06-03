@@ -10,11 +10,10 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(config => {
-  const cookies = document.cookie.split(';').map(cookie => cookie.trim());
-  const token = cookies.find(cookie => cookie.startsWith('accessToken='));
-  
-  if (token) {
-    config.headers.Authorization = token;
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  if (user) {
+    config.data = user;
   }
 
   return config;

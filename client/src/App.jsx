@@ -502,7 +502,7 @@ function App() {
   const checkLocalUser = () => {
     const user = localStorage.getItem("user");
     return !!user && !!JSON.parse(user)?.id;
-}
+  }
 
   const PrivateRoute = ({isAllowed}) => {
     return (

@@ -2,3 +2,7 @@
 .ant-tabs-tab-btn {
     font-size: 15px !important;
 }
+
+.ant-modal-content {
+    padding: 30px !important;
+}

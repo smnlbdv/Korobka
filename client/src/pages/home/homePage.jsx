@@ -40,6 +40,7 @@ const HomePage = () => {
                     {contextHolder}
                     <button href="#" className={`${style.back_to_top} ${scrollTop && style.back_to_top_active}`} onClick={() => scrollToTop()}>
                         <img src="/assets/arrow-up.svg" alt="Arrow up" />
+                        <p>Наверх</p>
                     </button>
                     </>
                 }

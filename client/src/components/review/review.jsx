@@ -16,7 +16,15 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
     const [countLikes, setCountLikes] = useState(0)
     const openBlock = useRef()
     const openBlockFooter = useRef()
+    const photoRef = useRef(null);
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+
+    const handleClick = (index) => {
+        const photoRef = document.getElementById(`photo-${index}`);
+        if (photoRef) {
+            photoRef.click();
+        }
+    };
 
     const handleOpenGallery = () => {
         if(isGalleryOpen) {
@@ -28,8 +36,13 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
         } else {
             setIsGalleryOpen(true)
             openBlock.current.style.padding = "30px 30px 20px 30px";
-            openBlock.current.style.maxHeight = openBlock.current.scrollHeight + 'px';
-            openBlock.current.style.height = openBlock.current.scrollHeight + 'px';
+
+            const totalHeight = openBlock.current.scrollHeight +
+                    parseInt(window.getComputedStyle(openBlock.current).paddingTop) +
+                    parseInt(window.getComputedStyle(openBlock.current).paddingBottom) + 60;
+
+            openBlock.current.style.maxHeight = totalHeight + "px";
+            openBlock.current.style.height = totalHeight + "px";
             openBlockFooter.current.style.boxShadow = 'rgba(0, 0, 0, 0.21) 0px -10px 20px';
         }
     };
@@ -80,14 +93,14 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
                 <div className={style.footer__review__photos} ref={openBlockFooter}>
                     <div className={style.list__photos_review}  ref={openBlock}>
                         {slider.map((photo, index) => (
-                            <div className={style.photo__block} key={index}>
-                                <a data-fancybox="gallery" href={photo}>
+                            <div className={style.photo__block} key={index} onClick={() => handleClick(index)}>
+                                <a data-fancybox="gallery" href={photo} id={`photo-${index}`}>
                                     <img src={photo} alt={"Photo review"} />
                                 </a>
                             </div>
                         ))}
                     </div>
-                    <button className={style.button__open_galety} onClick={handleOpenGallery}>
+                    <button className={!isGalleryOpen ? style.button__open_galety : style.button__open_galety_grey} onClick={handleOpenGallery}>
                         {isGalleryOpen ? "Скрыть фото" : `Показать ${slider.length} фото`}
                     </button>
                 </div>
