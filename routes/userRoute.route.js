@@ -342,7 +342,7 @@ userRoute.get("/token/refresh", async (req, res) => {
       const tokens = generationToken({id: user._id, role: user.role.role})
 
       res.cookie("refreshToken", tokens.refreshToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true})
-      res.cookie("accessToken", tokens.accessToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true})
+      res.cookie("accessToken", tokens.accessToken, {maxAge: 7 * 24 * 60 * 60 * 1000, sameSite: 'None', secure: true})
       
       res.status(200).json({
           id: user._id, 
@@ -351,7 +351,7 @@ userRoute.get("/token/refresh", async (req, res) => {
 
     } catch (error) {
       res.cookie("refreshToken", "", { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true });
-      res.cookie("accessToken", "", { expires: new Date(0), httpOnly: true, sameSite: 'None', secure: true });
+      res.cookie("accessToken", "", { expires: new Date(0), sameSite: 'None', secure: true });
       return res.status(422).json({ message: 'Ошибка при проверке refresh токена', redirectTo: "/api/auth/login" });
     }
   } catch (error) {

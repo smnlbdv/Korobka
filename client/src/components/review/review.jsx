@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Rate } from 'antd';
 import style from './review.module.scss'
 import Rating from '@mui/material/Rating'
-import { useAuth } from "../../hooks/auth.hook.js";
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 

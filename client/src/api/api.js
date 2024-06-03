@@ -9,18 +9,17 @@ const api = axios.create({
   }
 });
 
-api.interceptors.request.use(config => {
-  const user = JSON.parse(localStorage.getItem('user'));
 
-  if (user) {
-    config.data = user;
+api.interceptors.request.use(config => {
+  const cookies = document.cookie.split(';').map(cookie => cookie.trim());
+  const token = cookies.find(cookie => cookie.startsWith('accessToken='));
+
+  if (token) {
+    config.headers.Authorization = token;
   }
 
   return config;
-
-}, error => {
-  return Promise.reject(error);
-});
+})
 
 api.interceptors.response.use(
   (response) => {

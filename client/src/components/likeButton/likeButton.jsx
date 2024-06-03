@@ -2,15 +2,13 @@ import style from './likeButton.module.scss'
 import api from '../../api/api';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/authContext';
-import { useAuth } from '../../hooks/auth.hook';
 
 // eslint-disable-next-line react/prop-types
 const LikeButton = ({id, countLikes, setCountLikes, likes}) => {
 
     
     const [isLike, setIsLike] = useState(false)
-    const {openNotificationError} = useContext(AuthContext)
-    const {userId} = useAuth()
+    const {openNotificationError, userId, role, isAuth} = useContext(AuthContext)
 
     useEffect(() => {
         setIsLike(likes.includes(userId))

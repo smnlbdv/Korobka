@@ -56,7 +56,7 @@ auth.post('/registration', registerValidation, async (req, res) => {
     }
 })
 
-auth.post('/login', loginValidation, async (req, res) => {
+auth.post('/login', loginValidation, async (req, res) => {  
 
     try {
         const errors = validationResult(req)
@@ -84,7 +84,7 @@ auth.post('/login', loginValidation, async (req, res) => {
         const tokens = generationToken({id: user._id, role: user.role.role})
 
         res.cookie("refreshToken", tokens.refreshToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true })
-        res.cookie("accessToken", tokens.accessToken, {maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true})
+        res.cookie("accessToken", tokens.accessToken, {maxAge: 7 * 24 * 60 * 60 * 1000, sameSite: 'None', secure: true})
         
         res.status(200).json({
             id: user._id, 

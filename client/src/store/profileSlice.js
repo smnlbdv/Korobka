@@ -53,7 +53,10 @@ const profileSlice = createSlice({
     name: 'profile',
     initialState: {
         profile: {},
-        order: []
+        order: [],
+        isAuth: false,
+        role: null,
+        userId: null
     },
     reducers: {
         addInfoProfile (state, action) {
@@ -61,6 +64,15 @@ const profileSlice = createSlice({
         },
         addProductProfile (state, action) {
             state.order.push(action.payload)
+        },
+        setIsAuth(state, action) {
+          state.isAuth = action.payload;
+        },
+        setRole(state, action) {
+            state.role = action.payload;
+        },
+        setUserId(state, action) {
+            state.userId = action.payload;
         }
     },
     extraReducers: builder => {
@@ -80,5 +92,5 @@ const profileSlice = createSlice({
     }
 })
 
-export const {addInfoProfile, addProductProfile, updateInfoProfile} = profileSlice.actions
+export const {addInfoProfile, addProductProfile, updateInfoProfile, setIsAuth, setRole, setUserId} = profileSlice.actions
 export default profileSlice.reducer

@@ -135,11 +135,8 @@ const ProductPage = () => {
         console.log(formData);
 
         try {
-          const token = JSON.parse(localStorage.getItem('userData')) || '';
-
           await api.post("/api/admin/add", formData, {
             headers: {
-              'Authorization': `${token.token}`,
               'Content-Type': 'multipart/form-data',
             }})
             .then((response) => {

@@ -3,13 +3,12 @@ import { Suspense, lazy, useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useNavigate, Navigate, Outlet } from "react-router-dom";
 import { AuthContext } from "./context/authContext.js";
-import { useAuth } from "./hooks/auth.hook.js";
 import { notification, Modal } from 'antd';
 import './libs/ant.css'
 import { useDispatch, useSelector } from "react-redux";
 import { addProductFavorite } from "./store/likedSlice.js";
 import { addProductCart } from "./store/cartSlice.js";
-import { addInfoProfile, addProductProfile } from "./store/profileSlice.js";
+import { addInfoProfile, addProductProfile, setIsAuth, setRole, setUserId } from "./store/profileSlice.js";
 
 import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
@@ -35,6 +34,7 @@ const Admin = lazyWithDelay(() => import("./pages/admin/admin.jsx"), 700);
 const OrderPage = lazyWithDelay(() => import("./pages/orderPage/orderPage.jsx"), 700);
 const ReviewPage = lazyWithDelay(() => import("./pages/reviewPage/reviewPage.jsx"), 800);
 const ConstructorBox = lazyWithDelay(() => import("./pages/constructorBox/constructorBox.jsx"), 700);
+const API_URL = "http://localhost:5000"
 
 function App() {
   const [reviewsList, setReviewsList] = useState([])
@@ -43,7 +43,6 @@ function App() {
   const [favoriteItem, setFavoriteItem] = useState([]);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
-  const { login, userId, role, logout, isAuth } = useAuth();
   const [apis, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -53,6 +52,45 @@ function App() {
   const order = useSelector(state => state.profile.order)
   const profile = useSelector(state => state.profile.profile)
   const cartPrice = useSelector(state => state.cart.cartPrice)
+
+  const isAuth = useSelector(state => state.profile.isAuth)
+  const userId = useSelector(state => state.profile.userId)
+  const role = useSelector(state => state.profile.role)
+
+  const login = (id, role) => {
+      dispatch(setIsAuth(true))
+      dispatch(setUserId(id))
+      dispatch(setRole(role))
+      localStorage.setItem('user', JSON.stringify({ id: id, role: role }));
+  }
+
+  const logout = () => {
+      document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; max-age=0; sameSite=None; secure";
+      dispatch(setIsAuth(false))
+      dispatch(setUserId(null))
+      dispatch(setRole(null))
+      localStorage.removeItem('user');
+  }
+
+  const checkAuth = async () => {
+      if(localStorage.getItem('user')) {
+          try {
+              const response = await api.get(`${API_URL}/api/profile/token/refresh`, { withCredentials: true });
+              if (response.status === 200) {
+                  login(response.data.id, response.data.role)
+              }
+          } catch (error) {
+              logout()
+          }
+      } else {
+          logout()
+      }
+  }
+
+
+  useEffect(() => {
+      checkAuth()
+  }, [login])
 
   useEffect(() => {
     getNewProduct()
@@ -500,8 +538,7 @@ function App() {
   };
 
   const checkLocalUser = () => {
-    const user = localStorage.getItem("user");
-    return !!user && !!JSON.parse(user)?.id;
+    return isAuth;
   }
 
   const PrivateRoute = ({isAllowed}) => {

@@ -13,6 +13,7 @@ const verifyToken = (req, res, next) => {
   try {
     const verifiedToken = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
     req.userId = verifiedToken.id;
+
     next();
   } catch (error) { 
     return res.status(401).json({ message: 'Ошибка токена' });
