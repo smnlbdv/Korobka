@@ -53,3 +53,45 @@
         object-fit: contain;
     }
 }
+
+.counter__block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1eae3e; 
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 6px 30px;
+    border: 0;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: white;
+    border-radius: 0px 0px 10px 10px;
+    transition: background-color 250ms;
+
+    &:hover {
+        background-color: #20b640;
+    }
+
+}
+
+
+.counter__image {
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+}
+
+.counter__count {
+    color: #FFF;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    text-align: center;
+}
+.counter__info {
+    display: flex;
+    flex-direction: column;
+}

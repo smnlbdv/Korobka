@@ -1,0 +1,121 @@
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: #000478;
+  z-index: 99;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  height: 70px;
+}
+
+.list__navigation {
+  position: relative;
+  display: flex;
+  column-gap: 24px;
+  font-weight: 500;
+  margin-left: 100px;
+}
+
+.list__item p {
+  position: relative;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 400;
+}
+.list__item p::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  transform: translateY(3px);
+  left: 0;
+  width: 0px;
+  height: 2px;
+  background-color: #F14D29;
+  transition: all 350ms;
+}
+.list__item p:hover::before {
+  width: 100%;
+  transition: all 350ms;
+}
+
+.buttons_block {
+  display: flex;
+  column-gap: 10px;
+  margin-left: auto;
+}
+
+.user_nav {
+  margin-left: auto;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.user_list {
+  display: flex;
+  align-items: center;
+  column-gap: 18px;
+}
+
+.list_item {
+  display: flex;
+  align-items: center;
+  column-gap: 9px;
+  cursor: pointer;
+}
+.list_item img {
+  width: 18px;
+}
+
+.admin__btn {
+  width: fit-content;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  border: 0;
+  color: inherit;
+  line-height: normal;
+  border-radius: 8px;
+  background-color: rgb(247, 25, 25);
+  transition: all 150ms;
+  padding: 8px 20px;
+}
+.admin__btn:hover {
+  transition: all 150ms;
+  background-color: rgb(248, 53, 53);
+}
+.admin__btn:active {
+  background-color: rgb(213, 46, 8);
+  transition: all 200ms;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.popover__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  left: 0;
+  width: 100%;
+  border-radius: 0 0 8px 8px;
+  cursor: pointer;
+  background-color: rgb(248, 38, 38);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  color: white;
+  transition: all 250ms;
+}
+.popover__button:hover {
+  background-color: rgb(250, 52, 52);
+  transition: all 250ms;
+}
+.popover__button:active {
+  background-color: rgb(252, 29, 29);
+  transition: all 250ms;
+}

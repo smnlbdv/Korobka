@@ -13,8 +13,10 @@ import style from './constructorBox.module.scss'
 import "../../index.scss"
 import "./constructor.scss"
 
-import { Pagination } from 'swiper/modules';
+import { Pagination, Navigation } from 'swiper/modules';
 import CardBox from '../../components/cardBox/cardBox.jsx';
+import { useSelector } from 'react-redux';
+import ItemConstructor from '../../components/itemConstructor/itemConstructor.jsx';
 
 
 const ConstructorBox = () => {
@@ -24,8 +26,12 @@ const ConstructorBox = () => {
     const [postCard, setPostCard] = useState()
     const [front, setFront] = useState(false)
     const [right, setRight] = useState(false)
-    const { getTypesBox, getProduct, getPostCard } = useContext(AuthContext)
+    const { getTypesBox, getProduct, getPostCard, contexHolder } = useContext(AuthContext)
     const textRef = useRef(null);
+    const productGift = useSelector(state => state.prefabricatedGift.product)
+    const typesBox = useSelector(state => state.prefabricatedGift.typesBox)
+    const postcards = useSelector(state => state.prefabricatedGift.postcards)
+
 
     const openFront = () => {
         setFront(true)
@@ -52,6 +58,7 @@ const ConstructorBox = () => {
         fetchData();
     }, []);
 
+
     return ( 
 
         <section className={`${style.section_constructor} wrapper`}>
@@ -70,7 +77,7 @@ const ConstructorBox = () => {
                     <div className={style.customSlide__list__types}>
                     {
                         boxTypes && boxTypes.map((item, index) => (
-                            <CardBox key={index} obj={item}/>
+                            <CardBox key={index} obj={item} type={"boxTypes"}/>
                         ))
                     }
                     </div>
@@ -78,7 +85,7 @@ const ConstructorBox = () => {
                 <SwiperSlide className={`${style.customSlide} ${style.customSlide2}`}>
                     <div className={style.three_d_box}>
                         <div className={!front ? style.front : style.front_open} onClick={openFront}>
-                            <img src="http://localhost:5000/typesBox/box-cart-box.png" alt="" ref={textRef}/>
+                            {/* <img src="http://localhost:5000/typesBox/box-cart-box.png" alt="" ref={textRef}/>
                             <Moveable
                                 target={textRef}
                                 scalable={true}
@@ -102,7 +109,7 @@ const ConstructorBox = () => {
                                 onScale={e => {
                                     e.target.style.transform = e.drag.transform;
                                 }}
-                            />
+                            /> */}
                         </div>
                         <div className={style.back}></div>
                         <div className={style.left}></div>
@@ -115,7 +122,7 @@ const ConstructorBox = () => {
                     <div className={style.customSlide__list__types}>
                         {
                             product && product.map((item, index) => (
-                                <CardBox key={index} obj={item}/>
+                                <CardBox key={index} obj={item} type={"product"}/>
                             ))
                         }
                     </div>
@@ -124,12 +131,30 @@ const ConstructorBox = () => {
                     <div className={style.customSlide__list__types}>
                         {
                             postCard && postCard.map((item, index) => (
-                                <CardBox key={index} obj={item}/>
+                                <CardBox key={index} obj={item} type={"postCard"}/>
                             ))
                         }
                     </div>
                 </SwiperSlide>
-                <SwiperSlide className={style.customSlide}>Slide 5</SwiperSlide>
+                <SwiperSlide className={style.customSlide}>
+                    <div className={style.customSlide__list__items}>
+                        {
+                            typesBox && typesBox.map((item, index) => (
+                                <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                            ))
+                        }
+                        {
+                            productGift && productGift.map((item, index) => (
+                                <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                            ))
+                        }
+                        {
+                            postcards && postcards.map((item, index) => (
+                                <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                            ))
+                        }
+                    </div>
+                </SwiperSlide>
             </Swiper>
 
         </section>

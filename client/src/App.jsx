@@ -17,23 +17,23 @@ import ResetPassword from "./components/resetPassword/resetPassword.jsx";
 const delayedImport = (component, delay) => new Promise(resolve => setTimeout(() => resolve(component), delay));
 const lazyWithDelay = (importFunction, delay) => lazy(() => delayedImport(importFunction(), delay));
 
-const HomePage = lazyWithDelay(() => import("./pages/home/homePage.jsx"), 700);
-const Auth = lazyWithDelay(() => import("./pages/auth/auth.jsx"), 700);
-const Main = lazyWithDelay(() => import("./pages/main/main.jsx"), 700);
-const ReadyGifts = lazyWithDelay(() => import("./pages/readyGifts/readyGifts.jsx"), 700);
-const Registration = lazyWithDelay(() => import("./components/registration/registration.jsx"), 700);
-const Login = lazyWithDelay(() => import("./components/login/login.jsx"), 700);
-const Contacts = lazyWithDelay(() => import("./pages/contacts/contacts.jsx"), 700);
-const AboutUs = lazyWithDelay(() => import("./pages/aboutUs/aboutUs.jsx"), 700);
-const Liked = lazyWithDelay(() => import("./pages/liked/liked.jsx"), 700);
-const Profile = lazyWithDelay(() => import("./pages/profile/profile.jsx"), 800);
-const ProductPage = lazyWithDelay(() => import("./pages/productPage/productPage.jsx"), 700);
-const Cart = lazyWithDelay(() => import("./pages/cart/cart.jsx"), 700);
-const Forgot = lazyWithDelay(() => import("./components/forgot/forgot.jsx"), 700);
-const Admin = lazyWithDelay(() => import("./pages/admin/admin.jsx"), 700);
-const OrderPage = lazyWithDelay(() => import("./pages/orderPage/orderPage.jsx"), 700);
-const ReviewPage = lazyWithDelay(() => import("./pages/reviewPage/reviewPage.jsx"), 800);
-const ConstructorBox = lazyWithDelay(() => import("./pages/constructorBox/constructorBox.jsx"), 700);
+const HomePage = lazyWithDelay(() => import("./pages/home/homePage.jsx"), 600);
+const Auth = lazyWithDelay(() => import("./pages/auth/auth.jsx"), 600);
+const Main = lazyWithDelay(() => import("./pages/main/main.jsx"), 600);
+const ReadyGifts = lazyWithDelay(() => import("./pages/readyGifts/readyGifts.jsx"), 600);
+const Registration = lazyWithDelay(() => import("./components/registration/registration.jsx"), 600);
+const Login = lazyWithDelay(() => import("./components/login/login.jsx"), 600);
+const Contacts = lazyWithDelay(() => import("./pages/contacts/contacts.jsx"), 600);
+const AboutUs = lazyWithDelay(() => import("./pages/aboutUs/aboutUs.jsx"), 600);
+const Liked = lazyWithDelay(() => import("./pages/liked/liked.jsx"), 600);
+const Profile = lazyWithDelay(() => import("./pages/profile/profile.jsx"), 600);
+const ProductPage = lazyWithDelay(() => import("./pages/productPage/productPage.jsx"), 600);
+const Cart = lazyWithDelay(() => import("./pages/cart/cart.jsx"), 600);
+const Forgot = lazyWithDelay(() => import("./components/forgot/forgot.jsx"), 600);
+const Admin = lazyWithDelay(() => import("./pages/admin/admin.jsx"), 600);
+const OrderPage = lazyWithDelay(() => import("./pages/orderPage/orderPage.jsx"), 600);
+const ReviewPage = lazyWithDelay(() => import("./pages/reviewPage/reviewPage.jsx"), 600);
+const ConstructorBox = lazyWithDelay(() => import("./pages/constructorBox/constructorBox.jsx"), 600);
 const API_URL = "http://localhost:5000"
 
 function App() {

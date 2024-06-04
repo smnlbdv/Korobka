@@ -1,0 +1,36 @@
+.block__input, .block__input__error {
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  border: 1px solid #D1D5DB;
+  background: #F5F5F5;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.092);
+  padding: 9px 13px;
+  border: 2px solid transparent;
+  transition: all 300ms;
+}
+
+.block__input__error {
+  border: 2px solid rgba(246, 4, 4, 0.9333333333);
+  color: rgba(246, 4, 4, 0.897);
+  background-color: rgb(247, 236, 236);
+  transition: all 300ms;
+}
+
+.input__image {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+}
+
+.profile__input {
+  background-color: transparent;
+  border: 0;
+  color: #454545;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  width: 100%;
+  transition: all 300ms;
+}

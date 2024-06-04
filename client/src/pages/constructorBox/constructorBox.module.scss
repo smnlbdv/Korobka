@@ -20,6 +20,18 @@
     overflow-y: auto;
 }
 
+.customSlide__list__items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(auto-fill, 90px);
+    justify-content: center;
+    column-gap: 20px;
+    row-gap: 20px;
+    flex-wrap: wrap;
+    width: 90%;
+    margin: 0 auto;
+}
+
 .customSlide__list__types {
     display: grid;
     grid-template-columns: repeat(4, 210px);
