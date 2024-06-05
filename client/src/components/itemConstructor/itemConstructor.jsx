@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import style from './itemConstructor.module.scss'
 
 const itemConstructor = ({_id, photo, title, price, count }) => {
+
     return ( 
         <div className={style.constructor__item_block}>
             <div className={style.image__block}>

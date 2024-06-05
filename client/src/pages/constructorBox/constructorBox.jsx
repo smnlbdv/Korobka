@@ -32,7 +32,6 @@ const ConstructorBox = () => {
     const typesBox = useSelector(state => state.prefabricatedGift.typesBox)
     const postcards = useSelector(state => state.prefabricatedGift.postcards)
 
-
     const openFront = () => {
         setFront(true)
     }
