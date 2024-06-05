@@ -11,10 +11,18 @@
     }
     
     .swiper-pagination {
-        width: max-content;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 70px;
+        row-gap: 20px !important;
+
     }
     
     .swiper-pagination-bullet {
+        margin: 0 !important;
+        padding: 0;
         width: 62px;
         height: 62px;
         border-radius: 15px !important;
@@ -22,11 +30,11 @@
         background-repeat: no-repeat;
         background-position: center;
         background-size: 45%;
-        margin: 20px 0 !important;
     }
     
     .swiper-pagination-bullet:nth-child(2) {
         background-image: url(../assets/style.svg);
+        animation: blinkBackground 1s;
     }
     
     .swiper-pagination-bullet:nth-child(3) {
@@ -40,6 +48,31 @@
     .swiper-pagination-bullet:nth-child(5) {
         background-image: url(../assets/receipt-text.svg);
     }
+}
+
+@keyframes blinkBackground {
+    0% { transform: scale(1);}
+    50% {transform: scale(1.1);}
+    100% { transform: scale(1); }
+}
+
+.mySwiper-constructor-style {
+
+    @extend .mySwiper-constructor;
+
+    .swiper-pagination-bullet:nth-child(2) {
+        background-image: url(../assets/shopping-cart.svg);
+        animation: none;
+    }
+    
+    .swiper-pagination-bullet:nth-child(3) {
+        background-image: url(../assets/book.svg);
+    }
+    
+    .swiper-pagination-bullet:nth-child(4) {
+        background-image: url(../assets/receipt-text.svg);
+    }
+
 }
 
 footer {

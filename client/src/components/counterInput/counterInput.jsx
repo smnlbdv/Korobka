@@ -16,7 +16,7 @@ const CounterInput = ({ counts, setCounts, _id }) => {
       if (counts <= 1) {
         dispatch(deleteCartItemAsync(_id))
                 .then(() => {
-                  openNotification("bottomright", "Товар удален из корзины")
+                  openNotification("bottomRight", "Товар удален из корзины")
                 })
       } else {
         const resultIncrease = dispatch(decreaseCartItemAsync(_id));

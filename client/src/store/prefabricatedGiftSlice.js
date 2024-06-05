@@ -34,25 +34,23 @@ const prefabricatedGiftSlice = createSlice({
     },
     incBoxTypeGift(state, action) {
       const index = state.typesBox.findIndex(
-        (item) => item._id === action.payload._id
+        (item) => item._id === action.payload
       );
       if (index !== -1) {
         state.typesBox[index]["count"] = state.typesBox[index]["count"] + 1;
       }
     },
     incProductGift(state, action) {
-      console.log(action.payload);
       const index = state.product.findIndex(
-        (item) => item._id === action.payload._id
+        (item) => item._id === action.payload
       );
       if (index !== -1) {
         state.product[index]["count"] = state.product[index]["count"] + 1;
       }
     },
     incPostCardGift(state, action) {
-      console.log(action.payload);
       const index = state.postcards.findIndex(
-        (item) => item._id === action.payload._id
+        (item) => item._id === action.payload
       );
       if (index !== -1) {
         state.postcards[index]["count"] = state.postcards[index]["count"] + 1;
@@ -60,7 +58,7 @@ const prefabricatedGiftSlice = createSlice({
     },
     decBoxTypeGift(state, action) {
       const index = state.typesBox.findIndex(
-        (item) => item._id === action.payload._id
+        (item) => item._id === action.payload
       );
       if (index !== -1) {
         state.typesBox[index]["count"] -= 1;
@@ -71,7 +69,7 @@ const prefabricatedGiftSlice = createSlice({
     },
     decProductGift(state, action) {
       const index = state.product.findIndex(
-        (item) => item._id === action.payload._id
+        (item) => item._id === action.payload
       );
       if (index !== -1) {
         state.product[index]["count"] -= 1;
@@ -82,7 +80,7 @@ const prefabricatedGiftSlice = createSlice({
     },
     decPostCardGift(state, action) {
       const index = state.postcards.findIndex(
-        (item) => item._id === action.payload._id
+        (item) => item._id === action.payload
       );
       if (index !== -1) {
         state.postcards[index]["count"] -= 1;
@@ -92,13 +90,13 @@ const prefabricatedGiftSlice = createSlice({
       }
     },
     delBoxTypeGift(state, action) {
-        state.typesBox = state.typesBox.filter(item => item.id !== action.payload);
+        state.typesBox = state.typesBox.filter(item => item._id !== action.payload);
     },
     delProductGift(state, action) {
-        state.product = state.product.filter(item => item.id !== action.payload);
+        state.product = state.product.filter(item => item._id !== action.payload);
     },
     delPostCardGift(state, action) {
-        state.postcards = state.postcards.filter(item => item.id !== action.payload);   
+        state.postcards = state.postcards.filter(item => item._id !== action.payload);   
     },
   },
   extraReducers: (builder) => {

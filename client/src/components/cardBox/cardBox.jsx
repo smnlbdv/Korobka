@@ -27,46 +27,45 @@ const CardBox = ({ obj, type }) => {
   const dispatch = useDispatch();
   const { openNotification } = useContext(AuthContext);
 
-  useEffect(() => {
-
-    // if (type === "boxTypes") {
-    //     handleDelItem(delBoxTypeGift);
-    //   }
-
-    //   if (type === "product") {
-    //     handleDelItem(delProductGift);
-    //   }
-
-    //   if (type === "postCard") {
-    //     handleDelItem(delPostCardGift);
-    //   }
-
-    return () => {
-      if (type === "boxTypes") {
-        handleDelItem(delBoxTypeGift);
-      }
-
-      if (type === "product") {
-        handleDelItem(delProductGift);
-      }
-
-      if (type === "postCard") {
-        handleDelItem(delPostCardGift);
-      }
-    };
-  }, []);
 
   const subtractProduct = () => {
-    if (type === "boxTypes") {
-      handleAddDec(decBoxTypeGift);
-    }
+    if (countProduct <= 1) {
+      if (type === "boxTypes") {
+        handleDelItem(delBoxTypeGift)
+        openNotification("bottomRight", "Коробка удалена")
+        setCountProduct(0)
+        setIsAdded(false)
+      }
+  
+      if (type === "product") {
+        handleDelItem(delProductGift)
+        openNotification("bottomRight", "Продукт удален")
+        setCountProduct(0)
+        setIsAdded(false)
+      }
+  
+      if (type === "postCard") {
+        handleDelItem(delPostCardGift)
+        openNotification("bottomRight", "Открытка удалена")
+        setCountProduct(0)
+        setIsAdded(false)
+      }
 
-    if (type === "product") {
-      handleAddDec(decProductGift);
-    }
-
-    if (type === "postCard") {
-      handleAddDec(decPostCardGift);
+    } else {
+      if (type === "boxTypes") {
+        handleAddDec(decBoxTypeGift);
+        setCountProduct(countProduct - 1)
+      }
+  
+      if (type === "product") {
+        handleAddDec(decProductGift);
+        setCountProduct(countProduct - 1)
+      }
+  
+      if (type === "postCard") {
+        handleAddDec(decPostCardGift);
+        setCountProduct(countProduct - 1)
+      }
     }
   };
 

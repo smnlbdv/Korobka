@@ -22,16 +22,116 @@
 
 .customSlide__list__items {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(auto-fill, 90px);
     justify-content: center;
     column-gap: 10px;
     row-gap: 10px;
     flex-wrap: wrap;
+    flex: 1;
+}
+
+.main__type_block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 20px 35px 20px;
+    border-radius: 10px;
+    background-color: rgb(1, 6, 153);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+}
+
+.main__type_title {
+    text-align: center;
+    font-size: 15px;
+}
+
+.check__block {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    justify-content: space-between;
+    column-gap: 50px;
     width: 90%;
     margin: 0 auto;
+}
+
+.main__type_price {
+    text-transform: uppercase;
+    margin: 30px 0;
+    margin-top: 25px;
+}
+
+.main__type_button {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 11px 10px;
+    border-radius: 0px 0px 10px 10px;
+    border: 0;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    background-color: #1eae3e;
+    color: white;
+    transition: all 250ms;
+    
+    &:hover {
+        background-color: #20b640;
+        transition: all 250ms;
+    }
+}
+
+.main__type_image {
+    max-width: 130px;
+    height: 130px;
+    margin-bottom: auto;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+.counter__block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1eae3e; 
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 6px 30px;
+    border: 0;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: white;
+    border-radius: 0px 0px 10px 10px;
+    transition: all 250ms;
+
+    &:hover {
+        background-color: #20b640;
+        transition: all 250ms;
+    }
 
 }
+
+.main__type_button_del {
+    @extend .main__type_button;
+    background-color: #d93c2e;
+    transition: all 250ms;
+
+    &:hover {
+        background-color: #d93c2e;
+        transition: all 250ms;
+    }
+}
+
 
 .customSlide__list__types {
     display: grid;
@@ -56,6 +156,100 @@
     z-index: 999;
     margin-top: -50px;
     display: flex;
+}
+
+.block__total_price {
+    position: sticky;
+    top: 0;
+    right: 0;
+    max-width: 320px;
+    height: max-content;
+    border-radius: 6px;
+    background-image: url("../assets/bg-cart-pay.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding: 32px;
+    flex: 1;
+
+    .title {
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 600; 
+        text-align: center;
+    }
+
+    .cart__info {
+        display: flex;
+        flex-direction: column;
+        row-gap: 14px;
+        margin-top: 31px;
+    }
+
+    .promo {
+        width: 100%;
+        color: #4e4e4e;
+        font-size: 14px;
+        background-color: white;
+        border: 2px solid white;
+        font-style: normal;
+        padding: 11px 17px;
+        font-weight: 400; 
+        margin-top: 30px;
+        border-radius: 4px;
+        transition: all 250ms;
+    }
+
+    .promo__active__true {
+        border: 2px solid rgba(64, 163, 2, 0.933);
+        color: rgba(64, 163, 2, 0.933);
+        transition: all 250ms;
+    }
+    
+    .promo__active__false {
+        border: 2px solid rgba(246, 4, 4, 0.9333333333);
+        color: rgba(246, 4, 4, 0.897);
+        transition: all 250ms;
+    }
+
+    .pay {
+        margin-top: 30px;
+    }
+
+    .pay_item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+    }
+
+    .totalPrice {
+        font-weight: 500;
+    }
+
+    .info__item {
+        display: flex;
+        font-size: 16px;
+        justify-content: space-between;
+    }
+    
+    .btn_checkout {
+        width: 100%;
+        font-size: 15px;
+        font-style: normal;
+        padding: 14px 17px;
+        border-radius: 8px;
+        background-color: rgb(247, 25, 25);
+        border: 0;
+        color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+        transition: all 100ms;
+
+        &:active {
+            box-shadow: 0 2px 2px rgba(0, 0, 0, .2);
+            background-color: rgb(248, 53, 53);
+            transition: all 100ms; 
+        }
+    }
 }
 
 .customSwiper {
@@ -199,24 +393,3 @@
         transition: transform 250ms;
     }
 }
-
-// .back {
-//     transform: rotateY(180deg) translateZ(100px);
-//     background-color: lightblue;
-// }
-
-// .left {
-//     position: absolute;
-//     width: 65%;
-//     height: 100%;
-//     transform: skew(0deg,  -15deg) translateX(10.3em) translateY(-100%);
-//     background-color: #c2925a;
-//     transition: all 250ms;
-//     @include hover__box;
-// }
-
-
-// .bottom {
-//     transform: rotateX(-90deg) translateZ(100px);
-//     background-color: lightpink;
-// }
