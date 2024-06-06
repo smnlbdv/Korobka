@@ -19,8 +19,13 @@ const prefabricatedGiftSlice = createSlice({
     product: [],
     postcards: [],
     typesBox: [],
+    styleBox: {},
     titlaGifts: "",
     imageUrl: "",
+    itemsPrice: 0,
+    totalPrice: 0,
+    price: 0,
+    promo: null
   },
   reducers: {
     addBoxTypeGift(state, action) {
@@ -31,6 +36,29 @@ const prefabricatedGiftSlice = createSlice({
     },
     addPostCardGift(state, action) {
       state.postcards.push(action.payload);
+    },
+    setPromoConstructor(state, action) {
+      state.promo = {...action.payload}
+    },
+    setTotalPrice (state, action) {
+      state.totalPrice = action.payload;
+    },
+    setStyleBox(state, action) {
+      state.styleBox = {...action.payload}
+    }, 
+    delStyleBox (state, action) {
+      state.styleBox = {}
+    },
+    calculatePrice (state, action) {
+      const productsTotal = state.product.reduce((accumulator, product) => accumulator + (product.count * product.price), 0);
+      const postcardsTotal = state.postcards.reduce((accumulator, postcard) => accumulator + (postcard.count * postcard.price), 0);
+      const typesBoxTotal = state.typesBox.reduce((accumulator, box) => accumulator + (box.count * box.price), 0);
+
+      if(Object.keys(state.styleBox).length === 0 ) {
+        state.itemsPrice = productsTotal + postcardsTotal + typesBoxTotal;
+      } else {
+        state.itemsPrice = productsTotal + postcardsTotal + typesBoxTotal + (state.styleBox.count * state.styleBox.price);
+      }
     },
     incBoxTypeGift(state, action) {
       const index = state.typesBox.findIndex(
@@ -98,6 +126,16 @@ const prefabricatedGiftSlice = createSlice({
     delPostCardGift(state, action) {
         state.postcards = state.postcards.filter(item => item._id !== action.payload);   
     },
+    deleteItemConstructor (state, action) {
+      const itemToDelete = action.payload;
+      state.product = state.product.filter(item => item._id !== itemToDelete);
+      state.postcards = state.postcards.filter(item => item._id !== itemToDelete);
+      state.typesBox =  state.typesBox.filter(item => item._id !== itemToDelete);
+      
+      if(state.styleBox._id === itemToDelete) {
+        state.styleBox =  {};
+      }
+    }
   },
   extraReducers: (builder) => {
     // builder
@@ -119,7 +157,13 @@ export const {
   decPostCardGift,
   delBoxTypeGift,
   delProductGift,
-  delPostCardGift
+  delPostCardGift,
+  setPromoConstructor,
+  setTotalPrice,
+  calculatePrice,
+  setStyleBox,
+  delStyleBox,
+  deleteItemConstructor
 
 } = prefabricatedGiftSlice.actions;
 export default prefabricatedGiftSlice.reducer;

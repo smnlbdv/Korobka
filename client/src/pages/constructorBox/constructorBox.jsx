@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 import Moveable from "react-moveable";
 import { flushSync } from "react-dom";
 import keycon from "keycon";
+import * as uuid  from 'uuid';
 
 keycon.setGlobal();
 
@@ -15,8 +16,11 @@ import "./constructor.scss"
 
 import { Pagination, Navigation } from 'swiper/modules';
 import CardBox from '../../components/cardBox/cardBox.jsx';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ItemConstructor from '../../components/itemConstructor/itemConstructor.jsx';
+import debounce from 'debounce';
+import api from '../../api/api.js';
+import { calculatePrice, delStyleBox, setPromoConstructor, setStyleBox, setTotalPrice } from '../../store/prefabricatedGiftSlice.js';
 
 
 const ConstructorBox = () => {
@@ -25,13 +29,36 @@ const ConstructorBox = () => {
     const [boxTypes, setBoxTypes] = useState()
     const [product, setProduct] = useState()
     const [postCard, setPostCard] = useState()
+    const [sale, setSale] = useState({id: null, active: null, percentage: 0,});
     const [front, setFront] = useState(false)
     const [right, setRight] = useState(false)
+    const itemsPrice = useSelector(state => state.prefabricatedGift.itemsPrice)
     const { getTypesBox, getProduct, getPostCard, contexHolder } = useContext(AuthContext)
     const textRef = useRef(null);
+    const dispatch = useDispatch()
     const productGift = useSelector(state => state.prefabricatedGift.product)
     const typesBox = useSelector(state => state.prefabricatedGift.typesBox)
     const postcards = useSelector(state => state.prefabricatedGift.postcards)
+    const styleBox = useSelector(state => state.prefabricatedGift.styleBox)
+    const styleId = useSelector(state => state.prefabricatedGift.styleBox._id)
+    const totalPrice = useSelector(state => state.prefabricatedGift.totalPrice)
+
+    useEffect(() => {
+        const result = sale.active === true
+          ? itemsPrice - itemsPrice * (sale.percentage / 100)
+          : itemsPrice;
+        
+        if(sale.active) {
+          dispatch(setPromoConstructor(sale));
+        }
+    
+        dispatch(setTotalPrice(result))
+        
+    }, [itemsPrice, sale])
+
+    useEffect(() => {
+        dispatch(calculatePrice())
+    }, [productGift, typesBox, postcards, styleBox]);
 
     const openFront = () => {
         setFront(true)
@@ -57,10 +84,50 @@ const ConstructorBox = () => {
         };
         fetchData();
     }, []);
-
+    
     const clickToConstructor = () => {
-        setSimpleBox(!simpleBox)
+        if(simpleBox) {
+            dispatch(delStyleBox(styleId))
+            setSimpleBox(false)
+        } else {
+            const id = uuid.v4()
+            dispatch(setStyleBox({
+                _id: id,
+                photo: "./assets/box-simple-box.png",
+                title: "Простая коробка",
+                price: 15,
+                count: 1
+            }))
+            setSimpleBox(true)
+        }
     }
+
+    const delayedSearch = debounce(async (search) => {
+        if(search.trim() !== '') {
+            try {
+            await api.post(`/api/cart/promo`, { promoCode: search })
+                .then((response) => {
+                    if (response.status === 200) {
+                      setSale({
+                        id: response.data.id,
+                        active: response.data.active,
+                        percentage: response.data.percentage,
+                      });
+                    }
+                  })
+                .catch((response) => {
+                  if (response.response.status === 404) {
+                    setSale({
+                      active: response.response.data.active,
+                      percentage: 0,
+                    });
+                  }
+                });
+            } catch (error) {
+              console.log(error.message);
+            }
+        }
+      }, 500);
 
 
     return ( 
@@ -168,52 +235,56 @@ const ConstructorBox = () => {
                                 <div className={style.info__item}>
                                 <p>Кол-во:</p>
                                 <p>
-                                    {/* {checkArray.length !== 0 ? checkArray.length : cart.length}{" "} */}
+                                    {typesBox.length + productGift.length + productGift.length}{" "}
                                     шт.
                                 </p>
                                 </div>
                                 <div className={style.info__item}>
                                 <p>Сумма:</p>
-                                {/* <p>{cartTotalPrice} BYN</p> */}
+                                <p>{itemsPrice} BYN</p>
                                 </div>
                                 <div className={style.info__item}>
                                 <p>Скидка:</p>
-                                {/* <p>{sale.percentage} %</p> */}
+                                <p>{sale.percentage} %</p>
                                 </div>
                             </div>
                             <input
-                            //     className={`${style.promo} ${
-                            //     // sale.active == true
-                            //     //     ? style.promo__active__true
-                            //     //     : sale.active == false
-                            //     //     ? style.promo__active__false
-                            //     //     : ''
-                            //     }`
-                            // }
+                                className={`${style.promo} ${
+                                    sale.active === true
+                                    ? style.promo__active__true
+                                    : sale.active === false
+                                    ? style.promo__active__false
+                                    : sale.active === null
+                                    ? ' '
+                                    : ''
+                                }`}
                                 type="text"
                                 placeholder="Промокод..."
-                                // onInput={(event) =>  {
-                                //     // if(event.target.value.length === 0) {
-                                //     //     setSale({
-                                //     //         active: false,
-                                //     //         percentage: 0
-                                //     //     });
-                                //     // } else if(event.target.value.length > 0) {
-                                //     //     delayedSearch(event.target.value);
-                                //     // }
-                                // }}
+                                onInput={(event) =>  {
+                                    if (event.target.value.trim().length > 1) {
+                                        delayedSearch(event.target.value);
+                                    } else {
+                                        setSale({
+                                            active: null,
+                                            percentage: 0
+                                        });
+                                    }
+                                }}
                             />
                             <div className={style.pay}>
                                 <div className={style.pay_item}>
                                 <p>Итог к оплате: </p>
                                 <p className={style.totalPrice}>
-                                    {/* {totalPrice} BYN */}
+                                    {totalPrice} BYN
                                 </p>
                                 </div>
                                 <button className={style.btn_checkout}>Оформить</button>
                             </div>
                         </div>
                         <div className={style.customSlide__list__items}>
+                            {
+                               styleBox && styleBox._id &&
+                                <ItemConstructor _id={styleBox._id} photo={styleBox.photo} title={styleBox.title} price={styleBox.price} count={styleBox.count}/> }
                             {
                                 typesBox && typesBox.map((item, index) => (
                                     <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>

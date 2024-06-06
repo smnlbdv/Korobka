@@ -40,7 +40,6 @@ function App() {
   const [reviewsList, setReviewsList] = useState([])
   const [pay, setPay] = useState([])
   const [categories,setCategories] = useState([]);
-  const [favoriteItem, setFavoriteItem] = useState([]);
   const [newBoxList, setNewBoxList] = useState([]);
   const [modal, contextHolderEmail] = Modal.useModal();
   const [apis, contextHolder] = notification.useNotification();
@@ -52,6 +51,7 @@ function App() {
   const order = useSelector(state => state.profile.order)
   const profile = useSelector(state => state.profile.profile)
   const cartPrice = useSelector(state => state.cart.cartPrice)
+  const favoriteItem  = useSelector(state => state.liked.liked);
 
   const isAuth = useSelector(state => state.profile.isAuth)
   const userId = useSelector(state => state.profile.userId)
@@ -173,7 +173,7 @@ function App() {
             });
           }
 
-          if(response.data.favorite && favoriteItem.length == 0) {
+          if(response.data.favorite && favoriteItem.length === 0) {
             const newFavorite = [...response.data.favorite]
             newFavorite.forEach(element => {
               dispatch(addProductFavorite(element))
@@ -560,7 +560,6 @@ function App() {
         orderCheckout,
         favoriteItem,
         getProduct,
-        setFavoriteItem,
         sendEmailData,
         postResetPassword,
         uploadAvatar,

@@ -54,26 +54,7 @@ const CounterInput = ({ counts, setCounts, _id }) => {
         const resultIncrease = dispatch(increaseCartItemAsync(_id));
         if (resultIncrease) {
             setCounts(counts + 1);
-            // let countsNew = counts + 1
-            // calculatePrice(cart, countsNew);
         }
-        // if (!cartCheck && checkArray.length === 0) {
-        //   const resultIncrease = increaseCartItem(_id);
-        //   if (resultIncrease) {
-        //     setCounts(counts + 1);
-        //     let countsNew = counts + 1
-        //     calculatePrice(cart, countsNew);
-        //   }
-        // } else if (checkArray.some(item => item._id === _id)) {
-        //   const resultIncrease = increaseCartItem(_id);
-        //   if (resultIncrease) {
-        //     setCounts(counts + 1);
-        //     let countsNew = counts + 1
-        //     calculatePrice(checkArray, countsNew);
-        //   }
-        // } else {
-        //   return
-        // }
       }
     };
 

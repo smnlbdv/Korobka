@@ -27,6 +27,45 @@ const CardBox = ({ obj, type }) => {
   const dispatch = useDispatch();
   const { openNotification } = useContext(AuthContext);
 
+  useEffect(() => {
+    if (type === "boxTypes") {
+      const foundBox = typesBox.find(box => box._id === _id);
+      if (foundBox === undefined) {
+        setCountProduct(0);
+        setIsAdded(false)
+      } else {
+        setCountProduct(foundBox.count);
+        setIsAdded(true)
+      }
+    }
+  }, [typesBox]);
+
+  useEffect(() => {
+    if (type === "product") {
+      const foundBox = product.find(box => box._id === _id);
+      if (foundBox === undefined) {
+        setCountProduct(0);
+        setIsAdded(false)
+      } else {
+        setCountProduct(foundBox.count);
+        setIsAdded(true)
+      }
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (type === "postCard") {
+      const foundBox = postcards.find(box => box._id === _id);
+      if (foundBox === undefined) {
+        setCountProduct(0);
+        setIsAdded(false)
+      } else {
+        setCountProduct(foundBox.count);
+        setIsAdded(true)
+      }
+    }
+  }, [postcards]);
+
 
   const subtractProduct = () => {
     if (countProduct <= 1) {

@@ -1,7 +1,15 @@
 import { useEffect } from 'react';
 import style from './itemConstructor.module.scss'
+import { useDispatch } from 'react-redux';
+import { deleteItemConstructor } from '../../store/prefabricatedGiftSlice';
 
 const itemConstructor = ({_id, photo, title, price, count }) => {
+
+    const dispatch = useDispatch()
+
+    const clickDeleteButton = () => {
+        dispatch(deleteItemConstructor(_id))
+    }
 
     return ( 
         <div className={style.constructor__item_block}>
@@ -18,7 +26,7 @@ const itemConstructor = ({_id, photo, title, price, count }) => {
                 className={style.delete_icon}
                 src="/assets/btn-cart-delete.svg"
                 alt=""
-                // onClick={clickDeleteButton}
+                onClick={clickDeleteButton}
                 />
             </button>
         </div>
