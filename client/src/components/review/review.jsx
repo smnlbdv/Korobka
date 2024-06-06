@@ -90,7 +90,7 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
             {
                 slider.length !== 0 &&
                 <div className={style.footer__review__photos} ref={openBlockFooter}>
-                    <div className={style.list__photos_review}  ref={openBlock}>
+                    <div className={style.list__photos_review} ref={openBlock}>
                         {slider.map((photo, index) => (
                             <div className={style.photo__block} key={index} onClick={() => handleClick(index)}>
                                 <a data-fancybox="gallery" href={photo} id={`photo-${index}`}>

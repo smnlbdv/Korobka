@@ -5,6 +5,8 @@ import Moveable from "react-moveable";
 import { flushSync } from "react-dom";
 import keycon from "keycon";
 import * as uuid  from 'uuid';
+import { Fancybox as NativeFancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 keycon.setGlobal();
 
@@ -42,23 +44,19 @@ const ConstructorBox = () => {
     const styleBox = useSelector(state => state.prefabricatedGift.styleBox)
     const styleId = useSelector(state => state.prefabricatedGift.styleBox._id)
     const totalPrice = useSelector(state => state.prefabricatedGift.totalPrice)
+    const openImgTypes = useRef(null)
+    const openImgProduct = useRef(null)
+    const openImgPostCard = useRef(null)
+    const [valuePostCard, setValuePostCard] = useState("")
+    const [valueProduct, setValueProduct] = useState("")
 
-    useEffect(() => {
-        const result = sale.active === true
-          ? itemsPrice - itemsPrice * (sale.percentage / 100)
-          : itemsPrice;
-        
-        if(sale.active) {
-          dispatch(setPromoConstructor(sale));
-        }
-    
-        dispatch(setTotalPrice(result))
-        
-    }, [itemsPrice, sale])
+    const filterProduct = product.filter(item => {
+        return item.title.toLowerCase().includes(valueProduct.toLowerCase())
+    })
 
-    useEffect(() => {
-        dispatch(calculatePrice())
-    }, [productGift, typesBox, postcards, styleBox]);
+    const filterPostCard = postCard.filter(item => {
+        return item.title.toLowerCase().includes(valuePostCard.toLowerCase())
+    })  
 
     const openFront = () => {
         setFront(true)
@@ -68,23 +66,6 @@ const ConstructorBox = () => {
         setRight(true)
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const types = await getTypesBox();
-                const productRes = await getProduct()
-                const postCardRes = await getPostCard()
-
-                setProduct(productRes)
-                setBoxTypes(types);
-                setPostCard(postCardRes)
-            } catch (error) {
-                console.error('Произошла ошибка:', error);
-            }
-        };
-        fetchData();
-    }, []);
-    
     const clickToConstructor = () => {
         if(simpleBox) {
             dispatch(delStyleBox(styleId))
@@ -127,7 +108,59 @@ const ConstructorBox = () => {
               console.log(error.message);
             }
         }
-      }, 500);
+    }, 500);
+
+    useEffect(() => {
+        const result = sale.active === true
+          ? itemsPrice - itemsPrice * (sale.percentage / 100)
+          : itemsPrice;
+        
+        if(sale.active) {
+          dispatch(setPromoConstructor(sale));
+        }
+    
+        dispatch(setTotalPrice(result))
+        
+    }, [itemsPrice, sale])
+
+    useEffect(() => {
+        dispatch(calculatePrice())
+    }, [productGift, typesBox, postcards, styleBox]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const types = await getTypesBox();
+                const productRes = await getProduct()
+                const postCardRes = await getPostCard()
+
+                setProduct(productRes)
+                setBoxTypes(types);
+                setPostCard(postCardRes)
+            } catch (error) {
+                console.error('Произошла ошибка:', error);
+            }
+        };
+        fetchData();
+    }, []);
+    
+    useEffect(() => {
+        const containerTypes = openImgTypes.current;
+        const containerProduct = openImgProduct.current;
+        const containerPostCard = openImgPostCard.current;
+    
+        const delegate = "[data-fancybox]";
+        const options = {};
+    
+        NativeFancybox.bind(containerTypes, delegate, options);
+        NativeFancybox.bind(containerProduct, delegate, options);
+        NativeFancybox.bind(containerPostCard, delegate, options);
+    
+        return () => {
+          NativeFancybox.unbind(containerTypes);
+          NativeFancybox.close();
+        };
+    }, []);
 
 
     return ( 
@@ -145,10 +178,12 @@ const ConstructorBox = () => {
                 className={`${style.customSwiper} ${simpleBox ? "mySwiper-constructor" : "mySwiper-constructor-style"}`}
             >
                 <SwiperSlide className={style.customSlide}>
-                    <div className={style.customSlide__list__types}>
+                    <div className={style.customSlide__list__types} ref={openImgTypes}>
                         <div className={style.main__type_block}>
                             <div className={style.main__type_image}>
-                                <img src="./assets/box-simple-box.png" alt="Simple box" />
+                                <a data-fancybox="gallery" href={"./assets/box-simple-box.png"}>
+                                    <img src="./assets/box-simple-box.png" alt="Simple box" />
+                                </a>
                             </div>
                             <h2 className={style.main__type_title}>Простая коробка</h2>
                             <p className={style.main__type_price}>Цена: 10 BYN</p>
@@ -210,18 +245,32 @@ const ConstructorBox = () => {
                 </SwiperSlide>
                 }
                 <SwiperSlide className={style.customSlide}>
-                    <div className={style.customSlide__list__types}>
+                    <div className={style.header__slider}>
+                        <h2 className='section__title'>Товары</h2>
+                        <div className={style.search__input}>
+                            <img src="/assets/search.svg" alt=""/>
+                            <input type="text" placeholder='Введите название товара' onChange={(e) => setValueProduct(e.target.value)}/>  
+                        </div>
+                    </div>
+                    <div className={style.customSlide__list__types} ref={openImgProduct}>
                         {
-                            product && product.map((item, index) => (
+                            filterProduct && filterProduct.map((item, index) => (
                                 <CardBox key={index} obj={item} type={"product"}/>
                             ))
                         }
                     </div>
                 </SwiperSlide>
                 <SwiperSlide className={style.customSlide}>
-                    <div className={style.customSlide__list__types}>
+                    <div className={style.header__slider}>
+                        <h2 className='section__title'>Открытки</h2>
+                        <div className={style.search__input}>
+                            <img src="/assets/search.svg" alt=""/>
+                            <input type="text" placeholder='Введите название открытки' onChange={(e) => setValuePostCard(e.target.value)}/>  
+                        </div>
+                    </div>
+                    <div className={style.customSlide__list__types} ref={openImgPostCard}>
                         {
-                            postCard && postCard.map((item, index) => (
+                            filterPostCard && filterPostCard.map((item, index) => (
                                 <CardBox key={index} obj={item} type={"postCard"}/>
                             ))
                         }
@@ -229,23 +278,24 @@ const ConstructorBox = () => {
                 </SwiperSlide>
                 <SwiperSlide className={style.customSlide}>
                     <div className={style.check__block}>
+                        <div className={style.bg_constructor}></div>
                         <div className={style.block__total_price}>
                             <h3 className={style.title}>Ваш заказ</h3>
                             <div className={style.cart__info}>
                                 <div className={style.info__item}>
-                                <p>Кол-во:</p>
-                                <p>
-                                    {typesBox.length + productGift.length + productGift.length}{" "}
-                                    шт.
-                                </p>
+                                    <p>Кол-во:</p>
+                                    <p>
+                                        {typesBox.length + productGift.length + productGift.length}{" "}
+                                        шт.
+                                    </p>
                                 </div>
                                 <div className={style.info__item}>
-                                <p>Сумма:</p>
-                                <p>{itemsPrice} BYN</p>
+                                    <p>Сумма:</p>
+                                    <p>{itemsPrice} BYN</p>
                                 </div>
                                 <div className={style.info__item}>
-                                <p>Скидка:</p>
-                                <p>{sale.percentage} %</p>
+                                    <p>Скидка:</p>
+                                    <p>{sale.percentage} %</p>
                                 </div>
                             </div>
                             <input
@@ -281,26 +331,34 @@ const ConstructorBox = () => {
                                 <button className={style.btn_checkout}>Оформить</button>
                             </div>
                         </div>
-                        <div className={style.customSlide__list__items}>
-                            {
-                               styleBox && styleBox._id &&
-                                <ItemConstructor _id={styleBox._id} photo={styleBox.photo} title={styleBox.title} price={styleBox.price} count={styleBox.count}/> }
-                            {
-                                typesBox && typesBox.map((item, index) => (
-                                    <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
-                                ))
-                            }
-                            {
-                                productGift && productGift.map((item, index) => (
-                                    <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
-                                ))
-                            }
-                            {
-                                postcards && postcards.map((item, index) => (
-                                    <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
-                                ))
-                            }
-                        </div>
+                        {
+                            (styleBox._id || typesBox.length !== 0 || productGift.length !== 0 || postcards.length !== 0) ? (
+                                <div className={style.customSlide__list__items}>
+                                    {styleBox && styleBox._id && <ItemConstructor _id={styleBox._id} photo={styleBox.photo} title={styleBox.title} price={styleBox.price} count={styleBox.count}/>}
+                                    {typesBox && typesBox.map((item, index) => (
+                                        <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                                    ))}
+                                    {productGift && productGift.map((item, index) => (
+                                        <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                                    ))}
+                                    {postcards && postcards.map((item, index) => (
+                                        <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className={style.null_block_constructor}>
+                                    <div>
+                                        <p className={style.text__big}>У вас нет добавленных товаров</p>
+                                        <p className={style.text__little}>Добавьте новый товар сейчас!!</p>
+                                    </div>
+
+                                    <div className={style.image_null_block}>
+                                        <img src="./assets/left-line.png" alt="Line left" />
+                                    </div>
+
+                                </div>
+                            )
+                        }
                     </div>
                 </SwiperSlide>
             </Swiper>

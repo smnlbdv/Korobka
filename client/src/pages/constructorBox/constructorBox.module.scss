@@ -29,6 +29,7 @@
     row-gap: 10px;
     flex-wrap: wrap;
     flex: 1;
+    height: 100%;
 }
 
 .main__type_block {
@@ -56,6 +57,7 @@
     column-gap: 50px;
     width: 90%;
     margin: 0 auto;
+    height: 100%;
 }
 
 .main__type_price {
@@ -134,6 +136,7 @@
 
 
 .customSlide__list__types {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(4, 210px);
     grid-template-rows: repeat(auto-fill, 250px);
@@ -158,10 +161,68 @@
     display: flex;
 }
 
+.image_null_block {
+    position: absolute;
+    left: -100px;
+    bottom: 85px;
+    transform: rotate(180deg);
+    width: 400px;
+    height: min-content;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+.text__big {
+    font-size: 18px;
+    text-align: center;
+}
+
+.header__slider {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.search__input {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    z-index: 100;
+    color: #4e4e4e;
+    font-size: 14px;
+    background-color: white;
+    border: 2px solid white;
+    font-style: normal;
+    padding: 11px 17px;
+    font-weight: 400; 
+    border-radius: 4px;
+    transition: all 250ms;
+    margin: 20px 0;
+
+    input {
+        width: 100%;
+        border: 0;
+        margin-left: 10px;
+    }
+}
+
+.text__little {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 25px;
+    font-weight: 600;
+}
+
 .block__total_price {
     position: sticky;
     top: 0;
     right: 0;
+    min-width: 320px;
     max-width: 320px;
     height: max-content;
     border-radius: 6px;
@@ -392,4 +453,26 @@
         background-color: #94724a;
         transition: transform 250ms;
     }
+}
+
+.bg_constructor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: url('./assets/bg-main-img.png');
+    background-repeat: no-repeat;
+    background-size:contain;
+    background-position: center;
+}
+
+.null_block_constructor {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

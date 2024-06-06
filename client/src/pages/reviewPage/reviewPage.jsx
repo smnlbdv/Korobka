@@ -103,7 +103,6 @@ const ReviewPage = () => {
                 })
                 .then(response => {
                     if(response.status == 201) {
-                        console.log(response.data.message);
                         setHiddenBlock(response.data.create)
                     }
                 })

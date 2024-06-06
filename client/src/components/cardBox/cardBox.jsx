@@ -15,6 +15,8 @@ import {
   delProductGift,
   delPostCardGift,
 } from "../../store/prefabricatedGiftSlice";
+import { Fancybox as NativeFancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 // eslint-disable-next-line react/prop-types
 const CardBox = ({ obj, type }) => {
@@ -183,7 +185,9 @@ const CardBox = ({ obj, type }) => {
   return (
     <div className={style.main__type_block}>
       <div className={style.main__type_image}>
-        <img src={photo} alt="" />
+        <a data-fancybox="gallery" href={photo}>
+          <img src={photo} alt="Photo" />
+        </a>
       </div>
       <h2 className={style.main__type_title}>{title}</h2>
       <p className={style.main__type_price}>Цена: {price} BYN</p>
