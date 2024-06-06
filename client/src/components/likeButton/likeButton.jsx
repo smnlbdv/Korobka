@@ -12,14 +12,12 @@ const LikeButton = ({id, countLikes, setCountLikes, likes}) => {
 
     useEffect(() => {
         setIsLike(likes.includes(userId))
-        console.log(likes.includes(userId))
     }, [likes, userId])
 
     const likeReview = async () => {
         try {
             await api.post(`/api/reviews/like-review/${id}`)
                      .then((response) => {
-                        console.log(response.data);
                         if(response.data.liked) {
                             setIsLike(response.data.liked)
                             setCountLikes(response.data.like)

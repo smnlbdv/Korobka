@@ -29,12 +29,10 @@ const shema = new mongoose.Schema({
         type: [String],
         default: [],
     },
-    comments: {
-        type: [{
-            type: Types.ObjectId,
-            ref: 'Comment',
-        }],
-        default: [],
+    comment: {
+        type: Types.ObjectId,
+        ref: 'Comment',
+        default: null
     },
     likes: [{
         type: mongoose.Schema.Types.ObjectId,

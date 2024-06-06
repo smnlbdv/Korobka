@@ -38,10 +38,24 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 function modifiedReaviews(obj) {
-    return obj.map(obj => ({
-        ...obj._doc,
-        date: moment(obj.date).format('LL')
-    }));
+    return obj.map(item => {
+        const updatedItem = {
+            ...item._doc,
+            date: moment(item.date).format('LL')
+        };
+
+        if (item.comment) {
+            const updatedComment = {
+                ...item.comment._doc,
+                date: moment(item.comment.date).format('LL')
+            };
+            updatedItem.comment = updatedComment;
+        }
+
+        console.log(updatedItem);
+
+        return updatedItem;
+    });
 }
 
 // reviewsRoute.get('/', verifyToken, async (req, res) => {
@@ -100,10 +114,14 @@ reviewsRoute.get('/best', async (req, res) => {
 
 reviewsRoute.get('/:id', async (req, res) => {
     try {
-        const reviewsProduct = await Review.find({product: req.params.id}).populate('owner comments');
+        const reviewsProduct = await Review.find({product: req.params.id}).populate("owner").populate({
+            path: 'comment',
+            populate: {
+                path: 'owner'
+            }
+        });
 
         const filteredReviews = reviewsProduct.filter(review => review.owner !== null);
-
         const modifiedData = modifiedReaviews(filteredReviews)
 
         res.status(200).json(modifiedData);
@@ -128,6 +146,33 @@ reviewsRoute.post('/create/new-review', verifyToken, upload.array('image'), asyn
                 .catch((error) => {
                     res.status(400).json({message: 'Ошибка создания отзыва', create: false})
                 });
+
+    } catch (error) {
+        console.log(error.message)
+    }
+})
+
+reviewsRoute.post('/create/comment', verifyToken, async (req, res) => {
+    try {
+
+        const review = await Review.findById(req.body.reviewId)
+        const comment = await Comment.findById(review.comment)
+
+        if(review && !comment) {
+            const newComment = await Comment.create({
+                        owner: req.body.userId,
+                        text: req.body.text
+                    })
+            const populatedComment = await newComment.populate('owner');
+            review.comment = newComment._id;
+            await review.save();
+
+            console.log(populatedComment);
+
+            res.status(200).json(modifiedData)
+        } else {
+            res.status(500).json({message: "Комментарий уже добавлен"})
+        }
 
     } catch (error) {
         console.log(error.message)

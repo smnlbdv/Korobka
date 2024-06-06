@@ -11,7 +11,6 @@ import FavoriteHeart from "../../components/favoriteHeart/favoriteHeart.jsx";
 
 import api from "../../api/api.js";
 import Review from "../../components/review/review.jsx";
-import "./ant.css";
 import "./swiper.css"
 import ButtonReview from "../../components/buttonReview/buttonReview.jsx";
 import { useSelector } from "react-redux";
@@ -64,7 +63,9 @@ const ProductPage = () => {
                 likes={item.likes}
                 reviewProduct={true}
                 slider={item.slider}
+                comment={item.comment}
                 hidden = {true}
+                isComment={true}
               />
             ))
           ) : (
@@ -109,17 +110,12 @@ const ProductPage = () => {
         .get(`/api/reviews/${id}`, {})
         .then((response) => {
           if (response.status == 200) {
+            console.log(response.data);
             setProductReviews(response.data);
           }
         })
         .catch((response) => {
-          if (response.response.status == 400) {
-            console.log(response);
-          }
-          if (response.response.status == 401) {
-            logout();
-            navigate("/api/auth/login");
-          }
+          console.log(response.message);
         });
     } catch (error) {
       console.log(error.message);

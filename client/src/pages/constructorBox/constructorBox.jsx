@@ -50,11 +50,11 @@ const ConstructorBox = () => {
     const [valuePostCard, setValuePostCard] = useState("")
     const [valueProduct, setValueProduct] = useState("")
 
-    const filterProduct = product.filter(item => {
+    const filterProduct = product && product.filter(item => {
         return item.title.toLowerCase().includes(valueProduct.toLowerCase())
     })
 
-    const filterPostCard = postCard.filter(item => {
+    const filterPostCard = postCard && postCard.filter(item => {
         return item.title.toLowerCase().includes(valuePostCard.toLowerCase())
     })  
 

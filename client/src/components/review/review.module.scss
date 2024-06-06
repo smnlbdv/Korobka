@@ -28,20 +28,7 @@
     width: 100%;
     bottom: 0;
     left: 0;
-    overflow: auto;
-
-
-    &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 95%;
-        height: 30px;
-        border-radius: 8px 8px 0px 8px;
-        background-color: white;
-        z-index: 1;
-    }
+    border-radius: 8px 8px 0px 8px;
 }
 
 .logo {
@@ -58,6 +45,13 @@
         border-radius: 50%; 
         object-fit: cover;
     }
+}
+
+.input__comments {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    z-index: 100;
 }
 
 .static {
@@ -119,17 +113,146 @@
     max-width: 100%;
 }
 
-.button__open_galety {
+.button__open_gallery {
     position: relative;
     width: 100%;
     border: 0;
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 0px 8px;
     padding: 8px;
-    background-color:#f71919;
+    background-color:#f92f2f;
     color: #ffffff;
     font-size: 14px;
     z-index: 5;
     transition: 200ms;
+}
+
+.button__open_comments {
+    position: relative;
+    width: 100%;
+    border: 0;
+    border-radius: 0 0 0px 0px;
+    padding: 8px;
+    background-color:#f92f2f;
+    color: #ffffff;
+    font-size: 14px;
+    z-index: 5;
+    transition: 200ms;
+    border-left: 2px solid white;
+}
+
+.button__open_comments_grey {
+    @extend .button__open_comments;
+    background-color:#f67474;
+    transition: 200ms;
+}
+
+.review__comments_text {
+    width: 100%;
+    text-align: center;
+}
+
+.block__create__comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    column-gap: 20px;
+    row-gap: 15px;
+
+    button {
+        height: 100%;
+        padding: 5px 40px;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        border: 0;
+        color: inherit;
+        line-height: normal;
+        border-radius: 5px;
+        background-color: transparent;
+        transition: all 200ms;
+        background-color: #f92f2f;
+        color: white;
+    
+        &:hover { 
+            transition: all 200ms;
+            background-color: rgb(248, 46, 46);
+        }
+    }
+}
+
+.count__word {
+    width: min-content;
+    white-space: nowrap;
+    margin-left: auto;
+    margin-top: -20px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.count__word__error {
+    @extend .count__word;
+    color: #f92f2f;
+}
+
+.admin_review {
+    width: 100%;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    max-width: 100%;
+
+    span {
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    p {
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 400;
+        height: 100%;
+        white-space: pre-line;
+    }
+}
+
+.header__comment {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    column-gap: 14px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+
+    img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.list__comments_review {
+    position: relative;
+    width: 100%;
+    border-radius: 8px 8px 0px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 15px;
+    background-color: #ffffff;
+    height: 0px;
+    max-height: 0px;
+    overflow: hidden;
+    max-height: 285px;
+    transition: all 250ms;
+    background-image: url("/assets/bg-main-img.png");
+    background-repeat: repeat;
+    background-size: cover;
 }
 
 .list__photos_review {
@@ -152,11 +275,28 @@
     background-repeat: repeat;
     background-size: cover;
 
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 95%;
+        height: 30px;
+        border-radius: 8px 8px 0px 8px;
+        background-color: white;
+        z-index: 1;
+    }
 }
 
-.button__open_galety_grey {
-    @extend .button__open_galety;
-    background-color:#fb4242;
+.button__list {
+    display: flex;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+}
+
+.button__open_gallery_grey {
+    @extend .button__open_gallery;
+    background-color:#f67474;
     transition: 200ms;
 }
 
@@ -180,9 +320,9 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 33%; /* Используйте нужные вам размеры */
-        height: 30%; /* Используйте нужные вам размеры */
-        background-image: url('../assets/search-normal.svg'); /* Замените на путь к изображению лупы */
+        width: 29%;
+        height: 27%;
+        background-image: url('../assets/search-normal.svg');
         background-size: cover;
         background-position: center;
         transform: translate(-50%, -50%);
