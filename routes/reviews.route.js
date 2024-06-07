@@ -51,9 +51,6 @@ function modifiedReaviews(obj) {
             };
             updatedItem.comment = updatedComment;
         }
-
-        console.log(updatedItem);
-
         return updatedItem;
     });
 }

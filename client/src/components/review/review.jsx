@@ -106,9 +106,6 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
     };
 
     useEffect(() => {
-
-        console.log(comment);
-
         const container = openBlock.current;
     
         const delegate = "[data-fancybox]";

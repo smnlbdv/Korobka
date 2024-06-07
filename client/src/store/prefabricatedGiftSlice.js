@@ -25,11 +25,19 @@ const prefabricatedGiftSlice = createSlice({
     itemsPrice: 0,
     totalPrice: 0,
     price: 0,
-    promo: null
+    promo: null,
+    title: "Сборный подарок",
+    orderObj: {},
   },
   reducers: {
     addBoxTypeGift(state, action) {
       state.typesBox.push(action.payload);
+    },
+    setOrderObj (state, action) {
+      state.orderObj = {...action}
+    },
+    setTitleOrder (state, action) {
+      state.title = action.payload
     },
     addProductGift(state, action) {
       state.product.push(action.payload);
@@ -163,7 +171,9 @@ export const {
   calculatePrice,
   setStyleBox,
   delStyleBox,
-  deleteItemConstructor
+  deleteItemConstructor,
+  setTitleOrder,
+  setOrderObj
 
 } = prefabricatedGiftSlice.actions;
 export default prefabricatedGiftSlice.reducer;

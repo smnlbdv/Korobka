@@ -22,7 +22,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ItemConstructor from '../../components/itemConstructor/itemConstructor.jsx';
 import debounce from 'debounce';
 import api from '../../api/api.js';
-import { calculatePrice, delStyleBox, setPromoConstructor, setStyleBox, setTotalPrice } from '../../store/prefabricatedGiftSlice.js';
+import { calculatePrice, delStyleBox, setPromoConstructor, setStyleBox, setTotalPrice, setTitleOrder, setOrderObj } from '../../store/prefabricatedGiftSlice.js';
+import { Link } from 'react-router-dom';
 
 
 const ConstructorBox = () => {
@@ -44,11 +45,14 @@ const ConstructorBox = () => {
     const styleBox = useSelector(state => state.prefabricatedGift.styleBox)
     const styleId = useSelector(state => state.prefabricatedGift.styleBox._id)
     const totalPrice = useSelector(state => state.prefabricatedGift.totalPrice)
+    const userId = useSelector(state => state.profile.userId)
+    const title = useSelector(state => state.prefabricatedGift.title)
     const openImgTypes = useRef(null)
     const openImgProduct = useRef(null)
     const openImgPostCard = useRef(null)
     const [valuePostCard, setValuePostCard] = useState("")
     const [valueProduct, setValueProduct] = useState("")
+    const [isDisabled, setIsDisabled] = useState(true)
 
     const filterProduct = product && product.filter(item => {
         return item.title.toLowerCase().includes(valueProduct.toLowerCase())
@@ -71,7 +75,7 @@ const ConstructorBox = () => {
             dispatch(delStyleBox(styleId))
             setSimpleBox(false)
         } else {
-            const id = uuid.v4()
+            const id = "66624b6b5fc83927db2b2ffb"
             dispatch(setStyleBox({
                 _id: id,
                 photo: "./assets/box-simple-box.png",
@@ -110,6 +114,36 @@ const ConstructorBox = () => {
         }
     }, 500);
 
+    const clickConstructorButton = () => {
+        const data = {
+            owner: userId,
+            typesBox: typesBox.map((type) => ({
+                product: type._id,
+                quantity: type.count
+            })),
+            product: productGift.map((prod) => ({
+                product: prod._id,
+                quantity: prod.count
+            })),
+            postCard: postcards.map((postcard) => ({
+                product: postcard._id,
+                quantity: postcard.count
+            })),
+            title: title || "Сборный подарок",
+            image: "./assets/box-simple-box.png",
+            price: totalPrice
+        };
+
+        if(styleBox._id) {
+            data.typesBox.push({
+                product: styleBox._id,
+                quantity: styleBox.count
+            })
+        }
+
+        dispatch(setOrderObj(data))
+    }
+
     useEffect(() => {
         const result = sale.active === true
           ? itemsPrice - itemsPrice * (sale.percentage / 100)
@@ -143,6 +177,14 @@ const ConstructorBox = () => {
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if(styleBox._id) {
+            setSimpleBox(true)
+        } else {
+            setSimpleBox(false)
+        }
+    }, [styleBox])
     
     useEffect(() => {
         const containerTypes = openImgTypes.current;
@@ -162,6 +204,14 @@ const ConstructorBox = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if(styleBox._id || typesBox.length !== 0 || productGift.length !== 0 || postcards.length !== 0) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+
+    }, [productGift, typesBox, postcards, styleBox])
 
     return ( 
 
@@ -321,6 +371,14 @@ const ConstructorBox = () => {
                                     }
                                 }}
                             />
+                            <input
+                                className={style.title_order}
+                                type="text"
+                                placeholder="Название подарка..."
+                                onInput={(event) =>  {
+                                    dispatch(setTitleOrder(event.target.value))
+                                }}
+                            />
                             <div className={style.pay}>
                                 <div className={style.pay_item}>
                                 <p>Итог к оплате: </p>
@@ -328,7 +386,9 @@ const ConstructorBox = () => {
                                     {totalPrice} BYN
                                 </p>
                                 </div>
-                                <button className={style.btn_checkout}>Оформить</button>
+                                <Link to="/cart/order">
+                                    <button className={style.btn_checkout} disabled={isDisabled} onClick={clickConstructorButton}>Оформить</button>
+                                </Link>
                             </div>
                         </div>
                         {

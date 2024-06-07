@@ -52,7 +52,6 @@ function App() {
   const profile = useSelector(state => state.profile.profile)
   const cartPrice = useSelector(state => state.cart.cartPrice)
   const favoriteItem  = useSelector(state => state.liked.liked);
-
   const isAuth = useSelector(state => state.profile.isAuth)
   const userId = useSelector(state => state.profile.userId)
   const role = useSelector(state => state.profile.role)

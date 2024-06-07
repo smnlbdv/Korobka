@@ -24,6 +24,7 @@ const OrderPage = () => {
     const profile = useSelector(state => state.profile.profile)
     const orderArray = useSelector(state => state.cart.order)
     const promo = useSelector(state => state.cart.promo)
+    const orderObj = useSelector(state => state.prefabricatedGift.orderObj)
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
@@ -147,7 +148,7 @@ const OrderPage = () => {
             </ul>
             <h2 className={`${style.section_title} section__title`}>Оформление заказа</h2>
             {
-                orderArray.length !== 0 ?
+                orderArray.length !== 0 || Object.keys(orderObj).length !== 0 ?
                 <div className={style.block__orders}>
                     <div className={style.block__form}>
                         <form
@@ -244,10 +245,17 @@ const OrderPage = () => {
                         </form>
                     </div>
                     <div className={style.block__order__items}>
-                        {orderArray && orderArray.map((obj, index) => 
+                        {orderArray.length !== 0 ? orderArray.map((obj, index) => (
                             <OrderItem
                                 key={index}
                                 {...obj}
+                            />
+                        )) : Object.keys(orderObj).length !== 0 && (
+                            <OrderItem
+                                img={orderObj.image}
+                                title={orderObj.title}
+                                price={orderObj.price}
+                                count={1}
                             />
                         )}
                     </div>

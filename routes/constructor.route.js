@@ -8,7 +8,7 @@ const constructorRoute = Router()
 
 constructorRoute.get('/box/types', async (req, res) => {
     try {
-        const products = await BoxType.find();
+        const products = await BoxType.find({ _id: { $ne: "66624b6b5fc83927db2b2ffb" } });
         res.status(200).json(products);
     } catch (error) {
         console.error('Произошла ошибка:', error);
