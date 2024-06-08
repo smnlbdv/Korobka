@@ -135,8 +135,8 @@ const Profile = () => {
         .required("Обязательное поле"),
       phone: Yup.string().matches(
         /^\+375 \([0-9]{2}\) [0-9]{3}-[0-9]{2}-[0-9]{2}$/,
-        "Неверный формат телефона"
-      ),
+        "Неверный формат телефона")
+        .required("Обязательное поле")
     }),
     onSubmit: (values) => {
       if (!compareObjects(initialData, values)) {
@@ -205,7 +205,7 @@ const Profile = () => {
                 name="name"
                 typeInput={"text"}
                 value={formikPersonal.values.name}
-                placeholder={"Иван"}
+                placeholder={"Имя"}
                 onChange={changeUserName}
                 errorChange={formikPersonal.errors.name && "true"}
               />
@@ -223,7 +223,7 @@ const Profile = () => {
                 typeInput={"text"}
                 value={formikPersonal.values.surname}
                 onChange={formikPersonal.handleChange}
-                placeholder={"Иванов"}
+                placeholder={"Фамилия"}
                 errorChange={formikPersonal.errors.surname && "true"}
               />
               {formikPersonal.errors.surname && (
@@ -240,7 +240,7 @@ const Profile = () => {
                 id="email"
                 name="email"
                 typeInput={"text"}
-                placeholder={"ivanov@gmail.com"}
+                placeholder={"E-mail"}
                 value={formikPersonal.values.email}
                 onChange={formikPersonal.handleChange}
                 errorChange={formikPersonal.errors.email && "true"}
@@ -257,7 +257,7 @@ const Profile = () => {
                 id="phone"
                 name="phone"
                 typeInput={"text"}
-                placeholder={"+375 (99) 999-99-99"}
+                placeholder={"Номер телефона"}
                 value={formikPersonal.values.phone}
                 onChange={formikPersonal.handleChange}
                 errorChange={formikPersonal.errors.phone && "true"}
@@ -301,7 +301,7 @@ const Profile = () => {
                 hiddenImage={true}
                 value={formikPass.values.prepassword}
                 url={"/assets/lock-sign-up.svg"}
-                placeholder={""}
+                placeholder={"Старый пароль"}
                 onChange={formikPass.handleChange}
                 ref={inputPrePass}
                 errorChange={formikPass.errors.prepassword && "true"}
@@ -327,7 +327,7 @@ const Profile = () => {
                 typeInput={typeInputPass}
                 hiddenImage={true}
                 url={"/assets/lock-sign-up.svg"}
-                placeholder={""}
+                placeholder={"Новый пароль"}
                 errorChange={formikPass.errors.password && "true"}
                 ref={inputNewPass}
               />
@@ -347,7 +347,7 @@ const Profile = () => {
                 typeInput={typeInputPass}
                 hiddenImage={true}
                 url={"/assets/lock-sign-up.svg"}
-                placeholder={""}
+                placeholder={"Повторите пароль"}
                 errorChange={formikPass.errors.confirmPassword && "true"}
                 ref={inputDoublePass}
               />

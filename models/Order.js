@@ -37,9 +37,6 @@ const shema = new mongoose.Schema({
     createdOrder: {
         type: Date,
         default: Date.now,
-    },
-    updatedOrder: {
-        type: Date,
     }
 })
 

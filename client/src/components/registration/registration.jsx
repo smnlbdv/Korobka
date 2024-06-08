@@ -23,15 +23,19 @@ const Registration = () => {
         .required('Обязательное поле')
         .max(50, 'Превышено кол-во допустимых символов')
         .min(2, 'Слишком короткое имя'),
-     surname: Yup.string()
+      surname: Yup.string()
+          .required('Обязательное поле')
+          .max(50, 'Превышено кол-во допустимых символов'),
+      email: Yup.string()
+          .email('Некорректный e-mail')
+          .required('Обязательное поле'),
+      password: Yup.string()
+          .required('Обязательное поле')
+          .min(5, 'Минимальная длина пароля 5 символов'),
+      phone: Yup.string().matches(
+        /^\+375 \([0-9]{2}\) [0-9]{3}-[0-9]{2}-[0-9]{2}$/,
+        "Неверный формат телефона",)
         .required('Обязательное поле')
-        .max(50, 'Превышено кол-во допустимых символов'),
-     email: Yup.string()
-        .email('Некорректный e-mail')
-        .required('Обязательное поле'),
-     password: Yup.string()
-        .required('Обязательное поле')
-        .min(5, 'Минимальная длина пароля 5 символов'),
     }),
     onSubmit: async (values) => {
         try {
@@ -77,6 +81,17 @@ const Registration = () => {
             placeholder={"E-mail"}
             onChange={formikRegistration.handleChange}
             errorChange={formikRegistration.errors.email && "true"}
+          />
+          <InputReg
+            id="phone"
+            value={formikRegistration.values.phone}
+            img={"/assets/icon-call.svg"}
+            name={"phone"}
+            type={"text"}
+            placeholder={"Номер телефона"}
+            onChange={formikRegistration.handleChange}
+            errorChange={formikRegistration.errors.phone && "true"}
+            tel={"true"}
           />
           <InputReg
             id="password"

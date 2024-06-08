@@ -161,8 +161,6 @@ auth.post('/reset-password/:token', async (req, res) => {
     const token = req.params.token
     const password = req.body.password
 
-    console.log(token, password)
-
     if(!token) {
         res.redirect(process.env.CLIENT_URL + '/api/auth/login');
     }

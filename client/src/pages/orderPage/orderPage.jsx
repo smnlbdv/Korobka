@@ -165,7 +165,7 @@ const OrderPage = () => {
                                             typeInput={"text"}
                                             value={formikOrder.values.name}
                                             onChange={formikOrder.handleChange}
-                                            placeholder={"Иван"}
+                                            placeholder={"Имя"}
                                             errorChange = {formikOrder.errors.name && "true"}
                                         />
                                     </div>
@@ -177,7 +177,7 @@ const OrderPage = () => {
                                             typeInput={"text"}
                                             value={formikOrder.values.lastname}
                                             onChange={formikOrder.handleChange}
-                                            placeholder={"Иванов"}
+                                            placeholder={"Фамилия"}
                                             errorChange = {formikOrder.errors.lastname && "true"}
                                         />
                                     </div>
@@ -190,7 +190,7 @@ const OrderPage = () => {
                                             typeInput={"text"}
                                             value={formikOrder.values.email}
                                             onChange={formikOrder.handleChange}
-                                            placeholder={"korobka@gmail.com"}
+                                            placeholder={"E-mail"}
                                             errorChange = {formikOrder.errors.email && "true"}
                                         />
                                     </div>
@@ -204,7 +204,7 @@ const OrderPage = () => {
                                         typeInput={"text"}
                                         value={formikOrder.values.address}
                                         onChange={formikOrder.handleChange}
-                                        placeholder={"Беларусь, г. Гродно, ул. Врублевского 77/1"}
+                                        placeholder={"Адрес доставки"}
                                         errorChange = {formikOrder.errors.address && "true"}
                                     />
                                 </div>
@@ -216,7 +216,7 @@ const OrderPage = () => {
                                         id="phone"
                                         name="phone"
                                         typeInput={"tel"}
-                                        placeholder={"+375 (99) 999-99-99"}
+                                        placeholder={"Номер телефона"}
                                         value={formikOrder.values.phone}
                                         onChange={formikOrder.handleChange}
                                         errorChange = {formikOrder.errors.phone && "true"}

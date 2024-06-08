@@ -2,6 +2,8 @@ import { useContext, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs } from "antd";
 import { Faker } from "@faker-js/faker";
+import { Fancybox as NativeFancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 import "swiper/css";
 import style from "./productPage.module.scss";
@@ -22,6 +24,7 @@ const ProductPage = () => {
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [productReviews, setProductReviews] = useState([]);
   const { id } = useParams();
+  const openBlock = useRef()
   const [isFavorite, setIsFavorite] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const { logout, contextHolder, favoriteItem, scrollToTop } = useContext(AuthContext);
@@ -141,13 +144,28 @@ const ProductPage = () => {
     setIsFavorite(isExist)
   }, [])
 
+  useEffect(() => {
+    const container = openBlock.current;
+
+    const delegate = "[data-fancybox]";
+    const options = {};
+
+    NativeFancybox.bind(container, delegate, options);
+
+    return () => {
+      NativeFancybox.unbind(container);
+      NativeFancybox.close();
+    };
+
+}, []);
+
   return (
     <section className={style.main__block_product}>
       {contextHolder}
       <div className="wrapper">
         <div className={style.block__adding__product}>
           <div className={style.product__image}>
-            <div className={style.product__image_main}>
+            <div className={style.product__image_main } ref={openBlock}>
               <img
                   className={style.product__image_active}
                   ref={mainImage}
