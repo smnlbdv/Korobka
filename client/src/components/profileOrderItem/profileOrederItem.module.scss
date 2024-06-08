@@ -75,11 +75,11 @@
     }
     .list__info__order {
         display: flex;
-        flex-direction: column;
         color: #282727;
         font-size: 12px;
-        margin-left: 30px;
+        margin-left: 50px;
         width: fit-content;
+        
 
         b {
             font-weight: 600;
@@ -120,9 +120,8 @@
 
 .order__click__block {
     display: grid;
-    grid-template-columns: minmax(80px, auto) auto 80px 80px;
+    grid-template-columns: minmax(60px, auto) auto 0px 72px;
     align-items: center;
-    column-gap: 10px;
     width: 100%;
     cursor: pointer;
 }

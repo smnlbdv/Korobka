@@ -32,7 +32,8 @@ const shema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        default: ''
+        default: '',
+        required: true
     },
     order: [{
         type: Types.ObjectId, 

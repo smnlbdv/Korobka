@@ -537,6 +537,7 @@ function App() {
   };
 
   const checkLocalUser = () => {
+    checkAuth()
     return isAuth;
   }
 

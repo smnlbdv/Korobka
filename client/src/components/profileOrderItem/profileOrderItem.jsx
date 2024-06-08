@@ -76,7 +76,7 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
                     <p><b>Адрес:</b> {address}</p>
                     <p><b>Способ оплаты:</b> {wayPay.name}</p>
                 </div>
-                <p className={style.count__product}>Кол-во: {groupImage.length}</p>
+                
                 <p className={style.price}>{totalAmount} BYN</p>
                 <span className={style.order__item__status}>{status.name}</span>
             </div>

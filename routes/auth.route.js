@@ -19,7 +19,7 @@ const auth = Router()
 auth.post('/registration', registerValidation, async (req, res) => {
     try {
         const errors = validationResult(req)
-        const { name, email, surname, password} = req.body
+        const { name, email, surname, password, phone} = req.body
 
         if(!errors.isEmpty()) {
             return res.status(400).json({
@@ -42,6 +42,7 @@ auth.post('/registration', registerValidation, async (req, res) => {
                     name,
                     email: newEmail._id,
                     surname,
+                    phone,
                     passwordHash: passwordHash,
                     activationLink
                 }

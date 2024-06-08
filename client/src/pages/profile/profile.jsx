@@ -252,7 +252,7 @@ const Profile = () => {
               )}
             </div>
             <div className={style.input__block}>
-              <p className={style.input__title}>Номер телефона</p>
+              <p className={style.input__title}>Номер телефона *</p>
               <InputProfile
                 id="phone"
                 name="phone"
@@ -449,7 +449,7 @@ const Profile = () => {
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
-            width={900}
+            width={950}
             footer={null}
           >
             {selectedItems.map((item) => (
