@@ -15,12 +15,12 @@ export const addProductCartAsync = createAsyncThunk(
 
 export const increaseCartItemAsync = createAsyncThunk(
     'cart/increaseProductCartAsync',
-    async (id) => {
+    async (obj) => {
       try {
-        const response = await api.post(`/api/cart/increase/`, {id: id})
+        const response = await api.post(`/api/cart/increase/`, obj)
         return {
           increase: response.data.increase,
-          _id: id
+          _id: obj._id
         };
       } catch (error) {
         console.log(error.message);
@@ -62,13 +62,13 @@ export const updateCountItemAsync = createAsyncThunk(
   'cart/updateCountItemAsync',
   async (obj) => {
     try {
-      await api.post(`/api/cart/update-item`, {id: obj._id, count: obj.count})
+      await api.post(`/api/cart/update-item`, obj)
       return {
         _id: obj._id,
         count: obj.count
       };
     } catch (error) {
-      console.log(error.message);
+      localStorage.setItem('errorMessage', error.response.data.message);
     }
   }
 );
@@ -93,20 +93,18 @@ const cartSlice = createSlice({
         totalPrice: 0,
         order: [],
         promo: null
-        // scroll: false
     },
     reducers: {
         addProductCart (state, action) {
-            state.cart.push(action.payload)
+          if (!state.cart.some(item => item._id === action.payload._id)) {
+            state.cart.push(action.payload);
+          }
         },
         addCheckArray (state, action) {
-          state.checkArray.push(action.payload)
+          state.checkArray.push(action.payload);
         },
         removeCheckArray (state, action) {
           state.checkArray = state.checkArray.filter(item => item !== action.payload);
-        },
-        checkScroll (state, action) {
-          state.scroll = action.payload;
         },
         setTotalPrice (state, action) {
           state.totalPrice = action.payload;

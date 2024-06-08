@@ -12,7 +12,7 @@ import style from './product.module.scss'
 const Product = ({_id, img, title, price, preText, loading = true, favorite, count, newProduct = false }) => {
     const [isAdded, setIsAdded] = useState(false)
     const [countProduct, setCountProduct] = useState()
-    const { openNotification } = useContext(AuthContext)
+    const { openNotification, openNotificationError } = useContext(AuthContext)
     const dispatch = useDispatch()
     const cart = useSelector(state => state.cart.cart)
 
@@ -20,6 +20,10 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite, cou
         dispatch(addProductCartAsync(_id))
                 .then(() => {
                     openNotification('bottomRight', 'Товар успешно добавлен в корзину');
+                })
+                .catch(() => {
+                    setCountProduct(0)
+                    setIsAdded(false)
                 })
 
         const product = cart.find(obj => obj._id === _id);
@@ -31,17 +35,30 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite, cou
             setIsAdded(true)
         }
     }
+
+    useEffect(() => {
+        if(count === 0) {
+            const isItemInCart = cart.some(item => item._id === _id);
+            if (isItemInCart) {
+                dispatch(deleteCartItemAsync(_id))
+            }
+        }
+    }, [count])
   
     const addProduct = () => {
         if(countProduct >= 200) {
             setCountProduct(countProduct)
         } else {
-            dispatch(increaseCartItemAsync(_id))
+            dispatch(increaseCartItemAsync({_id, countProduct}))
                     .then(result => {
                         if(result.payload.increase) { 
                             setCountProduct(countProduct + 1)
                             openNotification('bottomRight', 'Количество товара увеличено');
                         }
+                    })
+                    .catch(() => {
+                        setCountProduct(countProduct)
+                        openNotificationError('bottomRight', 'Товара недостаточно на складе');
                     })
         }
     }
@@ -88,7 +105,6 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite, cou
                             <div className={style.info}>
                                 <div className={style.image_box}>
                                     <img className={style.image} src={img} alt="image new" />
-                                    {newProduct && <img className={style.icon_new_box} src="./assets/icon-new.svg" alt="" />}
                                 </div>
                                 <div className={style.text_block}>
                                     <h2 className={style.title}>{title}</h2>

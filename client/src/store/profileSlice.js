@@ -63,7 +63,10 @@ const profileSlice = createSlice({
             state.profile = { ...action.payload };
         },
         addProductProfile (state, action) {
-            state.order.push(action.payload)
+          const existingItem = state.order.find(item => item._id === action.payload._id);
+          if (!existingItem) {
+              state.order.push(action.payload);
+          } 
         },
         setIsAuth(state, action) {
           state.isAuth = action.payload;

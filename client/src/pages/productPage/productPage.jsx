@@ -126,7 +126,6 @@ const ProductPage = () => {
   };
 
   useEffect(() => {
-    scrollToTop();
     fetchData();
     fetchReviewsProduct();
     getCountProduct();

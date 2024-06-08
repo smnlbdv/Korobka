@@ -18,7 +18,7 @@ import { placeOrderAsync } from "../../store/profileSlice.js";
 
 const OrderPage = () => {
     const [url, setUrl] = useState('#')
-    const { contextHolder, downloadCheck, scrollToTop, pay, orderCheckout, calculatePrice, openNotification, openNotificationError } = useContext(AuthContext);
+    const { contextHolder, downloadCheck, pay, orderCheckout, calculatePrice, openNotification, openNotificationError } = useContext(AuthContext);
     const cart = useSelector(state => state.cart.cart)
     const checkArray = useSelector(state => state.cart.checkArray)
     const profile = useSelector(state => state.profile.profile)
@@ -103,7 +103,6 @@ const OrderPage = () => {
     });
     
     useEffect(() => {
-        scrollToTop()
         if (profile.length !== 0) {
             formikOrder.setValues({
               name: profile.name,

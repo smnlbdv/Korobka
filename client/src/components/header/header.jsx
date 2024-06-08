@@ -17,7 +17,7 @@ const Header = () => {
     const [countFavorite, setCountFavorite] = useState(0)
     const [popoverCart, setPopoverCart] = useState([]);
     const [popoverLiked, setPopoverLiked] = useState([]);
-    const { categories, userId, role, isAuth } = useContext(AuthContext)
+    const { categories, userId, role, isAuth, scrollToTop } = useContext(AuthContext)
     const [popoverVisible, setPopoverVisible] = useState(false);
     const [popoverVisibleTwo, setPopoverVisibleTwo] = useState(false);
     const linkHeader = useRef()
@@ -102,7 +102,7 @@ const Header = () => {
     return (
         <header className={`${style.header}`}>
             <div className={`${style.header__inner} wrapper` }>
-                <Link to="/" replace={true} >
+                <Link to="/" replace={true} onClick={scrollToTop}>
                     <div className="header__logo">
                         <img className="header__image" src="/assets/logo.svg" alt="logo" />
                         <span>Коробка</span>

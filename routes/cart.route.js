@@ -5,6 +5,7 @@ import CartItem from '../models/Cart.js'
 import verifyToken from '../validation/verifyToken.js'
 import Discount from '../models/Discount.js'
 import Cart from '../models/Cart.js'
+import Box from '../models/Box.js'
 
 const cartRoute = Router()
 
@@ -13,6 +14,12 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
         const userId = req.userId
         const itemId = req.params.itemId
         const cartItem = await CartItem.findOne({owner: userId})
+
+        const boxItem = await Box.findById(itemId)
+
+        if(boxItem.count < 1) {
+            res.status(500).json({message: "Товара недостаточно на складе"})
+        }
 
         if (cartItem) {
             if (cartItem.items.length == 0) {
@@ -129,14 +136,24 @@ cartRoute.delete('/delete/:productId', verifyToken, async (req, res) => {
 
 cartRoute.post('/increase', verifyToken, async (req, res) => {
     try {
-        const productId = req.body.id;
+        const { _id, countProduct } = req.body;
+        const productId = _id;
         const userId = req.userId;
-        await CartItem.updateOne(
-            { owner: userId, 'items.product': productId},
-            { $inc: { 'items.$.quantity': 1 } },
-            { new: true })
-            .then((response) => res.status(200).json({increase: response.acknowledged}))
-            .catch((error) => res.status(400).json({increase: error.acknowledged}))
+
+        const cartItem = await Box.findById(_id)
+
+        if(cartItem && cartItem.count >= countProduct + 1) {
+            await CartItem.updateOne(
+                { owner: userId, 'items.product': productId},
+                { $inc: { 'items.$.quantity': 1 } },
+                { new: true })
+                .then((response) => res.status(200).json({increase: response.acknowledged}))
+                .catch((error) => res.status(400).json({increase: error.acknowledged}))
+        } else {
+            res.status(500).json({message: "Товара нет на складе"})
+        }
+
+
     } catch (error) {
         res.status(400).json({error: error.message})
     }
@@ -162,13 +179,19 @@ cartRoute.post('/update-item', verifyToken, async (req, res) => {
         const productId = req.body.id;
         const productCount = req.body.count
         const userId = req.userId
+        const cartItem = await Box.findById(productId)
 
-        await CartItem.updateOne(
-            { owner: userId, 'items.product': productId},
-            { $set: { 'items.$.quantity': productCount } },
-            { new: true })
-            .then((response) => res.status(200).json({update: response.acknowledged}))
-            .catch((error) => res.status(400).json({update: error.acknowledged}))
+        if(cartItem && cartItem.count >= productCount) {
+            await CartItem.updateOne(
+                { owner: userId, 'items.product': productId},
+                { $set: { 'items.$.quantity': productCount } },
+                { new: true })
+                .then((response) => res.status(200).json({update: response.acknowledged}))
+                .catch((error) => res.status(400).json({update: error.acknowledged}))
+        } else {
+            res.status(500).json({message: `Допустимое количество товара ${cartItem.count} штук`})
+        }
+
     } catch (error) {
         res.status(400).json({error: error.message})
     }

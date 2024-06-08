@@ -9,7 +9,7 @@ import { decreaseCartItemAsync, deleteCartItemAsync, increaseCartItemAsync, upda
 // eslint-disable-next-line react/prop-types
 const CounterInput = ({ counts, setCounts, _id }) => {
     const [input, setInput] = useState(false);
-    const { openNotification } = useContext(AuthContext);
+    const { openNotification, openNotificationError } = useContext(AuthContext);
     const dispatch = useDispatch()
 
     const subtractProduct = async () => {
@@ -27,7 +27,16 @@ const CounterInput = ({ counts, setCounts, _id }) => {
     };
 
     const debouncedHandleChange = debounce((_id, count) => {
-      dispatch(updateCountItemAsync({_id, count}));
+        dispatch(updateCountItemAsync({id:_id, count}))
+                .then(() => {
+                  setCounts(count)
+                })
+                .catch(() => {
+                  const errorMessage = localStorage.getItem('errorMessage')
+                  setCounts(counts)
+                  openNotificationError("bottomRight", errorMessage)
+                  localStorage.removeItem('errorMessage')
+                })
     }, 1000);
 
     const handleChange = (e) => {
@@ -51,10 +60,17 @@ const CounterInput = ({ counts, setCounts, _id }) => {
       if (counts >= 200) {
         setCounts(counts);
       } else {
-        const resultIncrease = dispatch(increaseCartItemAsync(_id));
-        if (resultIncrease) {
-            setCounts(counts + 1);
-        }
+        dispatch(increaseCartItemAsync({_id: _id, countProduct: counts}))
+                    .then(result => {
+                        if(result.payload.increase) { 
+                          setCounts(counts + 1)
+                            openNotification('bottomRight', 'Количество товара увеличено');
+                        }
+                    })
+                    .catch(() => {
+                        setCounts(counts)
+                        openNotificationError('bottomRight', 'Товара недостаточно на складе');
+                    })
       }
     };
 

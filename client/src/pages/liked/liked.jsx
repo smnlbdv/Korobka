@@ -11,13 +11,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { delProductFavoriteAsync } from "../../store/likedSlice.js";
 
 const Liked = () => {
-    const { contextHolder, scrollToTop } = useContext(AuthContext)
+    const { contextHolder } = useContext(AuthContext)
     const favoriteItem = useSelector(state => state.liked.liked)
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        scrollToTop();
-    }, [])
 
     const clearFavorite = () => {
         favoriteItem.forEach(element => {

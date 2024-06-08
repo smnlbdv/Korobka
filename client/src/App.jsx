@@ -179,7 +179,7 @@ function App() {
             });
           }
 
-          if(response.data.order.length !== 0 && order.length == 0) {
+          if(response.data.order.length !== 0 && order.length === 0) {
             response.data.order.forEach(element => {
               dispatch(addProductProfile(element))
             })
@@ -455,7 +455,7 @@ function App() {
     }
   }
   
-  const orderCheckout = async (order, values, promo = {percentage: 1} ) => {
+  const orderCheckout = async (order, values, promo = null ) => {
     const items = order.map(item => ({
       id: item._id, 
       count: item.count,
@@ -464,7 +464,7 @@ function App() {
     }));
     try {
       await api.post('/api/profile/pay/checkout', {
-        items: items, promo: promo.percentage})
+        items: items, promo: promo})
                 .then(response => {
                   localStorage.setItem('initialValues', JSON.stringify(values))
                   localStorage.setItem('order', JSON.stringify(order))

@@ -8,7 +8,7 @@ import api from "../../api/api.js";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { useDispatch, useSelector } from "react-redux";
-import { addCheckArray, removeCheckArray, checkScroll, deleteCartItemAsync, calculatePrice, calculatePriceCheck, orderPushItems, setPromo, setTotalPrice} from "../../store/cartSlice.js";
+import { addCheckArray, removeCheckArray, deleteCartItemAsync, calculatePrice, calculatePriceCheck, orderPushItems, setPromo, setTotalPrice} from "../../store/cartSlice.js";
 
 import CartItem from "../../components/cartItem/cartItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
@@ -24,14 +24,11 @@ const Cart = ({checkItemCart}) => {
   const favoriteItem = useSelector(state => state.liked.liked)
   const [sale, setSale] = useState({id: null, active: false, percentage: 0,});
   const [cartCheckAll, setCartCheckAll] = useState(checkItemCart);
-  const { scrollToTop, logout } = useContext(AuthContext);
   const cartTotalPrice = useSelector(state => state.cart.cartPrice)
-  const navigate = useNavigate();
   const dispatch = useDispatch()
   const cart = useSelector(state => state.cart.cart)
   const checkArray = useSelector(state => state.cart.checkArray)
   const totalPrice = useSelector(state => state.cart.totalPrice)
-  // const scroll = useSelector(state => state.cart.scroll)
 
   useEffect(() => {
     const result = sale.active === true
@@ -93,14 +90,6 @@ const Cart = ({checkItemCart}) => {
     }
   }, [checkArray, cart]);
 
-  // useEffect(() => {
-  //   if(!scroll) {
-  //      scrollToTop();
-  //      dispatch(checkScroll(true))
-  //   }
-  // }, []); 
-  //под вопросом, нужно решить еще
-
   const delayedSearch = debounce(async (search) => {
     if(search.trim() !== '') {
         try {
@@ -134,7 +123,6 @@ const Cart = ({checkItemCart}) => {
       dispatch(removeCheckArray(element._id))
     });
   };
-
 
   return (
       <section className={`${style.section_cart} wrapper`}>

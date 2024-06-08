@@ -25,8 +25,7 @@ const Profile = () => {
     contextHolder,
     updatePassUser,
     openNotification,
-    openNotificationError,
-    scrollToTop,
+    openNotificationError
   } = useContext(AuthContext);
   const inputFileRef = useRef(null);
   const inputNewPass = useRef(null);
@@ -183,10 +182,6 @@ const Profile = () => {
       // проверить на изменение
     }
   }, []);
-
-  // useEffect(() => {
-  //   scrollToTop();
-  // }, [])
 
   const itemsTabs = [
     {

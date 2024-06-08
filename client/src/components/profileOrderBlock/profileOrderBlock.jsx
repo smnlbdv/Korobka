@@ -10,9 +10,9 @@ const ProfileOrdersBlock = ({ showModal }) => {
     const order = useSelector(state => state.profile.order)
     return (
       <div className={style.block__orders}>
-        {order.map((obj) => (
+        {order.map((obj, index) => (
           <ProfileOrderItem
-            key={obj._id}
+            key={index}
             groupImage={obj.items}
             {...obj}
             onClick={showModal}

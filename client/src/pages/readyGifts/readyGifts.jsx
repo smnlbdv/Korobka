@@ -28,7 +28,7 @@ const ReadyGifts = () => {
     const [startCategoryValue, setStartCategoryValue] = useState()
     const nav = useNavigate()
 
-    const handleChange = (value, event) => {
+    const handleChange = (value="Все товары", event) => {
         nav(`/ready-gifts/${event.key}`)
         setStartCategoryValue(value);
         document.cookie = `id_category=${event.id}; expires= ${new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toUTCString()}; path=/; SameSite=None; Secure;`;
@@ -108,7 +108,7 @@ const ReadyGifts = () => {
 
         setCategoryId(cookieValue)
 
-        const value = categories.find(item => item.key === category);
+        const value = categories?.find(item => item.key === category);
         setValueCategory(value.value)
 
         const fetch = async () => {

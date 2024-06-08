@@ -1,12 +1,14 @@
 .back_to_top {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: fixed;
     bottom: 50px;
     column-gap:5px;
-    padding: 10px 15px;
-    border-radius: 10px;
+    row-gap: 10px;
+    padding: 10px 10px;
+    border-radius: 30px;
     right: 40px;
     background: #007aff;
     width: max-content;
@@ -16,7 +18,7 @@
     transition: all 250ms;
     opacity: 0;
     visibility: hidden;
-    box-shadow: 0px 0px 20px 1px #002751;
+    box-shadow: 0px 0px 20px 1px #002751b8;
 
     img {
         width: 19px;
@@ -26,6 +28,9 @@
     p {
         font-size: 14px;
         color: white;
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        letter-spacing: -1px;
     }
 }
    
