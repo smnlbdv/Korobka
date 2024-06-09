@@ -16,6 +16,8 @@ import ButtonCreate from "../../components/buttonCreate/buttonCreate.jsx";
 import ProfileOrdersBlock from "../../components/profileOrderBlock/profileOrderBlock.jsx";
 import ModalProfileItem from "../../components/modalProdileItem/modalProfileItem.jsx";
 import { useDispatch, useSelector } from "react-redux";
+import ProfileOrderConstructor from "../../components/profileOrderConstructor/profileOrderConstructor.jsx";
+import ModalItemConstructor from "../../components/modalItemConstructor/modalItemConstructor.jsx";
 
 const Profile = () => {
   const {
@@ -36,9 +38,12 @@ const Profile = () => {
   const [titleHiddenButton, setTitleHiddenButton] = useState(true);
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenConstructor, setIsModalOpenConstructor] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItemsConstructor, setSelectedItemsConstructor] = useState([]);
   const profile = useSelector(state => state.profile.profile)
   const order = useSelector(state => state.profile.order)
+  const constructor = useSelector(state => state.profile.constructor)
   const dispatch = useDispatch()
 
   const showModal = (_id) => {
@@ -49,14 +54,42 @@ const Profile = () => {
         setSelectedItems([...orderItem.items]);
       }
     })
+    
+  };
+
+  const showModalConstructor = (_id) => {
+    setIsModalOpenConstructor(true);
+
+    constructor.forEach((orderItem) => {
+      if(orderItem.typesBox) {
+        orderItem.typesBox.forEach((orderItem) => {
+            setSelectedItemsConstructor((prevSelectedItems) => [...prevSelectedItems, orderItem]);
+        })
+      }
+  
+      if(orderItem.product) {
+        orderItem.product.forEach((orderItem) => {
+          setSelectedItemsConstructor((prevSelectedItems) => [...prevSelectedItems, orderItem]);
+        })
+      }
+  
+      if(orderItem.postcards) {
+        orderItem.postcards.forEach((orderItem) => {
+          setSelectedItemsConstructor((prevSelectedItems) => [...prevSelectedItems, orderItem]);
+        })
+      }
+    })
+    
   };
 
   const handleOk = () => {
     setIsModalOpen(false);
+    setIsModalOpenConstructor(false)
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setIsModalOpenConstructor(false)
   };
 
   const hiddenPass = (e) => {
@@ -179,9 +212,61 @@ const Profile = () => {
         email: profile.email,
       };
       setInitialData(newData); 
-      // проверить на изменение
     }
   }, []);
+
+  const orderItemsTabs = [
+    {
+      key: "1",
+      label: "Готовые боксы",
+      children: (
+        <div>
+          {order.length !== 0 ? (
+              <ProfileOrdersBlock showModal={showModal} />
+            ) : (
+              <div className={style.profile__block_null}>
+                <div className={style.block__info}>
+                  <p className={style.title}>У вас нет заказов</p>
+                  <div className={style.btn_block}>
+                    <ButtonNull title={"В каталог"} path={"/ready-gifts/all"} />
+                    <ButtonNull title={"Собрать"} path={"/"} />
+                  </div>
+                </div>
+              </div>
+            )}
+        </div>
+      ),
+    },
+    {
+      key: "2",
+      label: "Сборные заказы",
+      children: (
+        <div>
+          {constructor.length !== 0 ? (
+              <div className={style.block__orders}>
+                {constructor.slice().reverse().map((obj, index) => (
+                    <ProfileOrderConstructor
+                        key={index}
+                        {...obj}
+                        onClick={showModalConstructor}
+                    />
+                ))}
+              </div>
+            ) : (
+              <div className={style.profile__block_null}>
+                <div className={style.block__info}>
+                  <p className={style.title}>У вас нет заказов</p>
+                  <div className={style.btn_block}>
+                    <ButtonNull title={"В каталог"} path={"/ready-gifts/all"} />
+                    <ButtonNull title={"Собрать"} path={"/"} />
+                  </div>
+                </div>
+              </div>
+            )}
+        </div>
+      ),
+    },
+  ];
 
   const itemsTabs = [
     {
@@ -383,7 +468,7 @@ const Profile = () => {
   };
 
   return (
-    <section className={`${style.section_profile} wrapper`}>
+    <section className={`${style.section_profile} wrapper profile-page`}>
       {contextHolder}
       <div className={style.bg_profile}></div>
       <ul className="bread-crumbs">
@@ -433,38 +518,40 @@ const Profile = () => {
               Выйти
             </button>
           </div>
-
           <Tabs defaultActiveKey="1" items={itemsTabs}></Tabs>
         </div>
 
+        <Modal
+          title="Товары заказа"
+          open={isModalOpen}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={950}
+          footer={null}
+          className="profile-ant"
+        >
+          {selectedItems.map((item, index) => (
+                <ModalProfileItem key={index} item={item}/>
+          ))}
+        </Modal>
+
+        <Modal
+          title="Товары заказа"
+          open={isModalOpenConstructor}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={830}
+          footer={null}
+          className="profile-ant"
+        >
+          {selectedItemsConstructor.map((item, index) => (
+                <ModalItemConstructor key={index} item={item}/>
+          ))}
+        </Modal>
+
         <div className={style.block__order}>
           <h3 className={style.order__title}>Мои заказы</h3>
-          <Modal
-            title="Товары заказа"
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            width={950}
-            footer={null}
-            className="profile-ant"
-          >
-            {selectedItems.map((item) => (
-                  <ModalProfileItem key={item._id} item={item}/>
-            ))}
-          </Modal>
-          {order.length !== 0 ? (
-            <ProfileOrdersBlock showModal={showModal} />
-          ) : (
-            <div className={style.profile__block_null}>
-              <div className={style.block__info}>
-                <p className={style.title}>У вас нет заказов</p>
-                <div className={style.btn_block}>
-                  <ButtonNull title={"В каталог"} path={"/ready-gifts/all"} />
-                  <ButtonNull title={"Собрать"} path={"/"} />
-                </div>
-              </div>
-            </div>
-          )}
+          <Tabs defaultActiveKey="1" items={orderItemsTabs}></Tabs>
         </div>
       </div>
     </section>

@@ -8,7 +8,7 @@ import './libs/ant.css'
 import { useDispatch, useSelector } from "react-redux";
 import { addProductFavorite } from "./store/likedSlice.js";
 import { addProductCart } from "./store/cartSlice.js";
-import { addInfoProfile, addProductProfile, setIsAuth, setRole, setUserId } from "./store/profileSlice.js";
+import { addConstructorProfile, addInfoProfile, addProductProfile, setIsAuth, setRole, setUserId } from "./store/profileSlice.js";
 
 import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
@@ -23,7 +23,7 @@ const Main = lazyWithDelay(() => import("./pages/main/main.jsx"), 600);
 const ReadyGifts = lazyWithDelay(() => import("./pages/readyGifts/readyGifts.jsx"), 600);
 const Registration = lazyWithDelay(() => import("./components/registration/registration.jsx"), 600);
 const Login = lazyWithDelay(() => import("./components/login/login.jsx"), 600);
-const Contacts = lazyWithDelay(() => import("./pages/contacts/contacts.jsx"), 600);
+const Contacts = lazyWithDelay(() => import("./pages/home/contacts/contacts.jsx"), 600);
 const AboutUs = lazyWithDelay(() => import("./pages/aboutUs/aboutUs.jsx"), 600);
 const Liked = lazyWithDelay(() => import("./pages/liked/liked.jsx"), 600);
 const Profile = lazyWithDelay(() => import("./pages/profile/profile.jsx"), 600);
@@ -54,6 +54,7 @@ function App() {
   const favoriteItem  = useSelector(state => state.liked.liked);
   const isAuth = useSelector(state => state.profile.isAuth)
   const userId = useSelector(state => state.profile.userId)
+  const constructorArray = useSelector(state => state.profile.constructor)
   const role = useSelector(state => state.profile.role)
 
   const login = (id, role) => {
@@ -182,6 +183,12 @@ function App() {
           if(response.data.order.length !== 0 && order.length === 0) {
             response.data.order.forEach(element => {
               dispatch(addProductProfile(element))
+            })
+          }
+
+          if(response.data.orderConstructor.length !== 0 && constructorArray.length === 0) {
+            response.data.orderConstructor.forEach(element => {
+              dispatch(addConstructorProfile(element))
             })
           }
 

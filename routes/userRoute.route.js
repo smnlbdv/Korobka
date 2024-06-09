@@ -64,13 +64,24 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
           { path: "wayPay" }, 
           { path: "status" }
       ]
-    }) 
+    })
+    .populate({
+      path: "orderConstructor",
+      populate: [
+          { path: "postcards.productId" }, 
+          { path: "product.productId" },
+          { path: "typesBox.productId" },
+          { path: "wayPay" }, 
+          { path: "status" }
+      ]
+    })  
     .populate("role")
     .then((response) => {
       const favoriteItems = response.favorite?.items || [];
       const cartItems = response.cart?.items || [];
       const userEmail = response.email.email || " ";
-      const userOrderItems = response.order;
+      const userOrderItems = response.order || [];
+      const orderConstructor = response.orderConstructor || [];
 
       const userData = {
           favorite: favoriteItems,
@@ -87,6 +98,7 @@ userRoute.get("/:userId", verifyToken, async (req, res) => {
             activationLink: response.activationLink
           },
           order: userOrderItems,
+          orderConstructor: orderConstructor
       };
       res.status(201).json(userData);
     })
