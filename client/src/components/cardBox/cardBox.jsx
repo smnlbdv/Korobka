@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/authContext";
 import {
   addBoxTypeGift,
   addProductGift,
+  addPostCardGift,
   incBoxTypeGift,
   incProductGift,
   incPostCardGift,
@@ -160,7 +161,7 @@ const CardBox = ({ obj, type }) => {
     }
 
     if (type === "postCard") {
-      handleAddItems(postcards, addProductGift, "Открытка успешно добавлена");
+      handleAddItems(postcards, addPostCardGift, "Открытка успешно добавлена");
     }
   };
 
@@ -212,7 +213,7 @@ const CardBox = ({ obj, type }) => {
           </div>
         ) : (
           <button className={style.main__type_button} onClick={clickBtnAdd}>
-            <p>В корзину</p>
+            <p>Добавить</p>
           </button>
         )}
       </div>

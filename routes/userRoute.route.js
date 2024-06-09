@@ -19,6 +19,7 @@ import Subscription from "../models/Subscription.js";
 import WayPay from "../models/WayPay.js";
 import OrderStatus from "../models/OrderStatus.js";
 import Box from "../models/Box.js"
+import ConstructorOrder from "../models/ConstructorOrder.js";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -243,6 +244,85 @@ userRoute.post("/order", verifyToken, async (req, res) => {
                     .populate('wayPay');
         
                 pdfGenerate(populatedOrder, order._id)
+                          .then((data) => {
+                            if(data.result) {
+                              res.status(200).json({ message: 'Заказ оформлен', success: true, order: populatedOrder, url: data.url });
+                            }
+                          })
+                          .catch((error) => {
+                              res.status(400).json({ message: 'Ошибка формирования чека' });
+                          });
+            } else {
+              res.status(404).json({ message: 'Пользователь не найден' });
+            }
+        } else {
+            res.status(500).json({ message: 'Не удалось сохранить заказ' });
+        }
+    })
+    .catch(err => {
+      console.log(err);
+        res.status(500).json({ message: 'Произошла ошибка при сохранении заказа', error: err });
+    });
+  
+});
+
+userRoute.post("/order/constructor", verifyToken, async (req, res) => {
+  const userId = req.userId;
+  const body = req.body;
+
+  let newOrder = {
+    owner: userId,
+    totalAmount: body.totalAmount,
+    address: body.order.address,
+    wayPay: body.order.wayPay,
+    postcards: [],
+    product: [],
+    typesBox: [],
+    image:  body.cart.image,
+    title:  body.cart.title  
+  }
+
+  newOrder.typesBox = body.cart.typesBox.length > 0 ? body.cart.typesBox.map(item => ({
+    productId: item.product,
+    quantity: item.quantity
+  })) : null;
+
+  newOrder.product = body.cart.product.length > 0 ? body.cart.product.map(item => ({
+      productId: item.product,
+      quantity: item.quantity
+  })) : null;
+
+  newOrder.postcards = body.cart.postcards.length > 0 ? body.cart.postcards.map(item => ({
+      productId: item.product,
+      quantity: item.quantity
+  })) : null;
+
+  // body.cart.forEach(async (cartItem) => {
+  //   const product = await Box.findById(cartItem._id);
+
+  //   if (product) {
+  //       product.count = product.count - cartItem.count;
+  //       product.save()
+  //   }
+  // });
+
+  const orderConstructor = new ConstructorOrder(newOrder);
+  orderConstructor.save()
+    .then(async (savedOrder) => {
+        if (savedOrder) {
+            const user = await User.findById(userId);
+            if (user) {
+                user.orderConstructor.push(savedOrder._id.toString());
+                await user.save();
+
+                const populatedOrder = await ConstructorOrder.findById(savedOrder._id)
+                    .populate('postcards.productId')
+                    .populate('product.productId')
+                    .populate('typesBox.productId')
+                    .populate('status')
+                    .populate('wayPay');
+        
+                pdfGenerate(populatedOrder, orderConstructor._id)
                           .then((data) => {
                             if(data.result) {
                               res.status(200).json({ message: 'Заказ оформлен', success: true, order: populatedOrder, url: data.url });

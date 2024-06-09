@@ -40,6 +40,11 @@ const shema = new mongoose.Schema({
         ref: 'Order',
         default: []
     }],
+    orderConstructor: [{
+        type: Types.ObjectId, 
+        ref: 'ConstructorOrder',
+        default: []
+    }],
     cart: {
         type: Types.ObjectId,
         ref: 'Cart',

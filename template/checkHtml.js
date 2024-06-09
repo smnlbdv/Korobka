@@ -1,8 +1,50 @@
 export default function generateHTML(orderData) {
     const items = orderData.items;
+    const typesBox = orderData.typesBox
+    const postcards = orderData.postcards
+    const product = orderData.product
     let itemsList = '';
 
-    items.forEach(item => {
+    items && items.forEach(item => {
+        itemsList += 
+            `<div class="product-item">
+                <img src="${item.productId.img}" alt="Product" class="product-image">
+                <div>
+                    <p class="product-description"><strong>Описание:</strong> ${item.productId.preText}</p>
+                    <p class="product-quantity"><strong>Количество:</strong> ${item.quantity}</p>
+                    <p class="product-price"><strong>Цена:</strong> ${item.productId.price} BYN</p>
+                </div>
+            </div>`
+        
+    });
+    
+    typesBox && typesBox.forEach(item => {
+        itemsList += 
+            `<div class="product-item">
+                <img src="${item.productId.img}" alt="Product" class="product-image">
+                <div>
+                    <p class="product-description"><strong>Описание:</strong> ${item.productId.preText}</p>
+                    <p class="product-quantity"><strong>Количество:</strong> ${item.quantity}</p>
+                    <p class="product-price"><strong>Цена:</strong> ${item.productId.price} BYN</p>
+                </div>
+            </div>`
+        
+    });
+
+    product && product.forEach(item => {
+        itemsList += 
+            `<div class="product-item">
+                <img src="${item.productId.img}" alt="Product" class="product-image">
+                <div>
+                    <p class="product-description"><strong>Описание:</strong> ${item.productId.preText}</p>
+                    <p class="product-quantity"><strong>Количество:</strong> ${item.quantity}</p>
+                    <p class="product-price"><strong>Цена:</strong> ${item.productId.price} BYN</p>
+                </div>
+            </div>`
+        
+    });
+
+    postcards && postcards.forEach(item => {
         itemsList += 
             `<div class="product-item">
                 <img src="${item.productId.img}" alt="Product" class="product-image">

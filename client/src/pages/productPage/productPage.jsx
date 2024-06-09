@@ -158,7 +158,12 @@ const ProductPage = () => {
     const container = openBlock.current;
 
     const delegate = "[data-fancybox]";
-    const options = {};
+    const options = {
+      image: {
+        maxWidth: "50%",
+        maxHeight: "50%"
+      }
+    };
 
     NativeFancybox.bind(container, delegate, options);
 
@@ -167,22 +172,26 @@ const ProductPage = () => {
       NativeFancybox.close();
     };
 
-}, []);
+  }, []);
+
+
 
   return (
     <section className={style.main__block_product}>
       {contextHolder}
       <div className="wrapper">
         <div className={style.block__adding__product}>
-          <div className={style.product__image}>
-            <div className={style.product__image_main } ref={openBlock}>
-              <img
-                  className={style.product__image_active}
-                  ref={mainImage}
-                  src={selectedProduct.img}
-                  alt="Product image"
-                />
-              </div>
+          <div className={style.product__image} ref={openBlock}>
+                <a data-fancybox="gallery" href={selectedProduct.img}>
+                  <div className={style.product__image_main}> 
+                      <img
+                          className={style.product__image_active}
+                          ref={mainImage}
+                          src={selectedProduct.img}
+                          alt="Product image"
+                        />
+                  </div>
+                </a>
           </div>
           <div className={style.functions__card}>
             <div className={style.product__header}>
@@ -200,15 +209,9 @@ const ProductPage = () => {
             </div>
             <p className={style.instock__product}>
               Осталось: {selectedProduct.count} шт.
-              <Progress percent={percent} strokeWidth={9} showInfo={false} strokeColor={customColors} trailColor="rgba(245, 245, 245, 0.13);" />
-              {/* {
-                selectedProduct.count >= 50 ?
-                <span className={style.instock__product_yes}>Есть</span>
-              : selectedProduct.count < 50 && selectedProduct.count > 0 ?
-                <span className={style.instock__product_past}>Меньше половины</span>
-              : selectedProduct.count === 0 &&
-                <span className={style.instock__product_null}>Нет в наличии</span>
-              } */}
+              <div className={style.bar_block}>
+                <Progress percent={percent} strokeWidth={8} showInfo={false} strokeColor={customColors} trailColor="rgba(245, 245, 245, 0.13);" width={100}/>
+              </div>
             </p>
             <p className={style.text__product}>{selectedProduct.pageDesc}</p>
             <p className={style.quantity__product}>В корзине:{`  ${counterCart}`}</p>

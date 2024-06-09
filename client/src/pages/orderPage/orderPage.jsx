@@ -4,7 +4,7 @@ import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Radio } from 'antd';
 import { deleteCartItemAsync, orderPushItems, setPromoAsync} from "../../store/cartSlice.js";
-import { addProductProfile } from "../../store/profileSlice.js";
+import { addProductProfile, addConstructorProfile } from "../../store/profileSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as Yup from "yup";
@@ -15,6 +15,8 @@ import ButtonCreate from "../../components/buttonCreate/buttonCreate";
 import OrderItem from "../../components/orderItem/orderItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import { placeOrderAsync } from "../../store/profileSlice.js";
+import OrderConstructorItem from "../../components/orderConstructorItem/orderConstructor.jsx";
+import { placeOrderConstructorAsync, fullDeleteItemConstructor } from "../../store/prefabricatedGiftSlice.js";
 
 const OrderPage = () => {
     const [url, setUrl] = useState('#')
@@ -24,6 +26,7 @@ const OrderPage = () => {
     const profile = useSelector(state => state.profile.profile)
     const orderArray = useSelector(state => state.cart.order)
     const promo = useSelector(state => state.cart.promo)
+    const promoConstructor = useSelector(state => state.prefabricatedGift.promo)
     const orderObj = useSelector(state => state.prefabricatedGift.orderObj)
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -67,6 +70,31 @@ const OrderPage = () => {
         }
     }
 
+    const postOrderConstructor = async (order, values, promo) => {
+        if(values) {
+            dispatch(placeOrderConstructorAsync({values, order, price: order.price}))
+                    .then((response) => {
+                        setUrl(response.payload.url);
+
+                        if(promo && promo.percentage !== 1) {
+                            dispatch(setPromoAsync(promo.id))
+                        }
+
+                        dispatch(addConstructorProfile(response.payload.order))
+                        dispatch(fullDeleteItemConstructor([]))
+                        
+
+                    })
+                    .catch((response) => {
+                        openNotificationError("bottomRight", "Ошибка оформления заказа");
+                        
+                        setTimeout(() => {
+                            navigate("/constructor");
+                        }, 1000)
+                    })
+        }
+    }
+
     const formikOrder = useFormik({
         initialValues: {
           address: "",
@@ -90,15 +118,24 @@ const OrderPage = () => {
             .required("Обязательное поле"),
         }),
         onSubmit: async (values, {resetForm}) => {
-
             const way = pay.find(item => item._id === values.wayPay)
 
             if(way.name === "Картой") {
-                orderCheckout(orderArray, values, promo)
+                if(Object.keys(orderObj.payload).length !== 0) {
+                    orderCheckout(orderObj.payload, values, promoConstructor)
+                } else {
+                    orderCheckout(orderArray, values, promo)
+                }
             } else {
-                postOrderItems(orderArray, values, promo)
-                resetForm()
+                if(Object.keys(orderObj.payload).length !== 0) {
+                    postOrderConstructor(orderObj.payload, values, promoConstructor)
+                    resetForm()
+                } else {
+                    postOrderItems(orderArray, values, promo)
+                    resetForm()
+                }
             }
+
         },
     });
     
@@ -250,10 +287,10 @@ const OrderPage = () => {
                                 {...obj}
                             />
                         )) : Object.keys(orderObj).length !== 0 && (
-                            <OrderItem
-                                img={orderObj.image}
-                                title={orderObj.title}
-                                price={orderObj.price}
+                            <OrderConstructorItem 
+                                img={orderObj.payload.image}
+                                title={orderObj.payload.title}
+                                price={orderObj.payload.price}
                                 count={1}
                             />
                         )}

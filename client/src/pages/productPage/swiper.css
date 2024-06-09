@@ -11,3 +11,7 @@
     align-items: center;
     box-shadow: none !important;
 }
+
+.tabs .ant-tabs-tab-btn {
+    font-size: 16px !important;
+}

@@ -48,12 +48,12 @@ export const placeOrderAsync = createAsyncThunk(
     }
 );
 
-
 const profileSlice = createSlice({
     name: 'profile',
     initialState: {
         profile: {},
         order: [],
+        constructor: [],
         isAuth: false,
         role: null,
         userId: null
@@ -68,6 +68,12 @@ const profileSlice = createSlice({
               state.order.push(action.payload);
           } 
         },
+        addConstructorProfile(state, action) {
+          const existingItem = state.constructor.find(item => item._id === action.payload._id);
+          if (!existingItem) {
+              state.constructor.push(action.payload);
+          }
+        }, 
         setIsAuth(state, action) {
           state.isAuth = action.payload;
         },
@@ -95,5 +101,5 @@ const profileSlice = createSlice({
     }
 })
 
-export const {addInfoProfile, addProductProfile, updateInfoProfile, setIsAuth, setRole, setUserId} = profileSlice.actions
+export const {addInfoProfile, addProductProfile, updateInfoProfile, setIsAuth, setRole, setUserId, addConstructorProfile} = profileSlice.actions
 export default profileSlice.reducer

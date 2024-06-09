@@ -2,8 +2,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: white;
-    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0);
+    // border-radius: 8px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     padding: 15px 22px;
     width: 100%;
 
@@ -28,7 +29,7 @@
         object-fit: cover;
     } 
     .count__product {
-        color: #282727;
+        color: #ffffff;
         font-size: 14px;
         font-style: normal;
         font-weight: 400; 
@@ -37,10 +38,10 @@
         font-size: 17px;
         font-style: normal;
         font-weight: 600; 
-        color: black;
+        color: rgb(255, 255, 255);
     }
     .price {
-        color: #282727;
+        color: #ffffff;
         font-size: 16px;
         font-style: normal;
         margin: 0 35px;
@@ -48,8 +49,8 @@
         white-space: nowrap;
     }
     .btn__delete_item {
-        min-width: 24px;
-        height: 24px;
+        min-width: 14px;
+        height: 14px;
         border: 0;
         background-color: transparent;
 

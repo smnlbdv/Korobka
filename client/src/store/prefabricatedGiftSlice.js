@@ -1,17 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api/api";
 
-// export const addProductFavoriteAsync = createAsyncThunk(
-//     'liked/addProductFavorite',
-//     async (id) => {
-//       try {
-//         const response = await api.post(`/api/favorite/add/${id}`);
-//         return response.data.product;
-//       } catch (error) {
-//         console.log(error.message);
-//       }
-//     }
-// );
+export const placeOrderConstructorAsync = createAsyncThunk(
+    'liked/placeOrderConstructorAsync',
+    async (orderObj) => {
+      try {
+        const response = await api.post(`/api/profile/order/constructor`, {order: orderObj.values, cart: orderObj.order, totalAmount: orderObj.price})
+        return {
+            result: response.data.success,
+            message: response.data.message,
+            url: response.data.url,
+            order: response.data.order,
+            success: response.data.success
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+);
 
 const prefabricatedGiftSlice = createSlice({
   name: "prefabricatedGift",
@@ -62,11 +68,11 @@ const prefabricatedGiftSlice = createSlice({
       const postcardsTotal = state.postcards.reduce((accumulator, postcard) => accumulator + (postcard.count * postcard.price), 0);
       const typesBoxTotal = state.typesBox.reduce((accumulator, box) => accumulator + (box.count * box.price), 0);
 
-      if(Object.keys(state.styleBox).length === 0 ) {
-        state.itemsPrice = productsTotal + postcardsTotal + typesBoxTotal;
-      } else {
-        state.itemsPrice = productsTotal + postcardsTotal + typesBoxTotal + (state.styleBox.count * state.styleBox.price);
-      }
+      let itemsPrice = productsTotal + postcardsTotal + typesBoxTotal;
+      if (Object.keys(state.styleBox).length !== 0) {
+          itemsPrice += state.styleBox.count * state.styleBox.price;
+      } 
+      state.itemsPrice = parseFloat(itemsPrice.toFixed(2));
     },
     incBoxTypeGift(state, action) {
       const index = state.typesBox.findIndex(
@@ -134,6 +140,12 @@ const prefabricatedGiftSlice = createSlice({
     delPostCardGift(state, action) {
         state.postcards = state.postcards.filter(item => item._id !== action.payload);   
     },
+    fullDeleteItemConstructor(state, action) {
+      state.product = [];
+      state.postcards = [];
+      state.typesBox = [];
+      state.orderObj = {}
+    },
     deleteItemConstructor (state, action) {
       const itemToDelete = action.payload;
       state.product = state.product.filter(item => item._id !== itemToDelete);
@@ -173,7 +185,8 @@ export const {
   delStyleBox,
   deleteItemConstructor,
   setTitleOrder,
-  setOrderObj
+  setOrderObj,
+  fullDeleteItemConstructor
 
 } = prefabricatedGiftSlice.actions;
 export default prefabricatedGiftSlice.reducer;

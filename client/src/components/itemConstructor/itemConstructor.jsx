@@ -23,10 +23,10 @@ const itemConstructor = ({_id, photo, title, price, count }) => {
             <p className={style.price}>{price} BYN</p>
             <button className={style.btn__delete_item}>
                 <img
-                className={style.delete_icon}
-                src="/assets/btn-cart-delete.svg"
-                alt=""
-                onClick={clickDeleteButton}
+                    className={style.delete_icon}
+                    src="/assets/close-square.svg"
+                    alt=""
+                    onClick={clickDeleteButton}
                 />
             </button>
         </div>

@@ -53,6 +53,7 @@ const ConstructorBox = () => {
     const [valuePostCard, setValuePostCard] = useState("")
     const [valueProduct, setValueProduct] = useState("")
     const [isDisabled, setIsDisabled] = useState(true)
+    const [valueTypes, setValueTypes] = useState("")
 
     const filterProduct = product && product.filter(item => {
         return item.title.toLowerCase().includes(valueProduct.toLowerCase())
@@ -60,6 +61,10 @@ const ConstructorBox = () => {
 
     const filterPostCard = postCard && postCard.filter(item => {
         return item.title.toLowerCase().includes(valuePostCard.toLowerCase())
+    })  
+
+    const filterTypes = boxTypes && boxTypes.filter(item => {
+        return item.title.toLowerCase().includes(valueTypes.toLowerCase())
     })  
 
     const openFront = () => {
@@ -125,7 +130,7 @@ const ConstructorBox = () => {
                 product: prod._id,
                 quantity: prod.count
             })),
-            postCard: postcards.map((postcard) => ({
+            postcards: postcards.map((postcard) => ({
                 product: postcard._id,
                 quantity: postcard.count
             })),
@@ -228,6 +233,13 @@ const ConstructorBox = () => {
                 className={`${style.customSwiper} ${simpleBox ? "mySwiper-constructor" : "mySwiper-constructor-style"}`}
             >
                 <SwiperSlide className={style.customSlide}>
+                    <div className={style.header__slider}>
+                        <h2 className='section__title'>Коробки</h2>
+                        <div className={style.search__input}>
+                            <img src="/assets/search.svg" alt=""/>
+                            <input type="text" placeholder='Введите название открытки' onChange={(e) => setValueTypes(e.target.value)}/>  
+                        </div>
+                    </div>
                     <div className={style.customSlide__list__types} ref={openImgTypes}>
                         <div className={style.main__type_block}>
                             <div className={style.main__type_image}>
@@ -249,7 +261,7 @@ const ConstructorBox = () => {
                             </div>
                         </div>
                     {
-                        boxTypes && boxTypes.map((item, index) => (
+                        filterTypes && filterTypes.map((item, index) => (
                             <CardBox key={index} obj={item} type={"boxTypes"}/>
                         ))
                     }
@@ -411,11 +423,6 @@ const ConstructorBox = () => {
                                         <p className={style.text__big}>У вас нет добавленных товаров</p>
                                         <p className={style.text__little}>Добавьте новый товар сейчас!!</p>
                                     </div>
-
-                                    <div className={style.image_null_block}>
-                                        <img src="./assets/left-line.png" alt="Line left" />
-                                    </div>
-
                                 </div>
                             )
                         }
