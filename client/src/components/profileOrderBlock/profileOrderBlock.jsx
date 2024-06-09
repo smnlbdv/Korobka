@@ -4,19 +4,17 @@ import ProfileOrderItem from '../profileOrderItem/profileOrderItem.jsx'
 
 import style from './profileOrderBlock.module.scss'
 
-
-
 const ProfileOrdersBlock = ({ showModal }) => {
     const order = useSelector(state => state.profile.order)
     return (
       <div className={style.block__orders}>
-        {order.map((obj, index) => (
-          <ProfileOrderItem
-            key={index}
-            groupImage={obj.items}
-            {...obj}
-            onClick={showModal}
-          />
+        {order.slice().reverse().map((obj, index) => (
+            <ProfileOrderItem
+                key={index}
+                groupImage={obj.items}
+                {...obj}
+                onClick={showModal}
+            />
         ))}
       </div>
     );

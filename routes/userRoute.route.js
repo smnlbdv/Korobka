@@ -210,13 +210,23 @@ userRoute.post("/order", verifyToken, async (req, res) => {
     owner: userId,
     totalAmount: body.totalAmount,
     address: body.order.address,
-    wayPay: body.order.wayPay
+    wayPay: body.order.wayPay,
+    items: []
   }
 
   newOrder.items = body.cart.map(item => ({
     productId: item._id,
     quantity: item.count
   }))
+
+  body.cart.forEach(async (cartItem) => {
+    const product = await Box.findById(cartItem._id);
+
+    if (product) {
+        product.count = product.count - cartItem.count;
+        product.save()
+    }
+  });
 
   const order = new Order(newOrder);
   order.save()
@@ -235,15 +245,6 @@ userRoute.post("/order", verifyToken, async (req, res) => {
                 pdfGenerate(populatedOrder, order._id)
                           .then((data) => {
                             if(data.result) {
-                              body.cart.forEach(async (item) => {
-                                const product = await Box.findById(item._id);
-                                if (product.count > 0) {
-                                  product.count -= 1;
-                                  await product.save();
-                                } else {
-                                  res.status(400).json({ message: 'Недостаточно товара', count: 0 });
-                                }
-                              });
                               res.status(200).json({ message: 'Заказ оформлен', success: true, order: populatedOrder, url: data.url });
                             }
                           })

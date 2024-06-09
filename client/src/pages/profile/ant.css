@@ -1,16 +1,16 @@
 
-.ant-tabs-tab-btn {
+.profile-ant .ant-tabs-tab-btn {
     font-size: 15px !important;
 }
 
-.ant-modal-content {
+.profile-ant .ant-modal-content {
     padding: 30px !important;
 }
 
-.ant-modal-body {
+.profile-ant  .ant-modal-body {
     padding: 20px !important;
 }
 
-.ant-modal-title {
+.profile-ant  .ant-modal-title {
     font-size: 18px !important;
 }

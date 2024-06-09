@@ -446,6 +446,7 @@ const Profile = () => {
             onCancel={handleCancel}
             width={950}
             footer={null}
+            className="profile-ant"
           >
             {selectedItems.map((item) => (
                   <ModalProfileItem key={item._id} item={item}/>

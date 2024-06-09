@@ -74,12 +74,13 @@
         background-color: rgba(63, 63, 255, 0.88);
     }
     .list__info__order {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(90px,150px));
         color: #282727;
         font-size: 12px;
         margin-left: 50px;
+        justify-content: flex-start;
         width: fit-content;
-        
 
         b {
             font-weight: 600;

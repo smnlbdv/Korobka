@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import debounce from "debounce";
 import { AuthContext } from "../../context/authContext.js";
 
@@ -12,6 +12,7 @@ const CounterInput = ({ count, _id }) => {
     const [input, setInput] = useState(false);
     const { openNotification, openNotificationError } = useContext(AuthContext);
     const dispatch = useDispatch()
+    const inputRef = useRef();
 
      const subtractProduct = async () => {
       if (countNew <= 1) {
@@ -28,27 +29,33 @@ const CounterInput = ({ count, _id }) => {
     };
 
     const debouncedHandleChange = debounce((_id, countInput) => {
-      dispatch(updateCountItemAsync({id:_id, countInput: 200}))
-      .then(() => {
-        setCountNew(countInput)
-        setInput(false)
-      })
-      .catch(() => {
-        setCountNew(count)
-        setInput(true)
-        const errorMessage = localStorage.getItem('errorMessage')
-        openNotificationError("bottomRight", errorMessage)
-        localStorage.removeItem('errorMessage')
-      })
-    }, 1000);
+      dispatch(updateCountItemAsync({id:_id, countInput: countInput}))
+                      .then(() => {
+                        setCountNew(countInput)
+                        setInput(false)
+                      })
+                      .catch(() => {
+                        setCountNew(count)
+                        setInput(true)
+                        const errorMessage = localStorage.getItem('errorMessage')
+                        openNotificationError("bottomRight", errorMessage)
+                        localStorage.removeItem('errorMessage')
+                      })
+    }, 500);
 
     const handleChange = (e) => {
-      if(e.target.value > 200) {
+      let newValue = e.target.value 
+      
+      if(newValue === "-" || isNaN(newValue) || newValue > 200) {
         setCountNew(200)
-        debouncedHandleChange(_id, 200);
+        setTimeout(() => {
+          inputRef.current.blur();
+        }, 500)
       } else {
-        setCountNew(e.target.value)
-        debouncedHandleChange(_id, Number(e.target.value));
+        setCountNew(newValue)
+        setTimeout(() => {
+          inputRef.current.blur();
+        }, 500)
       }
     };
 
@@ -56,8 +63,13 @@ const CounterInput = ({ count, _id }) => {
       setInput(true);
     };
   
-    const onBlurInput = () => {
-      setInput(false);
+    const onBlurInput = (e) => {
+      let newValue = e.target.value 
+      if(newValue === "-" || isNaN(newValue) || newValue > 200) {
+        debouncedHandleChange(_id, 200);
+      } else {
+        debouncedHandleChange(_id, Number(newValue));
+      }
     };
 
     const addProduct = async () => {
@@ -85,7 +97,7 @@ const CounterInput = ({ count, _id }) => {
             </button>
             {
                 input ?
-                <input className={style.count_input} type="text" value={countNew} onChange={handleChange} onBlur={onBlurInput}/>
+                <input className={style.count_input} type="text" value={countNew} onInput={handleChange} onBlur={onBlurInput} ref={inputRef}/>
                 :
                 <p className={style.count} onClick={changeOnInput}>{countNew}</p>
             }

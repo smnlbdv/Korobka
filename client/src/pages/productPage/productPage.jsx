@@ -4,6 +4,8 @@ import { Tabs } from "antd";
 import { Faker } from "@faker-js/faker";
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import { Progress } from 'antd';
+
 
 import "swiper/css";
 import style from "./productPage.module.scss";
@@ -32,10 +34,19 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const cart = useSelector(state => state.cart.cart)
   const order = useSelector(state => state.profile.order)
+  const [percent, setPercent] = useState(0)
+
+  const customColors = {
+    '0%': 'red',
+    '50%': 'orange',
+    '100%': '#5CCF25',
+  };
 
   useEffect(() => {
     if(selectedProduct.count == 0) {
       setIsDisabled(true)
+    } else {
+      setPercent((selectedProduct.count / 200) * 100)
     }
   }, [selectedProduct.count])
 
@@ -188,15 +199,16 @@ const ProductPage = () => {
               </div>
             </div>
             <p className={style.instock__product}>
-              В наличии:
-              {
+              Осталось: {selectedProduct.count} шт.
+              <Progress percent={percent} strokeWidth={9} showInfo={false} strokeColor={customColors} trailColor="rgba(245, 245, 245, 0.13);" />
+              {/* {
                 selectedProduct.count >= 50 ?
                 <span className={style.instock__product_yes}>Есть</span>
               : selectedProduct.count < 50 && selectedProduct.count > 0 ?
                 <span className={style.instock__product_past}>Меньше половины</span>
               : selectedProduct.count === 0 &&
                 <span className={style.instock__product_null}>Нет в наличии</span>
-              }
+              } */}
             </p>
             <p className={style.text__product}>{selectedProduct.pageDesc}</p>
             <p className={style.quantity__product}>В корзине:{`  ${counterCart}`}</p>
