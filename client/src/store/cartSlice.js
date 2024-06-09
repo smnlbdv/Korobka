@@ -64,8 +64,8 @@ export const updateCountItemAsync = createAsyncThunk(
     try {
       await api.post(`/api/cart/update-item`, obj)
       return {
-        _id: obj._id,
-        count: obj.count
+        _id: obj.id,
+        count: obj.countInput
       };
     } catch (error) {
       localStorage.setItem('errorMessage', error.response.data.message);

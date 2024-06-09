@@ -16,7 +16,7 @@ const ButtonCreate = ({_id, text, type, isCounter = false, setIsCounter, setCoun
         if(counterCart >= 200) {
             setCounterCart(counterCart)
         } else {
-            dispatch(increaseCartItemAsync(_id))
+            dispatch(increaseCartItemAsync({_id: _id, countProduct: counterCart}))
                     .then(result => {
                         if(result.payload.increase) { 
                             setCounterCart(counterCart + 1)
@@ -24,7 +24,8 @@ const ButtonCreate = ({_id, text, type, isCounter = false, setIsCounter, setCoun
                         }
                     })
                     .catch(() => {
-                        openNotificationError('bottomRight', 'Ошибка добавления товара');
+                        setCounterCart(counterCart)
+                        openNotificationError('bottomRight', 'Товара недостаточно на складе');
                     })
         }
     };
@@ -35,6 +36,7 @@ const ButtonCreate = ({_id, text, type, isCounter = false, setIsCounter, setCoun
                 .then(() => {
                     setIsCounter(false)
                     setCounterCart(0)
+                    openNotification("bottomRight", "Товар удален из корзины")
                 })
         } else {
             dispatch(decreaseCartItemAsync(_id))
@@ -47,17 +49,21 @@ const ButtonCreate = ({_id, text, type, isCounter = false, setIsCounter, setCoun
     const openCounterBlock = async () => {
         dispatch(addProductCartAsync(_id))
                 .then(() => {
+                    const product = cart.find(obj => obj._id === _id);
+                    if(!product) {
+                        setCounterCart(1)
+                        setIsCounter(true)
+                    } else {
+                        setCounterCart(product.count + 1)
+                        setIsCounter(true)
+                    }
                     openNotification('bottomRight', 'Товар успешно добавлен в корзину');
                 })
-
-        const product = cart.find(obj => obj._id === _id);
-        if(!product) {
-            setCounterCart(1)
-            setIsCounter(true)
-        } else {
-            setCounterCart(product.count + 1)
-            setIsCounter(true)
-        }
+                .catch(() => {
+                    setIsCounter(false)
+                    setCounterCart(counterCart)
+                    openNotificationError('bottomRight', 'Товара недостаточно на складе');
+                })
     }
 
     return ( 

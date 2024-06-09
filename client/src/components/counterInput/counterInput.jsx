@@ -7,13 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { decreaseCartItemAsync, deleteCartItemAsync, increaseCartItemAsync, updateCountItemAsync } from "../../store/cartSlice.js";
 
 // eslint-disable-next-line react/prop-types
-const CounterInput = ({ counts, setCounts, _id }) => {
+const CounterInput = ({ count, _id }) => {
+    const [countNew, setCountNew] = useState(count)
     const [input, setInput] = useState(false);
     const { openNotification, openNotificationError } = useContext(AuthContext);
     const dispatch = useDispatch()
 
-    const subtractProduct = async () => {
-      if (counts <= 1) {
+     const subtractProduct = async () => {
+      if (countNew <= 1) {
         dispatch(deleteCartItemAsync(_id))
                 .then(() => {
                   openNotification("bottomRight", "Товар удален из корзины")
@@ -21,29 +22,32 @@ const CounterInput = ({ counts, setCounts, _id }) => {
       } else {
         const resultIncrease = dispatch(decreaseCartItemAsync(_id));
         if (resultIncrease) {
-          setCounts(counts - 1);
+          setCountNew(countNew - 1);
         }
       }
     };
 
-    const debouncedHandleChange = debounce((_id, count) => {
-        dispatch(updateCountItemAsync({id:_id, count}))
-                .then(() => {
-                  setCounts(count)
-                })
-                .catch(() => {
-                  const errorMessage = localStorage.getItem('errorMessage')
-                  setCounts(counts)
-                  openNotificationError("bottomRight", errorMessage)
-                  localStorage.removeItem('errorMessage')
-                })
+    const debouncedHandleChange = debounce((_id, countInput) => {
+      dispatch(updateCountItemAsync({id:_id, countInput: 200}))
+      .then(() => {
+        setCountNew(countInput)
+        setInput(false)
+      })
+      .catch(() => {
+        setCountNew(count)
+        setInput(true)
+        const errorMessage = localStorage.getItem('errorMessage')
+        openNotificationError("bottomRight", errorMessage)
+        localStorage.removeItem('errorMessage')
+      })
     }, 1000);
 
     const handleChange = (e) => {
-      if (e.target.value > 200) {
-        setCounts(200);
+      if(e.target.value > 200) {
+        setCountNew(200)
+        debouncedHandleChange(_id, 200);
       } else {
-        setCounts(Number(e.target.value));
+        setCountNew(e.target.value)
         debouncedHandleChange(_id, Number(e.target.value));
       }
     };
@@ -57,18 +61,18 @@ const CounterInput = ({ counts, setCounts, _id }) => {
     };
 
     const addProduct = async () => {
-      if (counts >= 200) {
-        setCounts(counts);
+      if (countNew >= 200) {
+        setCountNew(countNew);
       } else {
-        dispatch(increaseCartItemAsync({_id: _id, countProduct: counts}))
+        dispatch(increaseCartItemAsync({_id: _id, countProduct: countNew}))
                     .then(result => {
                         if(result.payload.increase) { 
-                          setCounts(counts + 1)
+                          setCountNew(countNew + 1)
                             openNotification('bottomRight', 'Количество товара увеличено');
                         }
                     })
                     .catch(() => {
-                        setCounts(counts)
+                      setCountNew(countNew)
                         openNotificationError('bottomRight', 'Товара недостаточно на складе');
                     })
       }
@@ -81,9 +85,9 @@ const CounterInput = ({ counts, setCounts, _id }) => {
             </button>
             {
                 input ?
-                <input className={style.count_input} type="text" value={counts} onChange={handleChange} onBlur={onBlurInput}/>
+                <input className={style.count_input} type="text" value={countNew} onChange={handleChange} onBlur={onBlurInput}/>
                 :
-                <p className={style.count} onClick={changeOnInput}>{counts}</p>
+                <p className={style.count} onClick={changeOnInput}>{countNew}</p>
             }
             <button className={style.btn_counter} onClick={addProduct}>
                 <img className={style.counter_icon} src="/assets/btn-cart-plus.svg" alt="" />

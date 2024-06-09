@@ -11,7 +11,6 @@ import CounterInput from "../counterInput/counterInput.jsx";
 import { addProductFavoriteAsync, delProductFavoriteAsync } from "../../store/likedSlice.js";
 
 const CartItem = ({ _id, img, title, preText, price, count, checkItem, checkArrayItem }) => {
-  const [counts, setCounts] = useState(count);
   const [cartCheck, setCartCheck] = useState(checkArrayItem);
   const [isFavorite, setIsFavorite] = useState(checkItem);
   const { openNotification } = useContext(AuthContext);
@@ -33,7 +32,6 @@ const CartItem = ({ _id, img, title, preText, price, count, checkItem, checkArra
               openNotification('bottomRight', "Товар удален из корзины")
             })
   };
-
 
   const clickHeart = () => {
     if(isFavorite) {
@@ -62,8 +60,7 @@ const CartItem = ({ _id, img, title, preText, price, count, checkItem, checkArra
         <p className={style.text}>{preText}</p>
       </div>
       <CounterInput
-        counts={counts}
-        setCounts={setCounts}
+        count={count}
         _id={_id}
       />
       <p className={style.price}>{price} BYN</p>

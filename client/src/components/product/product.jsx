@@ -19,21 +19,21 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite, cou
     const clickBtnAdd = async () => {
         dispatch(addProductCartAsync(_id))
                 .then(() => {
+                    const product = cart.find(obj => obj._id === _id);
+                    if(!product) {
+                        setCountProduct(1)
+                        setIsAdded(true)
+                    } else {
+                        setCountProduct(product.count + 1)
+                        setIsAdded(true)
+                    }
                     openNotification('bottomRight', 'Товар успешно добавлен в корзину');
                 })
                 .catch(() => {
                     setCountProduct(0)
                     setIsAdded(false)
+                    openNotificationError('bottomRight', 'Товара недостаточно на складе');
                 })
-
-        const product = cart.find(obj => obj._id === _id);
-        if(!product) {
-            setCountProduct(1)
-            setIsAdded(true)
-        } else {
-            setCountProduct(product.count + 1)
-            setIsAdded(true)
-        }
     }
 
     useEffect(() => {

@@ -13,12 +13,24 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
     try {
         const userId = req.userId
         const itemId = req.params.itemId
-        const cartItem = await CartItem.findOne({owner: userId})
-
+        const cartItem = await CartItem.findOne({owner: userId}).populate({
+            path: 'items',
+            populate: {
+                path: 'product'
+            }
+        });
         const boxItem = await Box.findById(itemId)
+        const productInCart = cartItem.items.find(item => item.product.equals(itemId));
+
+        if (productInCart) {
+
+            if(productInCart.quantity + 1 > productInCart.product.count) {
+                return res.status(500).json({message: "Товара недостаточно на складе"})
+            }
+        }
 
         if(boxItem.count < 1) {
-            res.status(500).json({message: "Товара недостаточно на складе"})
+            return res.status(500).json({message: "Товара недостаточно на складе"})
         }
 
         if (cartItem) {
@@ -122,7 +134,7 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
         }
 
     } catch (error) {
-        res.status(400).json({error: error.message})
+        return res.status(400).json({error: error.message})
     }
 })
 
@@ -177,7 +189,7 @@ cartRoute.post('/decrease', verifyToken, async (req, res) => {
 cartRoute.post('/update-item', verifyToken, async (req, res) => {
     try {
         const productId = req.body.id;
-        const productCount = req.body.count
+        const productCount = req.body.countInput
         const userId = req.userId
         const cartItem = await Box.findById(productId)
 
