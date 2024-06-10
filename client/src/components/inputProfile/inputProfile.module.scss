@@ -10,6 +10,12 @@
     transition: all 300ms;
 }
 
+.close_icon {
+    width: 11px;
+    height: 11px;
+    cursor: pointer;
+}
+
 .block__input__error {
     @extend .block__input;
     border: 2px solid #f60404ee;

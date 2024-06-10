@@ -272,7 +272,6 @@ userRoute.post("/order", verifyToken, async (req, res) => {
         }
     })
     .catch(err => {
-      console.log(err);
         res.status(500).json({ message: 'Произошла ошибка при сохранении заказа', error: err });
     });
   

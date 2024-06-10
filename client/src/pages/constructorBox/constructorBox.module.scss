@@ -495,3 +495,55 @@
     justify-content: center;
     align-items: center;
 }
+
+.block_btn_create {
+    display: flex;
+    column-gap: 10px;
+    position: absolute;
+    bottom: -50px;
+    opacity: 0;
+}
+
+.button_close {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    transition: all 250ms;
+}
+
+.button_close_hidden {
+    @extend .button_close;
+    opacity: 1;
+    transition: all 250ms;
+}
+
+.block_btn_create_hidden {
+    @extend .block_btn_create;
+    opacity: 1;
+    transition: all 250ms;
+}
+
+.button_add {
+    border: 0;
+    background-color: #0b11cc;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    color: white;
+}
+
+.close_icon {
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+}

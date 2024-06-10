@@ -32,8 +32,8 @@ const Cart = ({checkItemCart}) => {
 
   useEffect(() => {
     const result = sale.active === true
-      ? cartTotalPrice - cartTotalPrice * (sale.percentage / 100)
-      : cartTotalPrice;
+          ? (cartTotalPrice - cartTotalPrice * (sale.percentage / 100)).toFixed(1)
+          : cartTotalPrice.toFixed(1);
     
     if(sale.active) {
       dispatch(setPromo(sale));
@@ -185,7 +185,7 @@ const Cart = ({checkItemCart}) => {
                 </div>
                 <div className={style.info__item}>
                   <p>Сумма:</p>
-                  <p>{cartTotalPrice} BYN</p>
+                  <p>{cartTotalPrice.toFixed(1)} BYN</p>
                 </div>
                 <div className={style.info__item}>
                   <p>Скидка:</p>

@@ -1,14 +1,10 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { AuthContext } from "../../context/authContext.js";
-import Moveable from "react-moveable";
 import { flushSync } from "react-dom";
-import keycon from "keycon";
 import * as uuid  from 'uuid';
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
-
-keycon.setGlobal();
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -24,6 +20,7 @@ import debounce from 'debounce';
 import api from '../../api/api.js';
 import { calculatePrice, setPromoConstructor, isSimpleBox, setTotalPrice, setTitleOrder, setOrderObj } from '../../store/prefabricatedGiftSlice.js';
 import { Link } from 'react-router-dom';
+import ImageBox from '../../components/imageBox/imageBox.jsx';
 
 
 const ConstructorBox = () => {
@@ -121,14 +118,19 @@ const ConstructorBox = () => {
             price: totalPrice
         };
 
-        if(styleBox._id) {
-            data.typesBox.push({
-                product: styleBox._id,
-                quantity: styleBox.count
-            })
-        }
-
         dispatch(setOrderObj(data))
+    }
+
+    const clearInputTypes = () => {
+        setValueTypes('')
+    }
+
+    const clearInputProduct = () => {
+        setValueProduct('')
+    }
+
+    const clearInputPostCard = () => {
+        setValuePostCard('')
     }
 
     useEffect(() => {
@@ -200,6 +202,18 @@ const ConstructorBox = () => {
 
     }, [productGift, typesBox, postcards])
 
+    const [images, setImages] = useState([]);
+
+    const addImageBox = () => {
+        const newImage = <ImageBox key={images.length} src={"http://localhost:5000/typesBox/box-cart-box.png"} />;
+        setImages(prevImages => [...prevImages, newImage]);
+    };
+
+    const closeSides = () => {
+        setFront(false);
+        setRight(false);
+    }
+
     return ( 
 
         <section className={`${style.section_constructor} wrapper`}>
@@ -219,7 +233,8 @@ const ConstructorBox = () => {
                         <h2 className='section__title'>Коробки</h2>
                         <div className={style.search__input}>
                             <img src="/assets/search.svg" alt=""/>
-                            <input type="text" placeholder='Введите название открытки' list="products" onChange={(e) => setValueTypes(e.target.value)}/> 
+                            <input type="text" placeholder='Введите название открытки' value={valueTypes} onChange={(e) => setValueTypes(e.target.value)}/>
+                            <img className={style.close_icon} src="/assets/close-icon.svg" alt="Icon clear" onClick={clearInputTypes}/>
                         </div>
                     </div>
                     <div className={style.customSlide__list__types} ref={openImgTypes}>
@@ -235,31 +250,15 @@ const ConstructorBox = () => {
                     <SwiperSlide className={`${style.customSlide} ${style.customSlide2}`}>
                     <div className={style.three_d_box}>
                         <div className={!front ? style.front : style.front_open} onClick={openFront}>
-                            {/* <img src="http://localhost:5000/typesBox/box-cart-box.png" alt="" ref={textRef}/>
-                            <Moveable
-                                target={textRef}
-                                scalable={true}
-                                keepRatio={true}
-                                draggable={true}
-                                snappable={true}
-                                bounds={{left: 0, top: 0, bottom: 0, right: 0, position: "css" }}
-                                onScaleStart={e => {
-                                    e.setFixedDirection([0, 0]);
-                                }}
-                                onDrag={e => {
-                                    e.target.style.transform = e.transform;
-                                }}
-                                onBeforeScale={e => {
-                                    if (keycon.global.shiftKey) {
-                                        e.setFixedDirection([-1, -1]);
-                                    } else {
-                                        e.setFixedDirection([0, 0]);
-                                    }
-                                }}
-                                onScale={e => {
-                                    e.target.style.transform = e.drag.transform;
-                                }}
-                            /> */}
+                            {images.map(image => image)}
+                            <div className={!front ? style.block_btn_create : style.block_btn_create_hidden}>
+                                <button className={style.button_add} onClick={addImageBox}>Добавить фото</button>
+                                <button className={style.button_add} onClick={addImageBox}>Добавить текст</button>
+                            </div>
+                            <div className={!front ? style.button_close : style.button_close_hidden} onDoubleClick={closeSides}>
+                                <img src="/assets/close-icon-constructor.svg" alt="Close icon" />
+                            </div>
+                            {/* <ImageBox src={"http://localhost:5000/typesBox/box-cart-box.png"} /> */}
                         </div>
                         <div className={style.back}></div>
                         <div className={style.left}></div>
@@ -274,7 +273,8 @@ const ConstructorBox = () => {
                         <h2 className='section__title'>Товары</h2>
                         <div className={style.search__input}>
                             <img src="/assets/search.svg" alt=""/>
-                            <input type="text" placeholder='Введите название товара' onChange={(e) => setValueProduct(e.target.value)}/>  
+                            <input type="text" placeholder='Введите название товара'  value={valueProduct} onChange={(e) => setValueProduct(e.target.value)}/> 
+                            <img className={style.close_icon} src="/assets/close-icon.svg" alt="Icon clear" onClick={clearInputProduct}/> 
                         </div>
                     </div>
                     <div className={style.customSlide__list__types} ref={openImgProduct}>
@@ -290,7 +290,8 @@ const ConstructorBox = () => {
                         <h2 className='section__title'>Открытки</h2>
                         <div className={style.search__input}>
                             <img src="/assets/search.svg" alt=""/>
-                            <input type="text" placeholder='Введите название открытки' onChange={(e) => setValuePostCard(e.target.value)}/>  
+                            <input type="text" placeholder='Введите название открытки' value={valuePostCard} onChange={(e) => setValuePostCard(e.target.value)}/>  
+                            <img className={style.close_icon} src="/assets/close-icon.svg" alt="Icon clear" onClick={clearInputPostCard}/>
                         </div>
                     </div>
                     <div className={style.customSlide__list__types} ref={openImgPostCard}>

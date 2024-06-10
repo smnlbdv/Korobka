@@ -269,21 +269,19 @@ function App() {
   }
 
   const countDown = (type, message) => {
-    if(type === 'success') {
-      modal.success({
-        title: 'Подписка на новости Korobka',
-        content: `${message}`,
-        okText: 'Хорошо',
-      });
+    const modalConfig = {
+      title: 'Подписка на новости Korobka',
+      content: message,
+      okText: 'Хорошо'
+    };
 
-    }
-    if (type === 'error') {
-      modal.error({
-        title: 'Подписка на новости Korobka',
-        content: `${message}`,
-        okText: 'Хорошо',
-      });
-
+    if (type === 'success') {
+        modalConfig.class = 'custom-modal'; // Добавляем класс для успешного сообщения
+        modal.success(modalConfig);
+    } 
+    else if (type === 'error') {
+        modalConfig.class = 'custom-modal'; // Добавляем класс для сообщения об ошибке
+        modal.error(modalConfig);
     }
   };
 
@@ -361,6 +359,7 @@ function App() {
   }
 
   const sendEmailData = async (email) => {
+    console.log(email)
     try {
       await api.post('/api/email/send', {email: email})
         .then(response => {
@@ -476,7 +475,7 @@ function App() {
                   localStorage.setItem('initialValues', JSON.stringify(values))
                   localStorage.setItem('order', JSON.stringify(order))
                   localStorage.setItem('promo', JSON.stringify(promo))
-
+                  
                   window.location = response.data.url
                 })
                 .catch(error => alert(error.message))

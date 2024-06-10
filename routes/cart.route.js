@@ -214,7 +214,6 @@ cartRoute.post('/promo', verifyToken, async (req, res) => {
         const promoCode = req.body.promoCode;
         const discount = await Discount.findOne({ name: promoCode });
         if (discount && discount.remainingUses !== 0) {
-            console.log(promoCode);
             res.status(200).json({ message: 'Скидка найдена!', id: discount._id, active: true, percentage: discount.percentage });
         } else {
             res.status(404).json({ message: 'Скидка не найдена.', active: false});

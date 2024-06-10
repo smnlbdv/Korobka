@@ -129,7 +129,7 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
             {
                 <Modal
                     title="Создание комментария"
-                    visible={visible}
+                    open={visible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                     okText="Отправить"

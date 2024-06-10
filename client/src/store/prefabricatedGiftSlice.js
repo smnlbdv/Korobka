@@ -66,7 +66,7 @@ const prefabricatedGiftSlice = createSlice({
       const typesBoxTotal = state.typesBox.reduce((accumulator, box) => accumulator + (box.count * box.price), 0);
 
       let itemsPrice = productsTotal + postcardsTotal + typesBoxTotal;
-      state.itemsPrice = parseFloat(itemsPrice.toFixed(2));
+      state.itemsPrice = parseFloat(itemsPrice.toFixed(1));
     },
     incBoxTypeGift(state, action) {
       const index = state.typesBox.findIndex(

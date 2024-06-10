@@ -117,6 +117,7 @@ const Profile = () => {
     },
     validationSchema: Yup.object().shape({
       password: Yup.string().min(5, "Длинна меньше 5 символов"),
+      prepassword: Yup.string().min(5, "Длинна меньше 5 символов"),
       confirmPassword: Yup.string()
         .min(5, "Длинна меньше 5 символов")
         .oneOf([Yup.ref("password"), null], "Пароли не совпадают"),
@@ -152,6 +153,20 @@ const Profile = () => {
   function compareObjects(obj1, obj2) {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
+
+  const clearFieldById = (fieldId) => {
+    formikPersonal.setValues({
+        ...formikPersonal.values,
+        [fieldId]: ""
+    });
+  };
+
+  const clearFieldByIdPass = (fieldId) => {
+    formikPass.setValues({
+        ...formikPersonal.values,
+        [fieldId]: ""
+    });
+  };
 
   const formikPersonal = useFormik({
     initialValues: {
@@ -294,6 +309,7 @@ const Profile = () => {
                 placeholder={"Имя"}
                 onChange={changeUserName}
                 errorChange={formikPersonal.errors.name && "true"}
+                clearFieldById={clearFieldById}
               />
               {formikPersonal.errors.name && (
                 <p className={style.error__message}>
@@ -311,6 +327,7 @@ const Profile = () => {
                 onChange={formikPersonal.handleChange}
                 placeholder={"Фамилия"}
                 errorChange={formikPersonal.errors.surname && "true"}
+                clearFieldById={clearFieldById}
               />
               {formikPersonal.errors.surname && (
                 <p className={style.error__message}>
@@ -330,6 +347,7 @@ const Profile = () => {
                 value={formikPersonal.values.email}
                 onChange={formikPersonal.handleChange}
                 errorChange={formikPersonal.errors.email && "true"}
+                clearFieldById={clearFieldById}
               />
               {formikPersonal.errors.email && (
                 <p className={style.error__message}>
@@ -348,6 +366,7 @@ const Profile = () => {
                 onChange={formikPersonal.handleChange}
                 errorChange={formikPersonal.errors.phone && "true"}
                 tel={"true"}
+                clearFieldById={clearFieldById}
               />
               {formikPersonal.errors.phone && (
                 <p className={style.error__message}>
@@ -387,10 +406,11 @@ const Profile = () => {
                 hiddenImage={true}
                 value={formikPass.values.prepassword}
                 url={"/assets/lock-sign-up.svg"}
-                placeholder={"Старый пароль"}
+                placeholder={""}
                 onChange={formikPass.handleChange}
                 ref={inputPrePass}
                 errorChange={formikPass.errors.prepassword && "true"}
+                clearFieldById={clearFieldByIdPass}
               />
               {formikPass.errors.prepassword && (
                 <p className={style.error__message}>
@@ -413,9 +433,10 @@ const Profile = () => {
                 typeInput={typeInputPass}
                 hiddenImage={true}
                 url={"/assets/lock-sign-up.svg"}
-                placeholder={"Новый пароль"}
+                placeholder={""}
                 errorChange={formikPass.errors.password && "true"}
                 ref={inputNewPass}
+                clearFieldById={clearFieldByIdPass}
               />
               {formikPass.errors.password && (
                 <p className={style.error__message}>
@@ -433,9 +454,10 @@ const Profile = () => {
                 typeInput={typeInputPass}
                 hiddenImage={true}
                 url={"/assets/lock-sign-up.svg"}
-                placeholder={"Повторите пароль"}
+                placeholder={""}
                 errorChange={formikPass.errors.confirmPassword && "true"}
                 ref={inputDoublePass}
+                clearFieldById={clearFieldByIdPass}
               />
               {formikPass.errors.confirmPassword && (
                 <p className={style.error__message}>

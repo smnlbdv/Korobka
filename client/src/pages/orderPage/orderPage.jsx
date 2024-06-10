@@ -30,14 +30,12 @@ const OrderPage = () => {
     const orderObj = useSelector(state => state.prefabricatedGift.orderObj)
     const dispatch = useDispatch()
     const navigate = useNavigate();
-
+    const totalPrice = useSelector(state => state.cart.totalPrice)
+    
     const postOrderItems = async (order, values, promo) => {
 
         if(values) {
-            const price = calculatePrice(order)
-    
-            if(price) {
-                dispatch(placeOrderAsync({values, order, price}))
+            dispatch(placeOrderAsync({values, order, price: totalPrice}))
                     .then((response) => {
                         setUrl(response.payload.url);
 
@@ -61,16 +59,15 @@ const OrderPage = () => {
                     })
                     .catch((response) => {
                         openNotificationError("bottomRight", "Ошибка оформления заказа");
-                        
                         setTimeout(() => {
                             navigate("/cart");
                         }, 1000)
                     })
-            }
         }
     }
 
     const postOrderConstructor = async (order, values, promo) => {
+
         if(values) {
             dispatch(placeOrderConstructorAsync({values, order, price: order.price}))
                     .then((response) => {
@@ -82,8 +79,6 @@ const OrderPage = () => {
 
                         dispatch(addConstructorProfile(response.payload.order))
                         dispatch(fullDeleteItemConstructor([]))
-                        
-
                     })
                     .catch((response) => {
                         openNotificationError("bottomRight", "Ошибка оформления заказа");
@@ -121,13 +116,13 @@ const OrderPage = () => {
             const way = pay.find(item => item._id === values.wayPay)
 
             if(way.name === "Картой") {
-                if(Object.keys(orderObj.payload).length !== 0) {
+                if(orderObj.payload) {
                     orderCheckout(orderObj.payload, values, promoConstructor)
                 } else {
                     orderCheckout(orderArray, values, promo)
                 }
             } else {
-                if(Object.keys(orderObj.payload).length !== 0) {
+                if(orderObj.payload) {
                     postOrderConstructor(orderObj.payload, values, promoConstructor)
                     resetForm()
                 } else {

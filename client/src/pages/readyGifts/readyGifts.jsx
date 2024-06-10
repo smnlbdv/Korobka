@@ -97,7 +97,6 @@ const ReadyGifts = () => {
         setStartCategoryValue(valueCategory)
     }, [])
 
-
     useEffect(() => {
         setBoxes([])
         setIsLoading(false)

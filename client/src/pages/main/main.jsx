@@ -77,45 +77,34 @@ const answersWhy = [
 const Main = () => {
 
   const [open, setOpen] = useState(3);
-  const [emailText, setEmailText] = useState('')
   const {contextHolder, newBoxList, sendEmailData, contextHolderEmail, reviewsList } = useContext(AuthContext);
+
 
   const formik = useFormik({
     initialValues: {
       email: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().email('Некорректный адрес электронной почты').required('Обязательное поле'),
+      email: Yup.string().email('Некорректный адрес электронной почты'),
     }),
-    onSubmit: (event) => {
-      if(emailText.length == 0) {
+    onSubmit: () => {
+      if(formik.values.email == 0) {
         return false 
       } else {
-        sendEmailData(event.email)
-        setEmailText('')
+        console.log(formik.values.email);
+        sendEmailData(formik.values.email)
+        formik.resetForm()
       }
     }
   });
-
-  const sendEmail = (event) => {
-    formik.handleChange(event)
-    setEmailText(event.target.value)
-    formik.initialValues.email = event.target.value
-  }
 
   const openAnswer = (id) => {
     setOpen(id);
   };
 
-  const onBlurInput = () => {
-    if(!formik.errors.email || formik.values.email == "") formik.resetForm();
-  }
-
-  useEffect(() => {
-    if(emailText.length == 0) {
-      formik.resetForm();
-    }
-  }, [emailText])
+  const clearFieldById = () => {
+    formik.resetForm();
+  };
 
   return (
     <section>
@@ -216,20 +205,20 @@ const Main = () => {
       </div>
       <div className={style.swiper}>
           <Swiper
-          effect={'coverflow'}
-          centeredSlides={true}
-          slidesPerView={"auto"}
-          initialSlide={1}
-          coverflowEffect={{
-            rotate: 50,
-            stretch: 0,
-            depth: -100,
-            modifier: 1,
-            slideShadows: true,
-          }}
-          navigation={true}
-          modules={[EffectCoverflow, Navigation]}
-          className="mySwiper-main mySwiperMain"
+            effect={'coverflow'}
+            centeredSlides={true}
+            slidesPerView={"auto"}
+            initialSlide={1}
+            coverflowEffect={{
+              rotate: 50,
+              stretch: 0,
+              depth: -100,
+              modifier: 1,
+              slideShadows: true,
+            }}
+            navigation={true}
+            modules={[EffectCoverflow, Navigation]}
+            className="mySwiper-main mySwiperMain"
           >
             {
             reviewsList.map((item, index) => (
@@ -248,15 +237,16 @@ const Main = () => {
                   <p className={style.text}>
                     Подпишитесь и получайте полезные статьи и самые интересные предложения сети Korobka
                   </p>
-                  <input 
-                    className={formik.errors.email ? style.input_question_error : style.input_question}
-                    type="email"
-                    name="email"
-                    placeholder="Укажите почту..."
-                    value={emailText}
-                    onChange={sendEmail}
-                    onBlur={onBlurInput}
-                  />
+                  <div className={formik.errors.email ? style.input_question_error : style.input_question}>
+                    <input 
+                      type="email"
+                      name="email"
+                      placeholder="Укажите почту..."
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                    />
+                    <img className={style.close_icon} src="/assets/close-icon.svg" alt="Icon clear" onClick={clearFieldById}/>
+                  </div>
                   <ButtonCreate text={"Отправить"} type={"submit"}/>
                 </form>
                 <div className={style.block_woman}>
