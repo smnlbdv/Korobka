@@ -506,31 +506,31 @@ function App() {
 
   const postCheckOrder = async (orderId) => {
     let url;
-    const token = JSON.parse(localStorage.getItem('userData')) || '';
     try {
-      await api.get(`/api/profile/order/${orderId}/check`, {
-          headers: {
-            'Authorization': token.token,
-          }
-        })
+      await api.get(`/api/profile/order/${orderId}/check`)
         .then(response => {
           if(response.status == 200) {
             url = response.data.url
           }    
         })
-        .catch(response => {
-          if(response.response.status == 401) {
-            logout()
-            navigate("/api/auth/login");
-          }
-      });
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        logout();
-        navigate("/api/auth/login");
-      } else {
-        console.log(error.message);
-      }
+      console.log(error.message);
+    }
+    return url
+  }
+
+  
+  const postCheckOrderConstructor = async (orderId) => {
+    let url;
+    try {
+      await api.get(`/api/profile/order//constructor/${orderId}/check`)
+        .then(response => {
+          if(response.status == 200) {
+            url = response.data.url
+          }    
+        })
+    } catch (error) {
+      console.log(error.message);
     }
     return url
   }
@@ -589,7 +589,8 @@ function App() {
         postRegistration,
         calculatePrice,
         postLogin,
-        postCheckOrder
+        postCheckOrder,
+        postCheckOrderConstructor
       }}
     >
         <Routes>

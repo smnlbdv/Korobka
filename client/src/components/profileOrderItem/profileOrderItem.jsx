@@ -91,7 +91,7 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
                         />
                     </button>
                 </Tooltip>
-                <Tooltip placement="right" title={"Чек"} color={"red"}>
+                <Tooltip placement="right" title={"Чек"} color={"green"}>
                     <a className={style.btn__check_order} href={urlCheck} ref={urlCheckLink} target="_blank" rel="noreferrer">
                         <img
                             className={style.delete_icon}

@@ -16,6 +16,21 @@ export const deleteOrderItemAsync = createAsyncThunk(
     }
 );
 
+export const deleteConstructorItemAsync = createAsyncThunk(
+  'liked/deleteConstructorItemAsync',
+  async (id) => {
+    try {
+      const response = await api.delete(`/api/profile/delete-order/constructor/${id}`)
+      return {
+          ...response.data,
+          _id: id,
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+);
+
 export const updateInfoProfileAsync = createAsyncThunk(
     'liked/updateInfoProfileAsync',
     async (changedData) => {
@@ -89,6 +104,12 @@ const profileSlice = createSlice({
             .addCase(deleteOrderItemAsync.fulfilled, (state, action) => {
                 if(action.payload && action.payload.success === true) {
                     state.order = state.order.filter(item => item._id !== action.payload._id);
+                } 
+            })
+        builder
+            .addCase(deleteConstructorItemAsync.fulfilled, (state, action) => {
+                if(action.payload && action.payload.success === true) {
+                    state.constructor = state.constructor.filter(item => item._id !== action.payload._id);
                 } 
             })
         builder

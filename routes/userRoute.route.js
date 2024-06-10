@@ -374,6 +374,23 @@ userRoute.delete("/delete-order/:orderId", verifyToken, async (req, res) => {
   }
 })
 
+userRoute.delete("/delete-order/constructor/:orderId", verifyToken, async (req, res) => {
+  const orderId = req.params.orderId
+  const userId = req.userId
+  try {
+    const response = await User.updateOne({ _id: userId }, { $pull: { orderConstructor: orderId } });
+    const responseOrder = await ConstructorOrder.deleteOne({ _id: orderId });
+    if(response.acknowledged && responseOrder.acknowledged) {
+      res.status(200).json({ message: "Заказ успешно удален", success: true });
+    }
+    else {
+      res.status(400).json({ message: "Ошибка удаления", success: false });
+    }
+  } catch (error) {
+      res.status(400).json({message: "Ошибка удаления", delete: error.acknowledged });
+  }
+})
+
 userRoute.get("/order/:orderId/check", verifyToken, async (req, res) => {
   const currentDir = process.cwd();
   const orderId = req.params.orderId;
@@ -383,7 +400,34 @@ userRoute.get("/order/:orderId/check", verifyToken, async (req, res) => {
     if (fs.existsSync(pdfFilePath)) {
       res.status(200).json({ message: "PDF файл уже существует", url: `check-${orderId}.pdf`});
     } else {
-      const save = await Order.findById(orderId).populate('items.productId')
+      const save = await Order.findById(orderId).populate('items.productId').populate('status').populate('wayPay')
+
+      pdfGenerate(save, orderId)
+        .then((data) => {
+          if(data.result) {
+            res.status(200).json({ message: 'Чек сформирован', url: data.url });
+          }
+        })
+        .catch((error) => {
+            res.status(400).json({ message: 'Ошибка формирования чека', url: null});
+        });
+    }
+  } catch (error) {
+    console.error('Произошла ошибка:', error);
+    res.status(400).json({ message: "Ошибка при создании PDF файла", success: false });
+  }
+})
+
+userRoute.get("/order/constructor/:orderId/check", verifyToken, async (req, res) => {
+  const currentDir = process.cwd();
+  const orderId = req.params.orderId;
+  const pdfFilePath = path.join(currentDir, '../public', `check-constructor-${orderId}.pdf`);
+
+  try {
+    if (fs.existsSync(pdfFilePath)) {
+      res.status(200).json({ message: "PDF файл уже существует", url: `check-${orderId}.pdf`});
+    } else {
+      const save = await ConstructorOrder.findById(orderId).populate('product.productId').populate('postcards.productId').populate('typesBox.productId')
       pdfGenerate(save, orderId)
         .then((data) => {
           if(data.result) {

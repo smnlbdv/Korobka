@@ -62,23 +62,29 @@ const Profile = () => {
 
     constructor.forEach((orderItem) => {
       if(orderItem.typesBox) {
-        orderItem.typesBox.forEach((orderItem) => {
-            setSelectedItemsConstructor((prevSelectedItems) => [...prevSelectedItems, orderItem]);
-        })
+          orderItem.typesBox.forEach((boxItem) => {
+              if (!selectedItemsConstructor.includes(boxItem)) {
+                  setSelectedItemsConstructor((prevSelectedItems) => [...prevSelectedItems, boxItem]);
+              }
+          });
       }
   
       if(orderItem.product) {
-        orderItem.product.forEach((orderItem) => {
-          setSelectedItemsConstructor((prevSelectedItems) => [...prevSelectedItems, orderItem]);
-        })
+          orderItem.product.forEach((productItem) => {
+              if (!selectedItemsConstructor.includes(productItem)) {
+                  setSelectedItemsConstructor((prevSelectedItems) => [...prevSelectedItems, productItem]);
+              }
+          });
       }
   
       if(orderItem.postcards) {
-        orderItem.postcards.forEach((orderItem) => {
-          setSelectedItemsConstructor((prevSelectedItems) => [...prevSelectedItems, orderItem]);
-        })
+          orderItem.postcards.forEach((postcardItem) => {
+              if (!selectedItemsConstructor.includes(postcardItem)) {
+                  setSelectedItemsConstructor((prevSelectedItems) => [...prevSelectedItems, postcardItem]);
+              }
+          });
       }
-    })
+  });
     
   };
 
@@ -544,7 +550,7 @@ const Profile = () => {
           footer={null}
           className="profile-ant"
         >
-          {selectedItemsConstructor.map((item, index) => (
+          {selectedItemsConstructor && selectedItemsConstructor.map((item, index) => (
                 <ModalItemConstructor key={index} item={item}/>
           ))}
         </Modal>
