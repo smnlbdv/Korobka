@@ -1,13 +1,36 @@
 
+import { useEffect, useRef } from 'react';
+import { Fancybox as NativeFancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
+
 import style from './modalItemConstructor.module.scss'
 
 // eslint-disable-next-line react/prop-types
 const ModalItemConstructor = ({item}) => {
+
+    const openConstructorItem = useRef(null)
+
+    useEffect(() => {
+        const containerTypes = openConstructorItem.current;
+    
+        const delegate = "[data-fancybox]";
+        const options = {};
+    
+        NativeFancybox.bind(containerTypes, delegate, options);
+    
+        return () => {
+          NativeFancybox.unbind(containerTypes);
+          NativeFancybox.close();
+        };
+    }, []);
+
     return ( 
         <div className={style.main__block__modal}>
-            <div className={style.modal__block__items}>
+            <div className={style.modal__block__items} ref={openConstructorItem}>
                 <div className={style.modal__block__image}>
-                    <img src={item.productId.photo} alt="" />
+                    <a data-fancybox="gallery" href={item.productId.photo}>
+                        <img src={item.productId.photo} alt="" />
+                    </a>
                 </div>
                 <div className={style.modal__block__description}>
                     <p className={style.modal__item__title}>

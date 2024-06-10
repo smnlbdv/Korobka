@@ -523,7 +523,7 @@ function App() {
   const postCheckOrderConstructor = async (orderId) => {
     let url;
     try {
-      await api.get(`/api/profile/order//constructor/${orderId}/check`)
+      await api.get(`/api/profile/order/constructor/${orderId}/check`)
         .then(response => {
           if(response.status == 200) {
             url = response.data.url

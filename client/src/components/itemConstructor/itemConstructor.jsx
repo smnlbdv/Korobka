@@ -3,11 +3,14 @@ import style from './itemConstructor.module.scss'
 import { useDispatch } from 'react-redux';
 import { deleteItemConstructor } from '../../store/prefabricatedGiftSlice';
 
-const itemConstructor = ({_id, photo, title, price, count }) => {
+const itemConstructor = ({_id, photo, title, price, count, setSimpleBox }) => {
 
     const dispatch = useDispatch()
 
     const clickDeleteButton = () => {
+        if(_id === "6666d4b8c61593814e392cb3") {
+            setSimpleBox(false)
+        }
         dispatch(deleteItemConstructor(_id))
     }
 

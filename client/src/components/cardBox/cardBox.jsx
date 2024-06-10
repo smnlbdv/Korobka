@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import style from "./cardBox.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/authContext";
+import { Progress } from 'antd';
 import {
   addBoxTypeGift,
   addProductGift,
@@ -15,13 +16,14 @@ import {
   delBoxTypeGift,
   delProductGift,
   delPostCardGift,
+  isSimpleBox
 } from "../../store/prefabricatedGiftSlice";
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 // eslint-disable-next-line react/prop-types
-const CardBox = ({ obj, type }) => {
-  const { _id, photo, title, price } = obj;
+const CardBox = ({ obj, type, setSimpleBox, simpleBox=false }) => {
+  const {_id, photo, title, price, count } = obj;
   const typesBox = useSelector((state) => state.prefabricatedGift.typesBox);
   const product = useSelector((state) => state.prefabricatedGift.product);
   const postcards = useSelector((state) => state.prefabricatedGift.postcards);
@@ -29,6 +31,34 @@ const CardBox = ({ obj, type }) => {
   const [countProduct, setCountProduct] = useState(0);
   const dispatch = useDispatch();
   const { openNotification } = useContext(AuthContext);
+  const [simpleButton, setSimpleButton] = useState(false);
+  const [percent, setPercent] = useState(0)
+  const [isDisabled, setIsDisabled] = useState(false);
+  const customColors = {
+    '100%': '#8000ff',
+    '0%': '#8000ff',
+  };
+
+  useEffect(() => {
+    if(count == 0) {
+      setIsDisabled(true)
+    } else {
+      setPercent((count / 200) * 100)
+    }
+  }, [count])
+
+  const clickToConstructor = () => {
+    if(simpleBox) {
+        dispatch(delBoxTypeGift(_id))
+        setSimpleBox(false)
+        dispatch(isSimpleBox(false))
+    } else {
+        dispatch(addBoxTypeGift({ _id, photo, title, price, count: 1 }));
+        dispatch(isSimpleBox(true));
+        openNotification("bottomRight", "Коробка успешно добавлена");
+        setSimpleBox(true)
+    }
+  }
 
   useEffect(() => {
     if (type === "boxTypes") {
@@ -69,6 +99,11 @@ const CardBox = ({ obj, type }) => {
     }
   }, [postcards]);
 
+  useEffect(() => {
+    if(obj._id === "6666d4b8c61593814e392cb3") {
+      setSimpleButton(true)
+    }
+  }, [])
 
   const subtractProduct = () => {
     if (countProduct <= 1) {
@@ -191,9 +226,16 @@ const CardBox = ({ obj, type }) => {
         </a>
       </div>
       <h2 className={style.main__type_title}>{title}</h2>
+      <div className={style.instock__product}>
+              <p>Осталось: {count} шт.</p>
+              <div className={style.bar_block}>
+                <Progress percent={percent} strokeWidth={4} showInfo={false} strokeColor={customColors} trailColor="#000589"/>
+              </div>
+      </div>
       <p className={style.main__type_price}>Цена: {price} BYN</p>
       <div className={style.button__add_cart}>
-        {isAdded ? (
+      {
+        !simpleButton && isAdded ? 
           <div className={style.counter__block}>
             <img
               className={style.counter__image}
@@ -211,11 +253,16 @@ const CardBox = ({ obj, type }) => {
               onClick={addProduct}
             />
           </div>
-        ) : (
-          <button className={style.main__type_button} onClick={clickBtnAdd}>
-            <p>Добавить</p>
-          </button>
-        )}
+        : 
+         simpleButton ? 
+            <button className={!simpleBox ? style.main__type_button : style.main__type_button_del} onClick={clickToConstructor}>
+              {simpleBox ? <p>Удалить</p> : <p>Стилизовать</p>}
+            </button>
+            :
+            <button className={style.main__type_button} onClick={clickBtnAdd}>
+              <p>Добавить</p>
+            </button>
+      }
       </div>
     </div>
   );

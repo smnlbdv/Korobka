@@ -38,10 +38,10 @@ const Header = () => {
         if(cart.length > 0) {
             let index = cart.length + 1
             contentCart = cart.map((element, index) => (
-                <PopoverItem key={index} obj={element} />
+                <PopoverItem key={index} obj={element} handleLinkClickTwo={handleLinkClickTwo}/>
             ));
             contentCart.push(
-                <Link to="cart" key={index}>
+                <Link to="cart" key={index} onClick={handleLinkClickTwo}>
                     <div className={style.popover__button}>
                         <p>Перейти в корзину</p>
                     </div>
@@ -59,10 +59,10 @@ const Header = () => {
         if(favoriteItem.length > 0) {
             let index = favoriteItem.length + 1
             contentLiked = favoriteItem.map((element, index) => (
-                <PopoverItem key={index} obj={element} />
+                <PopoverItem key={index} obj={element} handleLinkClickTwo={handleLinkClick}/>
             ));
             contentLiked.push(
-                <Link to="liked" key={index}>
+                <Link to="liked" key={index} onCLick={handleLinkClick}>
                     <div className={style.popover__button}>
                         <p>Перейти в избранное</p>
                     </div>

@@ -21,9 +21,8 @@ export default function generateHTML(orderData) {
     typesBox && typesBox.forEach(item => {
         itemsList += 
             `<div class="product-item">
-                <img src="${item.productId.img}" alt="Product" class="product-image">
+                <img src="${item.productId.photo}" alt="Product" class="product-image">
                 <div>
-                    <p class="product-description"><strong>Описание:</strong> ${item.productId.preText}</p>
                     <p class="product-quantity"><strong>Количество:</strong> ${item.quantity}</p>
                     <p class="product-price"><strong>Цена:</strong> ${item.productId.price} BYN</p>
                 </div>
@@ -34,9 +33,8 @@ export default function generateHTML(orderData) {
     product && product.forEach(item => {
         itemsList += 
             `<div class="product-item">
-                <img src="${item.productId.img}" alt="Product" class="product-image">
+                <img src="${item.productId.photo}" alt="Product" class="product-image">
                 <div>
-                    <p class="product-description"><strong>Описание:</strong> ${item.productId.preText}</p>
                     <p class="product-quantity"><strong>Количество:</strong> ${item.quantity}</p>
                     <p class="product-price"><strong>Цена:</strong> ${item.productId.price} BYN</p>
                 </div>
@@ -47,9 +45,8 @@ export default function generateHTML(orderData) {
     postcards && postcards.forEach(item => {
         itemsList += 
             `<div class="product-item">
-                <img src="${item.productId.img}" alt="Product" class="product-image">
+                <img src="${item.productId.photo}" alt="Product" class="product-image">
                 <div>
-                    <p class="product-description"><strong>Описание:</strong> ${item.productId.preText}</p>
                     <p class="product-quantity"><strong>Количество:</strong> ${item.quantity}</p>
                     <p class="product-price"><strong>Цена:</strong> ${item.productId.price} BYN</p>
                 </div>

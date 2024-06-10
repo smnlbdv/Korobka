@@ -37,9 +37,8 @@ const ProductPage = () => {
   const [percent, setPercent] = useState(0)
 
   const customColors = {
-    '0%': 'red',
-    '50%': 'orange',
-    '100%': '#5CCF25',
+    '0%': 'rgb(148, 0, 211)',
+    '100%': 'rgb(148, 0, 211)',
   };
 
   useEffect(() => {
@@ -207,12 +206,12 @@ const ProductPage = () => {
                 <FavoriteHeart _id={id} favorite={isFavorite}/>
               </div>
             </div>
-            <p className={style.instock__product}>
-              Осталось: {selectedProduct.count} шт.
+            <div className={style.instock__product}>
+              <p>Осталось: {selectedProduct.count} шт.</p>
               <div className={style.bar_block}>
-                <Progress percent={percent} strokeWidth={8} showInfo={false} strokeColor={customColors} trailColor="rgba(245, 245, 245, 0.13);" width={100}/>
+                <Progress percent={percent} strokeWidth={7} showInfo={false} strokeColor={customColors} trailColor="rgba(245, 245, 245, 0.13);"/>
               </div>
-            </p>
+            </div>
             <p className={style.text__product}>{selectedProduct.pageDesc}</p>
             <p className={style.quantity__product}>В корзине:{`  ${counterCart}`}</p>
 

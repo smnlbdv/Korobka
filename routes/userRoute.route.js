@@ -427,7 +427,7 @@ userRoute.get("/order/constructor/:orderId/check", verifyToken, async (req, res)
     if (fs.existsSync(pdfFilePath)) {
       res.status(200).json({ message: "PDF файл уже существует", url: `check-${orderId}.pdf`});
     } else {
-      const save = await ConstructorOrder.findById(orderId).populate('product.productId').populate('postcards.productId').populate('typesBox.productId')
+      const save = await ConstructorOrder.findById(orderId).populate('product.productId').populate('postcards.productId').populate('typesBox.productId').populate('status').populate('wayPay')
       pdfGenerate(save, orderId)
         .then((data) => {
           if(data.result) {

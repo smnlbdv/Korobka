@@ -22,13 +22,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import ItemConstructor from '../../components/itemConstructor/itemConstructor.jsx';
 import debounce from 'debounce';
 import api from '../../api/api.js';
-import { calculatePrice, delStyleBox, setPromoConstructor, setStyleBox, setTotalPrice, setTitleOrder, setOrderObj } from '../../store/prefabricatedGiftSlice.js';
+import { calculatePrice, setPromoConstructor, isSimpleBox, setTotalPrice, setTitleOrder, setOrderObj } from '../../store/prefabricatedGiftSlice.js';
 import { Link } from 'react-router-dom';
 
 
 const ConstructorBox = () => {
 
-    const [simpleBox, setSimpleBox] = useState(false)
+    const [simpleBox, setSimpleBox] = useState()
     const [boxTypes, setBoxTypes] = useState()
     const [product, setProduct] = useState()
     const [postCard, setPostCard] = useState()
@@ -42,9 +42,8 @@ const ConstructorBox = () => {
     const productGift = useSelector(state => state.prefabricatedGift.product)
     const typesBox = useSelector(state => state.prefabricatedGift.typesBox)
     const postcards = useSelector(state => state.prefabricatedGift.postcards)
-    const styleBox = useSelector(state => state.prefabricatedGift.styleBox)
-    const styleId = useSelector(state => state.prefabricatedGift.styleBox._id)
     const totalPrice = useSelector(state => state.prefabricatedGift.totalPrice)
+    const isSimple = useSelector(state => state.prefabricatedGift.simpleBox)
     const userId = useSelector(state => state.profile.userId)
     const title = useSelector(state => state.prefabricatedGift.title)
     const openImgTypes = useRef(null)
@@ -73,23 +72,6 @@ const ConstructorBox = () => {
 
     const openRight = () => {
         setRight(true)
-    }
-
-    const clickToConstructor = () => {
-        if(simpleBox) {
-            dispatch(delStyleBox(styleId))
-            setSimpleBox(false)
-        } else {
-            const id = "66624b6b5fc83927db2b2ffb"
-            dispatch(setStyleBox({
-                _id: id,
-                photo: "./assets/box-simple-box.png",
-                title: "Простая коробка",
-                price: 15,
-                count: 1
-            }))
-            setSimpleBox(true)
-        }
     }
 
     const delayedSearch = debounce(async (search) => {
@@ -164,7 +146,7 @@ const ConstructorBox = () => {
 
     useEffect(() => {
         dispatch(calculatePrice())
-    }, [productGift, typesBox, postcards, styleBox]);
+    }, [productGift, typesBox, postcards]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -182,14 +164,6 @@ const ConstructorBox = () => {
         };
         fetchData();
     }, []);
-
-    useEffect(() => {
-        if(styleBox._id) {
-            setSimpleBox(true)
-        } else {
-            setSimpleBox(false)
-        }
-    }, [styleBox])
     
     useEffect(() => {
         const containerTypes = openImgTypes.current;
@@ -210,13 +184,21 @@ const ConstructorBox = () => {
     }, []);
 
     useEffect(() => {
-        if(styleBox._id || typesBox.length !== 0 || productGift.length !== 0 || postcards.length !== 0) {
+        if(isSimple) {
+            setSimpleBox(true)
+        } else {
+            setSimpleBox(false)
+        }
+    }, [isSimple])
+
+    useEffect(() => {
+        if(typesBox.length !== 0 || productGift.length !== 0 || postcards.length !== 0) {
             setIsDisabled(false);
         } else {
             setIsDisabled(true);
         }
 
-    }, [productGift, typesBox, postcards, styleBox])
+    }, [productGift, typesBox, postcards])
 
     return ( 
 
@@ -237,32 +219,13 @@ const ConstructorBox = () => {
                         <h2 className='section__title'>Коробки</h2>
                         <div className={style.search__input}>
                             <img src="/assets/search.svg" alt=""/>
-                            <input type="text" placeholder='Введите название открытки' onChange={(e) => setValueTypes(e.target.value)}/>  
+                            <input type="text" placeholder='Введите название открытки' list="products" onChange={(e) => setValueTypes(e.target.value)}/> 
                         </div>
                     </div>
                     <div className={style.customSlide__list__types} ref={openImgTypes}>
-                        <div className={style.main__type_block}>
-                            <div className={style.main__type_image}>
-                                <a data-fancybox="gallery" href={"./assets/box-simple-box.png"}>
-                                    <img src="./assets/box-simple-box.png" alt="Simple box" />
-                                </a>
-                            </div>
-                            <h2 className={style.main__type_title}>Простая коробка</h2>
-                            <p className={style.main__type_price}>Цена: 10 BYN</p>
-                            <div className={style.button__add_cart}>
-                                <button className={!simpleBox ? style.main__type_button : style.main__type_button_del} onClick={clickToConstructor}>
-                                    {
-                                        simpleBox ?
-                                        <p>Удалить</p>
-                                        :
-                                        <p>Стилизовать</p>
-                                    }
-                                </button>
-                            </div>
-                        </div>
                     {
-                        filterTypes && filterTypes.map((item, index) => (
-                            <CardBox key={index} obj={item} type={"boxTypes"}/>
+                        filterTypes && filterTypes.reverse().map((item, index) => (
+                            <CardBox key={index} obj={item} type={"boxTypes"} setSimpleBox={setSimpleBox} simpleBox={simpleBox}/>
                         ))
                     }
                     </div>
@@ -340,83 +303,83 @@ const ConstructorBox = () => {
                 </SwiperSlide>
                 <SwiperSlide className={style.customSlide}>
                     <div className={style.check__block}>
-                        <div className={style.bg_constructor}></div>
-                        <div className={style.block__total_price}>
-                            <h3 className={style.title}>Ваш заказ</h3>
-                            <div className={style.cart__info}>
-                                <div className={style.info__item}>
-                                    <p>Кол-во:</p>
-                                    <p>
-                                        {typesBox.length + productGift.length + productGift.length}{" "}
-                                        шт.
-                                    </p>
-                                </div>
-                                <div className={style.info__item}>
-                                    <p>Сумма:</p>
-                                    <p>{itemsPrice} BYN</p>
-                                </div>
-                                <div className={style.info__item}>
-                                    <p>Скидка:</p>
-                                    <p>{sale.percentage} %</p>
-                                </div>
-                            </div>
-                            <input
-                                className={`${style.promo} ${
-                                    sale.active === true
-                                    ? style.promo__active__true
-                                    : sale.active === false
-                                    ? style.promo__active__false
-                                    : sale.active === null
-                                    ? ' '
-                                    : ''
-                                }`}
-                                type="text"
-                                placeholder="Промокод..."
-                                onInput={(event) =>  {
-                                    if (event.target.value.trim().length > 1) {
-                                        delayedSearch(event.target.value);
-                                    } else {
-                                        setSale({
-                                            active: null,
-                                            percentage: 0
-                                        });
-                                    }
-                                }}
-                            />
-                            <input
-                                className={style.title_order}
-                                type="text"
-                                placeholder="Название подарка..."
-                                onInput={(event) =>  {
-                                    dispatch(setTitleOrder(event.target.value))
-                                }}
-                            />
-                            <div className={style.pay}>
-                                <div className={style.pay_item}>
-                                <p>Итог к оплате: </p>
-                                <p className={style.totalPrice}>
-                                    {totalPrice} BYN
-                                </p>
-                                </div>
-                                <Link to="/cart/order">
-                                    <button className={style.btn_checkout} disabled={isDisabled} onClick={clickConstructorButton}>Оформить</button>
-                                </Link>
-                            </div>
-                        </div>
                         {
-                            (styleBox._id || typesBox.length !== 0 || productGift.length !== 0 || postcards.length !== 0) ? (
-                                <div className={style.customSlide__list__items}>
-                                    {styleBox && styleBox._id && <ItemConstructor _id={styleBox._id} photo={styleBox.photo} title={styleBox.title} price={styleBox.price} count={styleBox.count}/>}
-                                    {typesBox && typesBox.map((item, index) => (
-                                        <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
-                                    ))}
-                                    {productGift && productGift.map((item, index) => (
-                                        <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
-                                    ))}
-                                    {postcards && postcards.map((item, index) => (
-                                        <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
-                                    ))}
-                                </div>
+                            (typesBox.length !== 0 || productGift.length !== 0 || postcards.length !== 0) ? (
+                                <>
+                                    <div className={style.block__total_price}>
+                                        <h3 className={style.title}>Ваш заказ</h3>
+                                        <div className={style.cart__info}>
+                                            <div className={style.info__item}>
+                                                <p>Кол-во:</p>
+                                                <p>
+                                                    {typesBox.length + productGift.length + productGift.length}{" "}
+                                                    шт.
+                                                </p>
+                                            </div>
+                                            <div className={style.info__item}>
+                                                <p>Сумма:</p>
+                                                <p>{itemsPrice} BYN</p>
+                                            </div>
+                                            <div className={style.info__item}>
+                                                <p>Скидка:</p>
+                                                <p>{sale.percentage} %</p>
+                                            </div>
+                                        </div>
+                                        <input
+                                            className={`${style.promo} ${
+                                                sale.active === true
+                                                ? style.promo__active__true
+                                                : sale.active === false
+                                                ? style.promo__active__false
+                                                : sale.active === null
+                                                ? ' '
+                                                : ''
+                                            }`}
+                                            type="text"
+                                            placeholder="Промокод..."
+                                            onInput={(event) =>  {
+                                                if (event.target.value.trim().length > 1) {
+                                                    delayedSearch(event.target.value);
+                                                } else {
+                                                    setSale({
+                                                        active: null,
+                                                        percentage: 0
+                                                    });
+                                                }
+                                            }}
+                                        />
+                                        <input
+                                            className={style.title_order}
+                                            type="text"
+                                            placeholder="Название подарка..."
+                                            onInput={(event) =>  {
+                                                dispatch(setTitleOrder(event.target.value))
+                                            }}
+                                        />
+                                        <div className={style.pay}>
+                                            <div className={style.pay_item}>
+                                            <p>Итог к оплате: </p>
+                                            <p className={style.totalPrice}>
+                                                {totalPrice} BYN
+                                            </p>
+                                            </div>
+                                            <Link to="/cart/order">
+                                                <button className={style.btn_checkout} disabled={isDisabled} onClick={clickConstructorButton}>Оформить</button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    <div className={style.customSlide__list__items}>
+                                        {typesBox && typesBox.map((item, index) => (
+                                            <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count} setSimpleBox={setSimpleBox}/>
+                                        ))}
+                                        {productGift && productGift.map((item, index) => (
+                                            <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                                        ))}
+                                        {postcards && postcards.map((item, index) => (
+                                            <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                                        ))}
+                                    </div>
+                                </>
                             ) : (
                                 <div className={style.null_block_constructor}>
                                     <div>
