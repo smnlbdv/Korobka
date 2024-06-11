@@ -205,6 +205,7 @@ const Main = () => {
       </div>
       <div className={style.swiper}>
           <Swiper
+            loop={true}
             effect={'coverflow'}
             centeredSlides={true}
             slidesPerView={"auto"}

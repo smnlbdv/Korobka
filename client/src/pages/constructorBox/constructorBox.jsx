@@ -1,8 +1,9 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { AuthContext } from "../../context/authContext.js";
 import { flushSync } from "react-dom";
 import * as uuid  from 'uuid';
+import { ColorPicker } from 'antd';
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
@@ -12,29 +13,23 @@ import style from './constructorBox.module.scss'
 import "../../index.scss"
 import "./constructor.scss"
 
-import { Pagination, Navigation } from 'swiper/modules';
+import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import CardBox from '../../components/cardBox/cardBox.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import ItemConstructor from '../../components/itemConstructor/itemConstructor.jsx';
 import debounce from 'debounce';
 import api from '../../api/api.js';
-import { calculatePrice, setPromoConstructor, isSimpleBox, setTotalPrice, setTitleOrder, setOrderObj } from '../../store/prefabricatedGiftSlice.js';
+import { calculatePrice, setPromoConstructor, setTotalPrice, setTitleOrder, setOrderObj } from '../../store/prefabricatedGiftSlice.js';
 import { Link } from 'react-router-dom';
-import ImageBox from '../../components/imageBox/imageBox.jsx';
-
 
 const ConstructorBox = () => {
-
     const [simpleBox, setSimpleBox] = useState()
     const [boxTypes, setBoxTypes] = useState()
     const [product, setProduct] = useState()
     const [postCard, setPostCard] = useState()
     const [sale, setSale] = useState({id: null, active: null, percentage: 0,});
-    const [front, setFront] = useState(false)
-    const [right, setRight] = useState(false)
     const itemsPrice = useSelector(state => state.prefabricatedGift.itemsPrice)
     const { getTypesBox, getProduct, getPostCard, contexHolder } = useContext(AuthContext)
-    const textRef = useRef(null);
     const dispatch = useDispatch()
     const productGift = useSelector(state => state.prefabricatedGift.product)
     const typesBox = useSelector(state => state.prefabricatedGift.typesBox)
@@ -52,6 +47,15 @@ const ConstructorBox = () => {
     const [valueTypes, setValueTypes] = useState("")
     const [valuePromo, setValuePromo] = useState("")
     const [valueTitle, setValueTitle] = useState("")
+    const [currentTexture, setCurrentTexture] = useState(null);
+    const [colorHex, setColorHex] = useState('#1677ff');
+    const [formatHex, setFormatHex] = useState('hex');
+    const hexString = useMemo(
+        () => (typeof colorHex === 'string' ? colorHex : colorHex?.toHexString()),
+        [colorHex],
+    );
+
+    const [isColor, setIsColor] = useState(false)
 
     const filterProduct = product && product.filter(item => {
         return item.title.toLowerCase().includes(valueProduct.toLowerCase())
@@ -65,20 +69,12 @@ const ConstructorBox = () => {
         return item.title.toLowerCase().includes(valueTypes.toLowerCase())
     })  
 
-    const openFront = () => {
-        setFront(true)
-    }
-
     const clearInputPromo = () => {
         setValuePromo("")
     }
 
     const clearInputTitle = () => {
         setValueTitle("")
-    }
-
-    const openRight = () => {
-        setRight(true)
     }
 
     const delayedSearch = debounce(async (search) => {
@@ -142,6 +138,15 @@ const ConstructorBox = () => {
     const clearInputPostCard = () => {
         setValuePostCard('')
     }
+
+    const handleTextureClick = (texture) => {
+        setCurrentTexture(texture);
+    };
+
+    const blockStyles = {
+        backgroundImage: `url(${currentTexture})`,
+        ...(isColor ? { backgroundColor: hexString } : {})
+    };
 
     useEffect(() => {
         const result = sale.active === true
@@ -212,18 +217,6 @@ const ConstructorBox = () => {
 
     }, [productGift, typesBox, postcards])
 
-    const [images, setImages] = useState([]);
-
-    const addImageBox = () => {
-        const newImage = <ImageBox key={images.length} src={"http://localhost:5000/typesBox/box-cart-box.png"} />;
-        setImages(prevImages => [...prevImages, newImage]);
-    };
-
-    const closeSides = () => {
-        setFront(false);
-        setRight(false);
-    }
-
     return ( 
 
         <section className={`${style.section_constructor} wrapper`}>
@@ -257,24 +250,47 @@ const ConstructorBox = () => {
                 </SwiperSlide>
                 {
                     simpleBox &&
-                    <SwiperSlide className={`${style.customSlide} ${style.customSlide2}`}>
-                    <div className={style.three_d_box}>
-                        <div className={!front ? style.front : style.front_open} onClick={openFront}>
-                            {images.map(image => image)}
-                            <div className={!front ? style.block_btn_create : style.block_btn_create_hidden}>
-                                <button className={style.button_add} onClick={addImageBox}>Добавить фото</button>
-                                <button className={style.button_add} onClick={addImageBox}>Добавить текст</button>
-                            </div>
-                            <div className={!front ? style.button_close : style.button_close_hidden} onDoubleClick={closeSides}>
-                                <img src="/assets/close-icon-constructor.svg" alt="Close icon" />
-                            </div>
+                    <SwiperSlide className={`${style.customSlide} ${style.customSlide2} swiper-rexture`}>
+                        <div className={style.three_d_box}>
+                            <div className={style.front } style={blockStyles}></div>
+                            <div className={style.back} style={blockStyles}></div>
+                            <div className={style.left} style={blockStyles}></div>
+                            <div className={style.right} style={blockStyles}></div>
+                            <div className={style.top} style={blockStyles}></div>
+                            <div className={style.bottom} style={blockStyles}></div>
                         </div>
-                        <div className={style.back}></div>
-                        <div className={style.left}></div>
-                        <div className={!right ? style.right : style.right_open} onClick={openRight}></div>
-                        <div className={style.top}></div>
-                        <div className={style.bottom}></div>
-                    </div>
+
+                        <div className={style.list_textures}>
+                            <ColorPicker
+                                format={formatHex}
+                                onChange={(e) => {
+                                    setColorHex(e)
+                                    setIsColor(true);
+                                }}
+                                onFormatChange={setFormatHex}
+                                className={style.color_picker}
+                            />
+                            <Swiper
+                                loop={true}
+                                slidesPerView={5}
+                                allowTouchMove={true}
+                                navigation={true}
+                                className="inner_swiper_style"
+                                modules={[Navigation, Autoplay]}
+                                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                            >
+                                {
+                                    Array(7).fill().map((_, index) => (
+                                        <SwiperSlide key={index}>
+                                            <div className={style.texture_block}>
+                                                <img src={`../assets/textures/textures-${index+1}.png`} alt="Texture" onClick={() => handleTextureClick(`../assets/textures/textures-${index+1}.png`)}/>
+                                            </div>
+                                        </SwiperSlide>
+                                    ))
+                                }
+                            </Swiper>
+                        </div>
+                        
                 </SwiperSlide>
                 }
                 <SwiperSlide className={style.customSlide}>

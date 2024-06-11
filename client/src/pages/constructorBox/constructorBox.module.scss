@@ -373,17 +373,36 @@
 }
 
 .customSlide2 {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .three_d_box {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 350px;
     height: 200px;
 }
 
+
+.texture_block {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.179);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
 
 .front {
     display: flex;
@@ -397,12 +416,8 @@
     background-color: #cda16f;
     transition: all 250ms;
     z-index: 100;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #f2ca9c;
-        transition: all 250ms;
-    }
+    background-repeat: round;
+    // cursor: pointer;
 
     &:after {
         position: absolute;
@@ -422,6 +437,10 @@
         height: 15%;
         background-color: #c6915a;
     }
+}
+
+.color_picker {
+    
 }
 
 .front_open {
@@ -448,12 +467,8 @@
     background-color: #c2925a;
     transition: all 250ms;
     z-index: 100;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #f2ca9c;
-        transition: all 250ms;
-    }
+    background-repeat: round;
+    // cursor: pointer;
 }
 
 .right_open {
@@ -480,6 +495,7 @@
     transform: translateY(-111.3%) translateX(2.11em) skew(-75deg, 5.0deg);
     background-color: #e6b073;
     transition: all 250ms;
+    background-repeat: round;
 
     &:after {
         content: "";
