@@ -29,6 +29,7 @@ const Cart = ({checkItemCart}) => {
   const cart = useSelector(state => state.cart.cart)
   const checkArray = useSelector(state => state.cart.checkArray)
   const totalPrice = useSelector(state => state.cart.totalPrice)
+  const [valuePromo, setValuePromo] = useState("")
 
   useEffect(() => {
     const result = sale.active === true
@@ -80,6 +81,10 @@ const Cart = ({checkItemCart}) => {
     } else {
       dispatch(orderPushItems(cart))
     }
+  }
+
+  const clearInputPromo = () => {
+    setValuePromo("")
   }
 
   useEffect(() => {
@@ -192,27 +197,33 @@ const Cart = ({checkItemCart}) => {
                   <p>{sale.percentage} %</p>
                 </div>
               </div>
-              <input
-                className={`${style.promo} ${
-                  sale.active == true
-                    ? style.promo__active__true
-                    : sale.active == false
-                    ? style.promo__active__false
-                    : ''
-                }`}
-                type="text"
-                placeholder="Промокод..."
-                onInput={(event) =>  {
-                  if(event.target.value.length === 0) {
-                    setSale({
-                        active: false,
-                        percentage: 0
-                    });
-                  } else if(event.target.value.length > 0) {
-                      delayedSearch(event.target.value);
-                  }
-                }}
-              />
+              <div className={`${style.promo} ${
+                    sale.active == true
+                      ? style.promo__active__true
+                      : sale.active == false
+                      ? style.promo__active__false
+                      : ''
+                  }`}>
+                <input
+                  value={valuePromo}
+                  type="text"
+                  placeholder="Промокод..."
+                  onChange={(e) => {
+                    setValuePromo(e.target.value)
+                  }}
+                  onInput={(event) =>  {
+                    if(event.target.value.length === 0) {
+                      setSale({
+                          active: false,
+                          percentage: 0
+                      });
+                    } else if(event.target.value.length > 0) {
+                        delayedSearch(event.target.value);
+                    }
+                  }}
+                />
+                <img className={style.close_icon} src="/assets/close-icon.svg" alt="Icon clear" onClick={clearInputPromo}/>
+              </div>
               <div className={style.pay}>
                 <div className={style.pay_item}>
                   <p>Итог к оплате: </p>

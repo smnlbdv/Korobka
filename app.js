@@ -50,7 +50,7 @@ app.use('/api/constructor', constructorRoute)
 async function start() {
     try {
         await mongoose.connect(process.env.DB_URL)
-        .then(() => {
+        .then(() => {s
             console.log('Вы подключились к базе')
         })
         .catch(() => {

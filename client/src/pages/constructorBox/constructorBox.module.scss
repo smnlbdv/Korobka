@@ -12,6 +12,10 @@
     width: 100%;
 }
 
+.block_input {
+    display: flex;
+    align-items: center;
+}
 
 // slider 
 .swiper__main_block {
@@ -264,17 +268,28 @@
     }
 
     .promo {
+        display: flex;
+        align-items: center;
         width: 100%;
         color: #4e4e4e;
         font-size: 14px;
         background-color: white;
         border: 2px solid white;
         font-style: normal;
-        padding: 11px 17px;
+        padding: 10px 17px;
         font-weight: 400; 
         margin-top: 30px;
         border-radius: 4px;
         transition: all 250ms;
+
+        input {
+            width: 100%;
+            border: 0;
+        }
+
+        .close_icon {
+            margin-right: -5px;
+        }
     }
         
     .title_order {
@@ -546,4 +561,5 @@
     width: 12px;
     height: 12px;
     cursor: pointer;
+    margin-left: 5px;
 }

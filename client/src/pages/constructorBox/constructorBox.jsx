@@ -50,6 +50,8 @@ const ConstructorBox = () => {
     const [valueProduct, setValueProduct] = useState("")
     const [isDisabled, setIsDisabled] = useState(true)
     const [valueTypes, setValueTypes] = useState("")
+    const [valuePromo, setValuePromo] = useState("")
+    const [valueTitle, setValueTitle] = useState("")
 
     const filterProduct = product && product.filter(item => {
         return item.title.toLowerCase().includes(valueProduct.toLowerCase())
@@ -65,6 +67,14 @@ const ConstructorBox = () => {
 
     const openFront = () => {
         setFront(true)
+    }
+
+    const clearInputPromo = () => {
+        setValuePromo("")
+    }
+
+    const clearInputTitle = () => {
+        setValueTitle("")
     }
 
     const openRight = () => {
@@ -258,7 +268,6 @@ const ConstructorBox = () => {
                             <div className={!front ? style.button_close : style.button_close_hidden} onDoubleClick={closeSides}>
                                 <img src="/assets/close-icon-constructor.svg" alt="Close icon" />
                             </div>
-                            {/* <ImageBox src={"http://localhost:5000/typesBox/box-cart-box.png"} /> */}
                         </div>
                         <div className={style.back}></div>
                         <div className={style.left}></div>
@@ -326,37 +335,49 @@ const ConstructorBox = () => {
                                                 <p>{sale.percentage} %</p>
                                             </div>
                                         </div>
-                                        <input
-                                            className={`${style.promo} ${
-                                                sale.active === true
-                                                ? style.promo__active__true
-                                                : sale.active === false
-                                                ? style.promo__active__false
-                                                : sale.active === null
-                                                ? ' '
-                                                : ''
-                                            }`}
-                                            type="text"
-                                            placeholder="Промокод..."
-                                            onInput={(event) =>  {
-                                                if (event.target.value.trim().length > 1) {
-                                                    delayedSearch(event.target.value);
-                                                } else {
-                                                    setSale({
-                                                        active: null,
-                                                        percentage: 0
-                                                    });
-                                                }
-                                            }}
-                                        />
-                                        <input
-                                            className={style.title_order}
-                                            type="text"
-                                            placeholder="Название подарка..."
-                                            onInput={(event) =>  {
-                                                dispatch(setTitleOrder(event.target.value))
-                                            }}
-                                        />
+                                        <div className={`${style.promo} ${
+                                                    sale.active === true
+                                                    ? style.promo__active__true
+                                                    : sale.active === false
+                                                    ? style.promo__active__false
+                                                    : sale.active === null
+                                                    ? ' '
+                                                    : ''
+                                                }`}>
+                                            <input
+                                                type="text"
+                                                value={valuePromo}
+                                                placeholder="Промокод..."
+                                                onChange={(e) => {
+                                                    setValuePromo(e.target.value)
+                                                }}
+                                                onInput={(event) =>  {
+                                                    if (event.target.value.trim().length > 1) {
+                                                        delayedSearch(event.target.value);
+                                                    } else {
+                                                        setSale({
+                                                            active: null,
+                                                            percentage: 0
+                                                        });
+                                                    }
+                                                }}
+                                            />
+                                            <img className={style.close_icon} src="/assets/close-icon.svg" alt="Icon clear" onClick={clearInputPromo}/>
+                                        </div>
+                                        <div className={style.title_order}>
+                                            <input
+                                                type="text"
+                                                value={valueTitle}
+                                                placeholder="Название подарка..."
+                                                onInput={(event) =>  {
+                                                    dispatch(setTitleOrder(event.target.value))
+                                                }}
+                                                onChange={(e) => {
+                                                    setValueTitle(e.target.value)
+                                                }}
+                                            />
+                                            <img className={style.close_icon} src="/assets/close-icon.svg" alt="Icon clear" onClick={clearInputTitle}/>
+                                        </div>
                                         <div className={style.pay}>
                                             <div className={style.pay_item}>
                                             <p>Итог к оплате: </p>

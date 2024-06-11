@@ -14,6 +14,13 @@
     padding-top: 50px;
 }
 
+.close_icon {
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
 .search {
     display: flex;
     align-items: center;
@@ -22,11 +29,12 @@
     border: 1px solid #FFFFFF;
     border-radius: 36px;
     padding: 9px 18px;
+    background-color: white;
 
     input {
         background-color: transparent;
         border: 0;
-        color: white;
+        color: #696969;
         width: 175px;
     }
 
