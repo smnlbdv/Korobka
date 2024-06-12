@@ -92,12 +92,9 @@ const ReviewPage = () => {
                 formData.append('image', sliderImage[i]);
             }
 
-            const token = JSON.parse(localStorage.getItem('userData')) || '';
-
             try {
                 await api.post("/api/reviews/create/new-review", formData, {
                     headers: {
-                        'Authorization': `${token.token}`,
                         'Content-Type': 'multipart/form-data',
                     }
                 })

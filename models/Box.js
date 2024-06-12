@@ -5,9 +5,6 @@ const shema = new mongoose.Schema({
         type: String,
         required: true
     },
-    slider: [{
-        type: String
-    }],
     title: {
         type: String,
         required: true

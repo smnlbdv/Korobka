@@ -70,4 +70,4 @@ const shema = new mongoose.Schema({
     }
 })
 
-export default mongoose.model('ConstructorOrder', shema)
+export default mongoose.model('Constructor_order', shema)
