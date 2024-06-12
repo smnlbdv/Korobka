@@ -123,7 +123,7 @@ const Main = () => {
                   <p>подарок</p>
                 </div>
                 <Link to="constructor">
-                  <ButtonCreate text={"Собрать"} />
+                  <ButtonCreate text={"Собрать"} mainBlock={true} />
                 </Link>
               </div>
               <div className={style.right_block}>

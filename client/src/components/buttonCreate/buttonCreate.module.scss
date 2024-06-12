@@ -29,6 +29,11 @@
     }
 }
 
+.button_create_width {
+    @extend .button_create;
+    width: 100%;
+}
+
 
 .counter__block {
     display: flex;
@@ -65,4 +70,8 @@
     width: 160px;
     height: 39px;
     border-radius: 8px;
+}
+
+.block_counter_width {
+    width: 100%;
 }

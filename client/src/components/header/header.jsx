@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import style from './header.module.scss'
 import './header.scss'
 import '../../libs/ant.css'
+import './ant.css'
 
 import Button from '../button/button';
 import { AuthContext } from "../../context/authContext.js";
@@ -23,6 +24,7 @@ const Header = () => {
     const linkHeader = useRef()
     const favoriteItem = useSelector(state => state.liked.liked)
     const cart = useSelector(state => state.cart.cart)
+    const [isActive, setIsActive] = useState(false);
 
     const handleLinkClick = () => {
         setPopoverVisible(false);
@@ -87,10 +89,21 @@ const Header = () => {
         document.cookie = `id_category=${li.id}; expires= ${new Date(new Date().getTime() + 24 * 60 * 60 * 1000).toUTCString()}; path=/; SameSite=None; Secure;`;
     }
 
+    const handleToggleNavigation = () => {
+        setIsActive(!isActive);
+    };
+
+    const closeMenu = () => {
+        setIsActive(false);
+    };
+
     useEffect(() => {
         setItems(categories.map((item, index) => ({
             label: (
-                <Link to={`ready-gifts/${item.key}`} ref={linkHeader} onClick={(event) => getIdLink(event)}>
+                <Link to={`ready-gifts/${item.key}`} ref={linkHeader} onClick={(event) => {
+                    getIdLink(event) 
+                    closeMenu()
+                }}>
                   {item.value}
                 </Link>
             ),
@@ -109,10 +122,10 @@ const Header = () => {
                     </div>
                 </Link> 
 
-                <nav className={style.navigation}>
+                <nav className={`${isActive ? style.navigation_active  : style.navigation} header-links`}>
                     <ul className={style.list__navigation}>
                         <li className={style.list__item}>
-                            <Link to="constructor">
+                            <Link to="constructor" onClick={closeMenu}>
                                 <p className={style.list__text}>Собрать</p>
                             </Link>
                         </li>
@@ -122,12 +135,12 @@ const Header = () => {
                             </Dropdown>
                         </li>
                         <li className={style.list__item}>
-                            <Link to="contacts">
+                            <Link to="contacts" onClick={closeMenu}>
                                 <p className={style.list__text}>Контакты</p>
                             </Link>
                         </li>
                         <li className={style.list__item}>
-                            <Link to="about-us">
+                            <Link to="about-us" onClick={closeMenu}>
                                 <p className={style.list__text}>О нас</p>
                             </Link>
                         </li>
@@ -140,7 +153,10 @@ const Header = () => {
                             <ul className={style.user_list}>
                                 
                                 <Popover placement="bottomRight" content={popoverCart} onOpenChange={(visible) => setPopoverVisibleTwo(visible)} open={popoverVisibleTwo}>
-                                    <Link to="cart" onClick={handleLinkClickTwo}>
+                                    <Link to="cart" onClick={() => {
+                                        handleLinkClickTwo()
+                                        closeMenu()
+                                    }}>
                                         <li className={style.list_item}>
                                             <Badge count={countCart}>
                                                 <img src="/assets/bag.svg" alt="bag logo" />
@@ -150,7 +166,10 @@ const Header = () => {
                                     </Link>
                                 </Popover>
                                 <Popover placement="bottomRight" content={popoverLiked} onOpenChange={(visible) => setPopoverVisible(visible)} open={popoverVisible}>
-                                    <Link to="liked" onClick={handleLinkClick}>
+                                    <Link to="liked" onClick={() => {
+                                        handleLinkClick()
+                                        closeMenu()
+                                    }}>
                                         <li className={style.list_item}>
                                             <Badge count={countFavorite}>
                                                 <img src="/assets/heart.svg" alt="favorite logo" />
@@ -160,15 +179,18 @@ const Header = () => {
                                     </Link>
                                 </Popover>
                                 <Link to="profile">
-                                    <li className={style.list_item}>
+                                    <li className={style.list_item} onClick={closeMenu}>
                                         <img src="/assets/user.svg" alt="user logo" />
                                         <p>Профиль</p>
                                     </li>
                                 </Link>
+                                <button className={style.header__burger} type="button" aria-label="Мобильное меню" onClick={handleToggleNavigation}>
+                                    <span className={isActive ? style.span_open : style.span}></span>
+                                </button>   
                                 {
                                     role == 1 ? 
                                     <Link to={`/api/auth/admin/${userId}`}>
-                                        <button className={style.admin__btn} type="button">Админ панель</button>
+                                        <button className={style.admin__btn} type="button" onClick={closeMenu}>Админ панель</button>
                                     </Link>
                                     :
                                     ''

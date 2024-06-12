@@ -59,6 +59,12 @@ a {
     padding: 0 30px;
 }
 
+@media (max-width: 400px) {
+    .wrapper {
+        padding: 0 20px;
+    }
+}
+
 .header__logo {
     display: flex;
     align-items: center;
@@ -72,7 +78,17 @@ a {
     img {
         width: 40px;
     }
+
+    @media (max-width: 360px) {
+        font-size: 18px;
+        column-gap: 7px;
+        
+        img {
+            width: 30px;
+        }
+    }
 }
+
 
 a {
     list-style: none;
