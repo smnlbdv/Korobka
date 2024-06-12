@@ -72,6 +72,8 @@
     border-radius: 8px;
 }
 
-.block_counter_width {
-    width: 100%;
+@media (max-width: 1000px) {
+    .block_counter_width {
+        width: 100%;
+    }
 }

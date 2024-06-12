@@ -91,6 +91,12 @@ const Header = () => {
 
     const handleToggleNavigation = () => {
         setIsActive(!isActive);
+
+        if (!isActive) {
+            document.body.classList.add('no-scroll');
+        } else {
+            document.body.classList.remove('no-scroll');
+        }
     };
 
     const closeMenu = () => {

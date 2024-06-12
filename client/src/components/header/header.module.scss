@@ -285,11 +285,11 @@
     }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 470px) {
     .navigation_active {
         height: 100vh;
         align-items: flex-start;
-        background-color: rgba(0, 3, 103, 0.9);
+        background-color: rgb(0, 4, 120);
     }
     .list__navigation {
         flex-direction: column;
@@ -298,6 +298,7 @@
     }
     .list__item p {
         font-size: 20px;
+        font-weight: 500;
     }
 }
 

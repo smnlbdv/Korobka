@@ -65,6 +65,10 @@ a {
     }
 }
 
+.no-scroll {
+    overflow: hidden;
+}
+
 .header__logo {
     display: flex;
     align-items: center;
