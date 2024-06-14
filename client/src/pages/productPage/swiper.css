@@ -15,3 +15,9 @@
 .tabs .ant-tabs-tab-btn {
     font-size: 16px !important;
 }
+
+.mySwiper_cart .swiper-pagination-bullet {
+        width: 12px !important;
+        height: 12px !important;
+        margin: 0 7px !important;
+}

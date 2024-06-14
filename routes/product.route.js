@@ -70,15 +70,21 @@ boxRoute.get('/new', async (req, res) => {
 
 boxRoute.get('/:id', async (req, res) => {
     try {
-        await Box.find({_id: req.params.id})
-                     .then((product) => {
-                        res.status(200).json(product)
-                     })
-                     .catch((error) => {
-                        res.status(400).json({error: error})
-                     })
+        const product = await Box.findById(req.params.id).populate('category');
+        
+        if (!product) {
+            return res.status(500).json({ error: 'Товар не найден' });
+        }
+        
+        const similarProducts = await Box.find({ 
+            category: { $in: product.category } 
+        }).exec();
+        
+        res.status(200).json({product: product, similarProducts: similarProducts});
+        
     } catch (error) {
-        console.log(error.message)
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
     }
 })
 
