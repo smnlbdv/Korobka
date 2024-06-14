@@ -16,8 +16,6 @@ import { AuthContext } from "../../context/authContext.js";
 const ProductPage = () => {
   const [selectedImage, setSelectedImage] = useState('');
   const [pathImage, setPathImage] = useState('');
-  const [selectedSlider, setSelectedSlider] = useState([]);
-  const [pathSlider, setPathSlider] = useState([]);
   const [categoryInput, setCategoryInput] = useState([]);
   const [options, setOptions] = useState([]);
   const navigate = useNavigate();
@@ -59,28 +57,6 @@ const ProductPage = () => {
 
   };
 
-  const handleSliderImage = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    if(pathSlider.length < 4) {
-      setPathSlider([...pathSlider, file]);
-    }
-
-    reader.onload = () => {
-      if(selectedSlider.length < 4) {
-        setSelectedSlider([...selectedSlider, reader.result]);
-      }
-    };
-
-    reader.readAsDataURL(file);
-  };
-
-  const deleteSliderImage = (indexItem) => {
-    const updatedArray = selectedSlider.filter((item, index) => index !== indexItem);
-    setSelectedSlider([...updatedArray])
-  }
-
   const formikProduct = useFormik({
     initialValues: {
       title: "",
@@ -107,61 +83,39 @@ const ProductPage = () => {
 
     onSubmit: async (item, { resetForm }) => {
 
+      const formData = new FormData();
 
-      if(selectedImage.length == 0 && selectedSlider.length < 4) {
-        countDown('error', 'Выберите фото для товара')
-      } else if(selectedImage.length == 0) {
-        countDown('error', 'Выберите пожалуйста основное фото товара')
-      } else if(selectedSlider.length < 4) {
-        countDown('error', `Выберите еще ${4 - selectedSlider.length} фото для слайдера`)
-      } else {
+      formData.append("image", pathImage);
 
-        const formData = new FormData();
+      categoryInput.forEach(category => {
+        formData.append("category", category)
+      })
 
-        formData.append("image", pathImage);
+      Object.keys(item).forEach(key => {
+        formData.append(key, item[key]);
+      });
 
-        pathSlider.forEach(image => {
-          formData.append("sliderImages", image, image.name);
-        });
-
-        categoryInput.forEach(category => {
-          formData.append("category", category)
-        })
-
-        Object.keys(item).forEach(key => {
-          formData.append(key, item[key]);
-        });
-
-        console.log(formData);
-
-        try {
-          await api.post("/api/admin/add", formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            }})
-            .then((response) => {
-              if(response.status === 202) {
-                resetForm();
-                setSelectedImage('')
-                setSelectedSlider([])
-                setPathImage('')
-                setPathSlider([])
-                setCategoryInput([])
-                setAllProduct((prev) => [...prev, response.data.newProduct])
-                openNotification('bottomRight', 'Товар успешно добавлен БД');
-              }
-            })
-            .catch((response) => 
-              {
-                if(response.response.status == 401) {
-                  logout()
-                  navigate("/api/auth/login");
-                }
-              }
-            );
-        } catch (error) {
-          console.log("Ошибка", error);
-        }
+      try {
+        await api.post("/api/admin/add", formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }})
+          .then((response) => {
+            if(response.status === 202) {
+              resetForm();
+              setSelectedImage(null)
+              setPathImage(null)
+              setCategoryInput(null)
+              setOptions(null)
+              setAllProduct((prev) => [...prev, response.data.newProduct])
+              openNotification('bottomRight', 'Товар успешно добавлен в БД');
+            }
+          })
+          .catch((response) => 
+            console.log(response.message)
+          );
+      } catch (error) {
+        console.log("Ошибка", error);
       }
     },
   });
@@ -248,8 +202,6 @@ const ProductPage = () => {
             <div className={style.form__block__buttons}>
               <label htmlFor="mainImage">Выбрать основное фото</label>
               <input id="mainImage" name="mainImage" type="file" accept="image/*" onChange={handleImageChange} />
-              <label htmlFor="slide-image">Выбрать фото</label>
-              <input id="slide-image" name="slide-image" type="file" accept="image/*" onChange={handleSliderImage} />
             </div>
             <div className={style.form__block__input}>
               <p>Введите описание для страницы описания товара:</p>
@@ -270,13 +222,6 @@ const ProductPage = () => {
           <div className={style.product__image}>
             <div className={style.block__rigth}>
               <img className={style.main__product__image} src={selectedImage} alt="" onDoubleClick={() => setSelectedImage(null)}/>
-              <div className={style.slider__block}>
-                {
-                  selectedSlider.map((item, index) => (
-                    <img key={index} src={item} alt="Slider image" onDoubleClick={() => deleteSliderImage(index)}/>
-                  ))
-                }
-              </div>
             </div>
           </div>
         </div>

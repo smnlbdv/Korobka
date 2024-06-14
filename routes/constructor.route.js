@@ -36,5 +36,7 @@ constructorRoute.get('/post-card', async (req, res) => {
     }
 });
 
+// переделать в один
+
 
 export default constructorRoute

@@ -97,6 +97,8 @@ const ProductPage = () => {
         .then((response) => {
           if (response.status == 200) {
             setSelectedProduct(...response.data);
+
+            console.log(response.data)
           }
         })
         .catch((response) => {

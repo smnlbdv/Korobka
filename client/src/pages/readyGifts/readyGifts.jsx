@@ -22,7 +22,7 @@ const ReadyGifts = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSlider, setShowSlider] = useState(false);
   const [hiddenPagination, setHiddenPagination] = useState(true);
-  const { categories, contextHolder, scrollToTop } = useContext(AuthContext);
+  const { categories, contextHolder, scrollToTop, getCategories } = useContext(AuthContext);
   const [valueCategory, setValueCategory] = useState();
   const [categoriesOption, setCategoriesOption] = useState([]);
   const [startCategoryValue, setStartCategoryValue] = useState();
@@ -126,6 +126,7 @@ const ReadyGifts = () => {
   }, []);
 
   useEffect(() => {
+    getCategories()
     setBoxes([]);
     setIsLoading(false);
     const cookieValue = document.cookie
@@ -176,7 +177,7 @@ const ReadyGifts = () => {
             />
             <img
               className={style.close_icon}
-              src="/assets/close-icon.svg"
+              src="/assets/delete-search.svg"
               alt="Icon clear"
               onClick={clearInputSearch}
             />

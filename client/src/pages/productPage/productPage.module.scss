@@ -102,8 +102,8 @@
     }
     .share__icon__link {
         cursor: pointer;
-        width: 35px;
-        height: 35px;
+        width: 32px;
+        height: 32px;
 
         img {
             width: 100%;
@@ -146,6 +146,7 @@
     .text__information {
         margin-top: 39px;
         font-size: 15px;
+        line-height: 23px;
         white-space: pre-wrap;
         font-weight: 400;
         text-align: justify;

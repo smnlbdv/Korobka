@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const slider = [];
+let slider = [];
 const upload = multer({ storage: storage });
 const adminRoute = Router();
   
@@ -34,19 +34,21 @@ adminRoute.post('/add', verifyToken, upload.any(), async (req, res) => {
 
     const box = {
       img: slider[0],
-      slider: slider.slice(1),
       ...req.body
     }
 
-    const newBox = new Product(box);
+    const newBox = new Box(box);
     newBox.save();
 
+    slider = []
+
     res.status(202).json({
-        message: "Товар успешно добавлен"
+        message: "Товар успешно добавлен",
+        newProduct: newBox
     })
 
   } catch (error) {
-    console.log(error);
+    slider = []
     res.status(500).json({
       message: "Не удалось добавить товар. Пожалуйста, попробуйте еще раз."
     });

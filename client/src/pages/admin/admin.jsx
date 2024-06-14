@@ -14,7 +14,7 @@ const ProductPage = lazy(() => import("../adminProduct/productPage.jsx"));
 
 const Admin = () => {
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [isValidAdmin, setIsValidAdmin] = useState(false);
     const [allProduct, setAllProduct] = useState([]);
     const { adminFetch, logout } = useContext(AuthContext)
@@ -104,17 +104,7 @@ const Admin = () => {
     }
 
     if (isLoading) {
-        return <div>Loading...</div>; // Или любой компонент загрузки
-    }
- 
-    if (!isValidAdmin) {
-        setTimeout(() => {
-            logout()
-            nav("/")
-        }, 2000);
-        return <div>
-            Вы не являетесь админом, обратитесь в администратору
-        </div>
+        return <div>Loading...</div>;
     }
 
     return ( 

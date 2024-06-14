@@ -64,7 +64,7 @@ const Header = () => {
                 <PopoverItem key={index} obj={element} handleLinkClickTwo={handleLinkClick}/>
             ));
             contentLiked.push(
-                <Link to="liked" key={index} onCLick={handleLinkClick}>
+                <Link to="liked" key={index} onClick={handleLinkClick}>
                     <div className={style.popover__button}>
                         <p>Перейти в избранное</p>
                     </div>

@@ -233,7 +233,7 @@ const Main = () => {
         <div className="wrapper">
           <section className={`${style.section_advertising} ${style.section_question}`}>
             <div className={style.question_block}>
-                <form className={style.left_block} onSubmit={formik.handleSubmit}>
+                <form className={style.left_block_form} onSubmit={formik.handleSubmit}>
                   <h2 className={style.title_advertising}>Узнавайте первыми <br></br> о скидках и бонусах!</h2>
                   <p className={style.text}>
                     Подпишитесь и получайте полезные статьи и самые интересные предложения сети Korobka
