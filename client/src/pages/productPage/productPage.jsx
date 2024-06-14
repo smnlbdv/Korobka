@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Tabs } from "antd";
-import { Faker } from "@faker-js/faker";
+import { useParams } from "react-router-dom";
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import { Progress } from 'antd';
@@ -35,9 +33,8 @@ const ProductPage = () => {
   const openBlock = useRef()
   const [isFavorite, setIsFavorite] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const { logout, contextHolder, favoriteItem, scrollToTop } = useContext(AuthContext);
+  const { contextHolder, favoriteItem } = useContext(AuthContext);
   const mainImage = useRef();
-  const navigate = useNavigate();
   const cart = useSelector(state => state.cart.cart)
   const order = useSelector(state => state.profile.order)
   const [percent, setPercent] = useState(0)
@@ -252,8 +249,8 @@ const ProductPage = () => {
               ) : (
                 <div className={style.block__null__product}>
                   <img src="/assets/null-reviews.png" alt="Null reviews" />
-                  <p className={style.title_null_block}>У данного товара нет отзывов</p>
-                  <p className={style.sub_text}>Не упустите свой шанс! Станьте первыми, кто оценит наш товар.</p>
+                  <p className={style.title_null_block}>У данного бокса нет отзывов</p>
+                  <p className={style.sub_text}>Не упустите свой шанс! Закажите товар и оставьте отзыв.</p>
                 </div>
               )}
             </div>
