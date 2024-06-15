@@ -1,5 +1,5 @@
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
@@ -9,6 +9,12 @@ import style from './modalItemConstructor.module.scss'
 const ModalItemConstructor = ({item}) => {
 
     const openConstructorItem = useRef(null)
+
+    const [newTotalFormat, setNewTotalFormat] = useState()
+
+    useEffect(() => {
+        setNewTotalFormat(item.productId.price.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
+    }, [item.productId.price])
 
     useEffect(() => {
         const containerTypes = openConstructorItem.current;
@@ -41,7 +47,7 @@ const ModalItemConstructor = ({item}) => {
                     Кол-во: {item.quantity}
                 </p>
                 <div className={style.modal__item__price}>
-                    Цена: <br></br>{item.productId.price} BYN
+                    Цена: <br></br>{newTotalFormat} BYN
                 </div>
             </div>
         </div>

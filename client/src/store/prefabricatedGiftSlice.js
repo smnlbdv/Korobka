@@ -33,7 +33,7 @@ const prefabricatedGiftSlice = createSlice({
     price: 0,
     promo: null,
     title: "Сборный подарок",
-    orderObj: {},
+    orderObj: [],
   },
   reducers: {
     addBoxTypeGift(state, action) {
@@ -43,7 +43,13 @@ const prefabricatedGiftSlice = createSlice({
       state.simpleBox = action.payload
     },
     setOrderObj (state, action) {
-      state.orderObj = {...action}
+      state.orderObj = []
+      state.orderObj.push(action.payload);
+    },
+    resetOrderObj(state, action) {
+      state.orderObj = []
+      state.title = ""
+      state.simpleBox = false
     },
     setTitleOrder (state, action) {
       state.title = action.payload
@@ -138,7 +144,7 @@ const prefabricatedGiftSlice = createSlice({
       state.product = [];
       state.postcards = [];
       state.typesBox = [];
-      state.orderObj = {}
+      state.orderObj = [];
     },
     deleteItemConstructor (state, action) {
       const itemToDelete = action.payload;
@@ -176,6 +182,7 @@ export const {
   delStyleBox,
   deleteItemConstructor,
   setTitleOrder,
+  resetOrderObj,
   setOrderObj,
   fullDeleteItemConstructor
 

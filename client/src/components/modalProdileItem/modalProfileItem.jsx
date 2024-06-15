@@ -13,7 +13,7 @@ const ModalProfileItem = ({item}) => {
 
     useEffect(() => {
         setNewTotalFormat(item.productId.price.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
-    }, [])
+    }, [item.productId.price])
 
     return ( 
         <div className={style.main__block__modal}>

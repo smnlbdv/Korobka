@@ -20,6 +20,7 @@ import ItemConstructor from '../../components/itemConstructor/itemConstructor.js
 import debounce from 'debounce';
 import api from '../../api/api.js';
 import { calculatePrice, setPromoConstructor, setTotalPrice, setTitleOrder, setOrderObj } from '../../store/prefabricatedGiftSlice.js';
+import { resetOrderPush } from '../../store/cartSlice.js'
 import { Link } from 'react-router-dom';
 
 const ConstructorBox = () => {
@@ -123,8 +124,9 @@ const ConstructorBox = () => {
             image: "./assets/box-simple-box.png",
             price: totalPrice
         };
-
+        
         dispatch(setOrderObj(data))
+        dispatch(resetOrderPush());
     }
 
     const clearInputTypes = () => {

@@ -8,7 +8,7 @@ const OrderConstructorItem = ({_id, img, title, preText, price, count }) => {
 
   useEffect(() => {
     setNewTotalFormat(price.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
-  }, [])
+  }, [price])
 
   return (
     <div className={style.order__item_block}>

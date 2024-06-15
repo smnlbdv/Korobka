@@ -7,8 +7,12 @@
     padding: 30px !important;
 }
 
+.profile-ant.constructor .ant-modal-body {
+    padding: 0 !important;
+}
+
 .profile-ant  .ant-modal-body {
-    padding: 20px !important;
+    padding: 10px 10px 0 10px !important;
 }
 
 .profile-ant  .ant-modal-title {

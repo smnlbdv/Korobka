@@ -21,6 +21,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useFormik } from "formik";
+import { resetOrderObj } from "../../store/prefabricatedGiftSlice.js";
 
 const Cart = ({}) => {
   const favoriteItem = useSelector(state => state.liked.liked)
@@ -84,9 +85,11 @@ const Cart = ({}) => {
         }
         });
         dispatch(orderPushItems(foundItem));
+        dispatch(resetOrderObj())
         navigate("order")
       } else {
         dispatch(orderPushItems(cart))
+        dispatch(resetOrderObj())
         navigate("order")
       }
     },

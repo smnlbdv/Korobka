@@ -126,6 +126,9 @@ const cartSlice = createSlice({
           state.order = []
           state.order.push(...action.payload);
         },
+        resetOrderPush(state, action) {
+          state.order = []
+        },
         setPromo(state, action) {
           state.promo = {...action.payload}
         }
@@ -182,5 +185,5 @@ const cartSlice = createSlice({
     }
 })
 
-export const {addProductCart, addCheckArray, removeCheckArray, checkScroll, calculatePrice, calculatePriceCheck, orderPushItems, setPromo, setTotalPrice } = cartSlice.actions
+export const {addProductCart, addCheckArray, resetOrderPush, removeCheckArray, checkScroll, calculatePrice, calculatePriceCheck, orderPushItems, setPromo, setTotalPrice } = cartSlice.actions
 export default cartSlice.reducer

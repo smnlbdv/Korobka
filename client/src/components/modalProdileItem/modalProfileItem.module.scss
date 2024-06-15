@@ -1,6 +1,14 @@
 .main__block__modal {
     display: flex;
     flex-direction: column;
+    padding: 20px;
+    transition: all 250ms ease-in-out;
+
+    &:hover {
+        background-color: #e4e4e4;
+        border-radius: 10px;
+        transition: all 250ms ease-in-out;
+    }
 }
 
 .modal__block__items {

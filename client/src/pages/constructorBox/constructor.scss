@@ -1,4 +1,75 @@
 
+.inner_swiper_style {
+    position: absolute;
+    bottom: 0px;
+    width: 375px !important;
+    height: 135px !important;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .swiper-wrapper {
+        width: initial !important;
+    }
+
+    .swiper-button-next::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+        background-image: url('./assets/swiper-line.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .swiper-button-next {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        position: absolute;
+        bottom: 180px !important;
+        z-index: 900;
+        right: 0;
+        top: 69%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        right: 35%;
+    }
+    .swiper-button-prev {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        left: 50%;
+        position: absolute;
+        bottom: 18px;
+        left: 0px;
+        top: 69%;
+        transform: scale(-1, 1);
+        z-index: 900;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        left: 35%;
+    }
+
+    .swiper-button-prev::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+        background-image: url('./assets/swiper-line.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
 .mySwiper-constructor {
 
     .swiper-pagination-bullets {
@@ -54,76 +125,6 @@
     position: absolute !important;
     bottom: 15% !important;
     left: 28% !important;
-}
-
-
-.inner_swiper_style {
-    position: absolute;
-    bottom: 0px;
-    width: 375px !important;
-    height: 135px !important;
-    left: 50%;
-    transform: translateX(-50%);
-
-    .swiper-wrapper {
-        width: initial !important;
-    }
-
-    .swiper-button-next::after {
-        content: '';
-        width: 40px;
-        height: 40px;
-        background-image: url('./assets/swiper-line.svg');
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .swiper-button-next {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        position: absolute;
-        bottom: 18px;
-        z-index: 900;
-        right: 0;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        right: 35%;
-    }
-    .swiper-button-prev {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        left: 50%;
-        position: absolute;
-        bottom: 18px;
-        left: 0px;
-        transform: scale(-1, 1);
-        z-index: 900;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        left: 35%;
-    }
-
-    .swiper-button-prev::after {
-        content: '';
-        width: 40px;
-        height: 40px;
-        background-image: url('./assets/swiper-line.svg');
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-position: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 }
 
 

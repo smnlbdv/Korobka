@@ -9,11 +9,19 @@
     column-gap: 15px;
     align-items: center;
     color: initial !important;
+    transition: all 250ms ease-in-out;
+
+    &:hover {
+        background-color: #e4e4e4;
+        border-radius: 10px;
+        transition: all 250ms ease-in-out;
+    }
 }
 
 .modal__block__image {
-    max-width: 200px;
-    height: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    height: 130px;
 
     img {
         width: 100%;
@@ -46,7 +54,6 @@
 
 .modal__item__quantity {
     white-space: nowrap;
-    margin-right: 100px;
 }
 
 .modal__item__price {

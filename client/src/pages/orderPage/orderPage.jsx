@@ -67,9 +67,9 @@ const OrderPage = () => {
     }
 
     const postOrderConstructor = async (order, values, promo) => {
-
+        let originalFormat = typeof(order.price) === 'string' ? parseFloat(order.price.replace(/\s/g, '').replace(',', '.')) : order.price;
         if(values) {
-            dispatch(placeOrderConstructorAsync({values, order, price: order.price}))
+            dispatch(placeOrderConstructorAsync({values, order, price: originalFormat}))
                     .then((response) => {
                         setUrl(response.payload.url);
 
@@ -82,7 +82,7 @@ const OrderPage = () => {
                     })
                     .catch((response) => {
                         openNotificationError("bottomRight", "Ошибка оформления заказа");
-                        
+
                         setTimeout(() => {
                             navigate("/constructor");
                         }, 1000)
@@ -116,14 +116,14 @@ const OrderPage = () => {
             const way = pay.find(item => item._id === values.wayPay)
 
             if(way.name === "Картой") {
-                if(orderObj.payload) {
-                    orderCheckout(orderObj.payload, values, promoConstructor)  
+                if(orderObj.length !== 0) {
+                    orderCheckout(orderObj[0], values, promoConstructor)  
                 } else {
                     orderCheckout(orderArray, values, promo, totalPrice)
                 }
             } else {
-                if(orderObj.payload) {
-                    postOrderConstructor(orderObj.payload, values, promoConstructor)
+                if(orderObj.length !== 0) {
+                    postOrderConstructor(orderObj[0], values, promoConstructor)
                     resetForm()
                 } else {
                     postOrderItems(orderArray, values, promo, totalPrice)
@@ -143,6 +143,7 @@ const OrderPage = () => {
               phone: profile.phone,
             })
         }
+
     }, [])
 
     useEffect(() => {
@@ -180,7 +181,7 @@ const OrderPage = () => {
             </ul>
             <h2 className={`${style.section_title} section__title`}>Оформление заказа</h2>
             {
-                orderArray.length !== 0 || !orderObj ?
+                orderArray.length !== 0 || orderObj.length !==0  ?
                 <div className={style.block__orders}>
                     <div className={style.block__form}>
                         <form
@@ -277,19 +278,26 @@ const OrderPage = () => {
                         </form>
                     </div>
                     <div className={style.block__order__items}>
-                        {orderArray.length !== 0 ? orderArray.slice().reverse().map((obj, index) => (
+                    {orderArray.length !== 0 ? 
+                        orderArray.slice().reverse().map((obj, index) => (
                             <OrderItem
                                 key={index}
                                 {...obj}
                             />
-                        )) : Object.keys(orderObj).length !== 0 && (
-                            <OrderConstructorItem 
-                                img={orderObj.payload.image}
-                                title={orderObj.payload.title}
-                                price={orderObj.payload.price}
-                                count={1}
-                            />
-                        )}
+                        )) 
+                        : 
+                        orderObj && orderObj.length !== 0 && (
+                            orderObj.map((obj, index) => (
+                                <OrderConstructorItem 
+                                    key={index}
+                                    img={obj.image}
+                                    title={obj.title}
+                                    price={obj.price}
+                                    count={1}
+                                />
+                            )
+                        )
+                    )}
                     </div>
                 </div>
                 :

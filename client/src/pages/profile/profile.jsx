@@ -568,13 +568,15 @@ const Profile = () => {
           open={isModalOpenConstructor}
           onOk={handleOk}
           onCancel={handleCancel}
-          width={830}
+          width={900}
           footer={null}
-          className="profile-ant"
+          className="profile-ant constructor"
         >
-          {selectedItemsConstructor && selectedItemsConstructor.slice().reverse().map((item, index) => (
-                <ModalItemConstructor key={index} item={item}/>
-          ))}
+          <div className={style.constructor_list_item}>
+              {selectedItemsConstructor && selectedItemsConstructor.slice().reverse().map((item, index) => (
+                  <ModalItemConstructor key={index} item={item} />
+              ))}
+          </div>
         </Modal>
 
         <div className={style.block__order}>
