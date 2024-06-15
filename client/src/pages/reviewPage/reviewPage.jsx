@@ -31,7 +31,7 @@ const ReviewPage = () => {
             try {
                 await api.get(`/api/products/${id}`)
                           .then(response => {
-                            setProductTitle(response.data[0].title);
+                            setProductTitle(response.data.product.title);
                           })
                           .catch(error => alert(error.message))
               } catch (error) {
@@ -40,8 +40,6 @@ const ReviewPage = () => {
         }
         fetchData()
     }, [])
-
-    
 
     function previewImage(event) {
         const blockList = document.querySelector(`.${style.block__list__image}`)

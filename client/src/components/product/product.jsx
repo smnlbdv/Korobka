@@ -15,12 +15,11 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite, cou
     const { openNotification, openNotificationError } = useContext(AuthContext)
     const dispatch = useDispatch()
     const cart = useSelector(state => state.cart.cart)
-
     const [newTotalFormat, setNewTotalFormat] = useState()
 
     useEffect(() => {
-        setNewTotalFormat(price.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
-    }, [])
+        setNewTotalFormat(price?.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
+    }, [price])
 
     const clickBtnAdd = async () => {
         dispatch(addProductCartAsync(_id))

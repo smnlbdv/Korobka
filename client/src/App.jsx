@@ -87,7 +87,6 @@ function App() {
       }
   }
 
-
   useEffect(() => {
       checkAuth()
   }, [login])
@@ -458,7 +457,7 @@ function App() {
     }
   }
   
-  const orderCheckout = async (order, values, promo = 1, totalPrice ) => {
+  const orderCheckout = async (order, values, promo, totalPrice ) => {
     let originalFormat = parseFloat(totalPrice.replace(/\s/g, '').replace(',', '.'));
     const items = order.map(item => ({
       id: item._id, 
@@ -468,7 +467,7 @@ function App() {
     }));
     try {
       await api.post('/api/profile/pay/checkout', {
-        items: items, promo: promo, totalAmount: originalFormat})
+        items: items, promo: promo && promo.percentage ? promo.percentage : 1, totalAmount: originalFormat})
                 .then(response => {
                   localStorage.setItem('initialValues', JSON.stringify(values))
                   localStorage.setItem('order', JSON.stringify(order))

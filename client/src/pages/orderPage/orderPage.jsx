@@ -33,9 +33,9 @@ const OrderPage = () => {
     const totalPrice = useSelector(state => state.cart.totalPrice)
     
     const postOrderItems = async (order, values, promo, totalAmount) => {
-
+        let originalFormat = typeof(totalAmount) === 'string' ? parseFloat(totalAmount.replace(/\s/g, '').replace(',', '.')) : totalAmount;
         if(values) {
-            dispatch(placeOrderAsync({values, order, price: totalAmount}))
+            dispatch(placeOrderAsync({values, order, price: originalFormat}))
                     .then((response) => {
                         setUrl(response.payload.url);
 
@@ -118,14 +118,12 @@ const OrderPage = () => {
             if(way.name === "Картой") {
                 if(orderObj.payload) {
                     orderCheckout(orderObj.payload, values, promoConstructor)  
-                    // с ценой решить
                 } else {
                     orderCheckout(orderArray, values, promo, totalPrice)
                 }
             } else {
                 if(orderObj.payload) {
                     postOrderConstructor(orderObj.payload, values, promoConstructor)
-                     // с ценой решить
                     resetForm()
                 } else {
                     postOrderItems(orderArray, values, promo, totalPrice)

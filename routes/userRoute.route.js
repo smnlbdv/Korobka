@@ -265,6 +265,7 @@ userRoute.post("/order", verifyToken, async (req, res) => {
                             }
                           })
                           .catch((error) => {
+                              console.log(error);
                               res.status(400).json({ message: 'Ошибка формирования чека' });
                           });
             } else {
