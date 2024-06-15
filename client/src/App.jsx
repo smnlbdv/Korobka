@@ -468,8 +468,9 @@ function App() {
 
     try {
       await api.post('/api/profile/pay/checkout', {
-        items: items, promo: promo && promo.percentage ? promo.percentage : 0, totalAmount: originalFormat})
+        items: items, promo: promo && promo.percentage ? promo.percentage : null, totalAmount: originalFormat})
                 .then(response => {
+                  originalFormat = null
                   localStorage.setItem('initialValues', JSON.stringify(values))
                   localStorage.setItem('order', JSON.stringify(order))
                   localStorage.setItem('promo', JSON.stringify(promo))

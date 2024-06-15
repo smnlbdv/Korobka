@@ -44,7 +44,7 @@ const Liked = () => {
                     {
                         favoriteItem.slice().reverse().map((obj, index) => 
                             <Product
-                                key={index}
+                                key={obj._id}
                                 favorite={true}
                                 {...obj}
                             />

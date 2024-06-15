@@ -267,7 +267,7 @@ const Profile = () => {
               <div className={style.block__orders}>
                 {constructor.slice().reverse().map((obj, index) => (
                     <ProfileOrderConstructor
-                        key={index}
+                        key={obj._id}
                         {...obj}
                         onClick={showModalConstructor}
                     />

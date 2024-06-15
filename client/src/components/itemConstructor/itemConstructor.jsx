@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import style from './itemConstructor.module.scss'
 import { useDispatch } from 'react-redux';
-import { deleteItemConstructor } from '../../store/prefabricatedGiftSlice';
+import { deleteItemConstructor, isSimpleBox } from '../../store/prefabricatedGiftSlice';
 
-const itemConstructor = ({_id, photo, title, price, count, setSimpleBox }) => {
+const itemConstructor = ({_id, photo, title, price, count }) => {
 
     const dispatch = useDispatch()
     const [newTotalFormat, setNewTotalFormat] = useState()
@@ -14,7 +14,7 @@ const itemConstructor = ({_id, photo, title, price, count, setSimpleBox }) => {
 
     const clickDeleteButton = () => {
         if(_id === "6666d4b8c61593814e392cb3") {
-            setSimpleBox(false)
+            dispatch(isSimpleBox(false))
         }
         dispatch(deleteItemConstructor(_id))
     }

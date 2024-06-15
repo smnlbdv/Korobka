@@ -240,7 +240,7 @@ const ProductPage = () => {
                   productReviews.map((item, index) => (
                     <Review
                       id = {item._id}
-                      key={index}
+                      key={item._id}
                       img={item.owner.avatarUser}
                       name={item.owner.name}
                       lastName={item.owner.surname}
@@ -286,7 +286,7 @@ const ProductPage = () => {
                     >
                       {
                         similarItem.map((obj, index) => 
-                          <SwiperSlide key={index}>
+                          <SwiperSlide key={obj._id}>
                             <Product
                               {...obj}
                             />

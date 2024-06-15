@@ -184,7 +184,7 @@ const Cart = ({}) => {
               <div className={style.cart__list}>
                 {cart.slice().reverse().map((obj, index) => (
                   <CartItem
-                    key={index}
+                    key={obj._id}
                     calculatePrice={calculatePrice}
                     checkArray={checkArray}
                     checkItem={checkItem(obj._id)}

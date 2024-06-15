@@ -128,7 +128,7 @@ const ProductPage = () => {
       children: (
         <div className={style.product__admin__block}>
           {allProduct.map((obj, index) => (
-            <AdminProductItem key={index} {...obj} />
+            <AdminProductItem key={obj._id} {...obj} />
           ))}
         </div>
       ),

@@ -17,7 +17,7 @@ const ProfileOrderConstructor = ({_id, wayPay, totalAmount, address, status, ima
 
     useEffect(() => {
         setNewTotalFormat(totalAmount.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
-    }, [])
+    }, [totalAmount])
 
     const clickDeleteOrder = () => {
         dispatch(deleteConstructorItemAsync(_id))

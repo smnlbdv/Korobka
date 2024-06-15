@@ -242,7 +242,7 @@ const ConstructorBox = () => {
                     <div className={style.customSlide__list__types} ref={openImgTypes}>
                     {
                         filterTypes && filterTypes.reverse().map((item, index) => (
-                            <CardBox key={index} obj={item} type={"boxTypes"} simpleBox={isSimple}/>
+                            <CardBox key={item._id} obj={item} type={"boxTypes"} simpleBox={isSimple}/>
                         ))
                     }
                     </div>
@@ -304,7 +304,7 @@ const ConstructorBox = () => {
                     <div className={style.customSlide__list__types} ref={openImgProduct}>
                         {
                             filterProduct && filterProduct.map((item, index) => (
-                                <CardBox key={index} obj={item} type={"product"}/>
+                                <CardBox key={item._id} obj={item} type={"product"}/>
                             ))
                         }
                     </div>
@@ -321,7 +321,7 @@ const ConstructorBox = () => {
                     <div className={style.customSlide__list__types} ref={openImgPostCard}>
                         {
                             filterPostCard && filterPostCard.map((item, index) => (
-                                <CardBox key={index} obj={item} type={"postCard"}/>
+                                <CardBox key={item._id} obj={item} type={"postCard"}/>
                             ))
                         }
                     </div>
@@ -407,13 +407,13 @@ const ConstructorBox = () => {
                                     </div>
                                     <div className={style.customSlide__list__items}>
                                         {typesBox && typesBox.slice().reverse().map((item, index) => (
-                                            <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count} setSimpleBox={isSimple}/>
+                                            <ItemConstructor key={item._id} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count} setSimpleBox={isSimple}/>
                                         ))}
                                         {productGift && productGift.slice().reverse().map((item, index) => (
-                                            <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                                            <ItemConstructor key={item._id} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
                                         ))}
                                         {postcards && postcards.slice().reverse().map((item, index) => (
-                                            <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
+                                            <ItemConstructor key={item._id} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
                                         ))}
                                     </div>
                                 </>

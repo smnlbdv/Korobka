@@ -118,7 +118,7 @@ const OrderPage = () => {
 
             if(way.name === "Картой") {
                 if(orderObj.length !== 0) {
-                    orderCheckout(orderObj, values, promoConstructor, orderObj[0].price, true)  
+                    orderCheckout(orderObj, values, null, orderObj[0].price, true)  
                 } else {
                     orderCheckout(orderArray, values, promo, totalPrice)
                 }
@@ -167,6 +167,8 @@ const OrderPage = () => {
             localStorage.removeItem('initialValues')
             localStorage.removeItem('order')
             localStorage.removeItem('promo')
+            localStorage.removeItem('totalAmount')
+            localStorage.removeItem('constructor')
         }
     }, []);
 

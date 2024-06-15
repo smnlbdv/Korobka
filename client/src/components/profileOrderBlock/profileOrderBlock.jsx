@@ -10,7 +10,7 @@ const ProfileOrdersBlock = ({ showModal }) => {
       <div className={style.block__orders}>
         {order.slice().reverse().map((obj, index) => (
             <ProfileOrderItem
-                key={index}
+                key={obj._id}
                 groupImage={obj.items}
                 {...obj}
                 onClick={showModal}

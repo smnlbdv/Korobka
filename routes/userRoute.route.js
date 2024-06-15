@@ -500,8 +500,6 @@ userRoute.get("/token/refresh", async (req, res) => {
 });
 
 userRoute.post("/pay/checkout", async (req, res) => {
-
-  console.log(req.body);
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -513,7 +511,7 @@ userRoute.post("/pay/checkout", async (req, res) => {
             product_data: {
               name: item.name,
             },
-            unit_amount: (item.price - (item.price * (req.body.promo / 100))) * 100,
+            unit_amount: Math.round((item.price - (item.price * (req.body.promo ? req.body.promo / 100 : 0))) * 100),
           },
           quantity: item.count
         }
