@@ -407,13 +407,13 @@ const ConstructorBox = () => {
                                         </div>
                                     </div>
                                     <div className={style.customSlide__list__items}>
-                                        {typesBox && typesBox.map((item, index) => (
+                                        {typesBox && typesBox.slice().reverse().map((item, index) => (
                                             <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count} setSimpleBox={setSimpleBox}/>
                                         ))}
-                                        {productGift && productGift.map((item, index) => (
+                                        {productGift && productGift.slice().reverse().map((item, index) => (
                                             <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
                                         ))}
-                                        {postcards && postcards.map((item, index) => (
+                                        {postcards && postcards.slice().reverse().map((item, index) => (
                                             <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>
                                         ))}
                                     </div>

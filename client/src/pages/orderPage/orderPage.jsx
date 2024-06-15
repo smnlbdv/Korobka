@@ -277,7 +277,7 @@ const OrderPage = () => {
                         </form>
                     </div>
                     <div className={style.block__order__items}>
-                        {orderArray.length !== 0 ? orderArray.map((obj, index) => (
+                        {orderArray.length !== 0 ? orderArray.slice().reverse().map((obj, index) => (
                             <OrderItem
                                 key={index}
                                 {...obj}

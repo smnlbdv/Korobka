@@ -179,7 +179,7 @@ const Cart = ({}) => {
             <div className={style.cart__left_block}>
               <span className={style.cart__span}></span>
               <div className={style.cart__list}>
-                {cart.map((obj, index) => (
+                {cart.slice().reverse().map((obj, index) => (
                   <CartItem
                     key={index}
                     calculatePrice={calculatePrice}
@@ -261,7 +261,7 @@ const Cart = ({}) => {
                     className={`${style.mySwiper_cart} mySwiper_cart`}
                   >
                     {
-                      favoriteItem.map((obj, index) => 
+                      favoriteItem.slice().reverse().map((obj, index) => 
                         <SwiperSlide key={index}>
                           <Product
                             favorite={true}

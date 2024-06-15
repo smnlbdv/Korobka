@@ -558,7 +558,7 @@ const Profile = () => {
           footer={null}
           className="profile-ant"
         >
-          {selectedItems.map((item, index) => (
+          {selectedItems && selectedItems.slice().reverse().map((item, index) => (
                 <ModalProfileItem key={index} item={item}/>
           ))}
         </Modal>
@@ -572,7 +572,7 @@ const Profile = () => {
           footer={null}
           className="profile-ant"
         >
-          {selectedItemsConstructor && selectedItemsConstructor.map((item, index) => (
+          {selectedItemsConstructor && selectedItemsConstructor.slice().reverse().map((item, index) => (
                 <ModalItemConstructor key={index} item={item}/>
           ))}
         </Modal>

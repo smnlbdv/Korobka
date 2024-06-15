@@ -42,7 +42,7 @@ const Liked = () => {
                 favoriteItem.length !== 0 ?
                 <div className={style.favorite_items}>
                     {
-                        favoriteItem.map((obj, index) => 
+                        favoriteItem.slice().reverse().map((obj, index) => 
                             <Product
                                 key={index}
                                 favorite={true}
