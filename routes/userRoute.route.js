@@ -500,6 +500,8 @@ userRoute.get("/token/refresh", async (req, res) => {
 });
 
 userRoute.post("/pay/checkout", async (req, res) => {
+
+  console.log(req.body);
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],

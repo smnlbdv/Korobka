@@ -49,7 +49,6 @@ const prefabricatedGiftSlice = createSlice({
     resetOrderObj(state, action) {
       state.orderObj = []
       state.title = ""
-      state.simpleBox = false
     },
     setTitleOrder (state, action) {
       state.title = action.payload

@@ -44,6 +44,7 @@
         white-space: nowrap;
     }
     .price {
+        width: fit-content;
         color: #282727;
         font-size: 15px;
         font-style: normal;
@@ -78,7 +79,7 @@
         grid-template-columns: repeat(2, minmax(90px,150px));
         color: #282727;
         font-size: 12px;
-        margin-left: 50px;
+        margin-left: 20px;
         justify-content: flex-start;
         width: fit-content;
 
@@ -121,7 +122,7 @@
 
 .order__click__block {
     display: grid;
-    grid-template-columns: minmax(60px, auto) auto 0px 72px;
+    grid-template-columns: minmax(60px, auto) auto 0px 82px;
     align-items: center;
     width: 100%;
     cursor: pointer;

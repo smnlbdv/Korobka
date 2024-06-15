@@ -16,7 +16,7 @@ import OrderItem from "../../components/orderItem/orderItem.jsx";
 import ButtonNull from "../../components/buttonNull/buttonNull.jsx";
 import { placeOrderAsync } from "../../store/profileSlice.js";
 import OrderConstructorItem from "../../components/orderConstructorItem/orderConstructor.jsx";
-import { placeOrderConstructorAsync, fullDeleteItemConstructor } from "../../store/prefabricatedGiftSlice.js";
+import { placeOrderConstructorAsync, fullDeleteItemConstructor, isSimpleBox } from "../../store/prefabricatedGiftSlice.js";
 
 const OrderPage = () => {
     const [url, setUrl] = useState('#')
@@ -79,6 +79,7 @@ const OrderPage = () => {
 
                         dispatch(addConstructorProfile(response.payload.order))
                         dispatch(fullDeleteItemConstructor([]))
+                        dispatch(isSimpleBox(false))
                     })
                     .catch((response) => {
                         openNotificationError("bottomRight", "Ошибка оформления заказа");
@@ -117,7 +118,7 @@ const OrderPage = () => {
 
             if(way.name === "Картой") {
                 if(orderObj.length !== 0) {
-                    orderCheckout(orderObj[0], values, promoConstructor)  
+                    orderCheckout(orderObj, values, promoConstructor, orderObj[0].price, true)  
                 } else {
                     orderCheckout(orderArray, values, promo, totalPrice)
                 }
@@ -155,8 +156,11 @@ const OrderPage = () => {
             const initialValues = JSON.parse(localStorage.getItem('initialValues'))
             const promo = JSON.parse(localStorage.getItem('promo'))
             const totalAmount = JSON.parse(localStorage.getItem('totalAmount'))
+            const constructor = JSON.parse(localStorage.getItem('constructor'))
 
-            if (cart && cart.length >= 0 && checkArray && checkArray.length >= 0) {
+            if(order && constructor) {
+                postOrderConstructor(order[0], initialValues, promo)
+            } else if(cart && cart.length >= 0 && checkArray && checkArray.length >= 0) {
                 postOrderItems(order, initialValues, promo, totalAmount);
             }
 

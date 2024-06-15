@@ -64,7 +64,7 @@ const ProfileOrderConstructor = ({_id, wayPay, totalAmount, address, status, ima
                     <p><b>Способ оплаты:</b> {wayPay.name}</p>
                 </div>
                 
-                <p className={style.price}>{newTotalFormat} BYN</p>
+                <div className={style.price}>{newTotalFormat} BYN</div>
                 <span className={style.order__item__status}>{status.name}</span>
             </div>
             <div>

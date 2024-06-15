@@ -19,12 +19,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import ItemConstructor from '../../components/itemConstructor/itemConstructor.jsx';
 import debounce from 'debounce';
 import api from '../../api/api.js';
-import { calculatePrice, setPromoConstructor, setTotalPrice, setTitleOrder, setOrderObj } from '../../store/prefabricatedGiftSlice.js';
+import { calculatePrice, setPromoConstructor, setTotalPrice, setTitleOrder, setOrderObj, isSimpleBox } from '../../store/prefabricatedGiftSlice.js';
 import { resetOrderPush } from '../../store/cartSlice.js'
 import { Link } from 'react-router-dom';
 
 const ConstructorBox = () => {
-    const [simpleBox, setSimpleBox] = useState()
     const [boxTypes, setBoxTypes] = useState()
     const [product, setProduct] = useState()
     const [postCard, setPostCard] = useState()
@@ -50,7 +49,7 @@ const ConstructorBox = () => {
     const [valueTitle, setValueTitle] = useState("")
     const [currentTexture, setCurrentTexture] = useState(null);
     const [colorHex, setColorHex] = useState('#1677ff');
-    const [formatHex, setFormatHex] = useState('hex');
+    const [formatHex, setFormatHex] = useState('hex'); 
     const hexString = useMemo(
         () => (typeof colorHex === 'string' ? colorHex : colorHex?.toHexString()),
         [colorHex],
@@ -110,19 +109,25 @@ const ConstructorBox = () => {
             owner: userId,
             typesBox: typesBox.map((type) => ({
                 product: type._id,
-                quantity: type.count
+                quantity: type.count,
+                price: type.price,
+                name: type.title
             })),
             product: productGift.map((prod) => ({
                 product: prod._id,
-                quantity: prod.count
+                quantity: prod.count,
+                price: prod.price,
+                name: prod.title
             })),
             postcards: postcards.map((postcard) => ({
                 product: postcard._id,
-                quantity: postcard.count
+                quantity: postcard.count,
+                price: postcard.price,
+                name: postcard.title
             })),
             title: title || "Сборный подарок",
             image: "./assets/box-simple-box.png",
-            price: totalPrice
+            price: totalPrice,
         };
         
         dispatch(setOrderObj(data))
@@ -203,14 +208,6 @@ const ConstructorBox = () => {
     }, []);
 
     useEffect(() => {
-        if(isSimple) {
-            setSimpleBox(true)
-        } else {
-            setSimpleBox(false)
-        }
-    }, [isSimple])
-
-    useEffect(() => {
         if(typesBox.length !== 0 || productGift.length !== 0 || postcards.length !== 0) {
             setIsDisabled(false);
         } else {
@@ -231,7 +228,7 @@ const ConstructorBox = () => {
                 }}
                 allowTouchMove={false}
                 modules={[Pagination]}
-                className={`${style.customSwiper} ${simpleBox ? "mySwiper-constructor" : "mySwiper-constructor-style"}`}
+                className={`${style.customSwiper} ${isSimple ? "mySwiper-constructor" : "mySwiper-constructor-style"}`}
             >
                 <SwiperSlide className={style.customSlide}>
                     <div className={style.header__slider}>
@@ -245,13 +242,13 @@ const ConstructorBox = () => {
                     <div className={style.customSlide__list__types} ref={openImgTypes}>
                     {
                         filterTypes && filterTypes.reverse().map((item, index) => (
-                            <CardBox key={index} obj={item} type={"boxTypes"} setSimpleBox={setSimpleBox} simpleBox={simpleBox}/>
+                            <CardBox key={index} obj={item} type={"boxTypes"} simpleBox={isSimple}/>
                         ))
                     }
                     </div>
                 </SwiperSlide>
                 {
-                    simpleBox &&
+                    isSimple &&
                     <SwiperSlide className={`${style.customSlide} ${style.customSlide2} swiper-rexture`}>
                         <div className={style.three_d_box}>
                             <div className={style.front } style={blockStyles}></div>
@@ -410,7 +407,7 @@ const ConstructorBox = () => {
                                     </div>
                                     <div className={style.customSlide__list__items}>
                                         {typesBox && typesBox.slice().reverse().map((item, index) => (
-                                            <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count} setSimpleBox={setSimpleBox}/>
+                                            <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count} setSimpleBox={isSimple}/>
                                         ))}
                                         {productGift && productGift.slice().reverse().map((item, index) => (
                                             <ItemConstructor key={index} _id={item._id} photo={item.photo} title={item.title} price={item.price} count={item.count}/>

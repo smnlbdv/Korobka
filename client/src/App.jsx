@@ -457,22 +457,27 @@ function App() {
     }
   }
   
-  const orderCheckout = async (order, values, promo, totalPrice ) => {
+  const orderCheckout = async (order, values, promo, totalPrice, constructor = false) => {
     let originalFormat = parseFloat(totalPrice.replace(/\s/g, '').replace(',', '.'));
     const items = order.map(item => ({
       id: item._id, 
-      count: item.count,
-      price: item.price,
+      count: item.count || 1,
+      price: parseFloat(item.price.replace(/\s/g, '').replace(',', '.')),
       name: item.title
     }));
+
     try {
       await api.post('/api/profile/pay/checkout', {
-        items: items, promo: promo && promo.percentage ? promo.percentage : 1, totalAmount: originalFormat})
+        items: items, promo: promo && promo.percentage ? promo.percentage : 0, totalAmount: originalFormat})
                 .then(response => {
                   localStorage.setItem('initialValues', JSON.stringify(values))
                   localStorage.setItem('order', JSON.stringify(order))
                   localStorage.setItem('promo', JSON.stringify(promo))
                   localStorage.setItem('totalAmount', JSON.stringify(originalFormat))
+
+                  if(constructor) {
+                    localStorage.setItem('constructor', JSON.stringify(true))
+                  }
                   
                   window.location = response.data.url
                 })

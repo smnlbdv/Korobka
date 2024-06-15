@@ -22,7 +22,7 @@ import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 // eslint-disable-next-line react/prop-types
-const CardBox = ({ obj, type, setSimpleBox, simpleBox=false }) => {
+const CardBox = ({ obj, type, simpleBox = false }) => {
   const {_id, photo, title, price, count } = obj;
 
   const typesBox = useSelector((state) => state.prefabricatedGift.typesBox);
@@ -39,6 +39,7 @@ const CardBox = ({ obj, type, setSimpleBox, simpleBox=false }) => {
     '100%': '#8000ff',
     '0%': '#8000ff',
   };
+
 
   const [newTotalFormat, setNewTotalFormat] = useState()
 
@@ -57,13 +58,11 @@ const CardBox = ({ obj, type, setSimpleBox, simpleBox=false }) => {
   const clickToConstructor = () => {
     if(simpleBox) {
         dispatch(delBoxTypeGift(_id))
-        setSimpleBox(false)
         dispatch(isSimpleBox(false))
     } else {
         dispatch(addBoxTypeGift({ _id, photo, title, price, count: 1 }));
         dispatch(isSimpleBox(true));
         openNotification("bottomRight", "Коробка успешно добавлена");
-        setSimpleBox(true)
     }
   }
 
