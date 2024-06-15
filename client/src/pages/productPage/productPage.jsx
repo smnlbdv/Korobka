@@ -22,6 +22,7 @@ import ButtonReview from "../../components/buttonReview/buttonReview.jsx";
 import { useSelector } from "react-redux";
 import Product from "../../components/product/product.jsx";
 import Loading from "../../components/loading/loading.jsx";
+import { Rating } from "@mui/material";
 
 const ProductPage = () => {
   const [counterCart, setCounterCart] = useState(0);
@@ -40,6 +41,7 @@ const ProductPage = () => {
   const order = useSelector(state => state.profile.order)
   const [percent, setPercent] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
+  const [avgStars, setAvgStars] = useState(0)
 
   const customColors = {
     '0%': 'rgb(148, 0, 211)',
@@ -89,7 +91,6 @@ const ProductPage = () => {
         .get(`/api/reviews/${id}`, {})
         .then((response) => {
           if (response.status == 200) {
-            console.log(response.data);
             setProductReviews(response.data);
           }
         })
@@ -100,6 +101,14 @@ const ProductPage = () => {
       console.log(error.message);
     }
   };
+
+  useEffect(() => {
+    const totalStars = productReviews.reduce((total, item) => total + item.stars, 0);
+    const totalReviews = productReviews.length;
+    const averageStars = totalReviews > 0 ? totalStars / totalReviews : 0;
+    
+    setAvgStars(averageStars)
+  }, [productReviews])
 
   useEffect(() => {
     setIsLoading(false)
@@ -152,6 +161,12 @@ const ProductPage = () => {
         <div className="wrapper">
           <div className={style.block__adding__product}>
             <div className={style.product__image} ref={openBlock}>
+                  <a href="#reviewSection">
+                    <div className={style.stars_product}>
+                      <Rating name="half-rating-read" defaultValue={avgStars} precision={0.5} readOnly size="small"/>
+                      <p>{avgStars.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} {" "} • {" "} {productReviews.length} отзыва</p>
+                    </div>
+                  </a>
                   <a data-fancybox="gallery" href={selectedProduct.img}>
                     <div className={style.product__image_main}> 
                         <img
@@ -227,13 +242,14 @@ const ProductPage = () => {
               </div>
             </div>
           </div>
-          <h2 className={style.description__title}>Описание товара</h2>
           <div className={`${style.block__information} tabs`}>
-            <p className={style.text__information}>{selectedProduct.text}</p>
-
             <div>
+              <h2 className={style.description__title}>Описание товара</h2>
+              <p className={style.text__information}>{selectedProduct.text}</p>
+            </div>
 
-              <div></div>
+            <div id="reviewSection">
+              <h2 className={style.description__title}>Отзывы покупателей</h2>
 
               <div className={style.block__all_reviews}>
                 {productReviews.length !== 0 ? (
