@@ -163,7 +163,7 @@ const ProductPage = () => {
             <div className={style.product__image} ref={openBlock}>
                   <a href="#reviewSection">
                     <div className={style.stars_product}>
-                      <Rating name="half-rating-read" defaultValue={avgStars} precision={0.5} readOnly size="small"/>
+                      <Rating name="half-rating-read" defaultValue={avgStars} precision={0.5} readOnly size="medium"/>
                       <p>{avgStars.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} {" "} • {" "} {productReviews.length} отзыва</p>
                     </div>
                   </a>
@@ -292,6 +292,7 @@ const ProductPage = () => {
                         delay: 2500,
                         disableOnInteraction: false,
                       }}
+                      loop={true}
                       slidesPerView={4}
                       pagination={{
                         clickable: true,
