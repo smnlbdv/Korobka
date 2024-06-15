@@ -16,6 +16,12 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite, cou
     const dispatch = useDispatch()
     const cart = useSelector(state => state.cart.cart)
 
+    const [newTotalFormat, setNewTotalFormat] = useState()
+
+    useEffect(() => {
+        setNewTotalFormat(price.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
+    }, [])
+
     const clickBtnAdd = async () => {
         dispatch(addProductCartAsync(_id))
                 .then(() => {
@@ -113,7 +119,7 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite, cou
                                 <div className={style.block_price}>
                                     <div className={style.price}>
                                         <span>Цена:</span>
-                                        <p>{price} BYN</p>
+                                        <p>{newTotalFormat} BYN</p>
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +140,7 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite, cou
                                     :
                                     <button className={style.btn_add} onClick={count !== 0 && clickBtnAdd}>
                                         {
-                                            count == 0 ?
+                                            count <= 0 ?
                                             <p>Нет в наличии</p>
                                             :
                                             <p>В корзину</p>

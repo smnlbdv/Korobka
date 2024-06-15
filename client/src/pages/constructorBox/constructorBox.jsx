@@ -150,8 +150,8 @@ const ConstructorBox = () => {
 
     useEffect(() => {
         const result = sale.active === true
-          ? itemsPrice - itemsPrice * (sale.percentage / 100)
-          : itemsPrice;
+            ? (itemsPrice - itemsPrice * (sale.percentage / 100)).toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+            : itemsPrice.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2});
         
         if(sale.active) {
           dispatch(setPromoConstructor(sale));
@@ -344,7 +344,7 @@ const ConstructorBox = () => {
                                             </div>
                                             <div className={style.info__item}>
                                                 <p>Сумма:</p>
-                                                <p>{itemsPrice} BYN</p>
+                                                <p>{itemsPrice.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} BYN</p>
                                             </div>
                                             <div className={style.info__item}>
                                                 <p>Скидка:</p>

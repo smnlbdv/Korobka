@@ -14,7 +14,12 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
     const urlCheckLink = useRef()
     const [widthMultiplier, setWidthMultiplier] = useState()
     const { postCheckOrder, openNotification } = useContext(AuthContext);
+    const [newTotalFormat, setNewTotalFormat] = useState()
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        setNewTotalFormat(totalAmount.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
+    }, [])
 
     const clickDeleteOrder = () => {
         dispatch(deleteOrderItemAsync(_id))
@@ -77,7 +82,7 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
                     <p><b>Способ оплаты:</b> {wayPay.name}</p>
                 </div>
                 
-                <p className={style.price}>{totalAmount} BYN</p>
+                <p className={style.price}>{newTotalFormat} BYN</p>
                 <span className={style.order__item__status}>{status.name}</span>
             </div>
             <div>

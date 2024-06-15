@@ -32,10 +32,10 @@ const OrderPage = () => {
     const navigate = useNavigate();
     const totalPrice = useSelector(state => state.cart.totalPrice)
     
-    const postOrderItems = async (order, values, promo) => {
+    const postOrderItems = async (order, values, promo, totalAmount) => {
 
         if(values) {
-            dispatch(placeOrderAsync({values, order, price: totalPrice}))
+            dispatch(placeOrderAsync({values, order, price: totalAmount}))
                     .then((response) => {
                         setUrl(response.payload.url);
 
@@ -117,16 +117,18 @@ const OrderPage = () => {
 
             if(way.name === "Картой") {
                 if(orderObj.payload) {
-                    orderCheckout(orderObj.payload, values, promoConstructor)
+                    orderCheckout(orderObj.payload, values, promoConstructor)  
+                    // с ценой решить
                 } else {
-                    orderCheckout(orderArray, values, promo)
+                    orderCheckout(orderArray, values, promo, totalPrice)
                 }
             } else {
                 if(orderObj.payload) {
                     postOrderConstructor(orderObj.payload, values, promoConstructor)
+                     // с ценой решить
                     resetForm()
                 } else {
-                    postOrderItems(orderArray, values, promo)
+                    postOrderItems(orderArray, values, promo, totalPrice)
                     resetForm()
                 }
             }
@@ -153,9 +155,10 @@ const OrderPage = () => {
             const order = JSON.parse(localStorage.getItem('order'))
             const initialValues = JSON.parse(localStorage.getItem('initialValues'))
             const promo = JSON.parse(localStorage.getItem('promo'))
+            const totalAmount = JSON.parse(localStorage.getItem('totalAmount'))
 
             if (cart && cart.length >= 0 && checkArray && checkArray.length >= 0) {
-                postOrderItems(order, initialValues, promo);
+                postOrderItems(order, initialValues, promo, totalAmount);
             }
 
             localStorage.removeItem('initialValues')
@@ -179,7 +182,7 @@ const OrderPage = () => {
             </ul>
             <h2 className={`${style.section_title} section__title`}>Оформление заказа</h2>
             {
-                orderArray.length !== 0 || Object.keys(orderObj).length !== 0 ?
+                orderArray.length !== 0 || !orderObj ?
                 <div className={style.block__orders}>
                     <div className={style.block__form}>
                         <form

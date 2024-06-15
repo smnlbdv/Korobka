@@ -242,6 +242,9 @@ userRoute.post("/order", verifyToken, async (req, res) => {
   });
 
   const order = new Order(newOrder);
+
+  console.log(newOrder);
+
   order.save()
     .then(async (savedOrder) => {
         if (savedOrder) {

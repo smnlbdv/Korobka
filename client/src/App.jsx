@@ -461,7 +461,8 @@ function App() {
     }
   }
   
-  const orderCheckout = async (order, values, promo = null ) => {
+  const orderCheckout = async (order, values, promo = 1, totalPrice ) => {
+    let originalFormat = parseFloat(totalPrice.replace(/\s/g, '').replace(',', '.'));
     const items = order.map(item => ({
       id: item._id, 
       count: item.count,
@@ -470,11 +471,12 @@ function App() {
     }));
     try {
       await api.post('/api/profile/pay/checkout', {
-        items: items, promo: promo})
+        items: items, promo: promo, totalAmount: originalFormat})
                 .then(response => {
                   localStorage.setItem('initialValues', JSON.stringify(values))
                   localStorage.setItem('order', JSON.stringify(order))
                   localStorage.setItem('promo', JSON.stringify(promo))
+                  localStorage.setItem('totalAmount', JSON.stringify(originalFormat))
                   
                   window.location = response.data.url
                 })
@@ -542,11 +544,11 @@ function App() {
     }
   };
 
-  const PrivateRoute = ({isAllowed}) => {
-    return (
-      isAllowed ? <Outlet/> : <Navigate to={"/api/auth/login"}/>
-    )
-  };
+  // const PrivateRoute = ({isAllowed}) => {
+  //   return (
+  //     isAllowed ? <Outlet/> : <Navigate to={"/api/auth/login"}/>
+  //   )
+  // };
 
   return (
     <AuthContext.Provider
@@ -599,17 +601,14 @@ function App() {
               <Route path="ready-gifts/:category" element={<ReadyGifts />} />
               <Route path="contacts" element={<Contacts />} />
               <Route path="about-us" element={<AboutUs />} />
-
-              <Route element={<PrivateRoute isAllowed={isAuth} />}>
-                <Route path="cart" element={<Cart checkItemCart={checkItemCart()}/>}/>
-                <Route path="liked" element={<Liked favoriteItem={favoriteItem}/>} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="product/:id/review" element={<ReviewPage/>}/>
-                <Route path="cart/order" element={<OrderPage/>}/>
-              </Route>
                 
-              <Route path="product/:id" element={<ProductPage/>}/>
+              <Route path="cart" element={<Cart checkItemCart={checkItemCart()}/>}/>
+              <Route path="liked" element={<Liked favoriteItem={favoriteItem}/>} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="product/:id/review" element={<ReviewPage/>}/>
+              <Route path="cart/order" element={<OrderPage/>}/>
 
+              <Route path="product/:id" element={<ProductPage/>}/>
           </Route>
           <Route path="/api/auth/*" element={
               <Suspense fallback={<Loading />}>

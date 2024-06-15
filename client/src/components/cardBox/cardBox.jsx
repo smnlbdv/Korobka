@@ -24,6 +24,7 @@ import "@fancyapps/ui/dist/fancybox/fancybox.css";
 // eslint-disable-next-line react/prop-types
 const CardBox = ({ obj, type, setSimpleBox, simpleBox=false }) => {
   const {_id, photo, title, price, count } = obj;
+
   const typesBox = useSelector((state) => state.prefabricatedGift.typesBox);
   const product = useSelector((state) => state.prefabricatedGift.product);
   const postcards = useSelector((state) => state.prefabricatedGift.postcards);
@@ -38,6 +39,12 @@ const CardBox = ({ obj, type, setSimpleBox, simpleBox=false }) => {
     '100%': '#8000ff',
     '0%': '#8000ff',
   };
+
+  const [newTotalFormat, setNewTotalFormat] = useState()
+
+  useEffect(() => {
+    setNewTotalFormat(price.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
+  }, [])
 
   useEffect(() => {
     if(count == 0) {
@@ -232,7 +239,7 @@ const CardBox = ({ obj, type, setSimpleBox, simpleBox=false }) => {
                 <Progress percent={percent} strokeWidth={4} showInfo={false} strokeColor={customColors} trailColor="#000589"/>
               </div>
       </div>
-      <p className={style.main__type_price}>Цена: {price} BYN</p>
+      <p className={style.main__type_price}>Цена: {newTotalFormat} BYN</p>
       <div className={style.button__add_cart}>
       {
         !simpleButton && isAdded ? 

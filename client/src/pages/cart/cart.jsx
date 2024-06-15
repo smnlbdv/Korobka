@@ -31,6 +31,7 @@ const Cart = ({checkItemCart}) => {
   const checkArray = useSelector(state => state.cart.checkArray)
   const totalPrice = useSelector(state => state.cart.totalPrice)
   const [sale, setSale] = useState({id: null, active: false, percentage: 0,});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const result = sale.active === true
@@ -87,8 +88,10 @@ const Cart = ({checkItemCart}) => {
         }
         });
         dispatch(orderPushItems(foundItem));
+        navigate("order")
       } else {
         dispatch(orderPushItems(cart))
+        navigate("order")
       }
     },
   });
@@ -126,7 +129,7 @@ const Cart = ({checkItemCart}) => {
           console.log(error.message);
         }
     }
-  }, 500);
+  }, 1000);
 
   const deleteChecket = () => {
     checkArray.forEach((element) => {
@@ -231,9 +234,7 @@ const Cart = ({checkItemCart}) => {
                       {totalPrice} BYN
                   </p>
                 </div>
-                <Link to="order">
-                  <button className={style.btn_checkout}>Оформить</button>
-                </Link>
+                <button className={style.btn_checkout} type="submit">Оформить</button>
               </div>
             </form>
           </div>

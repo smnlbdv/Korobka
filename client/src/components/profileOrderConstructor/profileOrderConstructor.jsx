@@ -13,6 +13,11 @@ const ProfileOrderConstructor = ({_id, wayPay, totalAmount, address, status, ima
     const urlCheckLink = useRef()
     const { postCheckOrderConstructor, openNotification } = useContext(AuthContext);
     const dispatch = useDispatch()
+    const [newTotalFormat, setNewTotalFormat] = useState()
+
+    useEffect(() => {
+        setNewTotalFormat(totalAmount.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
+    }, [])
 
     const clickDeleteOrder = () => {
         dispatch(deleteConstructorItemAsync(_id))
@@ -59,7 +64,7 @@ const ProfileOrderConstructor = ({_id, wayPay, totalAmount, address, status, ima
                     <p><b>Способ оплаты:</b> {wayPay.name}</p>
                 </div>
                 
-                <p className={style.price}>{totalAmount} BYN</p>
+                <p className={style.price}>{newTotalFormat} BYN</p>
                 <span className={style.order__item__status}>{status.name}</span>
             </div>
             <div>
