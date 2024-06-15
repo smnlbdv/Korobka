@@ -179,6 +179,7 @@
     display: grid;
     grid-template-columns: 1fr 550px;
     margin-bottom: 80px; 
+    column-gap: 20px;
     background-image: url("./assets/bg-question-img.png");
     background-repeat: no-repeat;
     background-size: contain;
@@ -194,6 +195,7 @@
         line-height: 23px;
         white-space: pre-wrap;
         font-weight: 400;
+        text-align: justify;
     }
     .similar__product {
         margin-top: 30px;

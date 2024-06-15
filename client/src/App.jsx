@@ -122,9 +122,6 @@ function App() {
     }, 0);
   }
 
-  const checkItemCart = () => {
-    return checkArray && cart.length === checkArray.length
-  }
 
   const postLogin = async (values) => {
     await api.post("/api/auth/login", values)
@@ -602,7 +599,7 @@ function App() {
               <Route path="contacts" element={<Contacts />} />
               <Route path="about-us" element={<AboutUs />} />
                 
-              <Route path="cart" element={<Cart checkItemCart={checkItemCart()}/>}/>
+              <Route path="cart" element={<Cart/>}/>
               <Route path="liked" element={<Liked favoriteItem={favoriteItem}/>} />
               <Route path="profile" element={<Profile />} />
               <Route path="product/:id/review" element={<ReviewPage/>}/>

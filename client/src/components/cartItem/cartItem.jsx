@@ -10,16 +10,25 @@ import style from "./cartItem.module.scss";
 import CounterInput from "../counterInput/counterInput.jsx";
 import { addProductFavoriteAsync, delProductFavoriteAsync } from "../../store/likedSlice.js";
 
-const CartItem = ({ _id, img, title, preText, price, count, checkItem, checkArrayItem }) => {
-  const [cartCheck, setCartCheck] = useState(checkArrayItem);
+const CartItem = ({ _id, img, title, preText, price, count, checkItem }) => {
+  const [cartCheck, setCartCheck] = useState();
   const [isFavorite, setIsFavorite] = useState(checkItem);
   const { openNotification } = useContext(AuthContext);
   const dispatch = useDispatch()
   const [newTotalFormat, setNewTotalFormat] = useState()
+  const checkArray = useSelector(state => state.cart.checkArray)
 
   useEffect(() => {
     setNewTotalFormat(price.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}))
   }, [])
+
+  useEffect(() => {
+    if(checkArray.some((product) => product === _id)) {
+      setCartCheck(true)
+    } else {
+      setCartCheck(false)
+    }
+  }, [checkArray])
 
   const cartCheckClick = () => {
     if (!cartCheck) {

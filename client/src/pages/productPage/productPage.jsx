@@ -71,6 +71,7 @@ const ProductPage = () => {
       console.log(error.message);
     }
   };
+  
 
   const getCountProduct = () => {
     if (cart.length != 0) {
@@ -169,7 +170,7 @@ const ProductPage = () => {
                     {selectedProduct.title}
                   </h2>
                   <p className={style.price__product}>
-                    {selectedProduct.price} BYN
+                    {selectedProduct.price.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} BYN
                   </p>
                 </div>
                 <div className={style.header__right_block}>
@@ -228,7 +229,7 @@ const ProductPage = () => {
           </div>
           <h2 className={style.description__title}>Описание товара</h2>
           <div className={`${style.block__information} tabs`}>
-            <div className={style.text__information}>{selectedProduct.text}</div>
+            <p className={style.text__information}>{selectedProduct.text}</p>
 
             <div>
 

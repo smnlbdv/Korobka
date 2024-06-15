@@ -22,9 +22,9 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useFormik } from "formik";
 
-const Cart = ({checkItemCart}) => {
+const Cart = ({}) => {
   const favoriteItem = useSelector(state => state.liked.liked)
-  const [cartCheckAll, setCartCheckAll] = useState(checkItemCart);
+  const [cartCheckAll, setCartCheckAll] = useState();
   const cartTotalPrice = useSelector(state => state.cart.cartPrice)
   const dispatch = useDispatch()
   const cart = useSelector(state => state.cart.cart)
@@ -66,10 +66,6 @@ const Cart = ({checkItemCart}) => {
     return favoriteItem.some((product) => product._id === id);
   }
 
-  const checkArrayItem = (id) => {
-    return checkArray.some((product) => product === id);
-  }
-
   const clearInputPromo = () => {
     formikCart.resetForm()
   }
@@ -95,6 +91,14 @@ const Cart = ({checkItemCart}) => {
       }
     },
   });
+
+  useEffect(() => {
+    if(cart.length === checkArray.length) {
+      setCartCheckAll(true)
+    } else {
+      setCartCheckAll(false)
+    }
+  }, [checkArray])
 
   useEffect(() => {
     if(checkArray && checkArray.length !== 0) {
@@ -175,13 +179,12 @@ const Cart = ({checkItemCart}) => {
             <div className={style.cart__left_block}>
               <span className={style.cart__span}></span>
               <div className={style.cart__list}>
-                {cart.map((obj) => (
+                {cart.map((obj, index) => (
                   <CartItem
-                    key={obj._id}
+                    key={index}
                     calculatePrice={calculatePrice}
                     checkArray={checkArray}
                     checkItem={checkItem(obj._id)}
-                    checkArrayItem = {checkArrayItem(obj._id)}
                     {...obj}
                   />
                 ))}
