@@ -111,43 +111,6 @@
         margin-top: 31px;
     }
 
-    .promo {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        color: #4e4e4e;
-        font-size: 14px;
-        background-color: white;
-        border: 2px solid white;
-        font-style: normal;
-        padding: 11px 17px;
-        font-weight: 400; 
-        margin-top: 30px;
-        border-radius: 4px;
-        transition: all 250ms;
-
-        input {
-            width: 100%;
-            border: 0;
-        }
-
-        .close_icon {
-            margin-right: -5px;
-        }
-    }
-
-    .promo__active__true {
-        border: 2px solid rgba(64, 163, 2, 0.933);
-        color: rgba(64, 163, 2, 0.933);
-        transition: all 250ms;
-    }
-    
-    .promo__active__false {
-        border: 2px solid rgba(246, 4, 4, 0.9333333333);
-        color: rgba(246, 4, 4, 0.897);
-        transition: all 250ms;
-    }
-
     .pay {
         margin-top: 30px;
     }
@@ -188,6 +151,45 @@
     }
 }
 
+.promo {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: #4e4e4e;
+    font-size: 14px;
+    background-color: white;
+    border: 2px solid white;
+    font-style: normal;
+    padding: 11px 17px;
+    font-weight: 400; 
+    margin-top: 30px;
+    border-radius: 4px;
+    transition: all 250ms;
+
+    input {
+        width: 100%;
+        border: 0;
+    }
+
+    .close_icon {
+        margin-right: -5px;
+    }
+}
+
+.promo__active__true {
+    @extend .promo;
+    border: 2px solid rgba(64, 163, 2, 0.933);
+    color: rgba(64, 163, 2, 0.933);
+    transition: all 250ms;
+}
+
+.promo__active__false {
+    @extend .promo;
+    border: 2px solid rgba(246, 4, 4, 0.9333333333);
+    color: rgba(246, 4, 4, 0.897);
+    transition: all 250ms;
+}
+
 .cart__list {
     display: flex;
     flex-direction: column;
@@ -196,8 +198,8 @@
 }
 
 .close_icon {
-    width: 12px;
-    height: 12px;
+    width: 11px;
+    height: 11px;
     cursor: pointer;
     margin-left: 5px;
 }

@@ -39,7 +39,7 @@ const Liked = () => {
                 }
             </div>
             {
-                favoriteItem.length != 0 ?
+                favoriteItem.length !== 0 ?
                 <div className={style.favorite_items}>
                     {
                         favoriteItem.map((obj, index) => 

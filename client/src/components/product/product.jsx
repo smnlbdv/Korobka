@@ -44,7 +44,7 @@ const Product = ({_id, img, title, price, preText, loading = true, favorite, cou
             }
         }
     }, [count])
-  
+
     const addProduct = () => {
         if(countProduct >= 200) {
             setCountProduct(countProduct)

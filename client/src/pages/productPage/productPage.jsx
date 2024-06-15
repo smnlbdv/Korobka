@@ -21,6 +21,7 @@ import "./swiper.css"
 import ButtonReview from "../../components/buttonReview/buttonReview.jsx";
 import { useSelector } from "react-redux";
 import Product from "../../components/product/product.jsx";
+import Loading from "../../components/loading/loading.jsx";
 
 const ProductPage = () => {
   const [counterCart, setCounterCart] = useState(0);
@@ -38,6 +39,7 @@ const ProductPage = () => {
   const cart = useSelector(state => state.cart.cart)
   const order = useSelector(state => state.profile.order)
   const [percent, setPercent] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
 
   const customColors = {
     '0%': 'rgb(148, 0, 211)',
@@ -59,6 +61,7 @@ const ProductPage = () => {
           if (response.status == 200) {
             setSelectedProduct(response.data.product);
             setSimilarItem(response.data.similarProducts)
+            setIsLoading(true)
           }
         })
         .catch((response) => {
@@ -98,6 +101,7 @@ const ProductPage = () => {
   };
 
   useEffect(() => {
+    setIsLoading(false)
     fetchData();
     fetchReviewsProduct();
     getCountProduct();
@@ -140,156 +144,162 @@ const ProductPage = () => {
   return (
     <section className={style.main__block_product}>
       {contextHolder}
-      <div className="wrapper">
-        <div className={style.block__adding__product}>
-          <div className={style.product__image} ref={openBlock}>
-                <a data-fancybox="gallery" href={selectedProduct.img}>
-                  <div className={style.product__image_main}> 
-                      <img
-                          className={style.product__image_active}
-                          ref={mainImage}
-                          src={selectedProduct.img}
-                          alt="Product image"
-                        />
-                  </div>
-                </a>
-          </div>
-          <div className={style.functions__card}>
-            <div className={style.product__header}>
-              <div className={style.header__left_block}>
-                <h2 className={style.title__product}>
-                  {selectedProduct.title}
-                </h2>
-                <p className={style.price__product}>
-                  {selectedProduct.price} BYN
-                </p>
-              </div>
-              <div className={style.header__right_block}>
-                <FavoriteHeart _id={id} favorite={isFavorite}/>
-              </div>
-            </div>
-            <div className={style.instock__product}>
-              <p>Осталось: {selectedProduct.count} шт.</p>
-              <div className={style.bar_block}>
-                <Progress percent={percent} strokeWidth={7} showInfo={false} strokeColor={customColors} trailColor="rgba(245, 245, 245, 0.13);"/>
-              </div>
-            </div>
-            <p className={style.text__product}>{selectedProduct.pageDesc}</p>
-            <p className={style.quantity__product}>В корзине:{`  ${counterCart}`}</p>
-
-            <div className={style.button__add__cart}>
-              <ButtonCreate
-                disabled={isDisabled}
-                text={"Добавить"}
-                isCounter={isCounter}
-                setIsCounter={setIsCounter}
-                setCounterCart = {setCounterCart}
-                counterCart = {counterCart}
-                getCountProduct={getCountProduct}
-                button = {true}
-                _id={id}
-              />
-              {
-                hiddenButton && 
-                <ButtonReview id={id} />
-              }
-            </div>
-            <div>
-              <p className={style.title__messange}>
-                Расскажите об этом товаре друзьям
-              </p>
-              <div className={style.share__icon}>
-                <a className={style.share__icon__link} href="">
-                  <img src="/assets/instagram-product.svg" alt="" />
-                </a>
-                <a className={style.share__icon__link} href="">
-                  <img src="/assets/telegram-product.svg" alt="" />
-                </a>
-                <a className={style.share__icon__link} href="">
-                  <img src="/assets/viber-product.svg" alt="" />
-                </a>
-                <a className={style.share__icon__link} href="">
-                  <img src="/assets/vk-product.svg" alt="" />
-                </a>
-                <a className={style.share__icon__link} href="">
-                  <img src="/assets/OK-product.svg" alt="" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <h2 className={style.description__title}>Описание товара</h2>
-        <div className={`${style.block__information} tabs`}>
-          <div className={style.text__information}>{selectedProduct.text}</div>
-
-          <div>
-
-            <div></div>
-
-            <div className={style.block__all_reviews}>
-              {productReviews.length !== 0 ? (
-                productReviews.map((item, index) => (
-                  <Review
-                    id = {item._id}
-                    key={index}
-                    img={item.owner.avatarUser}
-                    name={item.owner.name}
-                    lastName={item.owner.surname}
-                    text={item.text}
-                    data={item.date}
-                    stars={item.stars}
-                    likes={item.likes}
-                    reviewProduct={true}
-                    slider={item.slider}
-                    comment={item.comment}
-                    hidden = {true}
-                    isComment={true}
-                  />
-                ))
-              ) : (
-                <div className={style.block__null__product}>
-                  <img src="/assets/null-reviews.png" alt="Null reviews" />
-                  <p className={style.title_null_block}>У данного бокса нет отзывов</p>
-                  <p className={style.sub_text}>Не упустите свой шанс! Закажите товар и оставьте отзыв.</p>
-                </div>
-              )}
-            </div>
-
-          </div>
-        </div>
-        <h2 className={style.description__title_similar}>Похожие товары</h2>
-        <div className={style.similar__block}>
-          <div className={style.liked__product__list}>
-              {
-                <div className={style.favorite_items}>
-                  <Swiper
-                    autoplay={{
-                      delay: 2500,
-                      disableOnInteraction: false,
-                    }}
-                    slidesPerView={4}
-                    pagination={{
-                      clickable: true,
-                    }}
-                    navigation={false}
-                    modules={[Autoplay, Pagination]}
-                    className={`${style.mySwiper_cart} mySwiper_cart`}
-                  >
-                    {
-                      similarItem.map((obj, index) => 
-                        <SwiperSlide key={index}>
-                          <Product
-                            {...obj}
+      {
+        !isLoading ?
+        <Loading />
+        :
+        <div className="wrapper">
+          <div className={style.block__adding__product}>
+            <div className={style.product__image} ref={openBlock}>
+                  <a data-fancybox="gallery" href={selectedProduct.img}>
+                    <div className={style.product__image_main}> 
+                        <img
+                            className={style.product__image_active}
+                            ref={mainImage}
+                            src={selectedProduct.img}
+                            alt="Product image"
                           />
-                        </SwiperSlide>
-                      )
-                    }
-                  </Swiper>
+                    </div>
+                  </a>
+            </div>
+            <div className={style.functions__card}>
+              <div className={style.product__header}>
+                <div className={style.header__left_block}>
+                  <h2 className={style.title__product}>
+                    {selectedProduct.title}
+                  </h2>
+                  <p className={style.price__product}>
+                    {selectedProduct.price} BYN
+                  </p>
                 </div>
-              }
+                <div className={style.header__right_block}>
+                  <FavoriteHeart _id={id} favorite={isFavorite}/>
+                </div>
+              </div>
+              <div className={style.instock__product}>
+                <p>Осталось: {selectedProduct.count} шт.</p>
+                <div className={style.bar_block}>
+                  <Progress percent={percent} strokeWidth={7} showInfo={false} strokeColor={customColors} trailColor="rgba(245, 245, 245, 0.13);"/>
+                </div>
+              </div>
+              <p className={style.text__product}>{selectedProduct.pageDesc}</p>
+              <p className={style.quantity__product}>В корзине:{`  ${counterCart}`}</p>
+
+              <div className={style.button__add__cart}>
+                <ButtonCreate
+                  disabled={isDisabled}
+                  text={"Добавить"}
+                  isCounter={isCounter}
+                  setIsCounter={setIsCounter}
+                  setCounterCart = {setCounterCart}
+                  counterCart = {counterCart}
+                  getCountProduct={getCountProduct}
+                  button = {true}
+                  _id={id}
+                />
+                {
+                  hiddenButton && 
+                  <ButtonReview id={id} />
+                }
+              </div>
+              <div>
+                <p className={style.title__messange}>
+                  Расскажите об этом товаре друзьям
+                </p>
+                <div className={style.share__icon}>
+                  <a className={style.share__icon__link} href="">
+                    <img src="/assets/instagram-product.svg" alt="" />
+                  </a>
+                  <a className={style.share__icon__link} href="">
+                    <img src="/assets/telegram-product.svg" alt="" />
+                  </a>
+                  <a className={style.share__icon__link} href="">
+                    <img src="/assets/viber-product.svg" alt="" />
+                  </a>
+                  <a className={style.share__icon__link} href="">
+                    <img src="/assets/vk-product.svg" alt="" />
+                  </a>
+                  <a className={style.share__icon__link} href="">
+                    <img src="/assets/OK-product.svg" alt="" />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-      </div>
+          <h2 className={style.description__title}>Описание товара</h2>
+          <div className={`${style.block__information} tabs`}>
+            <div className={style.text__information}>{selectedProduct.text}</div>
+
+            <div>
+
+              <div></div>
+
+              <div className={style.block__all_reviews}>
+                {productReviews.length !== 0 ? (
+                  productReviews.map((item, index) => (
+                    <Review
+                      id = {item._id}
+                      key={index}
+                      img={item.owner.avatarUser}
+                      name={item.owner.name}
+                      lastName={item.owner.surname}
+                      text={item.text}
+                      data={item.date}
+                      stars={item.stars}
+                      likes={item.likes}
+                      reviewProduct={true}
+                      slider={item.slider}
+                      comment={item.comment}
+                      hidden = {true}
+                      isComment={true}
+                    />
+                  ))
+                ) : (
+                  <div className={style.block__null__product}>
+                    <img src="/assets/null-reviews.png" alt="Null reviews" />
+                    <p className={style.title_null_block}>У данного бокса нет отзывов</p>
+                    <p className={style.sub_text}>Не упустите свой шанс! Закажите товар и оставьте отзыв.</p>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </div>
+          <h2 className={style.description__title_similar}>Похожие товары</h2>
+          <div className={style.similar__block}>
+            <div className={style.liked__product__list}>
+                {
+                  <div className={style.favorite_items}>
+                    <Swiper
+                      autoplay={{
+                        delay: 2500,
+                        disableOnInteraction: false,
+                      }}
+                      slidesPerView={4}
+                      pagination={{
+                        clickable: true,
+                      }}
+                      navigation={false}
+                      modules={[Autoplay, Pagination]}
+                      className={`${style.mySwiper_cart} mySwiper_page`}
+                    >
+                      {
+                        similarItem.map((obj, index) => 
+                          <SwiperSlide key={index}>
+                            <Product
+                              {...obj}
+                            />
+                          </SwiperSlide>
+                        )
+                      }
+                    </Swiper>
+                  </div>
+                }
+              </div>
+            </div>
+        </div>
+
+      }
     </section>
   );
 };

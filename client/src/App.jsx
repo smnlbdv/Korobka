@@ -542,11 +542,6 @@ function App() {
     }
   };
 
-  const checkLocalUser = () => {
-    checkAuth()
-    return isAuth;
-  }
-
   const PrivateRoute = ({isAllowed}) => {
     return (
       isAllowed ? <Outlet/> : <Navigate to={"/api/auth/login"}/>
@@ -605,7 +600,7 @@ function App() {
               <Route path="contacts" element={<Contacts />} />
               <Route path="about-us" element={<AboutUs />} />
 
-              <Route element={<PrivateRoute isAllowed={checkLocalUser()} />}>
+              <Route element={<PrivateRoute isAllowed={isAuth} />}>
                 <Route path="cart" element={<Cart checkItemCart={checkItemCart()}/>}/>
                 <Route path="liked" element={<Liked favoriteItem={favoriteItem}/>} />
                 <Route path="profile" element={<Profile />} />

@@ -46,6 +46,13 @@ const Registration = () => {
     },
   });
 
+  const clearFieldByIdPass = (fieldId) => {
+    formikRegistration.setValues({
+        ...formikRegistration.values,
+        [fieldId]: ""
+    });
+  };
+
   return (
     <div className={style.wrapper}>
       {contextHolder}
@@ -61,6 +68,7 @@ const Registration = () => {
             placeholder={"Имя"}
             onChange={formikRegistration.handleChange}
             errorChange={formikRegistration.errors.name && "true"}
+            clearFieldById={clearFieldByIdPass}
           />
           <InputReg
             id="surname"
@@ -71,6 +79,7 @@ const Registration = () => {
             placeholder={"Фамилия"}
             onChange={formikRegistration.handleChange}
             errorChange={formikRegistration.errors.surname && "true"}
+            clearFieldById={clearFieldByIdPass}
           />
           <InputReg
             id="email"
@@ -81,6 +90,7 @@ const Registration = () => {
             placeholder={"E-mail"}
             onChange={formikRegistration.handleChange}
             errorChange={formikRegistration.errors.email && "true"}
+            clearFieldById={clearFieldByIdPass}
           />
           <InputReg
             id="phone"
@@ -92,6 +102,7 @@ const Registration = () => {
             onChange={formikRegistration.handleChange}
             errorChange={formikRegistration.errors.phone && "true"}
             tel={"true"}
+            clearFieldById={clearFieldByIdPass}
           />
           <InputReg
             id="password"
@@ -103,6 +114,7 @@ const Registration = () => {
             onChange={formikRegistration.handleChange}
             errorChange={formikRegistration.errors.password && "true"}
             chek={true}
+            clearFieldById={clearFieldByIdPass}
           />
           <ButtonLogin
             title={"Зарегистрироваться"}

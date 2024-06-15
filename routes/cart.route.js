@@ -20,12 +20,15 @@ cartRoute.post('/add/:itemId', verifyToken, async (req, res) => {
             }
         });
         const boxItem = await Box.findById(itemId)
-        const productInCart = cartItem.items.find(item => item.product.equals(itemId));
+        
+        if(cartItem) {
+            const productInCart = cartItem.items.find(item => item.product.equals(itemId));
+            
+            if (productInCart) {
 
-        if (productInCart) {
-
-            if(productInCart.quantity + 1 > productInCart.product.count) {
-                return res.status(500).json({message: "Товара недостаточно на складе"})
+                if(productInCart.quantity + 1 > productInCart.product.count) {
+                    return res.status(500).json({message: "Товара недостаточно на складе"})
+                }
             }
         }
 

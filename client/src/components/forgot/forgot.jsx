@@ -26,6 +26,13 @@ const Forgot = () => {
     },
   });
 
+  const clearFieldByIdPass = (fieldId) => {
+    formikForgot.setValues({
+        ...formikForgot.values,
+        [fieldId]: ""
+    });
+  };
+
   return (
     <>
       {contextHolder}
@@ -42,9 +49,30 @@ const Forgot = () => {
               placeholder={"E-mail"}
               value={formikForgot.values.email}
               errorChange={formikForgot.errors.email && "true"}
+              clearFieldById={clearFieldByIdPass}
             />
             <ButtonLogin title={"Отправить"} />
           </form>
+          <nav className={style.navigation}>
+            <div className={style.navigation__item}>
+              <p className={style.navigation__text}>Есть аккаунт?</p>
+              <a
+                className={style.navigation__link}
+                href="http://localhost:5173/api/auth/login"
+              >
+                Войти
+              </a>
+            </div>
+            <div className={style.navigation__item}>
+              <p className={style.navigation__text}>Нет аккаунта?</p>
+              <a
+                className={style.navigation__link}
+                href="http://localhost:5173/api/auth/registration"
+              >
+                Зарегистрироваться
+              </a>
+            </div>
+          </nav>
         </div>
       </div>
     </>

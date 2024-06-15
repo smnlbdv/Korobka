@@ -32,6 +32,13 @@ const Login = () => {
     },
   });
 
+  const clearFieldByIdPass = (fieldId) => {
+    formikLogin.setValues({
+        ...formikLogin.values,
+        [fieldId]: ""
+    });
+  };
+
   return (
     <div className={style.wrapper}>
       {contextHolder}
@@ -47,6 +54,7 @@ const Login = () => {
             placeholder={"E-mail"}
             onChange={formikLogin.handleChange}
             errorChange={formikLogin.errors.email && "true"}
+            clearFieldById={clearFieldByIdPass}
           />
           <InputReg
             id="password"
@@ -58,6 +66,7 @@ const Login = () => {
             chek={true}
             onChange={formikLogin.handleChange}
             errorChange={formikLogin.errors.password && "true"}
+            clearFieldById={clearFieldByIdPass}
           />
           <ButtonLogin title={"Войти"} />
         </form>

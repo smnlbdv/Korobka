@@ -18,6 +18,12 @@
     transition: all 300ms;
 }
 
+.close_icon {
+    width: 11px;
+    height: 11px;
+    cursor: pointer;
+}
+
 .main_input_block {
     display: flex;
     align-items: center;
@@ -41,5 +47,6 @@
 .img_secret {
     width: 24px;
     height: 24px;
+    margin-left: 10px;
     cursor: pointer;
 }

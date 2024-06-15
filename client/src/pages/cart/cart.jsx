@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/authContext.js";
 import debounce from "debounce";
 import api from "../../api/api.js";
+import * as Yup from "yup";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { useDispatch, useSelector } from "react-redux";
@@ -19,22 +20,22 @@ import './cart.scss'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { useFormik } from "formik";
 
 const Cart = ({checkItemCart}) => {
   const favoriteItem = useSelector(state => state.liked.liked)
-  const [sale, setSale] = useState({id: null, active: false, percentage: 0,});
   const [cartCheckAll, setCartCheckAll] = useState(checkItemCart);
   const cartTotalPrice = useSelector(state => state.cart.cartPrice)
   const dispatch = useDispatch()
   const cart = useSelector(state => state.cart.cart)
   const checkArray = useSelector(state => state.cart.checkArray)
   const totalPrice = useSelector(state => state.cart.totalPrice)
-  const [valuePromo, setValuePromo] = useState("")
+  const [sale, setSale] = useState({id: null, active: false, percentage: 0,});
 
   useEffect(() => {
     const result = sale.active === true
-          ? (cartTotalPrice - cartTotalPrice * (sale.percentage / 100)).toFixed(1)
-          : cartTotalPrice.toFixed(1);
+          ? (cartTotalPrice - cartTotalPrice * (sale.percentage / 100)).toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})
+          : cartTotalPrice.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})
     
     if(sale.active) {
       dispatch(setPromo(sale));
@@ -68,24 +69,29 @@ const Cart = ({checkItemCart}) => {
     return checkArray.some((product) => product === id);
   }
 
-  const clickToOrderButton = () => {
-    let foundItem = []
-    if(checkArray.length !== 0) {
-      checkArray.forEach(checkItem => {
-        const newfoundItem = cart.find(cartItem => cartItem._id === checkItem);
-        if (newfoundItem) {
-          foundItem.push(newfoundItem);
-      }
-      });
-      dispatch(orderPushItems(foundItem));
-    } else {
-      dispatch(orderPushItems(cart))
-    }
+  const clearInputPromo = () => {
+    formikCart.resetForm()
   }
 
-  const clearInputPromo = () => {
-    setValuePromo("")
-  }
+  const formikCart = useFormik({
+    initialValues: {
+      valuePromo: ""
+    },
+    onSubmit: async (values) => {
+      let foundItem = []
+      if(checkArray.length !== 0) {
+        checkArray.forEach(checkItem => {
+          const newfoundItem = cart.find(cartItem => cartItem._id === checkItem);
+          if (newfoundItem) {
+            foundItem.push(newfoundItem);
+        }
+        });
+        dispatch(orderPushItems(foundItem));
+      } else {
+        dispatch(orderPushItems(cart))
+      }
+    },
+  });
 
   useEffect(() => {
     if(checkArray && checkArray.length !== 0) {
@@ -111,7 +117,7 @@ const Cart = ({checkItemCart}) => {
             .catch((response) => {
               if (response.response.status === 404) {
                 setSale({
-                  active: response.response.data.active,
+                  active: false,
                   percentage: 0,
                 });
               }
@@ -178,7 +184,7 @@ const Cart = ({checkItemCart}) => {
                 ))}
               </div>
             </div>
-            <div className={style.cart__right_block}>
+            <form className={style.cart__right_block} onSubmit={formikCart.handleSubmit}>
               <h3 className={style.title}>Ваш заказ</h3>
               <div className={style.cart__info}>
                 <div className={style.info__item}>
@@ -190,37 +196,31 @@ const Cart = ({checkItemCart}) => {
                 </div>
                 <div className={style.info__item}>
                   <p>Сумма:</p>
-                  <p>{cartTotalPrice.toFixed(1)} BYN</p>
+                  <p>{cartTotalPrice.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} BYN</p>
                 </div>
                 <div className={style.info__item}>
                   <p>Скидка:</p>
                   <p>{sale.percentage} %</p>
                 </div>
               </div>
-              <div className={`${style.promo} ${
-                    sale.active == true
-                      ? style.promo__active__true
-                      : sale.active == false
-                      ? style.promo__active__false
-                      : ''
-                  }`}>
+              <div className={`${formikCart.values.valuePromo ? (sale.active ? style.promo__active__true : style.promo__active__false) : style.promo}`}>
                 <input
-                  value={valuePromo}
+                  id="valuePromo"
+                  name="valuePromo"
                   type="text"
                   placeholder="Промокод..."
-                  onChange={(e) => {
-                    setValuePromo(e.target.value)
-                  }}
-                  onInput={(event) =>  {
-                    if(event.target.value.length === 0) {
+                  onChange={(event) => {
+                    if (event.target.value.length === null) {
                       setSale({
-                          active: false,
-                          percentage: 0
+                        active: false,
+                        percentage: 0
                       });
-                    } else if(event.target.value.length > 0) {
-                        delayedSearch(event.target.value);
+                    } else {
+                      formikCart.handleChange(event)
+                      delayedSearch(event.target.value);
                     }
                   }}
+                  value={formikCart.values.valuePromo}
                 />
                 <img className={style.close_icon} src="/assets/close-icon.svg" alt="Icon clear" onClick={clearInputPromo}/>
               </div>
@@ -232,10 +232,10 @@ const Cart = ({checkItemCart}) => {
                   </p>
                 </div>
                 <Link to="order">
-                  <button className={style.btn_checkout} onClick={clickToOrderButton}>Оформить</button>
+                  <button className={style.btn_checkout}>Оформить</button>
                 </Link>
               </div>
-            </div>
+            </form>
           </div>
           {
             favoriteItem.length != 0 &&

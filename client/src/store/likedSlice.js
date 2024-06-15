@@ -35,7 +35,9 @@ const likedSlice = createSlice({
     },
     reducers: {
         addProductFavorite (state, action) {
-            state.liked.push(action.payload)
+          if (!state.liked.some(item => item._id === action.payload._id)) {
+              state.liked.push(action.payload)
+            }
         },
         delProductFavorite (state, action) {
             state.liked = state.liked.filter(item => item._id !== action.payload);
