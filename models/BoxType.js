@@ -16,6 +16,7 @@ const shema = new mongoose.Schema({
     count: {
         type: Number,
         default: 200,
+        required: true
     }
 })
 

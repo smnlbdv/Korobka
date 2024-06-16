@@ -4,19 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../context/authContext";
 import { Progress } from 'antd';
 import {
-  addBoxTypeGift,
-  addProductGift,
-  addPostCardGift,
-  incBoxTypeGift,
-  incProductGift,
-  incPostCardGift,
+  addTypesAsync,
+  incBoxTypeGiftAsync,
+  incProductAsync,
+  addPostCardAsync,
+  addProductAsync,
   decBoxTypeGift,
   decProductGift,
   decPostCardGift,
   delBoxTypeGift,
   delProductGift,
   delPostCardGift,
-  isSimpleBox
+  isSimpleBox,
+  incPostCardAsync
 } from "../../store/prefabricatedGiftSlice";
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
@@ -31,15 +31,13 @@ const CardBox = ({ obj, type, simpleBox = false }) => {
   const [isAdded, setIsAdded] = useState(false);
   const [countProduct, setCountProduct] = useState(0);
   const dispatch = useDispatch();
-  const { openNotification } = useContext(AuthContext);
+  const { openNotification, openNotificationError } = useContext(AuthContext);
   const [simpleButton, setSimpleButton] = useState(false);
   const [percent, setPercent] = useState(0)
-  const [isDisabled, setIsDisabled] = useState(false);
   const customColors = {
     '100%': '#8000ff',
     '0%': '#8000ff',
   };
-
 
   const [newTotalFormat, setNewTotalFormat] = useState()
 
@@ -48,11 +46,7 @@ const CardBox = ({ obj, type, simpleBox = false }) => {
   }, [])
 
   useEffect(() => {
-    if(count == 0) {
-      setIsDisabled(true)
-    } else {
-      setPercent((count / 200) * 100)
-    }
+    setPercent((count / 200) * 100)
   }, [count])
 
   const clickToConstructor = () => {
@@ -60,7 +54,7 @@ const CardBox = ({ obj, type, simpleBox = false }) => {
         dispatch(delBoxTypeGift(_id))
         dispatch(isSimpleBox(false))
     } else {
-        dispatch(addBoxTypeGift({ _id, photo, title, price, count: 1 }));
+        dispatch(addTypesAsync({ _id, photo, title, price, count: 1 }));
         dispatch(isSimpleBox(true));
         openNotification("bottomRight", "Коробка успешно добавлена");
     }
@@ -153,24 +147,35 @@ const CardBox = ({ obj, type, simpleBox = false }) => {
   };
 
   const handleAddItems = (findType, addAction, notificationMessage) => {
-    setIsAdded(true);
-    dispatch(addAction({ _id, photo, title, price, count: countProduct + 1 }));
+    dispatch(addAction({ _id, photo, title, price, count: 1}))
+            .then(() => {
+              const typeFind = findType.find((obj) => obj._id === _id);
 
-    const typeFind = findType.find((obj) => obj._id === _id);
+              if (!typeFind) {
+                setCountProduct(1);
+              } else {
+                setCountProduct(typeFind.count + 1);
+              }
+          
+              setIsAdded(true);
+              openNotification("bottomRight", notificationMessage);
+          })
+          .catch(() => {
+              setCountProduct(0)
+              setIsAdded(false)
+              openNotificationError('bottomRight', 'Товара недостаточно на складе');
+          })
 
-    if (!typeFind) {
-      setCountProduct(1);
-    } else {
-      setCountProduct(typeFind.count + 1);
-    }
-
-    setIsAdded(true);
-    openNotification("bottomRight", notificationMessage);
   };
 
   const handleAddInc = (incAction) => {
-    dispatch(incAction(_id));
-    setCountProduct(countProduct + 1);
+    dispatch(incAction({_id: _id, count: countProduct}))
+            .then(() => {
+              setCountProduct(countProduct + 1)
+            })
+            .catch(() => {
+              openNotificationError("bottomRight", "Товара недостаточно на складе");
+            })
   };
 
   const handleDelItem = (incAction) => {
@@ -191,35 +196,34 @@ const CardBox = ({ obj, type, simpleBox = false }) => {
   };
 
   const clickBtnAdd = async () => {
-    setIsAdded(true);
 
     if (type === "boxTypes") {
-      handleAddItems(typesBox, addBoxTypeGift, "Коробка успешно добавлена");
+      handleAddItems(typesBox, addTypesAsync, "Коробка успешно добавлена");
     }
 
     if (type === "product") {
-      handleAddItems(product, addProductGift, "Товар успешно добавлен");
+      handleAddItems(product, addProductAsync, "Товар успешно добавлен");
     }
 
     if (type === "postCard") {
-      handleAddItems(postcards, addPostCardGift, "Открытка успешно добавлена");
+      handleAddItems(postcards, addPostCardAsync, "Открытка успешно добавлена");
     }
   };
 
   const addProduct = () => {
-    if (countProduct >= 200) {
+    if (countProduct > 200) {
       setCountProduct(countProduct);
     } else {
       if (type === "boxTypes") {
-        handleAddInc(incBoxTypeGift);
+        handleAddInc(incBoxTypeGiftAsync);
       }
 
       if (type === "product") {
-        handleAddInc(incProductGift);
+        handleAddInc(incProductAsync);
       }
 
       if (type === "postCard") {
-        handleAddInc(incPostCardGift);
+        handleAddInc(incPostCardAsync);
       }
     }
   };
@@ -261,12 +265,25 @@ const CardBox = ({ obj, type, simpleBox = false }) => {
           </div>
         : 
          simpleButton ? 
-            <button className={!simpleBox ? style.main__type_button : style.main__type_button_del} onClick={clickToConstructor}>
-              {simpleBox ? <p>Удалить</p> : <p>Стилизовать</p>}
+            <button className={!simpleBox ? style.main__type_button : style.main__type_button_del} onClick={count !== 0 && clickToConstructor}>
+              {count <= 0 ? (
+                <p>Нет в наличии</p>
+              ) : (
+                simpleBox ? (
+                  <p>Удалить</p>
+                ) : (
+                  <p>Стилизовать</p>
+                )
+              )}
             </button>
             :
-            <button className={style.main__type_button} onClick={clickBtnAdd}>
-              <p>Добавить</p>
+            <button className={style.main__type_button} onClick={count !== 0 && clickBtnAdd}>
+              {
+                  count <= 0 ?
+                  <p>Нет в наличии</p>
+                  :
+                  <p>Добавить</p>
+              }
             </button>
       }
       </div>

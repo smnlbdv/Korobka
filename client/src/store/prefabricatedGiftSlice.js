@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api/api";
 
 export const placeOrderConstructorAsync = createAsyncThunk(
-    'liked/placeOrderConstructorAsync',
+    'prefabricatedGift/placeOrderConstructorAsync',
     async (orderObj) => {
       try {
         const response = await api.post(`/api/profile/order/constructor`, {order: orderObj.values, cart: orderObj.order, totalAmount: orderObj.price})
@@ -17,6 +17,103 @@ export const placeOrderConstructorAsync = createAsyncThunk(
         console.log(error);
       }
     }
+);
+
+export const addTypesAsync = createAsyncThunk(
+  'prefabricatedGift/addTypesAsync',
+  async (orderObj) => {
+    try {
+      const response = await api.post(`/api/constructor/add/types`, orderObj)
+      return {
+        _id: orderObj._id,
+        photo: orderObj.photo,
+        title: orderObj.title,
+        price: orderObj.price,
+        count: orderObj.count
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const incBoxTypeGiftAsync = createAsyncThunk(
+  'prefabricatedGift/incBoxTypeGiftAsync',
+  async (orderObj) => {
+    try {
+      const response = await api.post(`/api/constructor/inc/types`, {_id: orderObj._id, count: orderObj.count})
+      console.log(response);
+      return {
+        _id: orderObj._id,
+      }
+    } catch (error) {
+      return
+    }
+  }
+);
+
+export const addProductAsync = createAsyncThunk(
+  'prefabricatedGift/addProductAsync',
+  async (orderObj) => {
+    try {
+      const response = await api.post(`/api/constructor/add/product`, orderObj)
+      return {
+        _id: orderObj._id,
+        photo: orderObj.photo,
+        title: orderObj.title,
+        price: orderObj.price,
+        count: orderObj.count
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const incProductAsync = createAsyncThunk(
+  'prefabricatedGift/incProductAsync',
+  async (orderObj) => {
+    try {
+      const response = await api.post(`/api/constructor/inc/product`, {_id: orderObj._id, count: orderObj.count})
+      return {
+        _id: orderObj._id,
+      }
+    } catch (error) {
+      return
+    }
+  }
+);
+
+export const addPostCardAsync = createAsyncThunk(
+  'prefabricatedGift/addPostCardAsync',
+  async (orderObj) => {
+    try {
+      const response = await api.post(`/api/constructor/add/post-card`, orderObj)
+      return {
+        _id: orderObj._id,
+        photo: orderObj.photo,
+        title: orderObj.title,
+        price: orderObj.price,
+        count: orderObj.count
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const incPostCardAsync = createAsyncThunk(
+  'prefabricatedGift/incPostCardAsync',
+  async (orderObj) => {
+    try {
+      const response = await api.post(`/api/constructor/inc/post-card`, {_id: orderObj._id, count: orderObj.count})
+      return {
+        _id: orderObj._id,
+      }
+    } catch (error) {
+      return
+    }
+  }
 );
 
 const prefabricatedGiftSlice = createSlice({
@@ -36,9 +133,6 @@ const prefabricatedGiftSlice = createSlice({
     orderObj: [],
   },
   reducers: {
-    addBoxTypeGift(state, action) {
-      state.typesBox.push(action.payload);
-    },
     isSimpleBox (state, action) {
       state.simpleBox = action.payload
     },
@@ -53,12 +147,6 @@ const prefabricatedGiftSlice = createSlice({
     setTitleOrder (state, action) {
       state.title = action.payload
     },
-    addProductGift(state, action) {
-      state.product.push(action.payload);
-    },
-    addPostCardGift(state, action) {
-      state.postcards.push(action.payload);
-    },
     setPromoConstructor(state, action) {
       state.promo = {...action.payload}
     },
@@ -72,30 +160,6 @@ const prefabricatedGiftSlice = createSlice({
 
       let itemsPrice = productsTotal + postcardsTotal + typesBoxTotal;
       state.itemsPrice = parseFloat(itemsPrice.toFixed(1));
-    },
-    incBoxTypeGift(state, action) {
-      const index = state.typesBox.findIndex(
-        (item) => item._id === action.payload
-      );
-      if (index !== -1) {
-        state.typesBox[index]["count"] = state.typesBox[index]["count"] + 1;
-      }
-    },
-    incProductGift(state, action) {
-      const index = state.product.findIndex(
-        (item) => item._id === action.payload
-      );
-      if (index !== -1) {
-        state.product[index]["count"] = state.product[index]["count"] + 1;
-      }
-    },
-    incPostCardGift(state, action) {
-      const index = state.postcards.findIndex(
-        (item) => item._id === action.payload
-      );
-      if (index !== -1) {
-        state.postcards[index]["count"] = state.postcards[index]["count"] + 1;
-      }
     },
     decBoxTypeGift(state, action) {
       const index = state.typesBox.findIndex(
@@ -153,10 +217,40 @@ const prefabricatedGiftSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    // builder
-    //     .addCase(addProductFavoriteAsync.fulfilled, (state, action) => {
-    //         state.liked.push(action.payload)
-    //     })
+    builder
+        .addCase(addTypesAsync.fulfilled, (state, action) => {
+            state.typesBox.push(action.payload);
+        })
+    builder
+        .addCase(incBoxTypeGiftAsync.fulfilled, (state, action) => {
+          const index = state.typesBox.findIndex((item) => item._id === action.payload._id);
+          if (index !== -1) {
+            state.typesBox[index]["count"] = state.typesBox[index]["count"] + 1;
+          }
+        })
+    builder
+        .addCase(addProductAsync.fulfilled, (state, action) => {
+            state.product.push(action.payload);
+        })
+    builder
+        .addCase(incProductAsync.fulfilled, (state, action) => {
+          const index = state.product.findIndex((item) => item._id === action.payload._id);
+          if (index !== -1) {
+            state.product[index]["count"] = state.product[index]["count"] + 1;
+          }
+        })
+    builder
+        .addCase(addPostCardAsync.fulfilled, (state, action) => {
+            state.postcards.push(action.payload);
+        })
+    builder
+        .addCase(incPostCardAsync.fulfilled, (state, action) => {
+          const index = state.postcards.findIndex((item) => item._id === action.payload._id);
+          if (index !== -1) {
+            state.postcards[index]["count"] = state.postcards[index]["count"] + 1;
+          }
+        })
+        
   },
 });
 
@@ -164,7 +258,6 @@ export const {
   addBoxTypeGift,
   addProductGift,
   addPostCardGift,
-  incBoxTypeGift,
   incProductGift,
   incPostCardGift,
   decBoxTypeGift,
