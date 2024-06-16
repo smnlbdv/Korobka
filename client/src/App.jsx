@@ -373,6 +373,7 @@ function App() {
   }
 
   const uploadAvatar = async (formData) => {
+    console.log(formData);
     const data = JSON.parse(localStorage.getItem('userData')) || '';
     let url;
     try {

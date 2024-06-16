@@ -1,8 +1,23 @@
 import {Router} from 'express'
+import fs from "fs";
+import multer from "multer";
 
 import BoxType from '../models/BoxType.js';
 import Product from '../models/Product.js';
 import PostCard from '../models/PostCard.js';
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "public/style-box");
+    },
+    filename: function (req, file, cb) {
+        const userId = req.userId;
+        const fileName = userId + '-' + file.originalname;
+        cb(null, fileName);
+    },
+});
+
+const upload = multer({ storage: storage });
 
 const constructorRoute = Router()
 
@@ -150,6 +165,17 @@ constructorRoute.post('/inc/post-card', async (req, res) => {
             return res.status(400).json({ error: error.message });
         }
 
+    } catch (error) {
+        console.error('Произошла ошибка:', error);
+        res.status(400).json({ error: error.message });
+    }
+});
+
+constructorRoute.post('/style-image', upload.single("image-style"), async (req, res) => {
+    try {
+        const uploadedFile = req.body;
+        console.log(uploadedFile);
+        res.status(200).json({message: "Фото добавлено"})
     } catch (error) {
         console.error('Произошла ошибка:', error);
         res.status(400).json({ error: error.message });

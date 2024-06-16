@@ -6,6 +6,7 @@ import * as uuid  from 'uuid';
 import { ColorPicker } from 'antd';
 import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import html2canvas from 'html2canvas';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -54,6 +55,46 @@ const ConstructorBox = () => {
         () => (typeof colorHex === 'string' ? colorHex : colorHex?.toHexString()),
         [colorHex],
     );
+    const nodeRef = useRef();
+
+    const takeScreenshot = (node) => {
+        html2canvas(node)
+            .then(async (canvas) => {
+                const image = canvas.toDataURL('image/png');
+    
+                const formData = new FormData();
+                const imageFile = dataURLtoFile(image, 'image.png');
+    
+                formData.append('image-style', imageFile);
+    
+                try {
+                    const response = await api.post('/api/constructor/style-image', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+                    console.log(response);
+                } catch (error) {
+                    console.error("Произошла ошибка", error);
+                    alert(error.message);
+                }
+            })
+            .catch((error) => {
+                console.error("Произошла ошибка при создании скриншота", error);
+            });
+    };
+
+    const dataURLtoFile = (dataURL, filename) => {
+        const arr = dataURL.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    };
 
     const [isColor, setIsColor] = useState(false)
 
@@ -250,15 +291,16 @@ const ConstructorBox = () => {
                 {
                     isSimple &&
                     <SwiperSlide className={`${style.customSlide} ${style.customSlide2} swiper-rexture`}>
-                        <div className={style.three_d_box}>
-                            <div className={style.front } style={blockStyles}></div>
-                            <div className={style.back} style={blockStyles}></div>
-                            <div className={style.left} style={blockStyles}></div>
-                            <div className={style.right} style={blockStyles}></div>
-                            <div className={style.top} style={blockStyles}></div>
-                            <div className={style.bottom} style={blockStyles}></div>
+                        <div className={style.back_block} ref={nodeRef}>
+                            <div className={style.three_d_box}>
+                                <div className={style.front} style={blockStyles}></div>
+                                <div className={style.back} style={blockStyles}></div>
+                                <div className={style.left} style={blockStyles}></div>
+                                <div className={style.right} style={blockStyles}></div>
+                                <div className={style.top} style={blockStyles}></div>
+                                <div className={style.bottom} style={blockStyles}></div>
+                            </div>
                         </div>
-
                         <div className={style.list_textures}>
                             <ColorPicker
                                 format={formatHex}
@@ -269,6 +311,13 @@ const ConstructorBox = () => {
                                 onFormatChange={setFormatHex}
                                 className={style.color_picker}
                             />
+                            <div className={style.block__button}>
+                                <button className={style.button} onClick={() => takeScreenshot(nodeRef.current)}>Сохранить</button>
+                                <button className={style.button} onClick={() => {
+                                    setCurrentTexture(null)
+                                    setColorHex("")
+                                }}>Сбросить</button>
+                            </div>
                             <Swiper
                                 loop={true}
                                 slidesPerView={5}
