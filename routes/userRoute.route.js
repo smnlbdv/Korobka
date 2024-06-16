@@ -20,6 +20,9 @@ import WayPay from "../models/WayPay.js";
 import OrderStatus from "../models/OrderStatus.js";
 import Box from "../models/Box.js"
 import ConstructorOrder from "../models/ConstructorOrder.js";
+import BoxType from "../models/BoxType.js";
+import Product from "../models/Product.js";
+import PostCard from "../models/PostCard.js"
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -232,18 +235,7 @@ userRoute.post("/order", verifyToken, async (req, res) => {
     quantity: item.count
   }))
 
-  body.cart.forEach(async (cartItem) => {
-    const product = await Box.findById(cartItem._id);
-
-    if (product) {
-        product.count = product.count - cartItem.count;
-        product.save()
-    }
-  });
-
   const order = new Order(newOrder);
-
-  console.log(newOrder);
 
   order.save()
     .then(async (savedOrder) => {
@@ -257,6 +249,15 @@ userRoute.post("/order", verifyToken, async (req, res) => {
                     .populate('items.productId')
                     .populate('status')
                     .populate('wayPay');
+
+                body.cart.forEach(async (cartItem) => {
+                  const product = await Box.findById(cartItem._id);
+              
+                  if (product) {
+                      product.count = product.count - cartItem.count;
+                      product.save()
+                  }
+                });
         
                 pdfGenerate(populatedOrder, order._id)
                           .then((data) => {
@@ -312,15 +313,6 @@ userRoute.post("/order/constructor", verifyToken, async (req, res) => {
       quantity: item.quantity
   })) : null;
 
-  // body.cart.forEach(async (cartItem) => {
-  //   const product = await Box.findById(cartItem._id);
-
-  //   if (product) {
-  //       product.count = product.count - cartItem.count;
-  //       product.save()
-  //   }
-  // });
-
   const orderConstructor = new ConstructorOrder(newOrder);
   orderConstructor.save()
     .then(async (savedOrder) => {
@@ -336,6 +328,30 @@ userRoute.post("/order/constructor", verifyToken, async (req, res) => {
                     .populate('typesBox.productId')
                     .populate('status')
                     .populate('wayPay');
+
+                if (body.cart.typesBox.length > 0) {
+                    body.cart.typesBox.forEach(async (item) => {
+                        const boxType = await BoxType.findById(item.product)
+                        boxType.count = boxType.count - item.quantity 
+                        boxType.save()
+                    });
+                }
+
+                if (body.cart.product.length > 0) {
+                  body.cart.product.forEach(async (item) => {
+                    const product = await Product.findById(item.product)
+                    product.count = product.count - item.quantity 
+                    product.save()
+                  });
+                }
+
+                if (body.cart.postcards.length > 0) {
+                    body.cart.postcards.forEach(async (item) => {
+                      const postCard = await PostCard.findById(item.product)
+                      postCard.count = postCard.count - item.quantity 
+                      postCard.save()
+                    });
+                }
         
                 pdfGenerate(populatedOrder, orderConstructor._id)
                           .then((data) => {

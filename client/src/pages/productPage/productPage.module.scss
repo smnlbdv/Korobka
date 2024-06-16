@@ -180,9 +180,10 @@
 
 .stars_product {
     position: absolute;
-    top: -15px;
-    left: 0;
+    top: 4px;
+    left: -130px;
     display: flex;
+    flex-direction: column-reverse;
     row-gap: 5px;
     column-gap: 15px;
     align-items: center;

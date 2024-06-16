@@ -79,7 +79,6 @@
         grid-template-columns: repeat(2, minmax(90px,150px));
         color: #282727;
         font-size: 12px;
-        margin-left: 20px;
         justify-content: flex-start;
         width: fit-content;
 
@@ -117,6 +116,19 @@
             height: 23px;
             margin-top: 5px;
         }
+    }
+}
+
+.constructor_block {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    margin-left: 20px;
+
+    .title_order {
+        color: #282727;
+        font-weight: 600;
+        font-size: 18px;
     }
 }
 

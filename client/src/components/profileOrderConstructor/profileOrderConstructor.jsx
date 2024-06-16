@@ -8,7 +8,7 @@ import style from "./profileOrderConstructor.module.scss";
 import { useDispatch } from "react-redux";
 import { deleteConstructorItemAsync } from "../../store/profileSlice.js";
 
-const ProfileOrderConstructor = ({_id, wayPay, totalAmount, address, status, image, onClick }) => {
+const ProfileOrderConstructor = ({_id, wayPay, totalAmount, address, status, image, onClick, title }) => {
     const [urlCheck, setUrlCheck] = useState("")
     const urlCheckLink = useRef()
     const { postCheckOrderConstructor, openNotification } = useContext(AuthContext);
@@ -59,9 +59,12 @@ const ProfileOrderConstructor = ({_id, wayPay, totalAmount, address, status, ima
                         />
                     </div>
                 </div>
-                <div className={style.list__info__order}>
-                    <p><b>Адрес:</b> {address}</p>
-                    <p><b>Способ оплаты:</b> {wayPay.name}</p>
+                <div className={style.constructor_block}>
+                    <p className={style.title_order}>{title}</p>
+                    <div className={style.list__info__order}>
+                        <p><b>Адрес:</b> {address}</p>
+                        <p><b>Способ оплаты:</b> {wayPay.name}</p>
+                    </div>
                 </div>
                 
                 <div className={style.price}>{newTotalFormat} BYN</div>

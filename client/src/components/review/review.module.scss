@@ -3,7 +3,6 @@
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    height: 100%;
     background-color: rgb(255, 255, 255);
     border-radius: 8px;
     box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.10);
@@ -14,7 +13,9 @@
 
 .slide_item_photos {
     @extend .slide_item;
-    padding: 30px 30px 60px 30px;
+    padding: 20px 30px 50px 30px;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .slide_header {
@@ -65,9 +66,7 @@
     font-style: normal;
     font-weight: 400; 
     margin-top: 10px;
-    height: 100%;
-    white-space: pre-line;
-    margin: 10px 0;
+    margin-bottom: 20px;
 }
 
 .date {
@@ -92,7 +91,7 @@
 
 .footer__review {
     display: flex;
-    align-items: justify-content;
+    align-items: center;
     justify-content: space-between;
     column-gap: 20px;
     margin-bottom: auto;
@@ -119,7 +118,7 @@
     border: 0;
     border-radius: 0 0 0px 8px;
     padding: 8px;
-    background-color:#f92f2f;
+    background-color:#8f8e8e;
     color: #ffffff;
     font-size: 14px;
     z-index: 5;
@@ -132,7 +131,7 @@
     border: 0;
     border-radius: 0 0 0px 0px;
     padding: 8px;
-    background-color:#f92f2f;
+    background-color:#8f8e8e;
     color: #ffffff;
     font-size: 14px;
     z-index: 5;

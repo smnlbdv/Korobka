@@ -78,7 +78,7 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
 
             const totalHeight = openBlock.current.scrollHeight +
                     parseInt(window.getComputedStyle(openBlock.current).paddingTop) +
-                    parseInt(window.getComputedStyle(openBlock.current).paddingBottom) + 60;
+                    parseInt(window.getComputedStyle(openBlock.current).paddingBottom) + 50;
 
             openBlock.current.style.maxHeight = totalHeight + "px";
             openBlock.current.style.height = totalHeight + "px";
@@ -211,7 +211,7 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
                         }
                     </div>
                     <div className={style.button__list}>
-                        {slider.length > 0 && ( // Проверяем, есть ли элементы в массиве slider
+                        {slider.length > 0 && ( 
                             <button className={!isGalleryOpen ? style.button__open_gallery : style.button__open_gallery_grey} onClick={handleOpenGallery}>
                                 {isGalleryOpen ? "Скрыть фото" : `Показать ${slider.length} фото`}
                             </button>

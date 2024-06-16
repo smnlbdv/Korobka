@@ -11,8 +11,9 @@ const LikeButton = ({id, countLikes, setCountLikes, likes}) => {
     const {openNotificationError, userId, role, isAuth} = useContext(AuthContext)
 
     useEffect(() => {
-        setIsLike(likes.includes(userId))
-    }, [likes, userId])
+        const result = likes.includes(userId)
+        setIsLike(result)
+    }, [likes])
 
     const likeReview = async () => {
         try {
@@ -33,7 +34,9 @@ const LikeButton = ({id, countLikes, setCountLikes, likes}) => {
 
     return ( 
         <div className={isLike ? style.likes__review_true : style.likes__review} onClick={likeReview}>
-            <img src="/assets/like.svg" alt="Icon like" />
+            <div className={style.img_block}>
+                <img src={isLike ? "/assets/like-true.svg" : "/assets/like.svg"} alt="Icon like" />
+            </div>
             <p>{countLikes}</p>
         </div>
      );
