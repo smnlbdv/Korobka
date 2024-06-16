@@ -1,11 +1,20 @@
 import style from './navigateAdmin.module.scss'
+import { Link  } from 'react-router-dom';
 
 const NavigateAdmin = () => {
     return ( 
         <div className={style.block__navigation}>
             <p className={style.title__panel}>Админ панель</p>
             <ul>
+                <Link to="/">
+                    <li>Главная</li>
+                </Link>
+                <Link to="product-page">
+                    <li>Боксы</li>
+                </Link>
                 <li>Товар</li>
+                <li>Открытки</li>
+                <li>Типы коробок</li>
                 <li>Отзывы</li>
                 <li>Пользователи</li>
                 <li>Email</li>

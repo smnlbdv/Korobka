@@ -23,7 +23,7 @@ const Main = lazyWithDelay(() => import("./pages/main/main.jsx"), 600);
 const ReadyGifts = lazyWithDelay(() => import("./pages/readyGifts/readyGifts.jsx"), 600);
 const Registration = lazyWithDelay(() => import("./components/registration/registration.jsx"), 600);
 const Login = lazyWithDelay(() => import("./components/login/login.jsx"), 600);
-const Contacts = lazyWithDelay(() => import("./pages/home/contacts/contacts.jsx"), 600);
+const Contacts = lazyWithDelay(() => import("./pages/contacts/contacts.jsx"), 600);
 const AboutUs = lazyWithDelay(() => import("./pages/aboutUs/aboutUs.jsx"), 600);
 const Liked = lazyWithDelay(() => import("./pages/liked/liked.jsx"), 600);
 const Profile = lazyWithDelay(() => import("./pages/profile/profile.jsx"), 600);
@@ -120,7 +120,6 @@ function App() {
       return accumulator + subtotal;
     }, 0);
   }
-
 
   const postLogin = async (values) => {
     await api.post("/api/auth/login", values)

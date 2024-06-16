@@ -10,6 +10,7 @@ import api from "../../api/api.js";
 import { AdminContext } from "../../context/adminContext.js";
 import Loading from "../../components/loading/loading.jsx";
 const HomePageAdmin = lazy(() => import("../../pages/home/homePageAdmin.jsx"));
+const MainPageAdmin = lazy(() => import("../mainPageAdmin/mainPageAdmin.jsx"));
 const ProductPage = lazy(() => import("../adminProduct/productPage.jsx"));  
 
 const Admin = () => {
@@ -17,6 +18,9 @@ const Admin = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isValidAdmin, setIsValidAdmin] = useState(false);
     const [allProduct, setAllProduct] = useState([]);
+    const [dataCategory, setDataCategory] = useState([]);
+    const [dataOrder, setDataOrder] = useState([]);
+    const [totalPrice, setTotalPrice] = useState([]);
     const { adminFetch, logout } = useContext(AuthContext)
     const nav = useNavigate()
 
@@ -26,6 +30,8 @@ const Admin = () => {
     useEffect(() => {
       fetchData();
       getAllProduct();
+      fetchDataCategory()
+      fetchDataOrder()
     }, []);
 
     const fetchData = async () => {
@@ -36,6 +42,36 @@ const Admin = () => {
         setIsValidAdmin(false);
       } finally {
         setIsLoading(false);
+      }
+    };
+
+    const fetchDataCategory = async () => {
+      try {
+        await api.get(`/api/admin/stat/category`)
+          .then(response => {
+            console.log(response.data);
+            setDataCategory(response.data)
+          })
+          .catch(response => {
+            console.log(response.message);
+        });
+      } catch (error) {
+        console.log(error.message)
+      }
+    };
+
+    const fetchDataOrder = async () => {
+      try {
+        await api.get(`/api/admin/stat/order`)
+          .then(response => {
+            setDataOrder(response.data.order)
+            setTotalPrice(response.data.totalPrice)
+          })
+          .catch(response => {
+            console.log(response.message);
+        });
+      } catch (error) {
+        console.log(error.message)
       }
     };
 
@@ -115,19 +151,23 @@ const Admin = () => {
           countDown,
           openNotification,
           deleteProductDB,
+          dataOrder,
+          totalPrice,
           allProduct,
+          dataCategory,
           setAllProduct
          }}>
         <Routes>
           <Route
-              path="/*"
+              path=""
               element={
                 <Suspense fallback={<Loading />}>
                   <HomePageAdmin/>
                 </Suspense>
               }
             >
-              <Route index element={<ProductPage />} />
+              <Route index element={<MainPageAdmin />} />
+              <Route path="product-page" element={<ProductPage />} />
           </Route>
         </Routes>
       </AdminContext.Provider>
