@@ -6,14 +6,18 @@ const NavigateAdmin = () => {
         <div className={style.block__navigation}>
             <p className={style.title__panel}>Админ панель</p>
             <ul>
-                <Link to="/">
+                <Link to="">
                     <li>Главная</li>
                 </Link>
                 <Link to="product-page">
                     <li>Боксы</li>
                 </Link>
-                <li>Товар</li>
-                <li>Открытки</li>
+                <Link to="page/product">
+                    <li>Товары</li>
+                </Link>
+                <Link to="page/postcard">
+                    <li>Открытки</li>
+                </Link>
                 <li>Типы коробок</li>
                 <li>Отзывы</li>
                 <li>Пользователи</li>

@@ -40,6 +40,10 @@
 
 .text {
     font-size: 13px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .title {

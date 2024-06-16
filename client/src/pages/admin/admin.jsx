@@ -9,6 +9,8 @@ import api from "../../api/api.js";
 
 import { AdminContext } from "../../context/adminContext.js";
 import Loading from "../../components/loading/loading.jsx";
+import OneProductPage from "../oneProductPage/oneProductPage.jsx";
+import OnePostCard from "../onePostCard/onePostCard.jsx";
 const HomePageAdmin = lazy(() => import("../../pages/home/homePageAdmin.jsx"));
 const MainPageAdmin = lazy(() => import("../mainPageAdmin/mainPageAdmin.jsx"));
 const ProductPage = lazy(() => import("../adminProduct/productPage.jsx"));  
@@ -22,8 +24,13 @@ const Admin = () => {
     const [dataOrder, setDataOrder] = useState([]);
     const [totalPrice, setTotalPrice] = useState([]);
     const { adminFetch, logout } = useContext(AuthContext)
+    const [product, setProduct] = useState();
+    const [postCard, setPosrCard] = useState();
+    const [typesBox, setTypesBox] = useState();
     const nav = useNavigate()
 
+    const { getTypesBox, getProduct, getPostCard} = useContext(AuthContext)
+    
     const [apis, contextHolder] = notification.useNotification();
     const [modal, contextHolderEmail] = Modal.useModal();
 
@@ -32,6 +39,7 @@ const Admin = () => {
       getAllProduct();
       fetchDataCategory()
       fetchDataOrder()
+      getProducts()
     }, []);
 
     const fetchData = async () => {
@@ -45,11 +53,19 @@ const Admin = () => {
       }
     };
 
+    const getProducts = async () => {
+      const types = await getTypesBox();
+      setTypesBox(types)
+      const productRes = await getProduct()
+      setProduct(productRes)
+      const postCardRes = await getPostCard()
+      setPosrCard(postCardRes)
+    }
+
     const fetchDataCategory = async () => {
       try {
         await api.get(`/api/admin/stat/category`)
           .then(response => {
-            console.log(response.data);
             setDataCategory(response.data)
           })
           .catch(response => {
@@ -152,6 +168,9 @@ const Admin = () => {
           openNotification,
           deleteProductDB,
           dataOrder,
+          product,
+          postCard,
+          typesBox,
           totalPrice,
           allProduct,
           dataCategory,
@@ -159,7 +178,7 @@ const Admin = () => {
          }}>
         <Routes>
           <Route
-              path=""
+              path="/*"
               element={
                 <Suspense fallback={<Loading />}>
                   <HomePageAdmin/>
@@ -168,6 +187,11 @@ const Admin = () => {
             >
               <Route index element={<MainPageAdmin />} />
               <Route path="product-page" element={<ProductPage />} />
+              <Route path="page/product" element={<OneProductPage />} />
+              <Route path="page/postcard" element={<OnePostCard />} />
+              {/* <Route path="page/typesbox" element={<TypesBoxPage />} />
+              <Route path="page/review" element={<ReviewsPage />} />
+              <Route path="page/users" element={<UsersPage />} /> */}
           </Route>
         </Routes>
       </AdminContext.Provider>
