@@ -46,11 +46,7 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.cart)
-  const checkArray = useSelector(state => state.cart.checkArray)
-  const orderArray = useSelector(state => state.cart.order)
   const order = useSelector(state => state.profile.order)
-  const profile = useSelector(state => state.profile.profile)
-  const cartPrice = useSelector(state => state.cart.cartPrice)
   const favoriteItem  = useSelector(state => state.liked.liked);
   const isAuth = useSelector(state => state.profile.isAuth)
   const userId = useSelector(state => state.profile.userId)
@@ -544,12 +540,6 @@ function App() {
         window.scrollTo(0, c - c / 20);
     }
   };
-
-  // const PrivateRoute = ({isAllowed}) => {
-  //   return (
-  //     isAllowed ? <Outlet/> : <Navigate to={"/api/auth/login"}/>
-  //   )
-  // };
 
   return (
     <AuthContext.Provider

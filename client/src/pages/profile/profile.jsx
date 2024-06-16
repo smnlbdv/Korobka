@@ -210,6 +210,7 @@ const Profile = () => {
         dispatch(updateInfoProfileAsync(diffValues))
               .then(() => {
                 openNotification("bottomRight", "Данные успешно измененны")
+                setInitialData(diffValues); 
               })
               .catch(() => {
                 openNotificationError("bottomRight", "Ошибка сохранения данных")
