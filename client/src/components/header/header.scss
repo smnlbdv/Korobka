@@ -14,3 +14,9 @@
         padding: 10px 20px !important;
     }
 }
+
+@media (max-width: 470px) {
+    .header__logo span {
+        display: none;
+    }
+}

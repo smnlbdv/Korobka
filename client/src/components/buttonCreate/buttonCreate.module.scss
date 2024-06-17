@@ -70,6 +70,10 @@
     width: 160px;
     height: 39px;
     border-radius: 8px;
+    
+    @media (max-width: 470px) {
+        width: 250px;
+    }
 }
 
 @media (max-width: 1000px) {

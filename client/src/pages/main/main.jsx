@@ -175,9 +175,11 @@ const Main = () => {
                 стильной сумочке или браслете, который она сможет носить на любом
                 мероприятии?
               </p>
-              <Link to="constructor">
-                <ButtonCreate text={"Собрать"} />
-              </Link>
+              <div className={style.block__counter_two}>
+                <Link to="constructor">
+                  <ButtonCreate text={"Собрать"} />
+                </Link>
+              </div>
             </div>
             <div className={style.block_woman}>
               <img
@@ -248,7 +250,9 @@ const Main = () => {
                     />
                     <img className={style.close_icon} src="/assets/close-icon.svg" alt="Icon clear" onClick={clearFieldById}/>
                   </div>
-                  <ButtonCreate text={"Отправить"} type={"submit"}/>
+                  <div className={style.block__butoon__form}>
+                    <ButtonCreate text={"Отправить"} type={"submit"}/>
+                  </div>
                 </form>
                 <div className={style.block_woman}>
                   <img

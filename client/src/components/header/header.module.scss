@@ -21,6 +21,13 @@
     margin-left: 100px;
 }
 
+.burder_block {
+    display: flex;
+    margin-left: auto;
+    align-items: center;
+    column-gap: 20px;
+}
+
 .list__item p {
     position: relative;
     cursor: pointer;
@@ -228,7 +235,7 @@
 
 
 
-@media (max-width: 750px) {
+@media (max-width: 875px) {
     .navigation{
         position: absolute;
         width: 100%;

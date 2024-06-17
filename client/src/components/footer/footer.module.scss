@@ -19,6 +19,10 @@
     display: flex;
     column-gap: 24px;
     font-weight: 500;
+
+    @media (max-width: 780px) {
+        display: none;
+    }
 }
 
 .list__item p {

@@ -13,6 +13,31 @@
     border-radius: 12px;
 }
 
+@media (max-width: 620px ) {
+    .mySwiperMain .swiper-slide {
+        width: 450px;
+    }
+}
+
+@media (max-width: 470px) {
+    .mySwiperMain .swiper-slide {
+        width: 380px;
+    }
+}
+
+
+@media (max-width: 400px) {
+    .mySwiperMain .swiper-slide {
+        width: 320px;
+    }
+}
+
+@media (max-width: 350px) {
+    .mySwiperMain .swiper-slide {
+        width: 300px;
+    }
+}
+
 .mySwiperMain .swiper.swiper-coverflow.swiper-3d.swiper-initialized.swiper-horizontal.swiper-watch-progress.mySwipere {
     height: 800px;
     width: 600px;

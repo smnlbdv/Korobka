@@ -189,10 +189,10 @@ const Header = () => {
                                         <img src="/assets/user.svg" alt="user logo" />
                                         <p>Профиль</p>
                                     </li>
-                                </Link>
+                                </Link>  
                                 <button className={style.header__burger} type="button" aria-label="Мобильное меню" onClick={handleToggleNavigation}>
                                     <span className={isActive ? style.span_open : style.span}></span>
-                                </button>   
+                                </button> 
                                 {
                                     role == 1 ? 
                                     <Link to={`/api/auth/admin/${userId}`}>
@@ -205,10 +205,16 @@ const Header = () => {
                         }
                     </div>
                     :
-                    <div className={style.buttons_block}>
-                        <Button title={"Вход"} path={'/api/auth/login'}/>
-                        <Button title={"Регистрация"} path={'/api/auth/registration'}/>
+                    <div className={style.burder_block}>
+                        <div className={style.buttons_block}>
+                            <Button title={"Вход"} path={'/api/auth/login'}/>
+                            <Button title={"Регистрация"} path={'/api/auth/registration'}/>
+                        </div>
+                        <button className={style.header__burger} type="button" aria-label="Мобильное меню" onClick={handleToggleNavigation}>
+                            <span className={isActive ? style.span_open : style.span}></span>
+                        </button> 
                     </div>
+                    
                 }
             </div>
         </header>
