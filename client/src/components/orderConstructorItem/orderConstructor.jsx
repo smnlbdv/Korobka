@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import style from "./orderConstructorItem.module.scss";
+import { useSelector } from "react-redux";
 
 // eslint-disable-next-line react/prop-types
 const OrderConstructorItem = ({_id, img, title, preText, price, count }) => {
 
+  const imageUrl = useSelector(state => state.prefabricatedGift.imageUrl)
   const [newTotalFormat, setNewTotalFormat] = useState()
 
   useEffect(() => {
@@ -12,7 +14,7 @@ const OrderConstructorItem = ({_id, img, title, preText, price, count }) => {
 
   return (
     <div className={style.order__item_block}>
-        <img className={style.image_product} src={`.${img}`} alt="Image item" />
+        <img className={style.image_product} src={imageUrl.length === 0 ? `.${img}` : `${img}`} alt="Image item" />
         <div className={style.cart__item_info}>
             <p className={style.title}>{title}</p>
             <p className={style.text}>{preText}</p>

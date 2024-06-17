@@ -136,6 +136,9 @@ const prefabricatedGiftSlice = createSlice({
     isSimpleBox (state, action) {
       state.simpleBox = action.payload
     },
+    setImgUrl (state, action) {
+      state.imageUrl = action.payload
+    },
     setOrderObj (state, action) {
       state.orderObj = []
       state.orderObj.push(action.payload);
@@ -262,6 +265,7 @@ export const {
   incPostCardGift,
   decBoxTypeGift,
   decProductGift,
+  setImgUrl,
   isSimpleBox,
   decPostCardGift,
   delBoxTypeGift,

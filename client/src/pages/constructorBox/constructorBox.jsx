@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ItemConstructor from '../../components/itemConstructor/itemConstructor.jsx';
 import debounce from 'debounce';
 import api from '../../api/api.js';
-import { calculatePrice, setPromoConstructor, setTotalPrice, setTitleOrder, setOrderObj, isSimpleBox } from '../../store/prefabricatedGiftSlice.js';
+import { calculatePrice, setPromoConstructor, setTotalPrice, setTitleOrder, setOrderObj, isSimpleBox, setImgUrl } from '../../store/prefabricatedGiftSlice.js';
 import { resetOrderPush } from '../../store/cartSlice.js'
 import { Link } from 'react-router-dom';
 
@@ -33,6 +33,7 @@ const ConstructorBox = () => {
     const { getTypesBox, getProduct, getPostCard, contexHolder } = useContext(AuthContext)
     const dispatch = useDispatch()
     const productGift = useSelector(state => state.prefabricatedGift.product)
+    const imageUrl = useSelector(state => state.prefabricatedGift.imageUrl)
     const typesBox = useSelector(state => state.prefabricatedGift.typesBox)
     const postcards = useSelector(state => state.prefabricatedGift.postcards)
     const totalPrice = useSelector(state => state.prefabricatedGift.totalPrice)
@@ -73,10 +74,9 @@ const ConstructorBox = () => {
                             'Content-Type': 'multipart/form-data'
                         }
                     });
-                    console.log(response);
+                    dispatch(setImgUrl("http://localhost:5000/style-box/" + response.data.fileName));
                 } catch (error) {
                     console.error("Произошла ошибка", error);
-                    alert(error.message);
                 }
             })
             .catch((error) => {
@@ -167,7 +167,7 @@ const ConstructorBox = () => {
                 name: postcard.title
             })),
             title: title || "Сборный подарок",
-            image: "./assets/box-simple-box.png",
+            image: imageUrl || "./assets/box-simple-box.png",
             price: totalPrice,
         };
         
