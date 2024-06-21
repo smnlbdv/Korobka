@@ -35,11 +35,36 @@
     flex: 1;
 }
 
+.status__user {
+    @media (max-width: 1020px) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+}
+
 .block__user {
     position: sticky;
     top: 40px;
     height: max-content;
     max-width: 490px;
+
+    @media (max-width: 1020px) {
+        width: 35%;
+    }
+
+    @media (max-width: 900px) {
+        position: relative;
+        top: 0;
+        width: 60%;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 650px) {
+        width: 90%;
+    }
 }
 
 .update__image__block {
@@ -52,6 +77,11 @@
         height: 100%;
         object-fit: cover;
     }
+
+    @media (max-width: 900px) {
+        width: 70px;
+        height: 70px;
+    }
 }
 .fullname__name {
     color: #FFF;
@@ -63,6 +93,11 @@
     overflow: hidden; 
     text-overflow: ellipsis;
     width: 145px;
+
+    @media (max-width: 900px) {
+        font-size: 19px;
+        width: 100%;
+    }
 }
 .user__status {
     white-space: nowrap;
@@ -86,6 +121,16 @@
     border: 1px solid #FFF;
     background: #00046F; 
     transition: all 250ms;
+
+    @media (max-width: 1120px) {
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
 }
 .button__delete__photo {
     background-color: rgb(247, 25, 25);
@@ -99,31 +144,79 @@
     align-items: center;
     margin-top: 50px;
     margin-bottom: 25px;
+
+    @media (max-width: 1020px) {
+        flex-direction: column;
+    }
 }
 
 .button__hidden__pass {
-    @extend .button__header__block;
-    padding: 0;
-    margin: 0;
-    height: 38px;
+    text-align: center;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    padding: 12px 20px;
+    color: white;
+    border-radius: 8px;
+    border: 1px solid #FFF;
+    background: #00046F;
+    transition: all 250ms;
     flex: 1;
+    max-width: 228px;
+
+    @media (max-width: 1120px) {
+        padding: 10px 15px;
+        width: 100%;
+        min-width: 100%;
+    }
+
 }
 
 .main__block__profile {
     position: relative;
     display: flex;
     column-gap: 50px;
+
+    @media (max-width: 900px) {
+        flex-direction: column;
+    }
 }
 
 .input__block {
+    width: 100%;
     position: relative;
     flex: 1;
+}
+
+.block__bittons__profile {
+    display: flex;
+    column-gap: 10px;
+
+    @media (max-width:1120px) {
+        flex-direction: column;
+        row-gap: 5px;
+    }
+
+    @media (max-width:1020px) {
+       width: 100%;
+       margin-top: 15px;
+    }
+
+    @media (max-width:900px) {
+        row-gap: 10px;
+     }
 }
 
 .personal__input__block {
     display: flex;
     column-gap: 30px;
     align-items: end;
+
+    @media (max-width: 1120px) {
+        flex-direction: column;
+        row-gap: 20px;
+        width: 100%;
+    }
 }
 
 .personal__data {
@@ -132,6 +225,10 @@
     row-gap: 30px;
     margin-top: 25px;
     max-width: 530px;
+
+    @media (max-width: 1120px) {
+        row-gap: 20px;
+    }
 }
 
 .input__title {
@@ -201,6 +298,10 @@
     margin-bottom: 5px;
     width: max-content;
     background-color: rgb(75, 166, 0);
+
+    @media (max-width: 900px) {
+        font-size: 15px;
+    }
 }
 
 .user__link_err {

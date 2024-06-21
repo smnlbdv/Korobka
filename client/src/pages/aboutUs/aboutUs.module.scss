@@ -20,16 +20,29 @@
     margin-bottom: 50px;
     column-gap: 50px;
 
+    @media (max-width: 900px) {
+        flex-direction: column-reverse;
+        row-gap: 20px;
+    }
+
+    @media (max-width: 470px) {
+        margin-top: 30px;
+    }
+
 
     .block__about_text {
         font-size: 15px;
         font-style: normal;
         font-weight: 400;
         margin-bottom: 30px;
+
+        @media (max-width: 470px) {
+            font-size: 13px;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
     }
-    // .block_flex {
-    //     display: flex;
-    // }
+
     .block__about_img {
         min-width: 600px;
         height: 400px;
@@ -38,6 +51,17 @@
             height: 100%;
             border-radius: 5px;
             object-fit: cover;
+        }
+
+        @media (max-width: 1000px) {
+            min-width: 400px;
+            height: 350px;
+        }
+
+        @media (max-width: 500px) {
+            width: 100%;
+            min-width: 0;
+            height: 300px;
         }
     }
 }

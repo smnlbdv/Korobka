@@ -513,7 +513,7 @@ const Profile = () => {
             <div className={style.update__image__block}>
               <img src={profile.avatarUser} alt="Avatar" />
             </div>
-            <div>
+            <div className={style.status__user}>
               {
                 profile.isActivated ?
                 <p className={style.user__link_ok}>Подтвержден</p>
@@ -531,21 +531,23 @@ const Profile = () => {
               hidden
               name="avatar"
             />
-            <button
-              className={`${style.button__header__block} ${style.button__add__photo}`}
-              onClick={(e) => {
-                inputFileRef.current.click();
-                e.preventDefault();
-              }}
-            >
-              Добавить фото
-            </button>
-            <button
-              className={`${style.button__header__block} ${style.button__delete__photo}`}
-              onClick={logoutUser}
-            >
-              Выйти
-            </button>
+            <div className={style.block__bittons__profile}>
+              <button
+                className={`${style.button__header__block} ${style.button__add__photo}`}
+                onClick={(e) => {
+                  inputFileRef.current.click();
+                  e.preventDefault();
+                }}
+              >
+                Добавить фото
+              </button>
+              <button
+                className={`${style.button__header__block} ${style.button__delete__photo}`}
+                onClick={logoutUser}
+              >
+                Выйти
+              </button>
+            </div>
           </div>
           <Tabs defaultActiveKey="1" items={itemsTabs}></Tabs>
         </div>

@@ -55,6 +55,10 @@
         display: flex;
         align-items: center;
         max-width: 263px;
+
+        @media (max-width: 550px) {
+            display: none;
+        }
     }
     .countOrder {
         font-size: 20px;
@@ -81,10 +85,22 @@
         margin-left: 50px;
         justify-content: flex-start;
         width: fit-content;
+        column-gap: 5px;
         margin-right: 10px;
 
         b {
             font-weight: 600;
+        }
+
+        @media (max-width: 1020px) {
+            display: flex;
+            flex-direction: column;
+            row-gap: 5px;
+        }
+
+        @media (max-width: 550px) {
+            margin-right: auto;
+            margin-left: 0;
         }
     }
     .order__item__status {
@@ -126,6 +142,11 @@
     align-items: center;
     width: 100%;
     cursor: pointer;
+
+    @media (max-width: 550px) {
+        grid-template-columns: auto 30px 40px;
+        column-gap: 15px;
+    }
 }
 
 .image__block {

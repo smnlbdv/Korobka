@@ -56,6 +56,10 @@
         display: flex;
         align-items: center;
         max-width: 263px;
+
+        @media (max-width: 550px) {
+            display: none;
+        }
     }
     .countOrder {
         font-size: 20px;
@@ -81,10 +85,23 @@
         font-size: 12px;
         justify-content: flex-start;
         width: fit-content;
+        column-gap: 5px;
 
         b {
             font-weight: 600;
         }
+
+        @media (max-width: 1020px) {
+            display: flex;
+            flex-direction: column;
+            row-gap: 5px;
+        }
+
+        @media (max-width: 550px) {
+            margin-right: auto;
+            margin-left: 0;
+        }
+        
     }
     .order__item__status {
         position: absolute;
@@ -129,6 +146,10 @@
         color: #282727;
         font-weight: 600;
         font-size: 18px;
+
+        @media (max-width:550px) {
+            font-size: 16px;
+        }
     }
 }
 
@@ -138,6 +159,10 @@
     align-items: center;
     width: 100%;
     cursor: pointer;
+
+    @media (max-width: 550px) {
+        grid-template-columns: auto 30px 40px;
+    }
 }
 
 .image__block {

@@ -74,7 +74,7 @@ const ConstructorBox = () => {
                             'Content-Type': 'multipart/form-data'
                         }
                     });
-                    dispatch(setImgUrl("http://localhost:5000/style-box/" + response.data.fileName));
+                    dispatch(setImgUrl("http://korobkabel.site:5000/style-box/" + response.data.fileName));
                 } catch (error) {
                     console.error("Произошла ошибка", error);
                 }

@@ -21,8 +21,7 @@ import PostCard from './models/PostCard.js';
 dotev.config()
 const app = express()
 const PORT = process.env.PORT || 5000
-    
-// app.use(limiter)
+
 app.use(morgan('combined'))
 app.use(express.json())
 app.use(cookieParser())
@@ -50,11 +49,11 @@ app.use('/api/constructor', constructorRoute)
 async function start() {
     try {
         await mongoose.connect(process.env.DB_URL)
-        .then(() => {s
+        .then(() => {
             console.log('Вы подключились к базе')
         })
-        .catch(() => {
-            console.log('Произошла ошибка подключения')
+        .catch((error) => {
+            console.log('Произошла ошибка подключения' + error)
         })
         
         app.listen(PORT, () => {
