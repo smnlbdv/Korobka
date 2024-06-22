@@ -43,17 +43,41 @@
 }
 
 .image__minus {
-    width: 29.6px;
-    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transform: translateX(10px);
+    width: 24.6px;
+    border-radius: 5px;
+    padding: 3px;
+    height: 24px;
     cursor: pointer;
+    background-color: #c61414;
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
 }
 
 .image__plus {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transform: translateX(-10px);
-    width: 29.6px;
-    height: 18px;
+    width: 24.6px;
+    border-radius: 5px;
+    padding: 3px;
+    height: 24px;
     cursor: pointer;
+    background-color: #c61414;
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
 }
 
 .image__counter {

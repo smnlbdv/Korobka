@@ -1,5 +1,10 @@
 .block_reg {
     max-width: 332px;
+    margin: 0 20px;
+
+    @media (max-width: 500px) {
+        max-width: 300px;
+    }
 }
 .form {
     display: flex;
@@ -22,5 +27,9 @@
     &__link {
         color: #3d66fd;
         font-weight: 500;
+    }
+
+    @media (max-width: 500px) {
+        font-size: 13px;
     }
 }

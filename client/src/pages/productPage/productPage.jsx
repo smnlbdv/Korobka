@@ -300,6 +300,22 @@ const ProductPage = () => {
                       navigation={false}
                       modules={[Autoplay, Pagination]}
                       className={`${style.mySwiper_cart} mySwiper_page`}
+                      breakpoints={{
+                        320: {
+                          slidesPerView: 1,
+                          spaceBetween: 10,
+                        },
+                        500: {
+                          slidesPerView: 2,
+                          spaceBetween: 10,
+                        },
+                        768: {
+                          slidesPerView: 3,
+                        },
+                        1200: {
+                          slidesPerView: 4,
+                        },
+                      }}
                     >
                       {
                         similarItem.map((obj, index) => 

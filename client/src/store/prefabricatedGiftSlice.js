@@ -42,7 +42,6 @@ export const incBoxTypeGiftAsync = createAsyncThunk(
   async (orderObj) => {
     try {
       const response = await api.post(`/api/constructor/inc/types`, {_id: orderObj._id, count: orderObj.count})
-      console.log(response);
       return {
         _id: orderObj._id,
       }

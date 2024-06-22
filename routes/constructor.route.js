@@ -52,7 +52,7 @@ constructorRoute.get('/post-card', async (req, res) => {
     }
 });
 
-constructorRoute.get('/add/types', async (req, res) => {
+constructorRoute.post('/add/types', async (req, res) => {
     try {
         const boxTypes = await BoxType.findById(req.body._id)
         
@@ -72,7 +72,7 @@ constructorRoute.get('/add/types', async (req, res) => {
     }
 });
 
-constructorRoute.get('/inc/types', async (req, res) => {
+constructorRoute.post('/inc/types', async (req, res) => {
     try {
         const boxTypes = await BoxType.findById(req.body._id)
         
@@ -92,7 +92,7 @@ constructorRoute.get('/inc/types', async (req, res) => {
     }
 });
 
-constructorRoute.get('/add/product', async (req, res) => {
+constructorRoute.post('/add/product', async (req, res) => {
     try {
         const product = await Product.findById(req.body._id)
         
@@ -112,7 +112,7 @@ constructorRoute.get('/add/product', async (req, res) => {
     }
 });
 
-constructorRoute.get('/inc/product', async (req, res) => {
+constructorRoute.post('/inc/product', async (req, res) => {
     try {
         const product = await Product.findById(req.body._id)
         
@@ -132,7 +132,7 @@ constructorRoute.get('/inc/product', async (req, res) => {
     }
 });
 
-constructorRoute.get('/add/post-card', async (req, res) => {
+constructorRoute.post('/add/post-card', async (req, res) => {
     try {
         const postCard = await PostCard.findById(req.body._id)
         
@@ -152,7 +152,7 @@ constructorRoute.get('/add/post-card', async (req, res) => {
     }
 });
 
-constructorRoute.get('/inc/post-card', async (req, res) => {
+constructorRoute.post('/inc/post-card', async (req, res) => {
     try {
         const postCard = await PostCard.findById(req.body._id)
         

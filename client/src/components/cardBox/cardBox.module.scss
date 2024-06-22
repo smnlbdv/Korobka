@@ -8,6 +8,11 @@
     border-radius: 8px;
     background-color: rgb(1, 6, 153);
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.088);
+
+    @media (max-width: 500px) {
+        width: 200px;
+        margin: 0 auto;
+    }
 }
 
 
@@ -19,7 +24,6 @@
     text-wrap: balance;
     font-size: 15px;
     min-height: 32px;
-    
 }
 
 .main__type_price {
@@ -86,6 +90,10 @@
         width: 98%;
         height: 98%;
         object-fit: contain;
+    }
+
+    @media (max-width: 500px) {
+        max-width: 90px;
     }
 }
 

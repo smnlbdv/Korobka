@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: column;
     row-gap: 15px;
+    margin: 0 20px;
     margin-top: 40px;
+
 }
 
 .error__message {
@@ -31,5 +33,9 @@
     &__link {
         color: #3d66fd;
         font-weight: 500;
+    }
+
+    @media (max-width: 500px) {
+        font-size: 13px;
     }
 }

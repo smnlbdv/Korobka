@@ -284,6 +284,10 @@
         display: flex;
         column-gap: 10px;
     }
+
+    @media (max-width: 900px) {
+        transform: translateY(46px);
+    }
 }
 
 .block__item__order {

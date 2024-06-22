@@ -95,19 +95,21 @@ const ButtonCreate = ({
         </button>
       ) : (
         <div className={style.counter__block}>
-          <img
-            className={style.image__minus}
-            src="/assets/minus-hidden-block.svg"
-            alt="Minus"
-            onClick={subtractProduct}
-          />
+          <div className={style.image__minus}>
+            <img
+              src="/assets/minus-hidden-block.svg"
+              alt="Minus"
+              onClick={subtractProduct}
+            />
+          </div>
           <p className={style.image__counter}>{counterCart}</p>
-          <img
-            className={style.image__plus}
-            src="/assets/plus-hidden-block.svg"
-            alt="Plus"
-            onClick={addProduct}
-          />
+          <div className={style.image__plus}>
+            <img
+              src="/assets/plus-hidden-block.svg"
+              alt="Plus"
+              onClick={addProduct}
+            />
+          </div>
         </div>
       )}
     </div>
