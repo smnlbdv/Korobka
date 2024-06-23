@@ -34,7 +34,7 @@ const Admin = lazyWithDelay(() => import("./pages/admin/admin.jsx"), 600);
 const OrderPage = lazyWithDelay(() => import("./pages/orderPage/orderPage.jsx"), 600);
 const ReviewPage = lazyWithDelay(() => import("./pages/reviewPage/reviewPage.jsx"), 600);
 const ConstructorBox = lazyWithDelay(() => import("./pages/constructorBox/constructorBox.jsx"), 600);
-const API_URL = "http://localhost:5000"
+const API_URL = "https://korobka-production-65a0.up.railway.app"
 
 function App() {
   const [reviewsList, setReviewsList] = useState([])
