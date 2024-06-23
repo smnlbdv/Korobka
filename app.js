@@ -27,10 +27,17 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({extended: false}))
 app.use(express.static('public'))
-app.use(cors({
-    credentials: true,
-    origin: process.env.CLIENT_URL
-}))
+
+const corsOptions = {
+    origin: "https://korobkabel.site",
+    optionsSuccessStatus: 200, 
+    credentials: true
+  };
+app.use(cors(corsOptions));
+// app.use(cors({
+//     credentials: true,
+//     origin: process.env.CLIENT_URL
+// }))
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use('/api/auth', auth)

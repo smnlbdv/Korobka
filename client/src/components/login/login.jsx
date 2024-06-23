@@ -75,7 +75,7 @@ const Login = () => {
             <p className={style.navigation__text}>Нет профиля?</p>
             <a
               className={style.navigation__link}
-              href="http://korobkabel.site/api/auth/registration"
+              href="https://korobkabel.site/api/auth/registration"
             >
               Зарегистрироваться
             </a>
@@ -84,7 +84,7 @@ const Login = () => {
             <p className={style.navigation__text}>Забыли пароль?</p>
             <a
               className={style.navigation__link}
-              href="http://korobkabel.site/api/auth/forgot"
+              href="https://korobkabel.site/api/auth/forgot"
             >
               Сбросить пароль
             </a>

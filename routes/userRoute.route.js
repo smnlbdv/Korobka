@@ -532,8 +532,8 @@ userRoute.post("/pay/checkout", async (req, res) => {
           quantity: item.count
         }
       }),
-      success_url: "http://korobkabel.site/cart/order?payment_success=true",
-      cancel_url: "http://korobkabel.site/cart/order",
+      success_url: "https://korobkabel.site/cart/order?payment_success=true",
+      cancel_url: "https://korobkabel.site/cart/order",
     })
 
     res.json({
