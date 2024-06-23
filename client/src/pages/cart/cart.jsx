@@ -262,6 +262,20 @@ const Cart = ({}) => {
                     navigation={false}
                     modules={[Autoplay, Pagination]}
                     className={`${style.mySwiper_cart} mySwiper_cart`}
+                    breakpoints={{
+                      320: {
+                        slidesPerView: 1,
+                      },
+                      500: {
+                        slidesPerView: 2,
+                      },
+                      768: {
+                        slidesPerView: 3,
+                      },
+                      1200: {
+                        slidesPerView: 4,
+                      },
+                    }}
                   >
                     {
                       favoriteItem.slice().reverse().map((obj, index) => 

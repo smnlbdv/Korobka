@@ -87,3 +87,13 @@
     align-items: center;
     left: 50%;
 }
+
+@media (max-width: 470px) {
+    .mySwiperMain .swiper-button-prev {
+        display: flex;
+        transform: translateX(-120%) scale(-1, 1);
+        align-items: center;
+        left: 50%;  
+    }
+}
+

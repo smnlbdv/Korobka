@@ -101,6 +101,7 @@ const Header = () => {
 
     const closeMenu = () => {
         setIsActive(false);
+        document.body.classList.remove('no-scroll');
     };
 
     useEffect(() => {

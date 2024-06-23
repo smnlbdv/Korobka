@@ -197,14 +197,6 @@
     padding-bottom: 65px !important;
 }
 
-.favorite_items {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
-    justify-content: space-between;
-    gap: 30px;
-        row-gap: 30px;
-    row-gap: 50px;
-}
 
 .sub_text {
     color: white;

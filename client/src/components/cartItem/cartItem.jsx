@@ -78,17 +78,19 @@ const CartItem = ({ _id, img, title, preText, price, count, checkItem }) => {
         _id={_id}
       />
       <p className={style.price}>{newTotalFormat} BYN</p>
-      <div className={!isFavorite ? style.page__product_love : style.page__product_nolove} onClick={clickHeart}>
-        <img className={style.favorite} src={isFavorite ? "/assets/favorite-love.svg" : "/assets/love.svg"} alt=""/>
+      <div className={style.block_buttons}>
+        <div className={!isFavorite ? style.page__product_love : style.page__product_nolove} onClick={clickHeart}>
+          <img className={style.favorite} src={isFavorite ? "/assets/favorite-love.svg" : "/assets/love.svg"} alt=""/>
+        </div>
+        <button className={style.btn__delete_item}>
+          <img
+            className={style.delete_icon}
+            src="/assets/btn-cart-delete.svg"
+            alt=""
+            onClick={clickDeleteButton}
+          />
+        </button>
       </div>
-      <button className={style.btn__delete_item}>
-        <img
-          className={style.delete_icon}
-          src="/assets/btn-cart-delete.svg"
-          alt=""
-          onClick={clickDeleteButton}
-        />
-      </button>
     </div>
   );
 };
