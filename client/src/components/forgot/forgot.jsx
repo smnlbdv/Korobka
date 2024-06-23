@@ -58,7 +58,7 @@ const Forgot = () => {
               <p className={style.navigation__text}>Есть аккаунт?</p>
               <a
                 className={style.navigation__link}
-                href="https://korobkabel.site/api/auth/login"
+                href="http://localhost:5173/api/auth/login"
               >
                 Войти
               </a>
@@ -67,7 +67,7 @@ const Forgot = () => {
               <p className={style.navigation__text}>Нет аккаунта?</p>
               <a
                 className={style.navigation__link}
-                href="https://korobkabel.site/api/auth/registration"
+                href="http://localhost:5173/api/auth/registration"
               >
                 Зарегистрироваться
               </a>

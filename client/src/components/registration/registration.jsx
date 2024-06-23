@@ -125,7 +125,7 @@ const Registration = () => {
             <p className={style.navigation__text}>Есть профиль?</p>
             <a
               className={style.navigation__link}
-              href="https://korobkabel.site/api/auth/login"
+              href="http://localhost:5173/api/auth/login"
             >
               Войти
             </a>
@@ -134,7 +134,7 @@ const Registration = () => {
             <p className={style.navigation__text}>Забыли пароль?</p>
             <a
               className={style.navigation__link}
-              href="https://korobkabel.site/api/auth/forgot"
+              href="http://localhost:5173/api/auth/forgot"
             >
               Сбросить пароль
             </a>

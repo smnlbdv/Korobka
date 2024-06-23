@@ -22,7 +22,7 @@ export default function pdfGenerate(save, orderId) {
             if (err) {
                 reject(err);
             } else {
-                const urlRes = `https://korobka-production-65a0.up.railway.app/pdf/check-${orderId}.pdf`;
+                const urlRes = `http://localhost:5000/pdf/check-${orderId}.pdf`;
                 resolve({ url: urlRes, result: true });
             }
         });

@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
           const encodedFilename = iconv.encode(raw.toString('hex') + Date.now() + path.extname(file.originalname), 'win1251');
           const filename = encodedFilename.toString();
           cb(null, filename);
-          slider.push(`https://korobka-production-65a0.up.railway.app/product/${filename}`);
+          slider.push(`http://localhost:5000/product/${filename}`);
       });
   }
 });
