@@ -111,6 +111,7 @@ const ReadyGifts = () => {
 
   const clearInputSearch = () => {
     setValueSearch("")
+    fetchData(limit, page, "", categoryId);
   };
 
   useEffect(() => {

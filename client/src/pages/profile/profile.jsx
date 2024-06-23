@@ -33,7 +33,7 @@ const Profile = () => {
   const inputNewPass = useRef(null);
   const inputPrePass = useRef(null);
   const inputDoublePass = useRef(null);
-  const [initialData, setInitialData] = useState({});
+  const [initialData, setInitialData] = useState();
   const [typeInputPass, setTypeInputPass] = useState("password");
   const [titleHiddenButton, setTitleHiddenButton] = useState(true);
   const navigate = useNavigate();
@@ -210,7 +210,7 @@ const Profile = () => {
         dispatch(updateInfoProfileAsync(diffValues))
               .then(() => {
                 openNotification("bottomRight", "Данные успешно измененны")
-                setInitialData(diffValues); 
+                setInitialData(values); 
               })
               .catch(() => {
                 openNotificationError("bottomRight", "Ошибка сохранения данных")

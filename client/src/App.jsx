@@ -458,7 +458,7 @@ function App() {
     const items = order.map(item => ({
       id: item._id, 
       count: item.count || 1,
-      price: parseFloat(item.price.replace(/\s/g, '').replace(',', '.')),
+      price: typeof item.price === 'string' ? parseFloat(item.price.replace(/\s/g, '').replace(',', '.')) : parseFloat(item.price),
       name: item.title
     }));
 
@@ -466,7 +466,7 @@ function App() {
       await api.post('/api/profile/pay/checkout', {
         items: items, promo: promo && promo.percentage ? promo.percentage : null, totalAmount: originalFormat})
                 .then(response => {
-                  originalFormat = null
+
                   localStorage.setItem('initialValues', JSON.stringify(values))
                   localStorage.setItem('order', JSON.stringify(order))
                   localStorage.setItem('promo', JSON.stringify(promo))
@@ -537,7 +537,7 @@ function App() {
     const c = document.documentElement.scrollTop || document.body.scrollTop;
     if (c > 0) {
         window.requestAnimationFrame(scrollToTop);
-        window.scrollTo(0, c - c / 20);
+        window.scrollTo(0, c - c / 2);
     }
   };
 

@@ -59,16 +59,16 @@ const Footer = () => {
                         </ul>
                     </nav>
                     <div className={style.contact}>
-                        <a href="https://twitter.com/?lang=en" target="blank">
+                        <a href="https://x.com/LbdwSmn" target="blank">
                             <img src="/assets/twitter.svg" alt="" />
                         </a>
-                        <a href="https://web.telegram.org/" target="blank">
+                        <a href="https://t.me/korobkagrodnoby" target="blank">
                             <img src="/assets/telegram.svg" alt="" />
                         </a>
-                        <a href="https://ru-ru.facebook.com/" target="blank">
+                        <a href="https://www.facebook.com/profile.php?id=61561043385451" target="blank">
                             <img src="/assets/facebook.svg" alt="" />
                         </a>
-                        <a href="https://www.youtube.com/" target="blank">
+                        <a href="https://www.youtube.com/channel/UC3HQr-tRvNmxEYoULU1b9eQ" target="blank">
                             <img src="/assets/youtube.svg" alt="" />
                         </a>
                     </div>

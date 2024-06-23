@@ -1,13 +1,12 @@
 .back_to_top {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: fixed;
-    bottom: 50px;
+    bottom: 100px;
     column-gap:5px;
     row-gap: 10px;
-    padding: 10px 10px;
+    padding: 10px 20px;
     border-radius: 30px;
     right: 40px;
     background: #007aff;
@@ -26,11 +25,8 @@
     }
 
     p {
-        font-size: 14px;
+        font-size: 16px;
         color: white;
-        writing-mode: vertical-rl;
-        text-orientation: upright;
-        letter-spacing: -1px;
     }
 }
    

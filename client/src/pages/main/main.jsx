@@ -127,11 +127,13 @@ const Main = () => {
                 </Link>
               </div>
               <div className={style.right_block}>
-                <img
-                  className={style.image_main}
-                  src="/assets/main-img.png"
-                  alt="surprise box"
-                />
+                <Link to="http://localhost:5173/product/666ca27bd1ac469ffa2fe344">
+                  <img
+                    className={style.image_main}
+                    src="/assets/main-img.png"
+                    alt="surprise box"
+                  />
+                </Link>
               </div>
             </div>
           </section>

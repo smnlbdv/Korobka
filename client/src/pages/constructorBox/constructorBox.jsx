@@ -30,7 +30,7 @@ const ConstructorBox = () => {
     const [postCard, setPostCard] = useState()
     const [sale, setSale] = useState({id: null, active: null, percentage: 0,});
     const itemsPrice = useSelector(state => state.prefabricatedGift.itemsPrice)
-    const { getTypesBox, getProduct, getPostCard, contexHolder } = useContext(AuthContext)
+    const { getTypesBox, getProduct, getPostCard, contexHolder, openNotification } = useContext(AuthContext)
     const dispatch = useDispatch()
     const productGift = useSelector(state => state.prefabricatedGift.product)
     const imageUrl = useSelector(state => state.prefabricatedGift.imageUrl)
@@ -74,7 +74,8 @@ const ConstructorBox = () => {
                             'Content-Type': 'multipart/form-data'
                         }
                     });
-                    dispatch(setImgUrl("http://localhost:5173/style-box/" + response.data.fileName));
+                    dispatch(setImgUrl("http://localhost:5000/style-box/" + response.data.fileName));
+                    openNotification('bottomRight', "Стиль сохранен")
                 } catch (error) {
                     console.error("Произошла ошибка", error);
                 }
@@ -313,7 +314,7 @@ const ConstructorBox = () => {
                             />
                             <div className={style.block__button}>
                                 <button className={style.button} onClick={() => takeScreenshot(nodeRef.current)}>Сохранить</button>
-                                <button className={style.button} onClick={() => {
+                                <button className={`${style.button} ${style.button__reset}`} onClick={() => {
                                     setCurrentTexture(null)
                                     setColorHex("")
                                 }}>Сбросить</button>

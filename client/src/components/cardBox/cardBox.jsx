@@ -172,6 +172,7 @@ const CardBox = ({ obj, type, simpleBox = false }) => {
     dispatch(incAction({_id: _id, count: countProduct}))
             .then(() => {
               setCountProduct(countProduct + 1)
+              openNotification('bottomRight', 'Количество товара увеличено');
             })
             .catch(() => {
               openNotificationError("bottomRight", "Товара недостаточно на складе");
@@ -185,10 +186,6 @@ const CardBox = ({ obj, type, simpleBox = false }) => {
   const handleAddDec = (decAction) => {
     if (countProduct <= 1) {
       setIsAdded(false);
-      // dispatch(deleteCartItemAsync(_id))
-      //         .then(() => {
-      //             setIsAdded(false)
-      //         })
     } else {
       setCountProduct(countProduct - 1);
       dispatch(decAction(_id));

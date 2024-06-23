@@ -266,7 +266,6 @@ userRoute.post("/order", verifyToken, async (req, res) => {
                             }
                           })
                           .catch((error) => {
-                              console.log(error);
                               res.status(400).json({ message: 'Ошибка формирования чека' });
                           });
             } else {
@@ -361,6 +360,7 @@ userRoute.post("/order/constructor", verifyToken, async (req, res) => {
                           })
                           .catch((error) => {
                               res.status(400).json({ message: 'Ошибка формирования чека' });
+                              console.log(error);
                           });
             } else {
               res.status(404).json({ message: 'Пользователь не найден' });
