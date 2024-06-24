@@ -52,6 +52,7 @@ favoriteRoute.post('/add/:productId', verifyToken, async (req, res) => {
 favoriteRoute.delete('/delete/:productId', verifyToken, async (req, res) => {
     const productId = req.params.productId
     const userId = req.userId
+
     await Favorite.updateOne({owner: userId}, { $pull: { items: productId } }, { new: true })
         .then((response) => res.status(200).json({delete: response.acknowledged}))
         .catch((error) => res.status(400).json({delete: error.acknowledged}))

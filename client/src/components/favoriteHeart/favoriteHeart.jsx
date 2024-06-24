@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext.js";
-import { addProductFavorite, addProductFavoriteAsync, delProductFavoriteAsync } from "../../store/likedSlice.js";
+import { addProductFavoriteAsync, delProductFavoriteAsync } from "../../store/likedSlice.js";
 import { useSelector, useDispatch } from "react-redux";
 
 import style from './favoriteHeart.module.scss'

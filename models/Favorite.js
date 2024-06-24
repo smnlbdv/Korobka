@@ -8,7 +8,7 @@ const shema = new mongoose.Schema({
     items: [{
         type: Types.ObjectId,
         ref: 'Box'
-    }],
+    }]
 })
 
 

@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api/api";
 
 export const addProductFavoriteAsync = createAsyncThunk(
-    'liked/addProductFavorite',
+    'liked/addProductFavoriteAsync',
     async (id) => {
       try {
         const response = await api.post(`/api/favorite/add/${id}`);
@@ -14,7 +14,7 @@ export const addProductFavoriteAsync = createAsyncThunk(
 );
 
 export const delProductFavoriteAsync = createAsyncThunk(
-    'liked/delProductFavorite',
+    'liked/delProductFavoriteAsync',
     async (id) => {
       try {
         await api.delete(`/api/favorite/delete/${id}`);

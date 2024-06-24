@@ -16,6 +16,7 @@
 .mySwiper_page .swiper-slide {
     display: flex !important;
     justify-content: flex-start!important;
+    height: auto !important;
 }
 
 .tabs .ant-tabs-tab-btn {
