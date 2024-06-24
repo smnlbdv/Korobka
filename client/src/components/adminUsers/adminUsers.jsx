@@ -4,10 +4,10 @@ import { Fancybox as NativeFancybox } from "@fancyapps/ui";
 import { Select, Space } from 'antd';
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
+import "./ant.css"
 import style from './adminUsers.module.scss'
 import { AdminContext } from '../../context/adminContext';
 import api from '../../api/api';
-import "./ant.css"
 import { AuthContext } from '../../context/authContext';
 import { useSelector } from 'react-redux';
 
