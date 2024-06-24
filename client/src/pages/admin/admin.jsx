@@ -6,11 +6,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { notification, Modal } from 'antd';
 
 import api from "../../api/api.js";
+import { Button, message, Space } from 'antd';
 
 import { AdminContext } from "../../context/adminContext.js";
 import Loading from "../../components/loading/loading.jsx";
 import OneProductPage from "../oneProductPage/oneProductPage.jsx";
 import OnePostCard from "../onePostCard/onePostCard.jsx";
+import UserPage from "../userPage/userPage.jsx";
 const HomePageAdmin = lazy(() => import("../../pages/home/homePageAdmin.jsx"));
 const MainPageAdmin = lazy(() => import("../mainPageAdmin/mainPageAdmin.jsx"));
 const ProductPage = lazy(() => import("../adminProduct/productPage.jsx"));  
@@ -27,11 +29,13 @@ const Admin = () => {
     const [product, setProduct] = useState();
     const [postCard, setPosrCard] = useState();
     const [typesBox, setTypesBox] = useState();
+    const [allUsers, setAllUsers] = useState([]);
+    const [allRoles, setAllRoles] = useState([]);
     const nav = useNavigate()
 
     const { getTypesBox, getProduct, getPostCard} = useContext(AuthContext)
     
-    const [apis, contextHolder] = notification.useNotification();
+    const [messageApi, contextHolder] = message.useMessage();
     const [modal, contextHolderEmail] = Modal.useModal();
 
     useEffect(() => {
@@ -40,7 +44,29 @@ const Admin = () => {
       fetchDataCategory()
       fetchDataOrder()
       getProducts()
+      fetchAllUsers()
+      fetchRoles()
     }, []);
+
+    const success = (value) => {
+      messageApi.open({
+        type: 'success',
+        content: `${value}`,
+      });
+    };
+
+    const deleteUser = async (id) => {
+      try {
+          await api.delete(`/api/admin/delete/user/${id}`)
+            .then((response) => {
+              setAllUsers(prevUsers => prevUsers.filter(user => user._id !== id));
+              success("Пользователь успешно удален")
+            })
+            .catch((error) => alert(error.message));
+      } catch (error) {
+          console.log("Ошибка", error);
+      }
+  }
 
     const fetchData = async () => {
       try {
@@ -50,6 +76,43 @@ const Admin = () => {
         setIsValidAdmin(false);
       } finally {
         setIsLoading(false);
+      }
+    };
+
+    const fetchRoles = async () => {
+      try {
+        await api.get("/api/admin/roles/all")
+          .then((response) => {
+            const roles = response.data.map(role => {
+              let label = '';
+              if (role.role === 0) {
+                label = 'Пользователь';
+              } else if (role.role === 1) {
+                label = 'Администратор';
+              } else if (role.role === 2) {
+                label = 'Модератор';
+              }
+              return { label, value: role._id };
+            });
+            setAllRoles(roles);
+          })
+          .catch((error) => alert(error.message));
+      } catch (error) {
+        console.log("Ошибка", error);
+      }
+    };
+
+    const fetchAllUsers = async () => {
+      try {
+        await api.get(`/api/admin/users`)
+          .then(response => {
+            setAllUsers(response.data)
+          })
+          .catch(response => {
+            console.log(response.message);
+        });
+      } catch (error) {
+        console.log(error.message)
       }
     };
 
@@ -167,9 +230,13 @@ const Admin = () => {
           countDown,
           openNotification,
           deleteProductDB,
+          deleteUser,
           dataOrder,
           product,
+          allUsers,
+          success,
           postCard,
+          allRoles,
           typesBox,
           totalPrice,
           allProduct,
@@ -190,8 +257,8 @@ const Admin = () => {
               <Route path="page/product" element={<OneProductPage />} />
               <Route path="page/postcard" element={<OnePostCard />} />
               {/* <Route path="page/typesbox" element={<TypesBoxPage />} />
-              <Route path="page/review" element={<ReviewsPage />} />
-              <Route path="page/users" element={<UsersPage />} /> */}
+              <Route path="page/review" element={<ReviewsPage />} /> */}
+              <Route path="page/users" element={<UserPage />} />
           </Route>
         </Routes>
       </AdminContext.Provider>

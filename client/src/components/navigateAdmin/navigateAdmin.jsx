@@ -14,7 +14,9 @@ const NavigateAdmin = () => {
                 <Link to="">
                     <li>Главная</li>
                 </Link>
-                <li>Пользователя</li>
+                <Link to="page/users">
+                    <li>Пользователи</li>
+                </Link>
                 <li>Заказы</li>
                 <Link to="product-page">
                     <li>Боксы</li>
@@ -27,7 +29,6 @@ const NavigateAdmin = () => {
                 </Link>
                 <li>Типы коробок</li>
                 <li>Отзывы</li>
-                <li>Пользователи</li>
                 <li>Email</li>
             </ul>
             <p className={style.lowtitle__panel}>2024 © Все права защищены</p>

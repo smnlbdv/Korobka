@@ -10,8 +10,7 @@ const HomePageAdmin = () => {
     
     const { contextHolder, contextHolderEmail } = useContext(AdminContext)
     return ( 
-        <div className={style.wrapper_admin}>
-            {contextHolder}
+        <div className={style.wrapper_admin}>         
             {contextHolderEmail}
             <NavigateAdmin />
             <Outlet/>

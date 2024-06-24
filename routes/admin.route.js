@@ -12,6 +12,8 @@ import crypto from 'crypto'
 import Box from '../models/Box.js'
 import Category from '../models/Category.js'
 import Order from '../models/Order.js'
+import User from '../models/User.js'
+import Role from '../models/Role.js'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -178,6 +180,65 @@ adminRoute.get("/stat/order", async (req, res) => {
     console.log(error.message);
   }
 });
+
+adminRoute.get("/users", async (req, res) => {
+  try {
+
+    const users = await User.find({}).populate("role").populate("email")
+    
+    res.status(200).json(users)
+
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+adminRoute.get("/roles/all", async (req, res) => {
+  try {
+
+    const roles = await Role.find({})
+    res.status(200).json(roles)
+
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+adminRoute.patch("/role/update/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId
+    const role = req.body.role
+
+    console.log(userId);
+    console.log(role);
+
+    const user = await User.findById(userId)
+    user.role = role
+    user.save()
+
+    res.status(200).json({message:"Роль успешно измененна"})
+
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+adminRoute.delete("/delete/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    return res.status(200).json({ message: "Пользователь успешно удален" });
+
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 
 
 
