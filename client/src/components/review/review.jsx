@@ -188,7 +188,7 @@ const Review = ({id, img, name, lastName, text, data, stars, likes = [], hidden 
                             <div className={style.block__create__comment}>
                                 <p>У отзыва нет комментариев</p>
                                 {
-                                    role == 1 && <button className={style.open__modal__input} onClick={showModal}>Написать</button>
+                                    role == 1 || role == 2 && <button className={style.open__modal__input} onClick={showModal}>Написать</button>
                                 }
                             </div>
                             :

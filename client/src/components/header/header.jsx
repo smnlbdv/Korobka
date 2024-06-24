@@ -195,7 +195,7 @@ const Header = () => {
                                     <span className={isActive ? style.span_open : style.span}></span>
                                 </button> 
                                 {
-                                    role == 1 ? 
+                                    role == 1 || role == 2? 
                                     <Link to={`/api/auth/admin/${userId}`}>
                                         <button className={style.admin__btn} type="button" onClick={closeMenu}>Админ панель</button>
                                     </Link>

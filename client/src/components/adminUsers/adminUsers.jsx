@@ -16,6 +16,7 @@ const AdminUsers = ({item}) => {
 
     const { allRoles, openNotification, contextHolder, deleteUser, success } = useContext(AdminContext)
     const [defaultRole, setDefaultRole] = useState()
+    const role = useSelector(state => state.profile.role)
 
     useEffect(() => {
         const role = item.role.role;
@@ -58,12 +59,15 @@ const AdminUsers = ({item}) => {
                     </p>
                 </div>
                 <div className={style.roles__block}>
-                    <Select
-                        defaultValue="Пользователь"
-                        style={{ width: 20, height: 26 }}
-                        onChange={handleChange}
-                        options={allRoles}
-                    />
+                    {
+                        role === 1 && 
+                        <Select
+                            defaultValue="Пользователь"
+                            style={{ width: 20, height: 26 }}
+                            onChange={handleChange}
+                            options={allRoles}
+                        />
+                    }
                 </div>
                 {
                     item.isActivated ?
