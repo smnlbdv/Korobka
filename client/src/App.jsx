@@ -462,6 +462,8 @@ function App() {
       name: item.title
     }));
 
+
+    
     try {
       await api.post('/api/profile/pay/checkout', {
         items: items, promo: promo && promo.percentage ? promo.percentage : null, totalAmount: originalFormat})
