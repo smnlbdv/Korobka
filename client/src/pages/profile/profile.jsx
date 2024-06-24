@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/authContext.js";
 import { useFormik } from "formik";
 import { Tabs, Modal } from "antd";
 import * as Yup from "yup";
-import { addInfoProfile, updateInfoProfileAsync } from "../../store/profileSlice.js";
+import { addInfoProfile, resetProfile, updateInfoProfileAsync } from "../../store/profileSlice.js";
 
 import "./ant.css";
 
@@ -18,6 +18,8 @@ import ModalProfileItem from "../../components/modalProdileItem/modalProfileItem
 import { useDispatch, useSelector } from "react-redux";
 import ProfileOrderConstructor from "../../components/profileOrderConstructor/profileOrderConstructor.jsx";
 import ModalItemConstructor from "../../components/modalItemConstructor/modalItemConstructor.jsx";
+import { resetProductFavorite } from "../../store/likedSlice.js";
+import { resetCard } from "../../store/cartSlice.js";
 
 const Profile = () => {
   const {
@@ -494,6 +496,9 @@ const Profile = () => {
     logout();
     dispatch(addInfoProfile({}))
     navigate("/");
+    dispatch(resetProductFavorite())
+    dispatch(resetCard())
+    dispatch(resetProfile())
   };
 
   return (

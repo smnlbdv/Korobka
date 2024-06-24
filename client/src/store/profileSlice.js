@@ -97,6 +97,10 @@ const profileSlice = createSlice({
         },
         setUserId(state, action) {
             state.userId = action.payload;
+        }, 
+        resetProfile(state, action) {
+          state.constructor = []
+          state.order = []
         }
     },
     extraReducers: builder => {
@@ -122,5 +126,5 @@ const profileSlice = createSlice({
     }
 })
 
-export const {addInfoProfile, addProductProfile, updateInfoProfile, setIsAuth, setRole, setUserId, addConstructorProfile} = profileSlice.actions
+export const {addInfoProfile, addProductProfile, resetProfile, updateInfoProfile, setIsAuth, setRole, setUserId, addConstructorProfile} = profileSlice.actions
 export default profileSlice.reducer

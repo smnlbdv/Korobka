@@ -41,6 +41,9 @@ const likedSlice = createSlice({
         },
         delProductFavorite (state, action) {
             state.liked = state.liked.filter(item => item._id !== action.payload);
+        },
+        resetProductFavorite (state, action) {
+          state.liked = []
         }
     },
     extraReducers: builder => {
@@ -55,5 +58,5 @@ const likedSlice = createSlice({
     }
 })
 
-export const {addProductFavorite, delProductFavorite} = likedSlice.actions
+export const {addProductFavorite, delProductFavorite, resetProductFavorite} = likedSlice.actions
 export default likedSlice.reducer

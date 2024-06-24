@@ -131,8 +131,12 @@ const cartSlice = createSlice({
         },
         setPromo(state, action) {
           state.promo = {...action.payload}
+        },
+        resetCard(state, action) {
+          state.cart = []
+          state.checkArray = []
         }
-    },
+     },
     extraReducers: builder => {
         builder
             .addCase(addProductCartAsync.fulfilled, (state, action) => {
@@ -185,5 +189,5 @@ const cartSlice = createSlice({
     }
 })
 
-export const {addProductCart, addCheckArray, resetOrderPush, removeCheckArray, checkScroll, calculatePrice, calculatePriceCheck, orderPushItems, setPromo, setTotalPrice } = cartSlice.actions
+export const {addProductCart, addCheckArray, resetOrderPush, resetCard, removeCheckArray, checkScroll, calculatePrice, calculatePriceCheck, orderPushItems, setPromo, setTotalPrice } = cartSlice.actions
 export default cartSlice.reducer

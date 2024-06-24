@@ -6,9 +6,9 @@ import { AuthContext } from "./context/authContext.js";
 import { notification, Modal } from 'antd';
 import './libs/ant.css'
 import { useDispatch, useSelector } from "react-redux";
-import { addProductFavorite } from "./store/likedSlice.js";
-import { addProductCart } from "./store/cartSlice.js";
-import { addConstructorProfile, addInfoProfile, addProductProfile, setIsAuth, setRole, setUserId } from "./store/profileSlice.js";
+import { addProductFavorite, resetProductFavorite } from "./store/likedSlice.js";
+import { addProductCart, resetCard } from "./store/cartSlice.js";
+import { addConstructorProfile, addInfoProfile, addProductProfile, resetProfile, setIsAuth, setRole, setUserId } from "./store/profileSlice.js";
 
 import Loading from "./components/loading/loading.jsx";
 import api from './api/api.js'
