@@ -4,11 +4,18 @@ import { Link  } from 'react-router-dom';
 const NavigateAdmin = () => {
     return ( 
         <div className={style.block__navigation}>
-            <p className={style.title__panel}>Админ панель</p>
+            <div className={style.block__exit}>
+                <Link to="http://localhost:5173/">
+                    <img src="/assets/exit.svg" alt="Exit svg" />  
+                </Link>
+                <p className={style.title__panel}>Админ панель</p>
+            </div>
             <ul>
                 <Link to="">
                     <li>Главная</li>
                 </Link>
+                <li>Пользователя</li>
+                <li>Заказы</li>
                 <Link to="product-page">
                     <li>Боксы</li>
                 </Link>
