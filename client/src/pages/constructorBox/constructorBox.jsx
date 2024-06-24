@@ -30,7 +30,7 @@ const ConstructorBox = () => {
     const [postCard, setPostCard] = useState()
     const [sale, setSale] = useState({id: null, active: null, percentage: 0,});
     const itemsPrice = useSelector(state => state.prefabricatedGift.itemsPrice)
-    const { getTypesBox, getProduct, getPostCard, contexHolder, openNotification } = useContext(AuthContext)
+    const { getTypesBox, getProduct, getPostCard, contexHolder, isAuth, openNotification } = useContext(AuthContext)
     const dispatch = useDispatch()
     const productGift = useSelector(state => state.prefabricatedGift.product)
     const imageUrl = useSelector(state => state.prefabricatedGift.imageUrl)
@@ -450,7 +450,7 @@ const ConstructorBox = () => {
                                                 {totalPrice} BYN
                                             </p>
                                             </div>
-                                            <Link to="/cart/order">
+                                            <Link to={isAuth ? "/cart/order" : "/api/auth/login"}>
                                                 <button className={style.btn_checkout} disabled={isDisabled} onClick={clickConstructorButton}>Оформить</button>
                                             </Link>
                                         </div>
