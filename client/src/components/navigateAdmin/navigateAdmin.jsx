@@ -17,7 +17,9 @@ const NavigateAdmin = () => {
                 <Link to="page/users">
                     <li>Пользователи</li>
                 </Link>
-                <li>Заказы</li>
+                <Link to="page/orders">
+                    <li>Заказы</li>
+                </Link>
                 <Link to="product-page">
                     <li>Боксы</li>
                 </Link>

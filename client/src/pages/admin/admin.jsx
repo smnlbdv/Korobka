@@ -13,6 +13,7 @@ import Loading from "../../components/loading/loading.jsx";
 import OneProductPage from "../oneProductPage/oneProductPage.jsx";
 import OnePostCard from "../onePostCard/onePostCard.jsx";
 import UserPage from "../userPage/userPage.jsx";
+import Orders from "../orders/orders.jsx";
 const HomePageAdmin = lazy(() => import("../../pages/home/homePageAdmin.jsx"));
 const MainPageAdmin = lazy(() => import("../mainPageAdmin/mainPageAdmin.jsx"));
 const ProductPage = lazy(() => import("../adminProduct/productPage.jsx"));  
@@ -31,6 +32,8 @@ const Admin = () => {
     const [typesBox, setTypesBox] = useState();
     const [allUsers, setAllUsers] = useState([]);
     const [allRoles, setAllRoles] = useState([]);
+    const [allOrders, setAllOrders] = useState([]);
+    const [allStatus, setAllStatus] = useState([]);
     const nav = useNavigate()
 
     const { getTypesBox, getProduct, getPostCard} = useContext(AuthContext)
@@ -46,6 +49,8 @@ const Admin = () => {
       getProducts()
       fetchAllUsers()
       fetchRoles()
+      getAllOrders()
+      fetchStatus()
     }, []);
 
     const success = (value) => {
@@ -54,6 +59,18 @@ const Admin = () => {
         content: `${value}`,
       });
     };
+
+    const getAllOrders = async () => {
+      try {
+        await api.get(`/api/admin/orders`)
+          .then((response) => {
+            setAllOrders(response.data);
+          })
+          .catch((error) => alert(error.message));
+    } catch (error) {
+        console.log("Ошибка", error);
+    }
+    }
 
     const deleteUser = async (id) => {
       try {
@@ -95,6 +112,23 @@ const Admin = () => {
               return { label, value: role._id };
             });
             setAllRoles(roles);
+          })
+          .catch((error) => alert(error.message));
+      } catch (error) {
+        console.log("Ошибка", error);
+      }
+    };
+
+    const fetchStatus = async () => {
+      try {
+        await api.get("/api/admin/status/all")
+          .then((response) => {
+            const formattedOptions = response.data.map(option => ({
+              value: option._id,
+              label: option.name,
+              color: option.color
+            }));
+            setAllStatus(formattedOptions);
           })
           .catch((error) => alert(error.message));
       } catch (error) {
@@ -233,7 +267,9 @@ const Admin = () => {
           deleteUser,
           dataOrder,
           product,
+          allStatus,
           allUsers,
+          allOrders,
           success,
           postCard,
           allRoles,
@@ -256,9 +292,8 @@ const Admin = () => {
               <Route path="product-page" element={<ProductPage />} />
               <Route path="page/product" element={<OneProductPage />} />
               <Route path="page/postcard" element={<OnePostCard />} />
-              {/* <Route path="page/typesbox" element={<TypesBoxPage />} />
-              <Route path="page/review" element={<ReviewsPage />} /> */}
               <Route path="page/users" element={<UserPage />} />
+              <Route path="page/orders" element={<Orders />} />
           </Route>
         </Routes>
       </AdminContext.Provider>

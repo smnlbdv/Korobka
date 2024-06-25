@@ -14,6 +14,7 @@ import Category from '../models/Category.js'
 import Order from '../models/Order.js'
 import User from '../models/User.js'
 import Role from '../models/Role.js'
+import OrderStatus from '../models/OrderStatus.js'
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -204,6 +205,17 @@ adminRoute.get("/roles/all", async (req, res) => {
   }
 });
 
+adminRoute.get("/status/all", async (req, res) => {
+  try {
+
+    const statuses = await OrderStatus.find({})
+    res.status(200).json(statuses)
+
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 adminRoute.patch("/role/update/:userId", async (req, res) => {
   try {
     const userId = req.params.userId
@@ -223,6 +235,22 @@ adminRoute.patch("/role/update/:userId", async (req, res) => {
   }
 });
 
+adminRoute.patch("/orders/update/:orderId", async (req, res) => {
+  try {
+    const orderId = req.params.orderId
+    const status = req.body.status
+
+    const order = await Order.findById(orderId)
+    order.status = status
+    order.save()
+
+    res.status(200).json({message:"Статус успешно измененн"})
+
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 adminRoute.delete("/delete/user/:userId", async (req, res) => {
   try {
     const userId = req.params.userId
@@ -234,6 +262,15 @@ adminRoute.delete("/delete/user/:userId", async (req, res) => {
 
     return res.status(200).json({ message: "Пользователь успешно удален" });
 
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+adminRoute.get("/orders", async (req, res) => {
+  try {
+    const orders = await Order.find({}).populate("wayPay").populate("items.productId").populate("status")
+    res.status(200).json(orders)
   } catch (error) {
     console.log(error.message);
   }

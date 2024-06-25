@@ -83,7 +83,7 @@ const ProfileOrderItem = ({_id, groupImage = [], wayPay, totalAmount, address, s
                 </div>
                 
                 <p className={style.price}>{newTotalFormat} BYN</p>
-                <span className={style.order__item__status}>{status.name}</span>
+                <span className={style.order__item__status} style={{backgroundColor: status.color}}>{status.name}</span>
             </div>
             <div>
                 <Tooltip placement="right" title={"Удалить"} color={"red"}>
